@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>대출 이자 계산기 - 원리금균등·원금균등 월 상환액 계산 | 금융계산기</title>
+    <meta name="description"
+        content="대출 이자와 월 상환액을 간편하게 계산해 보세요. 원리금균등·원금균등·만기일시 상환 방식별 총 이자, 월 납입금, 상환 스케줄을 무료로 제공합니다." />
+    <meta name="keywords" content="대출이자 계산기, 주택담보대출 계산기, 원리금균등상환, 원금균등상환, 월 상환금 계산, 대출 계산기" />
+    <meta property="og:title" content="대출 이자 계산기 - 원리금균등·원금균등 월 상환액 계산" />
+    <meta property="og:description" content="대출 이자와 월 상환액을 간편하게 계산하세요. 원리금균등·원금균등·만기일시 상환 방식 지원." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">💰</span>
+                <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+            </a>
+            <nav class="header-nav">
+                <a href="../index.html" class="nav-link">🏠 홈</a>
+                <a href="#calculator" class="nav-link active">대출 계산기</a>
+                <a href="#schedule" class="nav-link">상환 스케줄</a>
+                <a href="#bottom-info" class="nav-link">계산 방법</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== TOP AD BANNER ===== -->
+    <div class="ad-banner-top">
+        <div class="container">
+            <div class="ad-slot ad-slot--horizontal" id="ad-top">
+                <span class="ad-placeholder-text">광고</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOP DESCRIPTION ===== -->
+    <section class="top-description">
+        <div class="container">
+            <div class="top-desc-inner">
+                <div class="breadcrumb">
+                    <span>홈</span> <span class="bc-sep">›</span> <span>금융 계산기</span> <span class="bc-sep">›</span> <span
+                        class="bc-current">대출 이자 계산기</span>
+                </div>
+                <h1 class="main-title">대출 이자 계산기</h1>
+                <p class="main-subtitle">
+                    주택담보대출, 신용대출, 전세자금대출 등 다양한 대출의 <strong>월 상환금</strong>과 <strong>총 이자</strong>를 계산해 드립니다.
+                    원리금균등·원금균등·만기일시 3가지 상환 방식을 모두 지원합니다.
+                </p>
+                <div class="top-desc-tags">
+                    <span class="tag">✓ 원리금균등 상환</span>
+                    <span class="tag">✓ 원금균등 상환</span>
+                    <span class="tag">✓ 만기일시 상환</span>
+                    <span class="tag">✓ 월별 상환 스케줄</span>
+                    <span class="tag">✓ 무료 사용</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <div class="container content-grid">
+
+            <!-- ===== CALCULATOR ===== -->
+            <section class="calculator-section" id="calculator">
+
+                <div class="calc-card">
+                    <h2 class="calc-card-title">대출 계산</h2>
+                    <p class="calc-card-desc">대출 조건을 입력하고 <strong>계산하기</strong>를 누르세요. 3가지 상환 방식을 비교할 수 있습니다.</p>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="loan-amount">대출 원금</label>
+                            <div class="input-wrap">
+                                <input type="text" id="loan-amount" class="form-input" placeholder="300,000,000"
+                                    inputmode="numeric" />
+                                <span class="input-unit">원</span>
+                            </div>
+                            <span class="form-hint" id="loan-amount-hint"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="loan-rate">연이율</label>
+                            <div class="input-wrap">
+                                <input type="number" id="loan-rate" class="form-input" placeholder="4.50" min="0.01"
+                                    max="100" step="0.01" />
+                                <span class="input-unit">%</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="loan-period">대출 기간</label>
+                            <div class="input-wrap">
+                                <input type="number" id="loan-period" class="form-input" placeholder="360" min="1"
+                                    max="600" step="1" />
+                                <span class="input-unit">개월</span>
+                            </div>
+                            <span class="form-hint period-hint" id="loan-period-hint"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">거치 기간</label>
+                            <div class="input-wrap">
+                                <input type="number" id="loan-grace" class="form-input" placeholder="0" min="0"
+                                    max="360" step="1" value="0" />
+                                <span class="input-unit">개월</span>
+                            </div>
+                            <span class="form-hint">거치 기간 중 이자만 납입</span>
+                        </div>
+
+                        <div class="form-group" style="grid-column: span 2">
+                            <label class="form-label">상환 방식</label>
+                            <div class="radio-group repayment-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="repayment-type" value="equal-installment" checked
+                                        id="r-equal-installment" />
+                                    <span class="radio-custom"></span>
+                                    <div>
+                                        <strong>원리금균등상환</strong>
+                                        <small>매월 동일 금액 납부 (가장 일반적)</small>
+                                    </div>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="repayment-type" value="equal-principal"
+                                        id="r-equal-principal" />
+                                    <span class="radio-custom"></span>
+                                    <div>
+                                        <strong>원금균등상환</strong>
+                                        <small>매월 동일 원금 + 줄어드는 이자</small>
+                                    </div>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="repayment-type" value="bullet" id="r-bullet" />
+                                    <span class="radio-custom"></span>
+                                    <div>
+                                        <strong>만기일시상환</strong>
+                                        <small>매월 이자만 납부, 만기에 원금 일시 상환</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="calc-btn" id="btn-loan" onclick="calculateLoan()">
+                        <span class="btn-icon">⚡</span> 계산하기
+                    </button>
+                </div>
+
+                <!-- ===== RESULTS ===== -->
+                <div class="result-card" id="result-loan" style="display:none">
+                    <h3 class="result-title">📊 대출 계산 결과</h3>
+                    <div class="result-summary-box" id="result-loan-summary"></div>
+
+                    <!-- Compare bar -->
+                    <div class="compare-section" id="compare-section" style="display:none">
+                        <h4 class="compare-title">💡 상환 방식 비교</h4>
+                        <div class="compare-grid" id="compare-grid"></div>
+                    </div>
+
+                    <div class="result-grid" id="result-loan-grid"></div>
+
+                    <div class="chart-wrap">
+                        <canvas id="chart-loan" width="260" height="260"></canvas>
+                        <div class="chart-legend" id="legend-loan"></div>
+                    </div>
+
+                    <div class="result-notice">
+                        ※ 실제 대출 이자는 금융기관의 기산일 방식, 중도상환 수수료, 보험료 등에 따라 다를 수 있습니다.
+                    </div>
+                </div>
+
+                <!-- ===== AMORTIZATION SCHEDULE ===== -->
+                <div class="schedule-card" id="schedule-card" style="display:none">
+                    <div class="schedule-header">
+                        <h3 class="result-title" id="schedule" style="margin-bottom:0">📋 월별 상환 스케줄</h3>
+                        <div class="schedule-controls">
+                            <button class="btn-toggle-all" id="btn-show-all" onclick="toggleSchedule()">전체 보기</button>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="schedule-table" id="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>회차</th>
+                                    <th>납입원금</th>
+                                    <th>이자</th>
+                                    <th>월납입금</th>
+                                    <th>잔여원금</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===== SIDEBAR ===== -->
+            <aside class="sidebar">
+                <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
+                    <span class="ad-placeholder-text">광고</span>
+                </div>
+
+                <nav class="sidebar-widget" aria-label="다른 금융 계산기">
+                    <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+                    <ul class="sidebar-links">
+                        <li><a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span><div class="link-info"><strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small></div></a></li>
+                        <li><a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span><div class="link-info"><strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small></div></a></li>
+                        <li><a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span><div class="link-info"><strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small></div></a></li>
+                        <li><a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span><div class="link-info"><strong>예적금 만기 계산기</strong><small>예금·적금 수령액 계산</small></div></a></li>
+                        <li><a href="#" class="sidebar-link active-link"><span class="link-icon">🏠</span><div class="link-info"><strong>대출 이자 계산기</strong><small>현재 페이지</small></div></a></li>
+                        <li><a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span><div class="link-info"><strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small></div></a></li>
+                        <li><a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span><div class="link-info"><strong>전세/월세 전환 계산기</strong><small>전환보증금 계산</small></div></a></li>
+                        <li><a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span><div class="link-info"><strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small></div></a></li>
+                        <li><a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span><div class="link-info"><strong>세후 이자 계산기</strong><small>이자소득세 상세 계산</small></div></a></li>
+                        <li><a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span><div class="link-info"><strong>물가상승률 계산기</strong><small>실질 구매력 계산</small></div></a></li>
+                        <li><a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span><div class="link-info"><strong>환율 계산기</strong><small>달러·엔·유로 환산</small></div></a></li>
+                    </ul>
+                </nav>
+
+                <!-- DSR info widget -->
+                <div class="sidebar-widget info-widget">
+                    <h2 class="widget-title">📋 DSR 기준 안내</h2>
+                    <table class="tax-table">
+                        <thead>
+                            <tr>
+                                <th>구분</th>
+                                <th>DSR 한도</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>은행권</td>
+                                <td class="tax-rate">40%</td>
+                            </tr>
+                            <tr>
+                                <td>비은행권</td>
+                                <td class="tax-rate preferred">50%</td>
+                            </tr>
+                            <tr>
+                                <td>보금자리론</td>
+                                <td class="tax-rate exempt">비적용</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="widget-note">※ DSR(총부채원리금상환비율) = 연간 원리금 상환액 ÷ 연소득</p>
+                </div>
+
+                <!-- Rate info -->
+                <div class="sidebar-widget info-widget">
+                    <h2 class="widget-title">📰 기준금리 정보</h2>
+                    <div class="rate-info-box">
+                        <div class="rate-item">
+                            <span class="rate-label">한국은행 기준금리</span>
+                            <span class="rate-value">연 2.75%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span class="rate-label">최종 변경일</span>
+                            <span class="rate-value small">2025.02.25</span>
+                        </div>
+                    </div>
+                    <p class="widget-note">※ 실제 대출 금리는 개인 신용등급 및 금융기관별로 상이합니다.</p>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- ===== MIDDLE AD ===== -->
+    <div class="ad-banner-middle">
+        <div class="container">
+            <div class="ad-slot ad-slot--horizontal" id="ad-middle">
+                <span class="ad-placeholder-text">광고</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOTTOM DESCRIPTION ===== -->
+    <section class="bottom-description" id="bottom-info">
+        <div class="container">
+
+            <div class="info-section">
+                <h2>상환 방식별 특징 비교</h2>
+                <div class="info-grid three-col">
+                    <div class="info-card highlight-card">
+                        <h3>📐 원리금균등상환</h3>
+                        <p>매월 납입하는 금액이 동일합니다. 초기에는 이자 비중이 높고 갈수록 원금 비중이 커집니다. 생활비 계획을 세우기 편리하여 <strong>주택담보대출에서 가장 많이
+                                사용</strong>합니다.</p>
+                        <ul class="feature-list">
+                            <li>✅ 매월 동일한 납입금</li>
+                            <li>✅ 가계 계획 수립 용이</li>
+                            <li>❌ 원금균등 대비 총이자 많음</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📊 원금균등상환</h3>
+                        <p>매월 동일한 원금을 납부하고 잔여 원금에 대한 이자를 추가로 납부합니다. 초기 납입금이 많지만 갈수록 줄어들며, 총 이자 부담이 가장 적습니다.</p>
+                        <ul class="feature-list">
+                            <li>✅ 총 이자 부담 최소</li>
+                            <li>✅ 납입금이 점차 감소</li>
+                            <li>❌ 초기 월납입금이 높음</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🔔 만기일시상환</h3>
+                        <p>대출 기간 중에는 이자만 납부하고 만기 시에 원금 전액을 한꺼번에 상환합니다. 월 납입 부담은 가장 낮지만 <strong>총 이자 부담이 가장 큽니다.</strong>
+                        </p>
+                        <ul class="feature-list">
+                            <li>✅ 월 납입 부담 최소</li>
+                            <li>❌ 총 이자 부담 최대</li>
+                            <li>❌ 만기 시 목돈 필요</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>대출 이자 계산 공식</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>📐 원리금균등상환 공식</h3>
+                        <p>매월 동일한 금액을 납부하는 방식입니다.</p>
+                        <div class="formula-box">
+                            <p>월 납입금 (M):</p>
+                            <code>M = P × [r(1+r)ⁿ] ÷ [(1+r)ⁿ - 1]</code>
+                            <p class="mt-8">P = 대출 원금 | r = 월 이율 (연이율/12) | n = 총 납입 횟수</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>📊 원금균등상환 공식</h3>
+                        <p>매월 원금은 동일하고 이자는 잔여원금에 대해 산출됩니다.</p>
+                        <div class="formula-box">
+                            <p>k회차 월 납입금:</p>
+                            <code>Mₖ = P/n + (P - P/n × (k-1)) × r</code>
+                            <p class="mt-8">P = 대출 원금 | r = 월 이율 | n = 총 납입 횟수 | k = 납입 회차</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>대출 관련 용어 설명</h2>
+                <div class="info-grid three-col">
+                    <div class="info-card">
+                        <h3>📌 DSR (총부채원리금상환비율)</h3>
+                        <p>연간 모든 대출의 원리금 상환액을 연소득으로 나눈 비율입니다. 은행권 40%, 비은행권 50%를 초과하면 대출이 제한됩니다.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>📌 LTV (담보인정비율)</h3>
+                        <p>주택 가격 대비 대출 가능 금액의 비율입니다. 지역/주택 유형에 따라 30~70%까지 다르게 적용됩니다.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>📌 중도상환 수수료</h3>
+                        <p>대출 만기 전에 상환할 경우 발생하는 수수료입니다. 일반적으로 잔여 원금의 0.5~1.5%이며, 통상 3년 이후에는 면제됩니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section" id="faq">
+                <h2>자주 묻는 질문 (FAQ)</h2>
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary>원리금균등과 원금균등 중 어느 것이 더 유리한가요?</summary>
+                        <p>총 이자 부담은 <strong>원금균등상환</strong>이 더 적습니다. 하지만 초기 월납입금이 높아 현금 흐름 부담이 클 수 있습니다. 여유 자금이 있다면
+                            원금균등이 유리하고, 안정적인 월 납입 계획이 필요하다면 원리금균등이 적합합니다.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>변동금리 대출은 어떻게 계산하나요?</summary>
+                        <p>본 계산기는 고정 금리를 기준으로 계산합니다. 변동금리 대출은 금리 변동 주기(6개월/1년)마다 이율이 바뀌므로, 현재 적용 금리를 기준으로 계산 후 금리 변동 위험을
+                            추가로 고려하시기 바랍니다.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>거치 기간이란 무엇인가요?</summary>
+                        <p>거치 기간은 원금 상환 없이 <strong>이자만 납부</strong>하는 기간입니다. 예를 들어 3년 거치 27년 상환의 경우, 처음 36개월은 이자만 납부하고 이후
+                            324개월 동안 원리금을 상환합니다. 초기 월 납입 부담을 줄일 수 있지만 총 이자는 더 많아집니다.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>주택담보대출과 신용대출의 금리 차이는 얼마나 되나요?</summary>
+                        <p>일반적으로 담보가 있는 주택담보대출(연 3~5%)이 신용대출(연 4~8%)보다 금리가 낮습니다. 개인 신용등급, 소득, 금융기관에 따라 크게 달라지므로 여러 금융기관의
+                            금리를 비교해 보시기 바랍니다.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>대출 기간이 길면 왜 총 이자가 늘어나나요?</summary>
+                        <p>대출 기간이 길어질수록 원금이 더 천천히 줄어들고, 잔여 원금에 대한 이자가 더 오랫동안 발생하기 때문입니다. 예를 들어 3억원 4.5% 금리 기준으로, 20년 상환
+                            시 약 1.56억원 이자가 발생하지만 30년 상환 시에는 약 2.47억원으로 크게 늘어납니다.</p>
+                    </details>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== BOTTOM AD ===== -->
+    <div class="ad-banner-bottom">
+        <div class="container">
+            <div class="ad-slot ad-slot--horizontal" id="ad-bottom">
+                <span class="ad-placeholder-text">광고</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-logo">
+                <span class="logo-icon">💰</span>
+                <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+            </div>
+            <div class="footer-links">
+                <a href="../terms/index.html">이용약관</a>
+                <a href="../privacy-policy/index.html">개인정보처리방침</a>
+                <a href="../contact/index.html">문의하기</a>
+            </div>
+            <p class="footer-disclaimer">
+                본 계산기는 참고용으로만 사용하시기 바랍니다. 실제 대출 상환액은 금융기관에 따라 다를 수 있으며, 본 사이트는 계산 결과에 대한 법적 책임을 지지 않습니다.
+            </p>
+            <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="calculator.js"></script>
+</body>
+
+</html>

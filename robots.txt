@@ -1,0 +1,7 @@
+# https://geungyungcalc.kr/robots.txt
+
+User-agent: *
+Allow: /
+
+# 사이트맵 위치
+Sitemap: https://geungyungcalc.kr/sitemap.xml
