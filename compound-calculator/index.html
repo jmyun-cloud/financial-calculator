@@ -1,492 +1,629 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 
 <head>
-    <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-B1TE1JHHE3');
-</script>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>복리 수익률 계산기 - 투자 원금, 이율, 기간별 복리 계산 | 금융계산기</title>
-    <meta name="description"
-        content="복리 수익률 계산기로 투자 원금과 기대 수익률을 입력하면 기간별 자산 증가를 계산합니다. 월 추가 투자, 세전/세후 수익, 연도별 자산 성장 그래프를 무료로 확인하세요." />
-    <meta name="keywords" content="복리 계산기, 복리 수익률, 투자 수익 계산기, 복리 효과, 투자 원금 계산, 72의 법칙" />
-    <meta property="og:title" content="복리 수익률 계산기 - 투자 기간별 복리 효과 계산" />
-    <meta property="og:description" content="복리 투자 수익률을 계산하세요. 월 추가 투자, 연도별 자산 성장 그래프, 72의 법칙 계산 지원." />
-    <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035" crossorigin="anonymous"></script>
-
-    <!-- SEO & Favicon for Google Search -->
-    <meta property="og:site_name" content="금융계산기.kr" />
-    <link rel="icon" href="/favicon.svg" />
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "금융계산기.kr",
-      "url": "https://richcalc.kr/"
+  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
     }
+    gtag("js", new Date());
+
+    gtag("config", "G-B1TE1JHHE3");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    복리 수익률 계산기 - 투자 원금, 이율, 기간별 복리 계산 | 금융계산기
+  </title>
+  <meta name="description"
+    content="복리 수익률 계산기로 투자 원금과 기대 수익률을 입력하면 기간별 자산 증가를 계산합니다. 월 추가 투자, 세전/세후 수익, 연도별 자산 성장 그래프를 무료로 확인하세요." />
+  <meta name="keywords" content="복리 계산기, 복리 수익률, 투자 수익 계산기, 복리 효과, 투자 원금 계산, 72의 법칙" />
+  <meta property="og:title" content="복리 수익률 계산기 - 투자 기간별 복리 효과 계산" />
+  <meta property="og:description" content="복리 투자 수익률을 계산하세요. 월 추가 투자, 연도별 자산 성장 그래프, 72의 법칙 계산 지원." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+    crossorigin="anonymous"></script>
+
+  <!-- SEO & Favicon for Google Search -->
+  <meta property="og:site_name" content="금융계산기.kr" />
+  <link rel="icon" href="/favicon.svg" />
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "금융계산기.kr",
+        "url": "https://richcalc.kr/"
+      }
     </script>
 </head>
 
 <body>
-
-    <!-- ===== HEADER ===== -->
-    <header class="site-header">
-        <div class="container header-inner">
-            <a href="../index.html" class="logo">
-                <span class="logo-icon">💰</span>
-                <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-            </a>
-            <nav class="header-nav">
-                <a href="../index.html" class="nav-link">🏠 홈</a>
-                <a href="#calculator" class="nav-link active">복리 계산기</a>
-                <a href="#growth-table" class="nav-link">연도별 성장</a>
-                <a href="#bottom-info" class="nav-link">복리 원리</a>
-                <a href="#faq" class="nav-link">FAQ</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- ===== TOP AD ===== -->
-    <div class="ad-banner-top">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal" id="ad-top">
-                <span class="ad-placeholder-text">광고</span>
-            </div>
-        </div>
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html" class="nav-link">🏠 홈</a>
+        <a href="#calculator" class="nav-link active">복리 계산기</a>
+        <a href="#growth-table" class="nav-link">연도별 성장</a>
+        <a href="#bottom-info" class="nav-link">복리 원리</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- ===== TOP DESCRIPTION ===== -->
-    <section class="top-description">
-        <div class="container">
-            <div class="top-desc-inner">
-                <div class="breadcrumb">
-                    <span>홈</span> <span class="bc-sep">›</span> <span>금융 계산기</span> <span class="bc-sep">›</span> <span
-                        class="bc-current">복리 수익률 계산기</span>
-                </div>
-                <h1 class="main-title">복리 수익률 계산기</h1>
-                <p class="main-subtitle">
-                    투자 원금, 기대 수익률, 투자 기간을 입력하면 <strong>복리 효과</strong>로 자산이 어떻게 성장하는지 확인할 수 있습니다.
-                    월 추가 투자금 설정과 연도별 자산 성장 그래프까지 한눈에 제공합니다.
-                </p>
-                <div class="top-desc-tags">
-                    <span class="tag">✓ 복리 / 단리 비교</span>
-                    <span class="tag">✓ 월 추가 투자금 설정</span>
-                    <span class="tag">✓ 연도별 자산 성장 그래프</span>
-                    <span class="tag">✓ 72의 법칙 자동 계산</span>
-                    <span class="tag">✓ 무료 사용</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content">
-        <div class="container content-grid">
-
-            <!-- ===== CALCULATOR ===== -->
-            <section class="calculator-section" id="calculator">
-
-                <div class="calc-card">
-                    <h2 class="calc-card-title">복리 수익 계산</h2>
-                    <p class="calc-card-desc">투자 조건을 입력하고 <strong>계산하기</strong>를 누르세요. 복리와 단리 수익을 동시에 비교할 수 있습니다.</p>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="initial-amount">초기 투자 원금</label>
-                            <div class="input-wrap">
-                                <input type="text" id="initial-amount" class="form-input" placeholder="10,000,000"
-                                    inputmode="numeric" />
-                                <span class="input-unit">원</span>
-                            </div>
-                            <span class="form-hint" id="initial-amount-hint"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="annual-rate">연 수익률 (기대)</label>
-                            <div class="input-wrap">
-                                <input type="number" id="annual-rate" class="form-input" placeholder="7.00" min="0.01"
-                                    max="100" step="0.01" />
-                                <span class="input-unit">%</span>
-                            </div>
-                            <span class="form-hint">S&P500 장기평균 약 7~10%</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="invest-period">투자 기간</label>
-                            <div class="input-wrap">
-                                <input type="number" id="invest-period" class="form-input" placeholder="20" min="1"
-                                    max="100" step="1" />
-                                <span class="input-unit">년</span>
-                            </div>
-                            <span class="form-hint" id="invest-period-hint"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="monthly-add">월 추가 투자금 <span
-                                    class="optional-badge">선택</span></label>
-                            <div class="input-wrap">
-                                <input type="text" id="monthly-add" class="form-input" placeholder="300,000"
-                                    inputmode="numeric" />
-                                <span class="input-unit">원</span>
-                            </div>
-                            <span class="form-hint" id="monthly-add-hint">없으면 0 또는 비워두세요</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">복리 주기</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="compound-freq" value="12" checked id="freq-monthly" />
-                                    <span class="radio-custom"></span>
-                                    월복리
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="compound-freq" value="4" id="freq-quarterly" />
-                                    <span class="radio-custom"></span>
-                                    분기복리
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="compound-freq" value="1" id="freq-annual" />
-                                    <span class="radio-custom"></span>
-                                    연복리
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">세금 적용</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="tax-apply" value="none" checked id="tax-none" />
-                                    <span class="radio-custom"></span>
-                                    세전 (적용 안함)
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tax-apply" value="15.4" id="tax-154" />
-                                    <span class="radio-custom"></span>
-                                    이자소득세 15.4%
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tax-apply" value="22" id="tax-22" />
-                                    <span class="radio-custom"></span>
-                                    양도소득세 22%
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="calc-btn" onclick="calculateCompound()">
-                        <span class="btn-icon">⚡</span> 계산하기
-                    </button>
-                </div>
-
-                <!-- ===== RESULT ===== -->
-                <div class="result-card" id="result-compound" style="display:none">
-                    <h3 class="result-title">📈 복리 계산 결과</h3>
-                    <div class="result-summary-box" id="result-summary"></div>
-
-                    <!-- 복리 vs 단리 비교 -->
-                    <div class="compare-section">
-                        <h4 class="compare-title">💡 복리 vs 단리 비교</h4>
-                        <div class="compare-grid" id="compare-grid"></div>
-                    </div>
-
-                    <div class="result-grid" id="result-grid"></div>
-
-                    <!-- 72의 법칙 -->
-                    <div class="rule72-box" id="rule72-box"></div>
-
-                    <!-- 선형 성장 차트 -->
-                    <div class="chart-section">
-                        <h4 class="chart-section-title">📊 연도별 자산 성장</h4>
-                        <div class="line-chart-wrap">
-                            <canvas id="chart-growth"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- 도넛 차트 -->
-                    <div class="chart-wrap">
-                        <canvas id="chart-donut" width="260" height="260"></canvas>
-                        <div class="chart-legend" id="legend-donut"></div>
-                    </div>
-
-                    <div class="result-notice">
-                        ※ 수익률은 과거 실적을 기반으로 한 추정치입니다. 실제 투자 수익은 보장되지 않으며, 투자 원금 손실이 발생할 수 있습니다.
-                    </div>
-                </div>
-
-                <!-- ===== GROWTH TABLE ===== -->
-                <div class="schedule-card" id="growth-table-card" style="display:none">
-                    <div class="schedule-header">
-                        <h3 class="result-title" id="growth-table">📋 연도별 자산 성장 표</h3>
-                    </div>
-                    <div class="table-wrap">
-                        <table class="schedule-table" id="growth-table-body-wrap">
-                            <thead>
-                                <tr>
-                                    <th>연도</th>
-                                    <th>누적 투자금</th>
-                                    <th>복리 수익</th>
-                                    <th>복리 자산총액</th>
-                                    <th>단리 자산총액</th>
-                                </tr>
-                            </thead>
-                            <tbody id="growth-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- ===== SIDEBAR ===== -->
-            <aside class="sidebar">
-                <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
-                    <span class="ad-placeholder-text">광고</span>
-                </div>
-
-                <nav class="sidebar-widget">
-                    <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-                    <ul class="sidebar-links">
-                        <li><a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span><div class="link-info"><strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small></div></a></li>
-                        <li><a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span><div class="link-info"><strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small></div></a></li>
-                        <li><a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span><div class="link-info"><strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small></div></a></li>
-                        <li><a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span><div class="link-info"><strong>예적금 만기 계산기</strong><small>예금·적금 수령액 계산</small></div></a></li>
-                        <li><a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span><div class="link-info"><strong>대출 이자 계산기</strong><small>원리금균등·원금균등 상환</small></div></a></li>
-                        <li><a href="#" class="sidebar-link active-link"><span class="link-icon">📈</span><div class="link-info"><strong>복리 수익률 계산기</strong><small>현재 페이지</small></div></a></li>
-                        <li><a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span><div class="link-info"><strong>전세/월세 전환 계산기</strong><small>전환보증금 계산</small></div></a></li>
-                        <li><a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span><div class="link-info"><strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small></div></a></li>
-                        <li><a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span><div class="link-info"><strong>세후 이자 계산기</strong><small>이자소득세 상세 계산</small></div></a></li>
-                        <li><a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span><div class="link-info"><strong>물가상승률 계산기</strong><small>실질 구매력 계산</small></div></a></li>
-                        <li><a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span><div class="link-info"><strong>환율 계산기</strong><small>달러·엔·유로 환산</small></div></a></li>
-                    </ul>
-                </nav>
-
-                <!-- 72의 법칙 위젯 -->
-                <div class="sidebar-widget info-widget">
-                    <h2 class="widget-title">🔢 72의 법칙</h2>
-                    <p class="widget-desc">자산이 2배가 되는 기간을 빠르게 계산하는 방법:</p>
-                    <div class="rule72-widget">
-                        <div class="rule72-formula">72 ÷ 수익률(%) = <strong>2배 기간(년)</strong></div>
-                        <div class="rule72-examples">
-                            <div class="r72-row"><span>연 4%</span><span>→ 18년</span></div>
-                            <div class="r72-row"><span>연 7%</span><span>→ 약 10년</span></div>
-                            <div class="r72-row"><span>연 10%</span><span>→ 약 7.2년</span></div>
-                            <div class="r72-row"><span>연 12%</span><span>→ 6년</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 수익률 참고 위젯 -->
-                <div class="sidebar-widget info-widget">
-                    <h2 class="widget-title">📰 수익률 참고</h2>
-                    <table class="tax-table">
-                        <thead>
-                            <tr>
-                                <th>자산 유형</th>
-                                <th>장기평균</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>S&amp;P500 (미국)</td>
-                                <td class="rate-highlight">약 10%</td>
-                            </tr>
-                            <tr>
-                                <td>코스피 (한국)</td>
-                                <td class="rate-highlight">약 6~8%</td>
-                            </tr>
-                            <tr>
-                                <td>정기예금</td>
-                                <td class="rate-highlight">약 3~4%</td>
-                            </tr>
-                            <tr>
-                                <td>채권</td>
-                                <td class="rate-highlight">약 2~4%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p class="widget-note">※ 과거 수익률은 미래 수익을 보장하지 않습니다.</p>
-                </div>
-
-            </aside>
-        </div>
-    </main>
-
-    <!-- ===== MIDDLE AD ===== -->
-    <div class="ad-banner-middle">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal" id="ad-middle">
-                <span class="ad-placeholder-text">광고</span>
-            </div>
-        </div>
+  <!-- ===== TOP AD ===== -->
+  <div class="ad-banner-top">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal" id="ad-top">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
     </div>
+  </div>
 
-    <!-- ===== BOTTOM DESCRIPTION ===== -->
-    <section class="bottom-description" id="bottom-info">
-        <div class="container">
-
-            <div class="info-section">
-                <h2>복리란 무엇인가?</h2>
-                <p>복리(複利, Compound Interest)는 원금뿐만 아니라 <strong>이미 발생한 이자에도 이자가 붙는 방식</strong>입니다. 시간이 지날수록 이자가 눈덩이처럼
-                    불어나는 효과가 있어 "세계 8번째 불가사의"라고도 불립니다.</p>
-                <div class="info-grid">
-                    <div class="info-card highlight-card">
-                        <h3>📈 복리 (Compound Interest)</h3>
-                        <p>이자에도 이자가 붙는 방식. 투자 기간이 길수록 그 효과가 기하급수적으로 커집니다.</p>
-                        <div class="formula-box">
-                            <p>복리 계산 공식:</p>
-                            <code>A = P × (1 + r/n)^(n×t)</code>
-                            <p class="mt-8">P=원금 | r=연이율 | n=복리주기/년 | t=기간(년)</p>
-                        </div>
-                        <p class="mt-8">월 추가투자 포함 시:</p>
-                        <div class="formula-box">
-                            <code>A = P×(1+r/n)^(n×t) + M×[(1+r/n)^(n×t)-1]/(r/n)</code>
-                            <p class="mt-8">M = 월 추가 투자금</p>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <h3>📐 단리 (Simple Interest)</h3>
-                        <p>원금에만 이자가 붙는 방식. 매 기간마다 동일한 이자가 발생합니다.</p>
-                        <div class="formula-box">
-                            <p>단리 계산 공식:</p>
-                            <code>A = P × (1 + r × t)</code>
-                            <p class="mt-8">P=원금 | r=연이율 | t=기간(년)</p>
-                        </div>
-                        <div class="comparison-note">
-                            <p>📌 <strong>핵심 차이:</strong> 동일한 조건에서 기간이 길수록 복리가 단리보다 훨씬 큰 수익을 냅니다. 1,000만원을 연 7%로 30년 투자
-                                시:</p>
-                            <ul>
-                                <li>단리: 약 3,100만원</li>
-                                <li>복리: 약 7,612만원</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-section">
-                <h2>72의 법칙 (Rule of 72)</h2>
-                <p>72의 법칙은 투자금이 <strong>2배가 되는 기간</strong>을 간단하게 계산하는 방법입니다. 72를 연간 수익률(%)로 나누면 자산이 2배가 되는 대략적인 기간(년)을 알
-                    수 있습니다.</p>
-                <div class="info-grid three-col">
-                    <div class="info-card">
-                        <h3>📌 계산 방법</h3>
-                        <p><strong>2배 기간 ≈ 72 ÷ 연이율(%)</strong></p>
-                        <p>연 6% 수익률이라면 72 ÷ 6 = <strong>12년</strong>마다 자산이 2배가 됩니다.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>📌 활용 예시</h3>
-                        <ul class="feature-list">
-                            <li>연 4% → 18년 후 2배</li>
-                            <li>연 6% → 12년 후 2배</li>
-                            <li>연 8% → 9년 후 2배</li>
-                            <li>연 10% → 7.2년 후 2배</li>
-                            <li>연 12% → 6년 후 2배</li>
-                        </ul>
-                    </div>
-                    <div class="info-card">
-                        <h3>📌 인플레이션 응용</h3>
-                        <p>물가상승률에도 적용할 수 있습니다. 물가가 연 3% 오른다면 72 ÷ 3 = <strong>24년</strong> 후에 현재 화폐 가치의 절반으로 줄어들 수 있습니다.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-section">
-                <h2>복리 투자 시 주의사항</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>⚠️ 세금 고려</h3>
-                        <p>투자 수익에는 세금이 발생합니다. 국내 주식 매매차익은 대주주 해당 시 또는 금투세 도입 여부에 따라 과세됩니다. 예금·채권 이자는 이자소득세 15.4%가 부과됩니다.
-                            세금을 고려한 실질 수익률을 반드시 확인하세요.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>⚠️ 인플레이션 영향</h3>
-                        <p>명목 수익률에서 물가상승률을 뺀 실질 수익률이 진짜 수익입니다. 연 7% 수익에 물가상승률 3%면 실질 수익률은 약 4%입니다. 장기 투자에서 인플레이션의 영향은 매우
-                            큽니다.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-section" id="faq">
-                <h2>자주 묻는 질문 (FAQ)</h2>
-                <div class="faq-list">
-                    <details class="faq-item">
-                        <summary>복리 주기가 짧을수록 수익이 더 많아지나요?</summary>
-                        <p>네, 복리 주기가 짧을수록(월복리 > 분기복리 > 연복리) 수익이 조금 더 많아집니다. 하지만 그 차이는 생각보다 크지 않습니다. 수익률이 7%일 때 연복리로 10년
-                            투자하면 1,967%의 수익을 얻고, 월복리로는 2,008%의 수익을 얻어 약 0.4% 차이가 납니다.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>월 추가 투자금의 복리 효과는 얼마나 클까요?</summary>
-                        <p>초기 1,000만원으로 시작해 월 30만원씩 20년간 연 7% 복리로 투자할 경우, 초기 1,000만원만 투자했을 때보다 약 1억 5천만원 이상 더 많은 자산을 형성할
-                            수 있습니다. 소액이라도 꾸준한 추가 투자가 장기적으로 매우 큰 차이를 만듭니다.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>연 7% 수익률을 어떻게 달성할 수 있나요?</summary>
-                        <p>단일 자산으로 높은 수익을 보장하는 방법은 없지만, S&P500 인덱스 펀드나 ETF(예: SPY, VOO)에 장기 분산 투자하면 과거 기준 연 7~10% 수익률을
-                            기록했습니다. 단, 이는 과거 실적이며 미래 수익을 보장하지 않습니다. 투자는 항상 원금 손실 위험을 동반합니다.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>복리 계산 시 세금은 어떻게 적용되나요?</summary>
-                        <p>예금 등 이자소득은 매년 발생하는 이자에 이자소득세 15.4%가 과세됩니다. 따라서 실제 재투자되는 금액은 세후 이자입니다. 본 계산기에서 세금 적용 항목을 선택하면
-                            최종 수령액에서 세금을 공제한 세후 금액을 확인할 수 있습니다.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>인플레이션을 고려한 실질 수익률은 어떻게 계산하나요?</summary>
-                        <p>실질 수익률 = (1 + 명목수익률) ÷ (1 + 인플레이션율) - 1 공식을 사용합니다. 명목수익률 7%, 인플레이션 3% 시 실질수익률 ≈ (1.07/1.03) -
-                            1 ≈ 3.88%입니다. 장기 투자에서 실질 수익률 관점으로 접근하는 것이 중요합니다.</p>
-                    </details>
-                </div>
-            </div>
-
+  <!-- ===== TOP DESCRIPTION ===== -->
+  <section class="top-description">
+    <div class="container">
+      <div class="top-desc-inner">
+        <div class="breadcrumb">
+          <span>홈</span> <span class="bc-sep">›</span>
+          <span>금융 계산기</span> <span class="bc-sep">›</span>
+          <span class="bc-current">복리 수익률 계산기</span>
         </div>
-    </section>
-
-    <!-- ===== BOTTOM AD ===== -->
-    <div class="ad-banner-bottom">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal" id="ad-bottom">
-                <span class="ad-placeholder-text">광고</span>
-            </div>
+        <h1 class="main-title">복리 수익률 계산기</h1>
+        <p class="main-subtitle">
+          투자 원금, 기대 수익률, 투자 기간을 입력하면
+          <strong>복리 효과</strong>로 자산이 어떻게 성장하는지 확인할 수
+          있습니다. 월 추가 투자금 설정과 연도별 자산 성장 그래프까지 한눈에
+          제공합니다.
+        </p>
+        <div class="top-desc-tags">
+          <span class="tag">✓ 복리 / 단리 비교</span>
+          <span class="tag">✓ 월 추가 투자금 설정</span>
+          <span class="tag">✓ 연도별 자산 성장 그래프</span>
+          <span class="tag">✓ 72의 법칙 자동 계산</span>
+          <span class="tag">✓ 무료 사용</span>
         </div>
+      </div>
     </div>
+  </section>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <div class="footer-logo">
-                <span class="logo-icon">💰</span>
-                <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+    <div class="container content-grid">
+      <!-- ===== CALCULATOR ===== -->
+      <section class="calculator-section" id="calculator">
+        <div class="calc-card">
+          <h2 class="calc-card-title">복리 수익 계산</h2>
+          <p class="calc-card-desc">
+            투자 조건을 입력하고 <strong>계산하기</strong>를 누르세요. 복리와
+            단리 수익을 동시에 비교할 수 있습니다.
+          </p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="initial-amount">초기 투자 원금</label>
+              <div class="input-wrap">
+                <input type="text" id="initial-amount" class="form-input" placeholder="10,000,000"
+                  inputmode="numeric" />
+                <span class="input-unit">원</span>
+              </div>
+              <span class="form-hint" id="initial-amount-hint"></span>
             </div>
-            <div class="footer-links">
-                <a href="../terms/index.html">이용약관</a>
-                <a href="../privacy-policy/index.html">개인정보처리방침</a>
-                <a href="../contact/index.html">문의하기</a>
+
+            <div class="form-group">
+              <label class="form-label" for="annual-rate">연 수익률 (기대)</label>
+              <div class="input-wrap">
+                <input type="number" id="annual-rate" class="form-input" placeholder="7.00" min="0.01" max="100"
+                  step="0.01" />
+                <span class="input-unit">%</span>
+              </div>
+              <span class="form-hint">S&P500 장기평균 약 7~10%</span>
             </div>
-            <p class="footer-disclaimer">
-                본 계산기는 교육·참고 목적으로만 사용하시기 바랍니다. 투자 권유가 아니며, 실제 투자 수익은 보장되지 않습니다. 투자는 항상 원금 손실 가능성을 수반합니다.
+
+            <div class="form-group">
+              <label class="form-label" for="invest-period">투자 기간</label>
+              <div class="input-wrap">
+                <input type="number" id="invest-period" class="form-input" placeholder="20" min="1" max="100"
+                  step="1" />
+                <span class="input-unit">년</span>
+              </div>
+              <span class="form-hint" id="invest-period-hint"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="monthly-add">월 추가 투자금
+                <span class="optional-badge">선택</span></label>
+              <div class="input-wrap">
+                <input type="text" id="monthly-add" class="form-input" placeholder="300,000" inputmode="numeric" />
+                <span class="input-unit">원</span>
+              </div>
+              <span class="form-hint" id="monthly-add-hint">없으면 0 또는 비워두세요</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">복리 주기</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="compound-freq" value="12" checked id="freq-monthly" />
+                  <span class="radio-custom"></span>
+                  월복리
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="compound-freq" value="4" id="freq-quarterly" />
+                  <span class="radio-custom"></span>
+                  분기복리
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="compound-freq" value="1" id="freq-annual" />
+                  <span class="radio-custom"></span>
+                  연복리
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">세금 적용</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="tax-apply" value="none" checked id="tax-none" />
+                  <span class="radio-custom"></span>
+                  세전 (적용 안함)
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="tax-apply" value="15.4" id="tax-154" />
+                  <span class="radio-custom"></span>
+                  이자소득세 15.4%
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="tax-apply" value="22" id="tax-22" />
+                  <span class="radio-custom"></span>
+                  양도소득세 22%
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <button class="calc-btn" onclick="calculateCompound()">
+            <span class="btn-icon">⚡</span> 계산하기
+          </button>
+        </div>
+
+        <!-- ===== RESULT ===== -->
+        <div class="result-card" id="result-compound" style="display: none">
+          <h3 class="result-title">📈 복리 계산 결과</h3>
+          <div class="result-summary-box" id="result-summary"></div>
+
+          <!-- 복리 vs 단리 비교 -->
+          <div class="compare-section">
+            <h4 class="compare-title">💡 복리 vs 단리 비교</h4>
+            <div class="compare-grid" id="compare-grid"></div>
+          </div>
+
+          <div class="result-grid" id="result-grid"></div>
+
+          <!-- 72의 법칙 -->
+          <div class="rule72-box" id="rule72-box"></div>
+
+          <!-- 선형 성장 차트 -->
+          <div class="chart-section">
+            <h4 class="chart-section-title">📊 연도별 자산 성장</h4>
+            <div class="line-chart-wrap">
+              <canvas id="chart-growth"></canvas>
+            </div>
+          </div>
+
+          <!-- 도넛 차트 -->
+          <div class="chart-wrap">
+            <canvas id="chart-donut" width="260" height="260"></canvas>
+            <div class="chart-legend" id="legend-donut"></div>
+          </div>
+
+          <div class="result-notice">
+            ※ 수익률은 과거 실적을 기반으로 한 추정치입니다. 실제 투자 수익은
+            보장되지 않으며, 투자 원금 손실이 발생할 수 있습니다.
+          </div>
+        </div>
+
+        <!-- ===== GROWTH TABLE ===== -->
+        <div class="schedule-card" id="growth-table-card" style="display: none">
+          <div class="schedule-header">
+            <h3 class="result-title" id="growth-table">
+              📋 연도별 자산 성장 표
+            </h3>
+          </div>
+          <div class="table-wrap">
+            <table class="schedule-table" id="growth-table-body-wrap">
+              <thead>
+                <tr>
+                  <th>연도</th>
+                  <th>누적 투자금</th>
+                  <th>복리 수익</th>
+                  <th>복리 자산총액</th>
+                  <th>단리 자산총액</th>
+                </tr>
+              </thead>
+              <tbody id="growth-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SIDEBAR ===== -->
+      <aside class="sidebar">
+        <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+
+        <nav class="sidebar-widget">
+          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+          <ul class="sidebar-links">
+            <li>
+              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
+                <div class="link-info">
+                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
+                <div class="link-info">
+                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
+                <div class="link-info">
+                  <strong>예적금 만기 계산기</strong><small>예금·적금 수령액 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등 상환</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar-link active-link"><span class="link-icon">📈</span>
+                <div class="link-info">
+                  <strong>복리 수익률 계산기</strong><small>현재 페이지</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
+                <div class="link-info">
+                  <strong>전세/월세 전환 계산기</strong><small>전환보증금 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
+                <div class="link-info">
+                  <strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
+                <div class="link-info">
+                  <strong>세후 이자 계산기</strong><small>이자소득세 상세 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
+                <div class="link-info">
+                  <strong>물가상승률 계산기</strong><small>실질 구매력 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
+                <div class="link-info">
+                  <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- 72의 법칙 위젯 -->
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">🔢 72의 법칙</h2>
+          <p class="widget-desc">
+            자산이 2배가 되는 기간을 빠르게 계산하는 방법:
+          </p>
+          <div class="rule72-widget">
+            <div class="rule72-formula">
+              72 ÷ 수익률(%) = <strong>2배 기간(년)</strong>
+            </div>
+            <div class="rule72-examples">
+              <div class="r72-row"><span>연 4%</span><span>→ 18년</span></div>
+              <div class="r72-row">
+                <span>연 7%</span><span>→ 약 10년</span>
+              </div>
+              <div class="r72-row">
+                <span>연 10%</span><span>→ 약 7.2년</span>
+              </div>
+              <div class="r72-row"><span>연 12%</span><span>→ 6년</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 수익률 참고 위젯 -->
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">📰 수익률 참고</h2>
+          <table class="tax-table">
+            <thead>
+              <tr>
+                <th>자산 유형</th>
+                <th>장기평균</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S&amp;P500 (미국)</td>
+                <td class="rate-highlight">약 10%</td>
+              </tr>
+              <tr>
+                <td>코스피 (한국)</td>
+                <td class="rate-highlight">약 6~8%</td>
+              </tr>
+              <tr>
+                <td>정기예금</td>
+                <td class="rate-highlight">약 3~4%</td>
+              </tr>
+              <tr>
+                <td>채권</td>
+                <td class="rate-highlight">약 2~4%</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="widget-note">
+            ※ 과거 수익률은 미래 수익을 보장하지 않습니다.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===== MIDDLE AD ===== -->
+  <div class="ad-banner-middle">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal" id="ad-middle">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM DESCRIPTION ===== -->
+  <section class="bottom-description" id="bottom-info">
+    <div class="container">
+      <div class="info-section">
+        <h2>복리란 무엇인가?</h2>
+        <p>
+          복리(複利, Compound Interest)는 원금뿐만 아니라
+          <strong>이미 발생한 이자에도 이자가 붙는 방식</strong>입니다. 시간이
+          지날수록 이자가 눈덩이처럼 불어나는 효과가 있어 "세계 8번째
+          불가사의"라고도 불립니다.
+        </p>
+        <div class="info-grid">
+          <div class="info-card highlight-card">
+            <h3>📈 복리 (Compound Interest)</h3>
+            <p>
+              이자에도 이자가 붙는 방식. 투자 기간이 길수록 그 효과가
+              기하급수적으로 커집니다.
             </p>
-            <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+            <div class="formula-box">
+              <p>복리 계산 공식:</p>
+              <code>A = P × (1 + r/n)^(n×t)</code>
+              <p class="mt-8">
+                P=원금 | r=연이율 | n=복리주기/년 | t=기간(년)
+              </p>
+            </div>
+            <p class="mt-8">월 추가투자 포함 시:</p>
+            <div class="formula-box">
+              <code>A = P×(1+r/n)^(n×t) + M×[(1+r/n)^(n×t)-1]/(r/n)</code>
+              <p class="mt-8">M = 월 추가 투자금</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>📐 단리 (Simple Interest)</h3>
+            <p>
+              원금에만 이자가 붙는 방식. 매 기간마다 동일한 이자가 발생합니다.
+            </p>
+            <div class="formula-box">
+              <p>단리 계산 공식:</p>
+              <code>A = P × (1 + r × t)</code>
+              <p class="mt-8">P=원금 | r=연이율 | t=기간(년)</p>
+            </div>
+            <div class="comparison-note">
+              <p>
+                📌 <strong>핵심 차이:</strong> 동일한 조건에서 기간이 길수록
+                복리가 단리보다 훨씬 큰 수익을 냅니다. 1,000만원을 연 7%로
+                30년 투자 시:
+              </p>
+              <ul>
+                <li>단리: 약 3,100만원</li>
+                <li>복리: 약 7,612만원</li>
+              </ul>
+            </div>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <script src="calculator.js"></script>
+      <div class="info-section">
+        <h2>72의 법칙 (Rule of 72)</h2>
+        <p>
+          72의 법칙은 투자금이 <strong>2배가 되는 기간</strong>을 간단하게
+          계산하는 방법입니다. 72를 연간 수익률(%)로 나누면 자산이 2배가 되는
+          대략적인 기간(년)을 알 수 있습니다.
+        </p>
+        <div class="info-grid three-col">
+          <div class="info-card">
+            <h3>📌 계산 방법</h3>
+            <p><strong>2배 기간 ≈ 72 ÷ 연이율(%)</strong></p>
+            <p>
+              연 6% 수익률이라면 72 ÷ 6 = <strong>12년</strong>마다 자산이
+              2배가 됩니다.
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>📌 활용 예시</h3>
+            <ul class="feature-list">
+              <li>연 4% → 18년 후 2배</li>
+              <li>연 6% → 12년 후 2배</li>
+              <li>연 8% → 9년 후 2배</li>
+              <li>연 10% → 7.2년 후 2배</li>
+              <li>연 12% → 6년 후 2배</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>📌 인플레이션 응용</h3>
+            <p>
+              물가상승률에도 적용할 수 있습니다. 물가가 연 3% 오른다면 72 ÷ 3
+              = <strong>24년</strong> 후에 현재 화폐 가치의 절반으로 줄어들 수
+              있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h2>복리 투자 시 주의사항</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>⚠️ 세금 고려</h3>
+            <p>
+              투자 수익에는 세금이 발생합니다. 국내 주식 매매차익은 대주주
+              해당 시 또는 금투세 도입 여부에 따라 과세됩니다. 예금·채권
+              이자는 이자소득세 15.4%가 부과됩니다. 세금을 고려한 실질
+              수익률을 반드시 확인하세요.
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>⚠️ 인플레이션 영향</h3>
+            <p>
+              명목 수익률에서 물가상승률을 뺀 실질 수익률이 진짜 수익입니다.
+              연 7% 수익에 물가상승률 3%면 실질 수익률은 약 4%입니다. 장기
+              투자에서 인플레이션의 영향은 매우 큽니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" id="faq">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>복리 주기가 짧을수록 수익이 더 많아지나요?</summary>
+            <p>
+              네, 복리 주기가 짧을수록(월복리 > 분기복리 > 연복리) 수익이 조금
+              더 많아집니다. 하지만 그 차이는 생각보다 크지 않습니다. 수익률이
+              7%일 때 연복리로 10년 투자하면 1,967%의 수익을 얻고, 월복리로는
+              2,008%의 수익을 얻어 약 0.4% 차이가 납니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>월 추가 투자금의 복리 효과는 얼마나 클까요?</summary>
+            <p>
+              초기 1,000만원으로 시작해 월 30만원씩 20년간 연 7% 복리로 투자할
+              경우, 초기 1,000만원만 투자했을 때보다 약 1억 5천만원 이상 더
+              많은 자산을 형성할 수 있습니다. 소액이라도 꾸준한 추가 투자가
+              장기적으로 매우 큰 차이를 만듭니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>연 7% 수익률을 어떻게 달성할 수 있나요?</summary>
+            <p>
+              단일 자산으로 높은 수익을 보장하는 방법은 없지만, S&P500 인덱스
+              펀드나 ETF(예: SPY, VOO)에 장기 분산 투자하면 과거 기준 연 7~10%
+              수익률을 기록했습니다. 단, 이는 과거 실적이며 미래 수익을
+              보장하지 않습니다. 투자는 항상 원금 손실 위험을 동반합니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>복리 계산 시 세금은 어떻게 적용되나요?</summary>
+            <p>
+              예금 등 이자소득은 매년 발생하는 이자에 이자소득세 15.4%가
+              과세됩니다. 따라서 실제 재투자되는 금액은 세후 이자입니다. 본
+              계산기에서 세금 적용 항목을 선택하면 최종 수령액에서 세금을
+              공제한 세후 금액을 확인할 수 있습니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>
+              인플레이션을 고려한 실질 수익률은 어떻게 계산하나요?
+            </summary>
+            <p>
+              실질 수익률 = (1 + 명목수익률) ÷ (1 + 인플레이션율) - 1 공식을
+              사용합니다. 명목수익률 7%, 인플레이션 3% 시 실질수익률 ≈
+              (1.07/1.03) - 1 ≈ 3.88%입니다. 장기 투자에서 실질 수익률
+              관점으로 접근하는 것이 중요합니다.
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOTTOM AD ===== -->
+  <div class="ad-banner-bottom">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal" id="ad-bottom">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">💰</span>
+        <!-- prettier-ignore -->
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+      </div>
+      <div class="footer-links">
+        <a href="../terms/index.html">이용약관</a>
+        <a href="../privacy-policy/index.html">개인정보처리방침</a>
+        <a href="../contact/index.html">문의하기</a>
+      </div>
+      <p class="footer-disclaimer">
+        본 계산기는 교육·참고 목적으로만 사용하시기 바랍니다. 투자 권유가
+        아니며, 실제 투자 수익은 보장되지 않습니다. 투자는 항상 원금 손실
+        가능성을 수반합니다.
+      </p>
+      <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="calculator.js"></script>
 </body>
 
 </html>

@@ -1,407 +1,525 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 
 <head>
-    <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-B1TE1JHHE3');
-    </script>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>물가상승률 계산기 - 인플레이션 실질 구매력, 미래 가치 계산 | 금융계산기</title>
-    <meta name="description"
-        content="물가상승률(인플레이션)로 현재 금액의 미래 가치와 실질 구매력을 계산합니다. 과거 금액의 현재 가치 계산, 목표 금액 달성에 필요한 실질 수익률도 계산합니다." />
-    <meta name="keywords" content="물가상승률 계산기, 인플레이션 계산기, 실질 구매력, 미래 가치 계산, 화폐 가치 계산, CPI 계산" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="../savings-calculator/style.css" />
-    <style>
-        :root {
-            --primary: #dc2626;
-            --primary-dark: #b91c1c;
-            --primary-light: #fff1f2;
-            --primary-mid: #fecdd3;
-        }
-
-        .top-description {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #7f1d1d 100%);
-        }
-
-        .calc-btn {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            box-shadow: 0 4px 16px rgba(220, 38, 38, .4);
-        }
-
-        .calc-btn:hover {
-            box-shadow: 0 8px 24px rgba(220, 38, 38, .5);
-        }
-
-        .result-card {
-            border-color: #dc2626;
-        }
-
-        .result-summary-box {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-        }
-
-        .info-section>h2 {
-            border-bottom-color: #dc2626;
-        }
-
-        .faq-item summary:hover {
-            background: var(--primary-light);
-        }
-
-        .faq-item summary::after {
-            color: #dc2626;
-        }
-
-        .sidebar-link:hover,
-        .sidebar-link.active-link {
-            background: var(--primary-light);
-            color: #dc2626;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: var(--primary-light);
-            color: #dc2626;
-        }
-
-        .form-input:focus {
-            border-color: #dc2626;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
-        }
-
-        .radio-label:hover {
-            border-color: #dc2626;
-            color: #dc2626;
-            background: var(--primary-light);
-        }
-
-        .radio-label:has(input:checked) {
-            border-color: #dc2626;
-            background: var(--primary-light);
-            color: #dc2626;
-        }
-
-        .radio-label:has(input:checked) .radio-custom {
-            border-color: #dc2626;
-            background: #dc2626;
-        }
-
-        .result-item-value.accent {
-            color: #dc2626;
-        }
-
-        .result-item-value.large {
-            color: #7f1d1d;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, .35);
-        }
-
-        .tab-btn:not(.active):hover {
-            background: var(--primary-light);
-            color: #dc2626;
-        }
-    </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-        crossorigin="anonymous"></script>
-
-    <!-- SEO & Favicon for Google Search -->
-    <meta property="og:site_name" content="금융계산기.kr" />
-    <link rel="icon" href="/favicon.svg" />
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "금융계산기.kr",
-      "url": "https://richcalc.kr/"
+  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
     }
+    gtag("js", new Date());
+
+    gtag("config", "G-B1TE1JHHE3");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    물가상승률 계산기 - 인플레이션 실질 구매력, 미래 가치 계산 | 금융계산기
+  </title>
+  <meta name="description"
+    content="물가상승률(인플레이션)로 현재 금액의 미래 가치와 실질 구매력을 계산합니다. 과거 금액의 현재 가치 계산, 목표 금액 달성에 필요한 실질 수익률도 계산합니다." />
+  <meta name="keywords" content="물가상승률 계산기, 인플레이션 계산기, 실질 구매력, 미래 가치 계산, 화폐 가치 계산, CPI 계산" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../savings-calculator/style.css" />
+  <style>
+    :root {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fff1f2;
+      --primary-mid: #fecdd3;
+    }
+
+    .top-description {
+      background: linear-gradient(135deg,
+          #dc2626 0%,
+          #b91c1c 50%,
+          #7f1d1d 100%);
+    }
+
+    .calc-btn {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+    }
+
+    .calc-btn:hover {
+      box-shadow: 0 8px 24px rgba(220, 38, 38, 0.5);
+    }
+
+    .result-card {
+      border-color: #dc2626;
+    }
+
+    .result-summary-box {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    }
+
+    .info-section>h2 {
+      border-bottom-color: #dc2626;
+    }
+
+    .faq-item summary:hover {
+      background: var(--primary-light);
+    }
+
+    .faq-item summary::after {
+      color: #dc2626;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active-link {
+      background: var(--primary-light);
+      color: #dc2626;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--primary-light);
+      color: #dc2626;
+    }
+
+    .form-input:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    }
+
+    .radio-label:hover {
+      border-color: #dc2626;
+      color: #dc2626;
+      background: var(--primary-light);
+    }
+
+    .radio-label:has(input:checked) {
+      border-color: #dc2626;
+      background: var(--primary-light);
+      color: #dc2626;
+    }
+
+    .radio-label:has(input:checked) .radio-custom {
+      border-color: #dc2626;
+      background: #dc2626;
+    }
+
+    .result-item-value.accent {
+      color: #dc2626;
+    }
+
+    .result-item-value.large {
+      color: #7f1d1d;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+    }
+
+    .tab-btn:not(.active):hover {
+      background: var(--primary-light);
+      color: #dc2626;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+    crossorigin="anonymous"></script>
+
+  <!-- SEO & Favicon for Google Search -->
+  <meta property="og:site_name" content="금융계산기.kr" />
+  <link rel="icon" href="/favicon.svg" />
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "금융계산기.kr",
+        "url": "https://richcalc.kr/"
+      }
     </script>
 </head>
 
 <body>
-    <header class="site-header">
-        <div class="container header-inner"><a href="../index.html" class="logo"><span class="logo-icon">💰</span><span
-                    class="logo-text">금융계산기<span class="logo-accent">.kr</span></span></a>
-            <nav class="header-nav"><a href="../index.html" class="nav-link">🏠 홈</a><a href="#calculator"
-                    class="nav-link active">물가 계산기</a><a href="#bottom-info" class="nav-link">인플레이션</a><a href="#faq"
-                    class="nav-link">FAQ</a></nav>
-        </div>
-    </header>
-    <div class="ad-banner-top">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal"><span class="ad-placeholder-text">광고</span></div>
-        </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo"><span class="logo-icon">💰</span><span class="logo-text">금융계산기<span
+            class="logo-accent">.kr</span></span></a>
+      <nav class="header-nav">
+        <a href="../index.html" class="nav-link">🏠 홈</a><a href="#calculator" class="nav-link active">물가 계산기</a><a
+          href="#bottom-info" class="nav-link">인플레이션</a><a href="#faq" class="nav-link">FAQ</a>
+      </nav>
     </div>
-    <section class="top-description">
-        <div class="container">
-            <div class="breadcrumb"><span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span
-                    class="bc-sep">›</span><span class="bc-current">물가상승률 계산기</span></div>
-            <h1 class="main-title">물가상승률 계산기</h1>
-            <p class="main-subtitle">인플레이션이 자산 가치에 미치는 영향을 계산합니다. <strong>현재 돈의 미래 가치</strong>와 <strong>실질 구매력</strong>을
-                확인하세요.</p>
-            <div class="top-desc-tags"><span class="tag">✓ 미래 필요 금액 계산</span><span class="tag">✓ 실질 구매력 계산</span><span
-                    class="tag">✓ 현재→미래 가치</span><span class="tag">✓ 실질 수익률 계산</span><span class="tag">✓ 무료</span></div>
-        </div>
-    </section>
-
-    <main class="main-content">
-        <div class="container content-grid">
-            <section class="calculator-section" id="calculator">
-                <div class="tab-switcher">
-                    <button class="tab-btn active" onclick="switchTab('future')">📈 미래 가치 계산</button>
-                    <button class="tab-btn" onclick="switchTab('present')">📉 현재 구매력</button>
-                    <button class="tab-btn" onclick="switchTab('real-return')">💹 실질 수익률</button>
-                </div>
-
-                <!-- 미래 가치 -->
-                <div class="tab-panel active" id="panel-future">
-                    <div class="calc-card">
-                        <h2 class="calc-card-title">미래에 필요한 금액 계산</h2>
-                        <p class="calc-card-desc">현재 생활비 또는 목표 금액이 물가상승률 적용 후 <strong>몇 년 뒤 얼마가 되는지</strong> 계산합니다.</p>
-                        <div class="form-grid">
-                            <div class="form-group"><label class="form-label" for="fv-amount">현재 금액</label>
-                                <div class="input-wrap"><input type="text" id="fv-amount" class="form-input"
-                                        placeholder="2,500,000" inputmode="numeric" /><span class="input-unit">원</span>
-                                </div><span class="form-hint" id="fv-amount-hint"></span>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="fv-rate">연 물가상승률</label>
-                                <div class="input-wrap"><input type="number" id="fv-rate" class="form-input"
-                                        placeholder="3.0" value="3.0" min="0.1" max="30" step="0.1" /><span
-                                        class="input-unit">%</span></div><span class="form-hint">한국 평균 약 2~3%</span>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="fv-years">기간</label>
-                                <div class="input-wrap"><input type="number" id="fv-years" class="form-input"
-                                        placeholder="20" min="1" max="100" step="1" /><span class="input-unit">년</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="calc-btn" onclick="calcFuture()"><span class="btn-icon">⚡</span>계산하기</button>
-                    </div>
-                    <div class="result-card" id="result-fv" style="display:none">
-                        <h3 class="result-title">📈 미래 가치 계산 결과</h3>
-                        <div id="result-fv-content"></div>
-                    </div>
-                </div>
-
-                <!-- 현재 구매력 -->
-                <div class="tab-panel" id="panel-present">
-                    <div class="calc-card">
-                        <h2 class="calc-card-title">현재 구매력 (화폐 가치 하락)</h2>
-                        <p class="calc-card-desc">현재 보유 자산이 물가상승 후 <strong>실질 구매력이 얼마나 줄어드는지</strong> 계산합니다.</p>
-                        <div class="form-grid">
-                            <div class="form-group"><label class="form-label" for="pv-amount">현재 보유 금액</label>
-                                <div class="input-wrap"><input type="text" id="pv-amount" class="form-input"
-                                        placeholder="100,000,000" inputmode="numeric" /><span
-                                        class="input-unit">원</span></div><span class="form-hint"
-                                    id="pv-amount-hint"></span>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="pv-rate">연 물가상승률</label>
-                                <div class="input-wrap"><input type="number" id="pv-rate" class="form-input"
-                                        placeholder="3.0" value="3.0" min="0.1" max="30" step="0.1" /><span
-                                        class="input-unit">%</span></div>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="pv-years">기간</label>
-                                <div class="input-wrap"><input type="number" id="pv-years" class="form-input"
-                                        placeholder="20" min="1" max="100" step="1" /><span class="input-unit">년</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="calc-btn" onclick="calcPresent()"><span class="btn-icon">⚡</span>계산하기</button>
-                    </div>
-                    <div class="result-card" id="result-pv" style="display:none">
-                        <h3 class="result-title">📉 현재 구매력 계산 결과</h3>
-                        <div id="result-pv-content"></div>
-                    </div>
-                </div>
-
-                <!-- 실질 수익률 -->
-                <div class="tab-panel" id="panel-real-return">
-                    <div class="calc-card">
-                        <h2 class="calc-card-title">실질 수익률 계산</h2>
-                        <p class="calc-card-desc">명목 수익률에서 물가상승률을 제외한 <strong>실질 수익률</strong>을 계산합니다.</p>
-                        <div class="form-grid">
-                            <div class="form-group"><label class="form-label" for="rr-nominal">명목 수익률 (투자 수익률)</label>
-                                <div class="input-wrap"><input type="number" id="rr-nominal" class="form-input"
-                                        placeholder="7.0" min="0" max="100" step="0.1" /><span
-                                        class="input-unit">%</span></div>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="rr-inflation">물가상승률</label>
-                                <div class="input-wrap"><input type="number" id="rr-inflation" class="form-input"
-                                        placeholder="3.0" value="3.0" min="0" max="50" step="0.1" /><span
-                                        class="input-unit">%</span></div>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="rr-amount">투자 원금</label>
-                                <div class="input-wrap"><input type="text" id="rr-amount" class="form-input"
-                                        placeholder="10,000,000" inputmode="numeric" /><span class="input-unit">원</span>
-                                </div>
-                            </div>
-                            <div class="form-group"><label class="form-label" for="rr-years">투자 기간</label>
-                                <div class="input-wrap"><input type="number" id="rr-years" class="form-input"
-                                        placeholder="10" min="1" max="50" step="1" /><span class="input-unit">년</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="calc-btn" onclick="calcRealReturn()"><span class="btn-icon">⚡</span>계산하기</button>
-                    </div>
-                    <div class="result-card" id="result-rr" style="display:none">
-                        <h3 class="result-title">💹 실질 수익률 계산 결과</h3>
-                        <div id="result-rr-content"></div>
-                    </div>
-                </div>
-            </section>
-
-            <aside class="sidebar">
-                <div class="ad-slot ad-slot--sidebar"><span class="ad-placeholder-text">광고</span></div>
-                <nav class="sidebar-widget">
-                    <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-                    <ul class="sidebar-links">
-                        <li><a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                                <div class="link-info"><strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small></div>
-                            </a></li>
-                        <li><a href="../salary-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">💼</span>
-                                <div class="link-info"><strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small></div>
-                            </a></li>
-                        <li><a href="../severance-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">📦</span>
-                                <div class="link-info"><strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small></div>
-                            </a></li>
-                        <li><a href="../savings-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">🏦</span>
-                                <div class="link-info"><strong>예적금 만기 계산기</strong><small>예금·적금 수령액</small></div>
-                            </a></li>
-                        <li><a href="../loan-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">🏠</span>
-                                <div class="link-info"><strong>대출 이자 계산기</strong><small>원리금균등·원금균등</small></div>
-                            </a></li>
-                        <li><a href="../compound-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">📈</span>
-                                <div class="link-info"><strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small></div>
-                            </a></li>
-                        <li><a href="../jeonse-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">🏗️</span>
-                                <div class="link-info"><strong>전세/월세 전환 계산기</strong></div>
-                            </a></li>
-                        <li><a href="../pension-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">👴</span>
-                                <div class="link-info"><strong>연금 수령액 계산기</strong></div>
-                            </a></li>
-                        <li><a href="../tax-interest-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">💸</span>
-                                <div class="link-info"><strong>세후 이자 계산기</strong></div>
-                            </a></li>
-                        <li><a href="#" class="sidebar-link active-link"><span class="link-icon">📊</span>
-                                <div class="link-info"><strong>물가상승률 계산기</strong><small>현재 페이지</small></div>
-                            </a></li>
-                        <li><a href="../exchange-calculator/index.html" class="sidebar-link"><span
-                                    class="link-icon">💱</span>
-                                <div class="link-info"><strong>환율 계산기</strong><small>통화 환산</small></div>
-                            </a></li>
-                    </ul>
-                </nav>
-                <div class="sidebar-widget info-widget">
-                    <h2 class="widget-title">📰 물가상승률 참고</h2>
-                    <table class="tax-table">
-                        <thead>
-                            <tr>
-                                <th>기준</th>
-                                <th>상승률</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>한국 2026년</td>
-                                <td class="tax-rate">약 2.3%</td>
-                            </tr>
-                            <tr>
-                                <td>한국 10년 평균</td>
-                                <td class="tax-rate preferred">약 2.0%</td>
-                            </tr>
-                            <tr>
-                                <td>한국 30년 평균</td>
-                                <td class="tax-rate exempt">약 3.2%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p class="widget-note">※ 통계청 소비자물가지수(CPI) 기준</p>
-                </div>
-            </aside>
-        </div>
-    </main>
-    <div class="ad-banner-middle">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal"><span class="ad-placeholder-text">광고</span></div>
-        </div>
+  </header>
+  <div class="ad-banner-top">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
     </div>
-    <section class="bottom-description" id="bottom-info">
-        <div class="container">
-            <div class="info-section">
-                <h2>인플레이션(물가상승)이란?</h2>
-                <p>인플레이션은 시간이 지남에 따라 화폐의 구매력이 하락하는 현상입니다. 연 3% 물가상승률이면 지금 1억원으로 살 수 있는 물건이 24년 후에는 2억원이 필요합니다.</p>
-                <div class="info-grid">
-                    <div class="info-card" style="border-color:#dc2626;background:#fff1f2">
-                        <h3>📐 핵심 공식</h3>
-                        <div class="formula-box"><code>미래 필요금액 = 현재금액 × (1 + 물가상승률)^기간</code><code
-                                class="mt-8">실질 구매력 = 현재금액 ÷ (1 + 물가상승률)^기간</code><code
-                                class="mt-8">실질수익률 ≈ 명목수익률 - 물가상승률</code></div>
-                    </div>
-                    <div class="info-card">
-                        <h3>💡 72의 법칙 응용</h3>
-                        <p>화폐 가치가 절반이 되는 기간 = 72 ÷ 물가상승률(%)</p>
-                        <ul class="feature-list">
-                            <li>연 2%: 36년 후 구매력 절반</li>
-                            <li>연 3%: 24년 후 구매력 절반</li>
-                            <li>연 5%: 14.4년 후 구매력 절반</li>
-                        </ul>
-                    </div>
+  </div>
+  <section class="top-description">
+    <div class="container">
+      <div class="breadcrumb">
+        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span><span
+          class="bc-current">물가상승률 계산기</span>
+      </div>
+      <h1 class="main-title">물가상승률 계산기</h1>
+      <p class="main-subtitle">
+        인플레이션이 자산 가치에 미치는 영향을 계산합니다.
+        <strong>현재 돈의 미래 가치</strong>와 <strong>실질 구매력</strong>을
+        확인하세요.
+      </p>
+      <div class="top-desc-tags">
+        <span class="tag">✓ 미래 필요 금액 계산</span><span class="tag">✓ 실질 구매력 계산</span><span class="tag">✓ 현재→미래
+          가치</span><span class="tag">✓ 실질 수익률 계산</span><span class="tag">✓ 무료</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <div class="container content-grid">
+      <section class="calculator-section" id="calculator">
+        <div class="tab-switcher">
+          <button class="tab-btn active" onclick="switchTab('future')">
+            📈 미래 가치 계산
+          </button>
+          <button class="tab-btn" onclick="switchTab('present')">
+            📉 현재 구매력
+          </button>
+          <button class="tab-btn" onclick="switchTab('real-return')">
+            💹 실질 수익률
+          </button>
+        </div>
+
+        <!-- 미래 가치 -->
+        <div class="tab-panel active" id="panel-future">
+          <div class="calc-card">
+            <h2 class="calc-card-title">미래에 필요한 금액 계산</h2>
+            <p class="calc-card-desc">
+              현재 생활비 또는 목표 금액이 물가상승률 적용 후
+              <strong>몇 년 뒤 얼마가 되는지</strong> 계산합니다.
+            </p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="fv-amount">현재 금액</label>
+                <div class="input-wrap">
+                  <input type="text" id="fv-amount" class="form-input" placeholder="2,500,000"
+                    inputmode="numeric" /><span class="input-unit">원</span>
                 </div>
+                <span class="form-hint" id="fv-amount-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fv-rate">연 물가상승률</label>
+                <div class="input-wrap">
+                  <input type="number" id="fv-rate" class="form-input" placeholder="3.0" value="3.0" min="0.1" max="30"
+                    step="0.1" /><span class="input-unit">%</span>
+                </div>
+                <span class="form-hint">한국 평균 약 2~3%</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fv-years">기간</label>
+                <div class="input-wrap">
+                  <input type="number" id="fv-years" class="form-input" placeholder="20" min="1" max="100"
+                    step="1" /><span class="input-unit">년</span>
+                </div>
+              </div>
             </div>
-            <div class="info-section" id="faq">
-                <h2>자주 묻는 질문 (FAQ)</h2>
-                <div class="faq-list">
-                    <details class="faq-item">
-                        <summary>실질 수익률이 마이너스면 어떤 의미인가요?</summary>
-                        <p>실질 수익률이 마이너스라는 것은 투자 명목 수익률이 물가상승률보다 낮다는 뜻입니다. 즉, 숫자상으로는 수익이 났어도 실제 구매력은 오히려 줄어든 상태입니다. 예금
-                            이자가 연 3%인데 물가가 4% 오르면 실질 수익률은 약 -1%입니다.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>인플레이션을 이기는 투자 방법은?</summary>
-                        <p>물가상승률보다 높은 실질 수익률을 올리는 것이 중요합니다. 주식(인덱스펀드), 부동산, 물가연동채권(TIPS) 등이 장기적으로 인플레이션 방어 효과가 있었습니다. 단,
-                            모든 투자는 위험을 수반합니다.</p>
-                    </details>
+            <button class="calc-btn" onclick="calcFuture()">
+              <span class="btn-icon">⚡</span>계산하기
+            </button>
+          </div>
+          <div class="result-card" id="result-fv" style="display: none">
+            <h3 class="result-title">📈 미래 가치 계산 결과</h3>
+            <div id="result-fv-content"></div>
+          </div>
+        </div>
+
+        <!-- 현재 구매력 -->
+        <div class="tab-panel" id="panel-present">
+          <div class="calc-card">
+            <h2 class="calc-card-title">현재 구매력 (화폐 가치 하락)</h2>
+            <p class="calc-card-desc">
+              현재 보유 자산이 물가상승 후
+              <strong>실질 구매력이 얼마나 줄어드는지</strong> 계산합니다.
+            </p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="pv-amount">현재 보유 금액</label>
+                <div class="input-wrap">
+                  <input type="text" id="pv-amount" class="form-input" placeholder="100,000,000"
+                    inputmode="numeric" /><span class="input-unit">원</span>
                 </div>
+                <span class="form-hint" id="pv-amount-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pv-rate">연 물가상승률</label>
+                <div class="input-wrap">
+                  <input type="number" id="pv-rate" class="form-input" placeholder="3.0" value="3.0" min="0.1" max="30"
+                    step="0.1" /><span class="input-unit">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pv-years">기간</label>
+                <div class="input-wrap">
+                  <input type="number" id="pv-years" class="form-input" placeholder="20" min="1" max="100"
+                    step="1" /><span class="input-unit">년</span>
+                </div>
+              </div>
             </div>
+            <button class="calc-btn" onclick="calcPresent()">
+              <span class="btn-icon">⚡</span>계산하기
+            </button>
+          </div>
+          <div class="result-card" id="result-pv" style="display: none">
+            <h3 class="result-title">📉 현재 구매력 계산 결과</h3>
+            <div id="result-pv-content"></div>
+          </div>
         </div>
-    </section>
-    <div class="ad-banner-bottom">
-        <div class="container">
-            <div class="ad-slot ad-slot--horizontal"><span class="ad-placeholder-text">광고</span></div>
+
+        <!-- 실질 수익률 -->
+        <div class="tab-panel" id="panel-real-return">
+          <div class="calc-card">
+            <h2 class="calc-card-title">실질 수익률 계산</h2>
+            <p class="calc-card-desc">
+              명목 수익률에서 물가상승률을 제외한
+              <strong>실질 수익률</strong>을 계산합니다.
+            </p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="rr-nominal">명목 수익률 (투자 수익률)</label>
+                <div class="input-wrap">
+                  <input type="number" id="rr-nominal" class="form-input" placeholder="7.0" min="0" max="100"
+                    step="0.1" /><span class="input-unit">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-inflation">물가상승률</label>
+                <div class="input-wrap">
+                  <input type="number" id="rr-inflation" class="form-input" placeholder="3.0" value="3.0" min="0"
+                    max="50" step="0.1" /><span class="input-unit">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-amount">투자 원금</label>
+                <div class="input-wrap">
+                  <input type="text" id="rr-amount" class="form-input" placeholder="10,000,000"
+                    inputmode="numeric" /><span class="input-unit">원</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rr-years">투자 기간</label>
+                <div class="input-wrap">
+                  <input type="number" id="rr-years" class="form-input" placeholder="10" min="1" max="50"
+                    step="1" /><span class="input-unit">년</span>
+                </div>
+              </div>
+            </div>
+            <button class="calc-btn" onclick="calcRealReturn()">
+              <span class="btn-icon">⚡</span>계산하기
+            </button>
+          </div>
+          <div class="result-card" id="result-rr" style="display: none">
+            <h3 class="result-title">💹 실질 수익률 계산 결과</h3>
+            <div id="result-rr-content"></div>
+          </div>
         </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="ad-slot ad-slot--sidebar">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+        <nav class="sidebar-widget">
+          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+          <ul class="sidebar-links">
+            <li>
+              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
+                <div class="link-info">
+                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
+                <div class="link-info">
+                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
+                <div class="link-info">
+                  <strong>예적금 만기 계산기</strong><small>예금·적금 수령액</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
+                <div class="link-info">
+                  <strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
+                <div class="link-info">
+                  <strong>전세/월세 전환 계산기</strong>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
+                <div class="link-info">
+                  <strong>연금 수령액 계산기</strong>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
+                <div class="link-info"><strong>세후 이자 계산기</strong></div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar-link active-link"><span class="link-icon">📊</span>
+                <div class="link-info">
+                  <strong>물가상승률 계산기</strong><small>현재 페이지</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
+                <div class="link-info">
+                  <strong>환율 계산기</strong><small>통화 환산</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">📰 물가상승률 참고</h2>
+          <table class="tax-table">
+            <thead>
+              <tr>
+                <th>기준</th>
+                <th>상승률</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>한국 2026년</td>
+                <td class="tax-rate">약 2.3%</td>
+              </tr>
+              <tr>
+                <td>한국 10년 평균</td>
+                <td class="tax-rate preferred">약 2.0%</td>
+              </tr>
+              <tr>
+                <td>한국 30년 평균</td>
+                <td class="tax-rate exempt">약 3.2%</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="widget-note">※ 통계청 소비자물가지수(CPI) 기준</p>
+        </div>
+      </aside>
     </div>
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <div class="footer-logo"><span class="logo-icon">💰</span><span class="logo-text">금융계산기<span
-                        class="logo-accent">.kr</span></span></div>
-            <div class="footer-links"><a href="../terms/index.html">이용약관</a><a
-                    href="../privacy-policy/index.html">개인정보처리방침</a><a href="../contact/index.html">문의하기</a></div>
-            <p class="footer-copy">© 2026 금융계산기.kr</p>
+  </main>
+  <div class="ad-banner-middle">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+  <section class="bottom-description" id="bottom-info">
+    <div class="container">
+      <div class="info-section">
+        <h2>인플레이션(물가상승)이란?</h2>
+        <p>
+          인플레이션은 시간이 지남에 따라 화폐의 구매력이 하락하는 현상입니다.
+          연 3% 물가상승률이면 지금 1억원으로 살 수 있는 물건이 24년 후에는
+          2억원이 필요합니다.
+        </p>
+        <div class="info-grid">
+          <div class="info-card" style="border-color: #dc2626; background: #fff1f2">
+            <h3>📐 핵심 공식</h3>
+            <div class="formula-box">
+              <code>미래 필요금액 = 현재금액 × (1 + 물가상승률)^기간</code><code class="mt-8">실질 구매력 = 현재금액 ÷ (1 + 물가상승률)^기간</code><code
+                class="mt-8">실질수익률 ≈ 명목수익률 - 물가상승률</code>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>💡 72의 법칙 응용</h3>
+            <p>화폐 가치가 절반이 되는 기간 = 72 ÷ 물가상승률(%)</p>
+            <ul class="feature-list">
+              <li>연 2%: 36년 후 구매력 절반</li>
+              <li>연 3%: 24년 후 구매력 절반</li>
+              <li>연 5%: 14.4년 후 구매력 절반</li>
+            </ul>
+          </div>
         </div>
-    </footer>
-    <script src="calculator.js"></script>
+      </div>
+      <div class="info-section" id="faq">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>실질 수익률이 마이너스면 어떤 의미인가요?</summary>
+            <p>
+              실질 수익률이 마이너스라는 것은 투자 명목 수익률이
+              물가상승률보다 낮다는 뜻입니다. 즉, 숫자상으로는 수익이 났어도
+              실제 구매력은 오히려 줄어든 상태입니다. 예금 이자가 연 3%인데
+              물가가 4% 오르면 실질 수익률은 약 -1%입니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>인플레이션을 이기는 투자 방법은?</summary>
+            <p>
+              물가상승률보다 높은 실질 수익률을 올리는 것이 중요합니다.
+              주식(인덱스펀드), 부동산, 물가연동채권(TIPS) 등이 장기적으로
+              인플레이션 방어 효과가 있었습니다. 단, 모든 투자는 위험을
+              수반합니다.
+            </p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="ad-banner-bottom">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">💰</span>
+        <!-- prettier-ignore -->
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+      </div>
+      <div class="footer-links">
+        <a href="../terms/index.html">이용약관</a><a href="../privacy-policy/index.html">개인정보처리방침</a><a
+          href="../contact/index.html">문의하기</a>
+      </div>
+      <p class="footer-copy">© 2026 금융계산기.kr</p>
+    </div>
+  </footer>
+  <script src="calculator.js"></script>
 </body>
 
 </html>
