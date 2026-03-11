@@ -1,187 +1,205 @@
 <!doctype html>
 <html lang="ko">
+  <head>
+    <meta
+      name="naver-site-verification"
+      content="a06011ac826bc5ab12896ed43961cb7960df04ed"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-<head>
-  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+      gtag("config", "G-B1TE1JHHE3");
+    </script>
 
-    gtag("config", "G-B1TE1JHHE3");
-  </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      전세 월세 전환 계산기 - 전월세 전환율 보증금 계산 | 금융계산기
+    </title>
+    <meta
+      name="description"
+      content="전세를 월세로, 월세를 전세로 전환할 때 적정 금액을 계산해 드립니다. 법정 전월세 전환율 기준 보증금과 월세를 무료로 계산하세요."
+    />
+    <meta
+      name="keywords"
+      content="전세 월세 전환 계산기, 전월세 전환율, 보증금 계산, 전세금 월세 환산, 월세 전세 전환"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../savings-calculator/style.css" />
+    <style>
+      :root {
+        --primary: #7c3aed;
+        --primary-dark: #6d28d9;
+        --primary-light: #f5f3ff;
+        --primary-mid: #ede9fe;
+      }
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    전세 월세 전환 계산기 - 전월세 전환율 보증금 계산 | 금융계산기
-  </title>
-  <meta name="description" content="전세를 월세로, 월세를 전세로 전환할 때 적정 금액을 계산해 드립니다. 법정 전월세 전환율 기준 보증금과 월세를 무료로 계산하세요." />
-  <meta name="keywords" content="전세 월세 전환 계산기, 전월세 전환율, 보증금 계산, 전세금 월세 환산, 월세 전세 전환" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="../savings-calculator/style.css" />
-  <style>
-    :root {
-      --primary: #7c3aed;
-      --primary-dark: #6d28d9;
-      --primary-light: #f5f3ff;
-      --primary-mid: #ede9fe;
-    }
-
-    .top-description {
-      background: linear-gradient(135deg,
+      .top-description {
+        background: linear-gradient(
+          135deg,
           #7c3aed 0%,
           #5b21b6 50%,
-          #3b0764 100%);
-    }
+          #3b0764 100%
+        );
+      }
 
-    .calc-btn {
-      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
-    }
+      .calc-btn {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+      }
 
-    .calc-btn:hover {
-      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
-    }
+      .calc-btn:hover {
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
+      }
 
-    .result-card {
-      border-color: #7c3aed;
-    }
+      .result-card {
+        border-color: #7c3aed;
+      }
 
-    .result-summary-box {
-      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-    }
+      .result-summary-box {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+      }
 
-    .info-section>h2 {
-      border-bottom-color: #7c3aed;
-    }
+      .info-section > h2 {
+        border-bottom-color: #7c3aed;
+      }
 
-    .faq-item summary::after {
-      color: #7c3aed;
-    }
+      .faq-item summary::after {
+        color: #7c3aed;
+      }
 
-    .faq-item summary:hover {
-      background: var(--primary-light);
-    }
+      .faq-item summary:hover {
+        background: var(--primary-light);
+      }
 
-    .sidebar-link:hover,
-    .sidebar-link.active-link {
-      background: var(--primary-light);
-      color: #7c3aed;
-      border-color: rgba(124, 58, 237, 0.2);
-    }
+      .sidebar-link:hover,
+      .sidebar-link.active-link {
+        background: var(--primary-light);
+        color: #7c3aed;
+        border-color: rgba(124, 58, 237, 0.2);
+      }
 
-    .nav-link:hover,
-    .nav-link.active {
-      background: var(--primary-light);
-      color: #7c3aed;
-    }
+      .nav-link:hover,
+      .nav-link.active {
+        background: var(--primary-light);
+        color: #7c3aed;
+      }
 
-    .form-input:focus {
-      border-color: #7c3aed;
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
-    }
+      .form-input:focus {
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      }
 
-    .radio-label:hover {
-      border-color: #7c3aed;
-      color: #7c3aed;
-      background: var(--primary-light);
-    }
+      .radio-label:hover {
+        border-color: #7c3aed;
+        color: #7c3aed;
+        background: var(--primary-light);
+      }
 
-    .radio-label:has(input:checked) {
-      border-color: #7c3aed;
-      background: var(--primary-light);
-      color: #7c3aed;
-    }
+      .radio-label:has(input:checked) {
+        border-color: #7c3aed;
+        background: var(--primary-light);
+        color: #7c3aed;
+      }
 
-    .radio-label:has(input:checked) .radio-custom {
-      border-color: #7c3aed;
-      background: #7c3aed;
-    }
+      .radio-label:has(input:checked) .radio-custom {
+        border-color: #7c3aed;
+        background: #7c3aed;
+      }
 
-    .result-item-value.accent {
-      color: #7c3aed;
-    }
+      .result-item-value.accent {
+        color: #7c3aed;
+      }
 
-    .result-item-value.large {
-      color: #5b21b6;
-    }
+      .result-item-value.large {
+        color: #5b21b6;
+      }
 
-    .widget-title {
-      border-bottom-color: var(--primary-light);
-    }
+      .widget-title {
+        border-bottom-color: var(--primary-light);
+      }
 
-    .tab-btn.active {
-      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
-    }
+      .tab-btn.active {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+      }
 
-    .tab-btn:not(.active):hover {
-      background: var(--primary-light);
-      color: #7c3aed;
-    }
+      .tab-btn:not(.active):hover {
+        background: var(--primary-light);
+        color: #7c3aed;
+      }
 
-    .conversion-rate-box {
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
-      color: white;
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .conversion-rate-box {
+        background: linear-gradient(135deg, #7c3aed, #5b21b6);
+        color: white;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .cr-label {
-      font-size: 0.83rem;
-      opacity: 0.8;
-    }
+      .cr-label {
+        font-size: 0.83rem;
+        opacity: 0.8;
+      }
 
-    .cr-value {
-      font-size: 1.4rem;
-      font-weight: 800;
-    }
+      .cr-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+      }
 
-    .cr-note {
-      font-size: 0.75rem;
-      opacity: 0.65;
-      margin-top: 2px;
-    }
+      .cr-note {
+        font-size: 0.75rem;
+        opacity: 0.65;
+        margin-top: 2px;
+      }
 
-    .result-highlight {
-      background: #f5f3ff;
-      border: 2px solid #7c3aed;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
+      .result-highlight {
+        background: #f5f3ff;
+        border: 2px solid #7c3aed;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
 
-    .result-highlight .amount {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #5b21b6;
-    }
+      .result-highlight .amount {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #5b21b6;
+      }
 
-    .result-highlight .label {
-      font-size: 0.85rem;
-      color: #7c3aed;
-      margin-bottom: 4px;
-    }
-  </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-    crossorigin="anonymous"></script>
+      .result-highlight .label {
+        font-size: 0.85rem;
+        color: #7c3aed;
+        margin-bottom: 4px;
+      }
+    </style>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+      crossorigin="anonymous"
+    ></script>
 
-  <!-- SEO & Favicon for Google Search -->
-  <meta property="og:site_name" content="금융계산기.kr" />
-  <link rel="icon" href="/favicon.svg" />
-  <script type="application/ld+json">
+    <!-- SEO & Favicon for Google Search -->
+    <meta property="og:site_name" content="금융계산기.kr" />
+    <link rel="icon" href="/favicon.svg" />
+    <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -189,446 +207,546 @@
         "url": "https://richcalc.kr/"
       }
     </script>
-</head>
+    <script src="../loader.js"></script>
+  </head>
 
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="../index.html" class="logo">
-        <span class="logo-icon">💰</span>
-        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-      </a>
-      <nav class="header-nav">
-        <a href="../index.html" class="nav-link">🏠 홈</a>
-        <a href="#calculator" class="nav-link active">전월세 전환</a>
-        <a href="#bottom-info" class="nav-link">전환율 안내</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="ad-banner-top">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="../index.html" class="logo">
+          <span class="logo-icon">💰</span>
+          <span class="logo-text"
+            >금융계산기<span class="logo-accent">.kr</span></span
+          >
+        </a>
+        <nav class="header-nav">
+          <a href="../index.html" class="nav-link">🏠 홈</a>
+          <a href="#calculator" class="nav-link active">전월세 전환</a>
+          <a href="#bottom-info" class="nav-link">전환율 안내</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <section class="top-description">
-    <div class="container">
-      <div class="breadcrumb">
-        <span>홈</span> <span class="bc-sep">›</span> <span>금융 계산기</span>
-        <span class="bc-sep">›</span>
-        <span class="bc-current">전세/월세 전환 계산기</span>
-      </div>
-      <h1 class="main-title">전세 / 월세 전환 계산기</h1>
-      <p class="main-subtitle">
-        전세를 월세로, 월세를 전세로 전환할 때
-        <strong>적정 보증금과 월세</strong>를 계산해 드립니다. 법정 전월세
-        전환율과 보증금 조정에 따른 월세 변동도 확인하세요.
-      </p>
-      <div class="top-desc-tags">
-        <span class="tag">✓ 전세 → 월세 전환</span>
-        <span class="tag">✓ 월세 → 전세 전환</span>
-        <span class="tag">✓ 보증금 증감 월세 조정</span>
-        <span class="tag">✓ 법정 전환율 기준</span>
-        <span class="tag">✓ 무료 사용</span>
-      </div>
-    </div>
-  </section>
-
-  <main class="main-content">
-    <div class="container content-grid">
-      <section class="calculator-section" id="calculator">
-        <!-- 법정 전환율 안내 박스 -->
-        <div class="conversion-rate-box">
-          <div>
-            <div class="cr-label">현행 법정 전월세 전환율</div>
-            <div class="cr-value">연 6.0%</div>
-            <div class="cr-note">
-              기준금리(2.75%) + 3.25%p | 주택임대차보호법 기준
-            </div>
-          </div>
-          <div style="text-align: right">
-            <div class="cr-label">계산 방식</div>
-            <div style="font-size: 0.9rem; font-weight: 600; margin-top: 4px">
-              월세 = (전세금 – 보증금) × 전환율 ÷ 12
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab -->
-        <div class="tab-switcher">
-          <button class="tab-btn active" onclick="switchTab('to-monthly')">
-            🏠 전세 → 월세
-          </button>
-          <button class="tab-btn" onclick="switchTab('to-deposit')">
-            💰 월세 → 전세
-          </button>
-          <button class="tab-btn" onclick="switchTab('adjust')">
-            ⚖️ 보증금 조정
-          </button>
-        </div>
-
-        <!-- 전세→월세 -->
-        <div class="tab-panel active" id="panel-to-monthly">
-          <div class="calc-card">
-            <h2 class="calc-card-title">전세 → 월세 전환</h2>
-            <p class="calc-card-desc">
-              전세 보증금을 월세로 전환할 때 적정 <strong>월세 금액</strong>을
-              계산합니다.
-            </p>
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="tm-jeonse">전세 보증금</label>
-                <div class="input-wrap">
-                  <input type="text" id="tm-jeonse" class="form-input" placeholder="300,000,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="tm-jeonse-hint"></span>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="tm-deposit">월세 전환 후 보증금</label>
-                <div class="input-wrap">
-                  <input type="text" id="tm-deposit" class="form-input" placeholder="50,000,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="tm-deposit-hint"></span>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="tm-rate">전환율</label>
-                <div class="input-wrap">
-                  <input type="number" id="tm-rate" class="form-input" placeholder="6.0" value="6.0" min="0.1" max="30"
-                    step="0.1" /><span class="input-unit">%</span>
-                </div>
-                <span class="form-hint">법정 기준 연 6.0%</span>
-              </div>
-            </div>
-            <button class="calc-btn" onclick="calcToMonthly()">
-              <span class="btn-icon">⚡</span> 계산하기
-            </button>
-          </div>
-          <div class="result-card" id="result-tm" style="display: none">
-            <h3 class="result-title">🏠 전세→월세 전환 결과</h3>
-            <div id="result-tm-content"></div>
-            <div class="result-notice">
-              ※ 법정 전환율(연6%)은 임대인이 일방적으로 초과할 수 없습니다.
-              협의 전에 꼭 확인하세요.
-            </div>
-          </div>
-        </div>
-
-        <!-- 월세→전세 -->
-        <div class="tab-panel" id="panel-to-deposit">
-          <div class="calc-card">
-            <h2 class="calc-card-title">월세 → 전세 전환</h2>
-            <p class="calc-card-desc">
-              현재 납부 중인 월세를 전세로 전환할 때
-              <strong>전세 환산 금액</strong>을 계산합니다.
-            </p>
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="td-monthly">월세</label>
-                <div class="input-wrap">
-                  <input type="text" id="td-monthly" class="form-input" placeholder="800,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="td-monthly-hint"></span>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="td-deposit">현재 보증금</label>
-                <div class="input-wrap">
-                  <input type="text" id="td-deposit" class="form-input" placeholder="10,000,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="td-deposit-hint"></span>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="td-rate">전환율</label>
-                <div class="input-wrap">
-                  <input type="number" id="td-rate" class="form-input" placeholder="6.0" value="6.0" min="0.1" max="30"
-                    step="0.1" /><span class="input-unit">%</span>
-                </div>
-                <span class="form-hint">법정 기준 연 6.0%</span>
-              </div>
-            </div>
-            <button class="calc-btn" onclick="calcToDeposit()">
-              <span class="btn-icon">⚡</span> 계산하기
-            </button>
-          </div>
-          <div class="result-card" id="result-td" style="display: none">
-            <h3 class="result-title">💰 월세→전세 전환 결과</h3>
-            <div id="result-td-content"></div>
-          </div>
-        </div>
-
-        <!-- 보증금 조정 -->
-        <div class="tab-panel" id="panel-adjust">
-          <div class="calc-card">
-            <h2 class="calc-card-title">보증금 증감에 따른 월세 조정</h2>
-            <p class="calc-card-desc">
-              보증금을 올리거나 내릴 때 월세가 얼마나 바뀌는지 계산합니다.
-            </p>
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="adj-current-monthly">현재 월세</label>
-                <div class="input-wrap">
-                  <input type="text" id="adj-current-monthly" class="form-input" placeholder="700,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adj-current-deposit">현재 보증금</label>
-                <div class="input-wrap">
-                  <input type="text" id="adj-current-deposit" class="form-input" placeholder="20,000,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adj-new-deposit">변경 후 보증금</label>
-                <div class="input-wrap">
-                  <input type="text" id="adj-new-deposit" class="form-input" placeholder="30,000,000"
-                    inputmode="numeric" /><span class="input-unit">원</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adj-rate">전환율</label>
-                <div class="input-wrap">
-                  <input type="number" id="adj-rate" class="form-input" placeholder="6.0" value="6.0" min="0.1" max="30"
-                    step="0.1" /><span class="input-unit">%</span>
-                </div>
-              </div>
-            </div>
-            <button class="calc-btn" onclick="calcAdjust()">
-              <span class="btn-icon">⚡</span> 계산하기
-            </button>
-          </div>
-          <div class="result-card" id="result-adj" style="display: none">
-            <h3 class="result-title">⚖️ 보증금 조정 결과</h3>
-            <div id="result-adj-content"></div>
-          </div>
-        </div>
-      </section>
-
-      <aside class="sidebar">
-        <div class="ad-slot ad-slot--sidebar">
+    <div class="ad-banner-top">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
           <span class="ad-placeholder-text">광고</span>
         </div>
-        <nav class="sidebar-widget">
-          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-          <ul class="sidebar-links">
-            <li>
-              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info">
-                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
-                <div class="link-info">
-                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
-                <div class="link-info">
-                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
-                <div class="link-info">
-                  <strong>예적금 만기 계산기</strong><small>예금·적금 수령액 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info">
-                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등 상환</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
-                <div class="link-info">
-                  <strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="sidebar-link active-link"><span class="link-icon">🏗️</span>
-                <div class="link-info">
-                  <strong>전세/월세 전환 계산기</strong><small>현재 페이지</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
-                <div class="link-info">
-                  <strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
-                <div class="link-info">
-                  <strong>세후 이자 계산기</strong><small>이자소득세 상세 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
-                <div class="link-info">
-                  <strong>물가상승률 계산기</strong><small>실질 구매력 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
-                <div class="link-info">
-                  <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div class="sidebar-widget info-widget">
-          <h2 class="widget-title">📋 전월세 전환율</h2>
-          <table class="tax-table">
-            <thead>
-              <tr>
-                <th>기준</th>
-                <th>전환율</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>법정 상한</td>
-                <td class="tax-rate">연 6.0%</td>
-              </tr>
-              <tr>
-                <td>기준금리</td>
-                <td class="tax-rate preferred">연 2.75%</td>
-              </tr>
-              <tr>
-                <td>가산율</td>
-                <td class="tax-rate exempt">3.25%p</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="widget-note">
-            ※ 전환율 = 기준금리 + 대통령령 가산율. 임대인은 이 비율을 초과할
-            수 없습니다.
-          </p>
-        </div>
-      </aside>
-    </div>
-  </main>
-
-  <div class="ad-banner-middle">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
       </div>
     </div>
-  </div>
 
-  <section class="bottom-description" id="bottom-info">
-    <div class="container">
-      <div class="info-section">
-        <h2>전월세 전환율이란?</h2>
-        <p>
-          전월세 전환율은 전세보증금을 월세로 전환하거나, 월세를 전세로 전환할
-          때 적용하는 비율입니다. <strong>주택임대차보호법</strong>에 따라
-          임대인은 법정 상한율을 초과하여 월세를 요구할 수 없습니다.
+    <section class="top-description">
+      <div class="container">
+        <div class="breadcrumb">
+          <span>홈</span> <span class="bc-sep">›</span> <span>금융 계산기</span>
+          <span class="bc-sep">›</span>
+          <span class="bc-current">전세/월세 전환 계산기</span>
+        </div>
+        <h1 class="main-title">전세 / 월세 전환 계산기</h1>
+        <p class="main-subtitle">
+          전세를 월세로, 월세를 전세로 전환할 때
+          <strong>적정 보증금과 월세</strong>를 계산해 드립니다. 법정 전월세
+          전환율과 보증금 조정에 따른 월세 변동도 확인하세요.
         </p>
-        <div class="info-grid">
-          <div class="info-card" style="border-color: #7c3aed; background: #f5f3ff">
-            <h3>📐 계산 공식</h3>
-            <div class="formula-box">
-              <p>전세 → 월세:</p>
-              <code>월세 = (전세금 – 보증금) × 전환율 ÷ 12</code>
-              <p class="mt-8">월세 → 전세:</p>
-              <code>전세금 = 보증금 + (월세 × 12 ÷ 전환율)</code>
+        <div class="top-desc-tags">
+          <span class="tag">✓ 전세 → 월세 전환</span>
+          <span class="tag">✓ 월세 → 전세 전환</span>
+          <span class="tag">✓ 보증금 증감 월세 조정</span>
+          <span class="tag">✓ 법정 전환율 기준</span>
+          <span class="tag">✓ 무료 사용</span>
+        </div>
+      </div>
+    </section>
+
+    <main class="main-content">
+      <div class="container content-grid">
+        <section class="calculator-section" id="calculator">
+          <!-- 법정 전환율 안내 박스 -->
+          <div class="conversion-rate-box">
+            <div>
+              <div class="cr-label">현행 법정 전월세 전환율</div>
+              <div class="cr-value">연 6.0%</div>
+              <div class="cr-note">
+                기준금리(2.75%) + 3.25%p | 주택임대차보호법 기준
+              </div>
+            </div>
+            <div style="text-align: right">
+              <div class="cr-label">계산 방식</div>
+              <div style="font-size: 0.9rem; font-weight: 600; margin-top: 4px">
+                월세 = (전세금 – 보증금) × 전환율 ÷ 12
+              </div>
             </div>
           </div>
-          <div class="info-card">
-            <h3>⚠️ 법적 보호</h3>
-            <p>
-              임대인이 법정 전환율(연 6%)을 초과하여 월세를 요구하면 이는
-              위법입니다. 세입자는 초과분에 대해 반환 청구가 가능합니다. 계약
-              전 반드시 전환율을 확인하세요.
+
+          <!-- Tab -->
+          <div class="tab-switcher">
+            <button class="tab-btn active" onclick="switchTab('to-monthly')">
+              🏠 전세 → 월세
+            </button>
+            <button class="tab-btn" onclick="switchTab('to-deposit')">
+              💰 월세 → 전세
+            </button>
+            <button class="tab-btn" onclick="switchTab('adjust')">
+              ⚖️ 보증금 조정
+            </button>
+          </div>
+
+          <!-- 전세→월세 -->
+          <div class="tab-panel active" id="panel-to-monthly">
+            <div class="calc-card">
+              <h2 class="calc-card-title">전세 → 월세 전환</h2>
+              <p class="calc-card-desc">
+                전세 보증금을 월세로 전환할 때 적정 <strong>월세 금액</strong>을
+                계산합니다.
+              </p>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="tm-jeonse">전세 보증금</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="tm-jeonse"
+                      class="form-input"
+                      placeholder="300,000,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="tm-jeonse-hint"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="tm-deposit"
+                    >월세 전환 후 보증금</label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="tm-deposit"
+                      class="form-input"
+                      placeholder="50,000,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="tm-deposit-hint"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="tm-rate">전환율</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="tm-rate"
+                      class="form-input"
+                      placeholder="6.0"
+                      value="6.0"
+                      min="0.1"
+                      max="30"
+                      step="0.1"
+                    /><span class="input-unit">%</span>
+                  </div>
+                  <span class="form-hint">법정 기준 연 6.0%</span>
+                </div>
+              </div>
+              <button class="calc-btn" onclick="calcToMonthly()">
+                <span class="btn-icon">⚡</span> 계산하기
+              </button>
+            </div>
+            <div class="result-card" id="result-tm" style="display: none">
+              <h3 class="result-title">🏠 전세→월세 전환 결과</h3>
+              <div id="result-tm-content"></div>
+              <div class="result-notice">
+                ※ 법정 전환율(연6%)은 임대인이 일방적으로 초과할 수 없습니다.
+                협의 전에 꼭 확인하세요.
+              </div>
+            </div>
+          </div>
+
+          <!-- 월세→전세 -->
+          <div class="tab-panel" id="panel-to-deposit">
+            <div class="calc-card">
+              <h2 class="calc-card-title">월세 → 전세 전환</h2>
+              <p class="calc-card-desc">
+                현재 납부 중인 월세를 전세로 전환할 때
+                <strong>전세 환산 금액</strong>을 계산합니다.
+              </p>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="td-monthly">월세</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="td-monthly"
+                      class="form-input"
+                      placeholder="800,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="td-monthly-hint"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="td-deposit">현재 보증금</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="td-deposit"
+                      class="form-input"
+                      placeholder="10,000,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="td-deposit-hint"></span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="td-rate">전환율</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="td-rate"
+                      class="form-input"
+                      placeholder="6.0"
+                      value="6.0"
+                      min="0.1"
+                      max="30"
+                      step="0.1"
+                    /><span class="input-unit">%</span>
+                  </div>
+                  <span class="form-hint">법정 기준 연 6.0%</span>
+                </div>
+              </div>
+              <button class="calc-btn" onclick="calcToDeposit()">
+                <span class="btn-icon">⚡</span> 계산하기
+              </button>
+            </div>
+            <div class="result-card" id="result-td" style="display: none">
+              <h3 class="result-title">💰 월세→전세 전환 결과</h3>
+              <div id="result-td-content"></div>
+            </div>
+          </div>
+
+          <!-- 보증금 조정 -->
+          <div class="tab-panel" id="panel-adjust">
+            <div class="calc-card">
+              <h2 class="calc-card-title">보증금 증감에 따른 월세 조정</h2>
+              <p class="calc-card-desc">
+                보증금을 올리거나 내릴 때 월세가 얼마나 바뀌는지 계산합니다.
+              </p>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="adj-current-monthly"
+                    >현재 월세</label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="adj-current-monthly"
+                      class="form-input"
+                      placeholder="700,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adj-current-deposit"
+                    >현재 보증금</label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="adj-current-deposit"
+                      class="form-input"
+                      placeholder="20,000,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adj-new-deposit"
+                    >변경 후 보증금</label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="adj-new-deposit"
+                      class="form-input"
+                      placeholder="30,000,000"
+                      inputmode="numeric"
+                    /><span class="input-unit">원</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adj-rate">전환율</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="adj-rate"
+                      class="form-input"
+                      placeholder="6.0"
+                      value="6.0"
+                      min="0.1"
+                      max="30"
+                      step="0.1"
+                    /><span class="input-unit">%</span>
+                  </div>
+                </div>
+              </div>
+              <button class="calc-btn" onclick="calcAdjust()">
+                <span class="btn-icon">⚡</span> 계산하기
+              </button>
+            </div>
+            <div class="result-card" id="result-adj" style="display: none">
+              <h3 class="result-title">⚖️ 보증금 조정 결과</h3>
+              <div id="result-adj-content"></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar">
+          <div class="ad-slot ad-slot--sidebar">
+            <span class="ad-placeholder-text">광고</span>
+          </div>
+          <nav class="sidebar-widget">
+            <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+            <ul class="sidebar-links">
+              <li>
+                <a href="../index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info">
+                    <strong>전체 계산기 홈</strong
+                    ><small>금융계산기.kr 메인</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../salary-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">💼</span>
+                  <div class="link-info">
+                    <strong>연봉 계산기</strong
+                    ><small>월 실수령액·4대보험 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../severance-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📦</span>
+                  <div class="link-info">
+                    <strong>퇴직금 계산기</strong
+                    ><small>퇴직소득세·DB/DC형</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../savings-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏦</span>
+                  <div class="link-info">
+                    <strong>예적금 만기 계산기</strong
+                    ><small>예금·적금 수령액 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../loan-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info">
+                    <strong>대출 이자 계산기</strong
+                    ><small>원리금균등·원금균등 상환</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../compound-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">📈</span>
+                  <div class="link-info">
+                    <strong>복리 수익률 계산기</strong
+                    ><small>투자 수익률 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="sidebar-link active-link"
+                  ><span class="link-icon">🏗️</span>
+                  <div class="link-info">
+                    <strong>전세/월세 전환 계산기</strong
+                    ><small>현재 페이지</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../pension-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">👴</span>
+                  <div class="link-info">
+                    <strong>연금 수령액 계산기</strong
+                    ><small>국민연금·퇴직연금</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../tax-interest-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">💸</span>
+                  <div class="link-info">
+                    <strong>세후 이자 계산기</strong
+                    ><small>이자소득세 상세 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../inflation-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📊</span>
+                  <div class="link-info">
+                    <strong>물가상승률 계산기</strong
+                    ><small>실질 구매력 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../exchange-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">💱</span>
+                  <div class="link-info">
+                    <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="sidebar-widget info-widget">
+            <h2 class="widget-title">📋 전월세 전환율</h2>
+            <table class="tax-table">
+              <thead>
+                <tr>
+                  <th>기준</th>
+                  <th>전환율</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>법정 상한</td>
+                  <td class="tax-rate">연 6.0%</td>
+                </tr>
+                <tr>
+                  <td>기준금리</td>
+                  <td class="tax-rate preferred">연 2.75%</td>
+                </tr>
+                <tr>
+                  <td>가산율</td>
+                  <td class="tax-rate exempt">3.25%p</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="widget-note">
+              ※ 전환율 = 기준금리 + 대통령령 가산율. 임대인은 이 비율을 초과할
+              수 없습니다.
             </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div class="ad-banner-middle">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="bottom-description" id="bottom-info">
+      <div class="container">
+        <div class="info-section">
+          <h2>전월세 전환율이란?</h2>
+          <p>
+            전월세 전환율은 전세보증금을 월세로 전환하거나, 월세를 전세로 전환할
+            때 적용하는 비율입니다. <strong>주택임대차보호법</strong>에 따라
+            임대인은 법정 상한율을 초과하여 월세를 요구할 수 없습니다.
+          </p>
+          <div class="info-grid">
+            <div
+              class="info-card"
+              style="border-color: #7c3aed; background: #f5f3ff"
+            >
+              <h3>📐 계산 공식</h3>
+              <div class="formula-box">
+                <p>전세 → 월세:</p>
+                <code>월세 = (전세금 – 보증금) × 전환율 ÷ 12</code>
+                <p class="mt-8">월세 → 전세:</p>
+                <code>전세금 = 보증금 + (월세 × 12 ÷ 전환율)</code>
+              </div>
+            </div>
+            <div class="info-card">
+              <h3>⚠️ 법적 보호</h3>
+              <p>
+                임대인이 법정 전환율(연 6%)을 초과하여 월세를 요구하면 이는
+                위법입니다. 세입자는 초과분에 대해 반환 청구가 가능합니다. 계약
+                전 반드시 전환율을 확인하세요.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="info-section" id="faq">
+          <h2>자주 묻는 질문 (FAQ)</h2>
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>법정 전월세 전환율은 어떻게 결정되나요?</summary>
+              <p>
+                전월세 전환율 상한은
+                <strong>기준금리 + 대통령령이 정하는 이율</strong>로 결정됩니다.
+                현재는 한국은행 기준금리(2.75%) + 3.25%p = 연 6.0%입니다.
+                기준금리 변동 시 전환율도 바뀝니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>보증금을 올려주면 월세가 낮아지나요?</summary>
+              <p>
+                네, 보증금을 올리면 그만큼 전세 환산 금액이 줄어 월세도
+                낮아집니다. '보증금 조정' 탭에서 보증금 변경 시 월세 변동액을
+                바로 계산할 수 있습니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>
+                전세를 월세로 전환할 때 꼭 법정 전환율을 적용해야 하나요?
+              </summary>
+              <p>
+                임대인은 법정 상한(연6%)을 초과할 수 없지만, 그 이하로는 합의에
+                따라 자유롭게 정할 수 있습니다. 시장 상황에 따라 법정 전환율보다
+                낮은 비율로 합의하는 경우도 많습니다.
+              </p>
+            </details>
           </div>
         </div>
       </div>
-      <div class="info-section" id="faq">
-        <h2>자주 묻는 질문 (FAQ)</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>법정 전월세 전환율은 어떻게 결정되나요?</summary>
-            <p>
-              전월세 전환율 상한은
-              <strong>기준금리 + 대통령령이 정하는 이율</strong>로 결정됩니다.
-              현재는 한국은행 기준금리(2.75%) + 3.25%p = 연 6.0%입니다.
-              기준금리 변동 시 전환율도 바뀝니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>보증금을 올려주면 월세가 낮아지나요?</summary>
-            <p>
-              네, 보증금을 올리면 그만큼 전세 환산 금액이 줄어 월세도
-              낮아집니다. '보증금 조정' 탭에서 보증금 변경 시 월세 변동액을
-              바로 계산할 수 있습니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>
-              전세를 월세로 전환할 때 꼭 법정 전환율을 적용해야 하나요?
-            </summary>
-            <p>
-              임대인은 법정 상한(연6%)을 초과할 수 없지만, 그 이하로는 합의에
-              따라 자유롭게 정할 수 있습니다. 시장 상황에 따라 법정 전환율보다
-              낮은 비율로 합의하는 경우도 많습니다.
-            </p>
-          </details>
+    </section>
+
+    <div class="ad-banner-bottom">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
+          <span class="ad-placeholder-text">광고</span>
         </div>
       </div>
     </div>
-  </section>
 
-  <div class="ad-banner-bottom">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-logo">
+          <span class="logo-icon">💰</span>
+          <!-- prettier-ignore -->
+          <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+        </div>
+        <div class="footer-links">
+          <a href="../terms/index.html">이용약관</a
+          ><a href="../privacy-policy/index.html">개인정보처리방침</a
+          ><a href="../contact/index.html">문의하기</a>
+        </div>
+        <p class="footer-disclaimer">
+          본 계산기는 참고용입니다. 실제 계약 시 임대차보호법 및 전문가 상담을
+          권장합니다.
+        </p>
+        <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
       </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-logo">
-        <span class="logo-icon">💰</span>
-        <!-- prettier-ignore -->
-        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-      </div>
-      <div class="footer-links">
-        <a href="../terms/index.html">이용약관</a><a href="../privacy-policy/index.html">개인정보처리방침</a><a
-          href="../contact/index.html">문의하기</a>
-      </div>
-      <p class="footer-disclaimer">
-        본 계산기는 참고용입니다. 실제 계약 시 임대차보호법 및 전문가 상담을
-        권장합니다.
-      </p>
-      <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
-    </div>
-  </footer>
-  <script src="calculator.js"></script>
-</body>
-
+    </footer>
+    <script src="calculator.js"></script>
+  </body>
 </html>

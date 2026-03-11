@@ -1,42 +1,60 @@
 <!doctype html>
 <html lang="ko">
+  <head>
+    <meta
+      name="naver-site-verification"
+      content="a06011ac826bc5ab12896ed43961cb7960df04ed"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-<head>
-  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+      gtag("config", "G-B1TE1JHHE3");
+    </script>
 
-    gtag("config", "G-B1TE1JHHE3");
-  </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>예적금 만기 수령액 계산기 - 세전/세후 이자 계산 | 금융계산기</title>
+    <meta
+      name="description"
+      content="예금·적금 만기 수령액을 간편하게 계산해보세요. 단리/복리 선택, 이자소득세(15.4%) 자동 공제, 세전·세후 수령액을 한눈에 확인할 수 있는 무료 금융 계산기입니다."
+    />
+    <meta
+      name="keywords"
+      content="예금 계산기, 적금 계산기, 만기 수령액 계산기, 이자 계산기, 세후 이자, 단리 복리 계산기"
+    />
+    <meta property="og:title" content="예적금 만기 수령액 계산기" />
+    <meta
+      property="og:description"
+      content="예금·적금 만기 수령액을 간편하게 계산해보세요. 단리/복리 선택, 이자소득세 자동 공제."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+      crossorigin="anonymous"
+    ></script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>예적금 만기 수령액 계산기 - 세전/세후 이자 계산 | 금융계산기</title>
-  <meta name="description"
-    content="예금·적금 만기 수령액을 간편하게 계산해보세요. 단리/복리 선택, 이자소득세(15.4%) 자동 공제, 세전·세후 수령액을 한눈에 확인할 수 있는 무료 금융 계산기입니다." />
-  <meta name="keywords" content="예금 계산기, 적금 계산기, 만기 수령액 계산기, 이자 계산기, 세후 이자, 단리 복리 계산기" />
-  <meta property="og:title" content="예적금 만기 수령액 계산기" />
-  <meta property="og:description" content="예금·적금 만기 수령액을 간편하게 계산해보세요. 단리/복리 선택, 이자소득세 자동 공제." />
-  <meta property="og:type" content="website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-    crossorigin="anonymous"></script>
-
-  <!-- SEO & Favicon for Google Search -->
-  <meta property="og:site_name" content="금융계산기.kr" />
-  <link rel="icon" href="/favicon.svg" />
-  <script type="application/ld+json">
+    <!-- SEO & Favicon for Google Search -->
+    <meta property="og:site_name" content="금융계산기.kr" />
+    <link rel="icon" href="/favicon.svg" />
+    <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -44,593 +62,749 @@
         "url": "https://richcalc.kr/"
       }
     </script>
-</head>
+    <script src="../loader.js"></script>
+  </head>
 
-<body>
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="../index.html" class="logo">
-        <span class="logo-icon">💰</span>
-        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-      </a>
-      <nav class="header-nav">
-        <a href="../index.html" class="nav-link">🏠 홈</a>
-        <a href="#calculator" class="nav-link active">예적금 계산기</a>
-        <a href="#bottom-info" class="nav-link">계산 방법</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- ===== TOP AD BANNER AREA ===== -->
-  <div class="ad-banner-top">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal" id="ad-top">
-        <!-- Google AdSense 상단 배너 (728x90 or 반응형) -->
-        <span class="ad-placeholder-text">광고</span>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="../index.html" class="logo">
+          <span class="logo-icon">💰</span>
+          <span class="logo-text"
+            >금융계산기<span class="logo-accent">.kr</span></span
+          >
+        </a>
+        <nav class="header-nav">
+          <a href="../index.html" class="nav-link">🏠 홈</a>
+          <a href="#calculator" class="nav-link active">예적금 계산기</a>
+          <a href="#bottom-info" class="nav-link">계산 방법</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- ===== TOP DESCRIPTION (AdSense SEO) ===== -->
-  <section class="top-description">
-    <div class="container">
-      <div class="top-desc-inner">
-        <div class="breadcrumb">
-          <span>홈</span> <span class="bc-sep">›</span>
-          <span>금융 계산기</span> <span class="bc-sep">›</span>
-          <span class="bc-current">예적금 만기 수령액 계산기</span>
-        </div>
-        <h1 class="main-title">예적금 만기 수령액 계산기</h1>
-        <p class="main-subtitle">
-          예금과 적금의 만기 수령액을 정확하게 계산해 드립니다. 단리·복리
-          방식을 선택하고 이자소득세(15.4%)까지 자동으로 공제된
-          <strong>실수령액</strong>을 바로 확인해 보세요.
-        </p>
-        <div class="top-desc-tags">
-          <span class="tag">✓ 세전 / 세후 이자 계산</span>
-          <span class="tag">✓ 단리 / 복리 선택</span>
-          <span class="tag">✓ 이자소득세 15.4% 자동 공제</span>
-          <span class="tag">✓ 무료 사용</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== MAIN CONTENT AREA ===== -->
-  <main class="main-content">
-    <div class="container content-grid">
-      <!-- ===== CALCULATOR (Main) ===== -->
-      <section class="calculator-section" id="calculator">
-        <!-- Tab Switcher -->
-        <div class="tab-switcher" role="tablist">
-          <button class="tab-btn active" id="tab-deposit" role="tab" aria-selected="true" aria-controls="panel-deposit"
-            onclick="switchTab('deposit')">
-            🏦 예금 계산기
-          </button>
-          <button class="tab-btn" id="tab-installment" role="tab" aria-selected="false"
-            aria-controls="panel-installment" onclick="switchTab('installment')">
-            📅 적금 계산기
-          </button>
-        </div>
-
-        <!-- ===== DEPOSIT PANEL ===== -->
-        <div class="tab-panel active" id="panel-deposit" role="tabpanel">
-          <div class="calc-card">
-            <h2 class="calc-card-title">예금 계산</h2>
-            <p class="calc-card-desc">
-              목돈을 한 번에 예치하는 <strong>정기예금</strong>의 만기
-              수령액을 계산합니다.
-            </p>
-
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="d-principal">예치 원금</label>
-                <div class="input-wrap">
-                  <input type="text" id="d-principal" class="form-input" placeholder="10,000,000" inputmode="numeric" />
-                  <span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="d-principal-hint"></span>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="d-rate">연이율 (세전)</label>
-                <div class="input-wrap">
-                  <input type="number" id="d-rate" class="form-input" placeholder="3.50" min="0.01" max="100"
-                    step="0.01" />
-                  <span class="input-unit">%</span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="d-period">예치 기간</label>
-                <div class="input-wrap">
-                  <input type="number" id="d-period" class="form-input" placeholder="12" min="1" max="600" step="1" />
-                  <span class="input-unit">개월</span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">이자 계산 방식</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" name="d-interest-type" value="simple" checked id="d-simple" />
-                    <span class="radio-custom"></span>
-                    단리
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="d-interest-type" value="compound" id="d-compound" />
-                    <span class="radio-custom"></span>
-                    복리 (월복리)
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">세금 우대</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" name="d-tax-type" value="normal" checked id="d-tax-normal" />
-                    <span class="radio-custom"></span>
-                    일반과세 (15.4%)
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="d-tax-type" value="preferred" id="d-tax-preferred" />
-                    <span class="radio-custom"></span>
-                    세금우대 (9.9%)
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="d-tax-type" value="exempt" id="d-tax-exempt" />
-                    <span class="radio-custom"></span>
-                    비과세 (0%)
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <button class="calc-btn" id="btn-deposit" onclick="calculateDeposit()">
-              <span class="btn-icon">⚡</span> 계산하기
-            </button>
-          </div>
-
-          <!-- Result -->
-          <div class="result-card" id="result-deposit" style="display: none">
-            <h3 class="result-title">💰 예금 계산 결과</h3>
-            <div class="result-summary-box" id="result-deposit-summary"></div>
-            <div class="result-grid" id="result-deposit-grid"></div>
-            <div class="chart-wrap">
-              <canvas id="chart-deposit" width="260" height="260"></canvas>
-              <div class="chart-legend" id="legend-deposit"></div>
-            </div>
-            <div class="result-notice">
-              ※ 이자소득세는 세전이자에 적용되며, 실제 수령액은 금융기관 및
-              개인 상황에 따라 다를 수 있습니다.
-            </div>
-          </div>
-        </div>
-
-        <!-- ===== INSTALLMENT PANEL ===== -->
-        <div class="tab-panel" id="panel-installment" role="tabpanel">
-          <div class="calc-card">
-            <h2 class="calc-card-title">적금 계산</h2>
-            <p class="calc-card-desc">
-              매월 일정 금액을 납입하는 <strong>정기적금</strong>의 만기
-              수령액을 계산합니다.
-            </p>
-
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="i-monthly">월 납입액</label>
-                <div class="input-wrap">
-                  <input type="text" id="i-monthly" class="form-input" placeholder="500,000" inputmode="numeric" />
-                  <span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="i-monthly-hint"></span>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="i-rate">연이율 (세전)</label>
-                <div class="input-wrap">
-                  <input type="number" id="i-rate" class="form-input" placeholder="4.00" min="0.01" max="100"
-                    step="0.01" />
-                  <span class="input-unit">%</span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="i-period">납입 기간</label>
-                <div class="input-wrap">
-                  <input type="number" id="i-period" class="form-input" placeholder="12" min="1" max="600" step="1" />
-                  <span class="input-unit">개월</span>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">이자 계산 방식</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" name="i-interest-type" value="simple" checked id="i-simple" />
-                    <span class="radio-custom"></span>
-                    단리
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="i-interest-type" value="compound" id="i-compound" />
-                    <span class="radio-custom"></span>
-                    복리 (월복리)
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">세금 우대</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" name="i-tax-type" value="normal" checked id="i-tax-normal" />
-                    <span class="radio-custom"></span>
-                    일반과세 (15.4%)
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="i-tax-type" value="preferred" id="i-tax-preferred" />
-                    <span class="radio-custom"></span>
-                    세금우대 (9.9%)
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="i-tax-type" value="exempt" id="i-tax-exempt" />
-                    <span class="radio-custom"></span>
-                    비과세 (0%)
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <button class="calc-btn" id="btn-installment" onclick="calculateInstallment()">
-              <span class="btn-icon">⚡</span> 계산하기
-            </button>
-          </div>
-
-          <!-- Result -->
-          <div class="result-card" id="result-installment" style="display: none">
-            <h3 class="result-title">📅 적금 계산 결과</h3>
-            <div class="result-summary-box" id="result-installment-summary"></div>
-            <div class="result-grid" id="result-installment-grid"></div>
-            <div class="chart-wrap">
-              <canvas id="chart-installment" width="260" height="260"></canvas>
-              <div class="chart-legend" id="legend-installment"></div>
-            </div>
-            <div class="result-notice">
-              ※ 적금 이자는 납입 회차별 예치기간에 따라 산출됩니다. 실제
-              수령액은 금융기관에 따라 다를 수 있습니다.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===== SIDEBAR ===== -->
-      <aside class="sidebar">
-        <!-- Ad in sidebar -->
-        <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
+    <!-- ===== TOP AD BANNER AREA ===== -->
+    <div class="ad-banner-top">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal" id="ad-top">
+          <!-- Google AdSense 상단 배너 (728x90 or 반응형) -->
           <span class="ad-placeholder-text">광고</span>
         </div>
+      </div>
+    </div>
 
-        <!-- Other calculators -->
-        <nav class="sidebar-widget" aria-label="다른 금융 계산기">
-          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-          <ul class="sidebar-links">
-            <li>
-              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info">
-                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
+    <!-- ===== TOP DESCRIPTION (AdSense SEO) ===== -->
+    <section class="top-description">
+      <div class="container">
+        <div class="top-desc-inner">
+          <div class="breadcrumb">
+            <span>홈</span> <span class="bc-sep">›</span>
+            <span>금융 계산기</span> <span class="bc-sep">›</span>
+            <span class="bc-current">예적금 만기 수령액 계산기</span>
+          </div>
+          <h1 class="main-title">예적금 만기 수령액 계산기</h1>
+          <p class="main-subtitle">
+            예금과 적금의 만기 수령액을 정확하게 계산해 드립니다. 단리·복리
+            방식을 선택하고 이자소득세(15.4%)까지 자동으로 공제된
+            <strong>실수령액</strong>을 바로 확인해 보세요.
+          </p>
+          <div class="top-desc-tags">
+            <span class="tag">✓ 세전 / 세후 이자 계산</span>
+            <span class="tag">✓ 단리 / 복리 선택</span>
+            <span class="tag">✓ 이자소득세 15.4% 자동 공제</span>
+            <span class="tag">✓ 무료 사용</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MAIN CONTENT AREA ===== -->
+    <main class="main-content">
+      <div class="container content-grid">
+        <!-- ===== CALCULATOR (Main) ===== -->
+        <section class="calculator-section" id="calculator">
+          <!-- Tab Switcher -->
+          <div class="tab-switcher" role="tablist">
+            <button
+              class="tab-btn active"
+              id="tab-deposit"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-deposit"
+              onclick="switchTab('deposit')"
+            >
+              🏦 예금 계산기
+            </button>
+            <button
+              class="tab-btn"
+              id="tab-installment"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-installment"
+              onclick="switchTab('installment')"
+            >
+              📅 적금 계산기
+            </button>
+          </div>
+
+          <!-- ===== DEPOSIT PANEL ===== -->
+          <div class="tab-panel active" id="panel-deposit" role="tabpanel">
+            <div class="calc-card">
+              <h2 class="calc-card-title">예금 계산</h2>
+              <p class="calc-card-desc">
+                목돈을 한 번에 예치하는 <strong>정기예금</strong>의 만기
+                수령액을 계산합니다.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="d-principal">예치 원금</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="d-principal"
+                      class="form-input"
+                      placeholder="10,000,000"
+                      inputmode="numeric"
+                    />
+                    <span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="d-principal-hint"></span>
                 </div>
-              </a>
+
+                <div class="form-group">
+                  <label class="form-label" for="d-rate">연이율 (세전)</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="d-rate"
+                      class="form-input"
+                      placeholder="3.50"
+                      min="0.01"
+                      max="100"
+                      step="0.01"
+                    />
+                    <span class="input-unit">%</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="d-period">예치 기간</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="d-period"
+                      class="form-input"
+                      placeholder="12"
+                      min="1"
+                      max="600"
+                      step="1"
+                    />
+                    <span class="input-unit">개월</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">이자 계산 방식</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="d-interest-type"
+                        value="simple"
+                        checked
+                        id="d-simple"
+                      />
+                      <span class="radio-custom"></span>
+                      단리
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="d-interest-type"
+                        value="compound"
+                        id="d-compound"
+                      />
+                      <span class="radio-custom"></span>
+                      복리 (월복리)
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">세금 우대</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="d-tax-type"
+                        value="normal"
+                        checked
+                        id="d-tax-normal"
+                      />
+                      <span class="radio-custom"></span>
+                      일반과세 (15.4%)
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="d-tax-type"
+                        value="preferred"
+                        id="d-tax-preferred"
+                      />
+                      <span class="radio-custom"></span>
+                      세금우대 (9.9%)
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="d-tax-type"
+                        value="exempt"
+                        id="d-tax-exempt"
+                      />
+                      <span class="radio-custom"></span>
+                      비과세 (0%)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="calc-btn"
+                id="btn-deposit"
+                onclick="calculateDeposit()"
+              >
+                <span class="btn-icon">⚡</span> 계산하기
+              </button>
+            </div>
+
+            <!-- Result -->
+            <div class="result-card" id="result-deposit" style="display: none">
+              <h3 class="result-title">💰 예금 계산 결과</h3>
+              <div class="result-summary-box" id="result-deposit-summary"></div>
+              <div class="result-grid" id="result-deposit-grid"></div>
+              <div class="chart-wrap">
+                <canvas id="chart-deposit" width="260" height="260"></canvas>
+                <div class="chart-legend" id="legend-deposit"></div>
+              </div>
+              <div class="result-notice">
+                ※ 이자소득세는 세전이자에 적용되며, 실제 수령액은 금융기관 및
+                개인 상황에 따라 다를 수 있습니다.
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== INSTALLMENT PANEL ===== -->
+          <div class="tab-panel" id="panel-installment" role="tabpanel">
+            <div class="calc-card">
+              <h2 class="calc-card-title">적금 계산</h2>
+              <p class="calc-card-desc">
+                매월 일정 금액을 납입하는 <strong>정기적금</strong>의 만기
+                수령액을 계산합니다.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="i-monthly">월 납입액</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="i-monthly"
+                      class="form-input"
+                      placeholder="500,000"
+                      inputmode="numeric"
+                    />
+                    <span class="input-unit">원</span>
+                  </div>
+                  <span class="form-hint" id="i-monthly-hint"></span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="i-rate">연이율 (세전)</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="i-rate"
+                      class="form-input"
+                      placeholder="4.00"
+                      min="0.01"
+                      max="100"
+                      step="0.01"
+                    />
+                    <span class="input-unit">%</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="i-period">납입 기간</label>
+                  <div class="input-wrap">
+                    <input
+                      type="number"
+                      id="i-period"
+                      class="form-input"
+                      placeholder="12"
+                      min="1"
+                      max="600"
+                      step="1"
+                    />
+                    <span class="input-unit">개월</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">이자 계산 방식</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="i-interest-type"
+                        value="simple"
+                        checked
+                        id="i-simple"
+                      />
+                      <span class="radio-custom"></span>
+                      단리
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="i-interest-type"
+                        value="compound"
+                        id="i-compound"
+                      />
+                      <span class="radio-custom"></span>
+                      복리 (월복리)
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">세금 우대</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="i-tax-type"
+                        value="normal"
+                        checked
+                        id="i-tax-normal"
+                      />
+                      <span class="radio-custom"></span>
+                      일반과세 (15.4%)
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="i-tax-type"
+                        value="preferred"
+                        id="i-tax-preferred"
+                      />
+                      <span class="radio-custom"></span>
+                      세금우대 (9.9%)
+                    </label>
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="i-tax-type"
+                        value="exempt"
+                        id="i-tax-exempt"
+                      />
+                      <span class="radio-custom"></span>
+                      비과세 (0%)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="calc-btn"
+                id="btn-installment"
+                onclick="calculateInstallment()"
+              >
+                <span class="btn-icon">⚡</span> 계산하기
+              </button>
+            </div>
+
+            <!-- Result -->
+            <div
+              class="result-card"
+              id="result-installment"
+              style="display: none"
+            >
+              <h3 class="result-title">📅 적금 계산 결과</h3>
+              <div
+                class="result-summary-box"
+                id="result-installment-summary"
+              ></div>
+              <div class="result-grid" id="result-installment-grid"></div>
+              <div class="chart-wrap">
+                <canvas
+                  id="chart-installment"
+                  width="260"
+                  height="260"
+                ></canvas>
+                <div class="chart-legend" id="legend-installment"></div>
+              </div>
+              <div class="result-notice">
+                ※ 적금 이자는 납입 회차별 예치기간에 따라 산출됩니다. 실제
+                수령액은 금융기관에 따라 다를 수 있습니다.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+          <!-- Ad in sidebar -->
+          <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
+            <span class="ad-placeholder-text">광고</span>
+          </div>
+
+          <!-- Other calculators -->
+          <nav class="sidebar-widget" aria-label="다른 금융 계산기">
+            <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+            <ul class="sidebar-links">
+              <li>
+                <a href="../index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info">
+                    <strong>전체 계산기 홈</strong
+                    ><small>금융계산기.kr 메인</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../salary-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">💼</span>
+                  <div class="link-info">
+                    <strong>연봉 계산기</strong
+                    ><small>월 실수령액·4대보험 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../severance-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📦</span>
+                  <div class="link-info">
+                    <strong>퇴직금 계산기</strong
+                    ><small>퇴직소득세·DB/DC형</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="sidebar-link active-link"
+                  ><span class="link-icon">🏦</span>
+                  <div class="link-info">
+                    <strong>예적금 만기 계산기</strong
+                    ><small>현재 페이지</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../loan-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info">
+                    <strong>대출 이자 계산기</strong
+                    ><small>원리금균등·원금균등 상환</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../compound-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">📈</span>
+                  <div class="link-info">
+                    <strong>복리 수익률 계산기</strong
+                    ><small>투자 수익률 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../jeonse-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏗️</span>
+                  <div class="link-info">
+                    <strong>전세/월세 전환 계산기</strong
+                    ><small>전환보증금 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../pension-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">👴</span>
+                  <div class="link-info">
+                    <strong>연금 수령액 계산기</strong
+                    ><small>국민연금·퇴직연금</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../tax-interest-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">💸</span>
+                  <div class="link-info">
+                    <strong>세후 이자 계산기</strong
+                    ><small>이자소득세 상세 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../inflation-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📊</span>
+                  <div class="link-info">
+                    <strong>물가상승률 계산기</strong
+                    ><small>실질 구매력 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../exchange-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">💱</span>
+                  <div class="link-info">
+                    <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Quick info widget -->
+          <div class="sidebar-widget info-widget">
+            <h2 class="widget-title">📋 세금 안내</h2>
+            <table class="tax-table">
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>세율</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>일반과세</td>
+                  <td class="tax-rate">15.4%</td>
+                </tr>
+                <tr>
+                  <td>세금우대</td>
+                  <td class="tax-rate preferred">9.9%</td>
+                </tr>
+                <tr>
+                  <td>비과세</td>
+                  <td class="tax-rate exempt">0%</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="widget-note">
+              ※ 이자소득세(14%) + 지방소득세(1.4%) = 15.4%
+            </p>
+          </div>
+
+          <!-- Rate info widget -->
+          <div class="sidebar-widget info-widget">
+            <h2 class="widget-title">📰 기준금리 정보</h2>
+            <div class="rate-info-box">
+              <div class="rate-item">
+                <span class="rate-label">한국은행 기준금리</span>
+                <span class="rate-value">연 2.50%</span>
+              </div>
+              <div class="rate-item">
+                <span class="rate-label">최종 변경일</span>
+                <span class="rate-value small">2026.02.26</span>
+              </div>
+            </div>
+            <p class="widget-note">
+              ※ 실제 예적금 금리는 금융기관별로 상이합니다.
+            </p>
+          </div>
+        </aside>
+      </div>
+      <!-- /.content-grid -->
+    </main>
+
+    <!-- ===== BOTTOM AD BANNER ===== -->
+    <div class="ad-banner-middle">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal" id="ad-middle">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BOTTOM DESCRIPTION (AdSense SEO) ===== -->
+    <section class="bottom-description" id="bottom-info">
+      <div class="container">
+        <div class="info-section">
+          <h2>예금과 적금의 차이점</h2>
+          <div class="info-grid">
+            <div class="info-card">
+              <h3>🏦 정기예금</h3>
+              <p>
+                목돈을 일정 기간 동안 은행에 맡기고 만기 시 원금과 이자를 함께
+                지급받는 금융 상품입니다. 목돈이 있고 일정 기간 사용하지 않을
+                경우 적합합니다. 가입 후 만기까지 추가 입금이 불가하며, 중도해지
+                시 약정 금리보다 낮은 이율이 적용될 수 있습니다.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>📅 정기적금</h3>
+              <p>
+                매월 일정 금액을 정해진 기간 동안 납입하고 만기 시 원금과 이자를
+                지급받는 금융 상품입니다. 여유 자금이 많지 않아 매월 일정액을
+                저축하며 목돈을 마련하고자 할 때 적합합니다. 납입금액·기간에
+                따라 이자가 달라집니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h2>이자 계산 방식</h2>
+          <div class="info-grid">
+            <div class="info-card">
+              <h3>📐 단리 계산 방식</h3>
+              <p><strong>단리</strong>는 원금에만 이자가 붙는 방식입니다.</p>
+              <div class="formula-box">
+                <p><strong>예금 단리:</strong></p>
+                <code>만기수령액 = 원금 × (1 + 연이율 × 기간(년))</code>
+                <p class="mt-8"><strong>적금 단리:</strong></p>
+                <code>총이자 = 월납입액 × 월이율 × n(n+1)/2</code>
+                <p class="formula-note">n = 납입 개월 수</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <h3>📊 복리 계산 방식</h3>
+              <p>
+                <strong>복리</strong>는 이자에 이자가 더해지는 방식입니다. 장기
+                투자일수록 복리 효과가 커집니다.
+              </p>
+              <div class="formula-box">
+                <p><strong>예금 월복리:</strong></p>
+                <code>만기수령액 = 원금 × (1 + 연이율/12)^기간(월)</code>
+                <p class="mt-8"><strong>적금 월복리:</strong></p>
+                <code>각 회차별 복리 산출 후 합산</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h2>이자소득세 계산 방법</h2>
+          <p>
+            은행 이자는 이자소득세 과세 대상입니다. 이자소득세는 이자소득의
+            <strong>14%</strong>이며, 여기에 지방소득세(이자소득세의 10%)인
+            <strong>1.4%</strong>가 추가되어 총 <strong>15.4%</strong>가
+            원천징수됩니다.
+          </p>
+          <div class="tax-example-box">
+            <h4>계산 예시</h4>
+            <ul>
+              <li>세전이자: 350,000원</li>
+              <li>이자소득세: 350,000 × 14% = 49,000원</li>
+              <li>지방소득세: 49,000 × 10% = 4,900원</li>
+              <li>총 세금: 53,900원 (15.4%)</li>
+              <li><strong>세후이자: 296,100원</strong></li>
+            </ul>
+          </div>
+          <p>단, 다음 경우에는 세금 혜택이 있습니다:</p>
+          <ul class="benefit-list">
+            <li>
+              <strong>세금우대 저축 (9.9%)</strong> – 조합원 출자금 등 일부
+              금융상품에 적용
             </li>
             <li>
-              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
-                <div class="link-info">
-                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
-                <div class="link-info">
-                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="sidebar-link active-link"><span class="link-icon">🏦</span>
-                <div class="link-info">
-                  <strong>예적금 만기 계산기</strong><small>현재 페이지</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info">
-                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등 상환</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
-                <div class="link-info">
-                  <strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
-                <div class="link-info">
-                  <strong>전세/월세 전환 계산기</strong><small>전환보증금 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
-                <div class="link-info">
-                  <strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
-                <div class="link-info">
-                  <strong>세후 이자 계산기</strong><small>이자소득세 상세 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
-                <div class="link-info">
-                  <strong>물가상승률 계산기</strong><small>실질 구매력 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
-                <div class="link-info">
-                  <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
-                </div>
-              </a>
+              <strong>비과세 저축 (0%)</strong> – 개인종합자산관리계좌(ISA),
+              장기주택마련저축 등에 적용
             </li>
           </ul>
-        </nav>
-
-        <!-- Quick info widget -->
-        <div class="sidebar-widget info-widget">
-          <h2 class="widget-title">📋 세금 안내</h2>
-          <table class="tax-table">
-            <thead>
-              <tr>
-                <th>구분</th>
-                <th>세율</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>일반과세</td>
-                <td class="tax-rate">15.4%</td>
-              </tr>
-              <tr>
-                <td>세금우대</td>
-                <td class="tax-rate preferred">9.9%</td>
-              </tr>
-              <tr>
-                <td>비과세</td>
-                <td class="tax-rate exempt">0%</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="widget-note">
-            ※ 이자소득세(14%) + 지방소득세(1.4%) = 15.4%
-          </p>
         </div>
 
-        <!-- Rate info widget -->
-        <div class="sidebar-widget info-widget">
-          <h2 class="widget-title">📰 기준금리 정보</h2>
-          <div class="rate-info-box">
-            <div class="rate-item">
-              <span class="rate-label">한국은행 기준금리</span>
-              <span class="rate-value">연 2.50%</span>
-            </div>
-            <div class="rate-item">
-              <span class="rate-label">최종 변경일</span>
-              <span class="rate-value small">2026.02.26</span>
-            </div>
+        <div class="info-section" id="faq">
+          <h2>자주 묻는 질문 (FAQ)</h2>
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>예금과 적금 중 어느 것이 더 유리한가요?</summary>
+              <p>
+                목돈 보유 시에는 <strong>예금</strong>이, 매월 일정액을 저축할
+                경우에는 <strong>적금</strong>이 적합합니다. 동일 금리
+                조건이라면 예금이 이자가 더 많습니다. 적금은 매월 납입하므로
+                평균 예치기간이 절반 정도이기 때문입니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>중도해지 시 이자는 어떻게 계산되나요?</summary>
+              <p>
+                중도해지 시에는 약정금리보다 낮은
+                <strong>중도해지이율</strong>이 적용됩니다. 일반적으로
+                약정금리의 10~70% 수준으로 예치 기간이 짧을수록 이율이 더
+                낮아집니다. 정확한 중도해지이율은 가입 금융기관에 문의하시기
+                바랍니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>비과세 예금 계좌는 누가 만들 수 있나요?</summary>
+              <p>
+                ISA(개인종합자산관리계좌)의 경우 근로소득자, 사업소득자, 농어민
+                등이 가입할 수 있습니다. 비과세 한도는 계좌
+                유형(일반형·서민형·농어민형)에 따라 다릅니다. 자세한 사항은
+                금융기관 또는 금융감독원에 문의하세요.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>이 계산기의 계산 결과는 얼마나 정확한가요?</summary>
+              <p>
+                본 계산기는 표준 금융 공식을 사용하여 계산합니다. 다만, 실제
+                금융기관마다 이자 계산 방식(영업일 기준, 입금일 산입 여부 등)이
+                미세하게 다를 수 있으므로, 정확한 수령액은 해당 금융기관에서
+                직접 확인하시길 권장합니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>세금우대 저축 상품은 어디서 가입하나요?</summary>
+              <p>
+                신협, 새마을금고, 수협, 산림조합 등 상호금융기관에서 조합원
+                자격으로 가입하면 세금우대 혜택을 받을 수 있습니다. 1인당
+                3,000만원 한도로 이자소득세가 9.9%로 경감됩니다.
+              </p>
+            </details>
           </div>
-          <p class="widget-note">
-            ※ 실제 예적금 금리는 금융기관별로 상이합니다.
-          </p>
         </div>
-      </aside>
-    </div>
-    <!-- /.content-grid -->
-  </main>
+      </div>
+    </section>
 
-  <!-- ===== BOTTOM AD BANNER ===== -->
-  <div class="ad-banner-middle">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal" id="ad-middle">
-        <span class="ad-placeholder-text">광고</span>
+    <!-- ===== BOTTOM AD ===== -->
+    <div class="ad-banner-bottom">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal" id="ad-bottom">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ===== BOTTOM DESCRIPTION (AdSense SEO) ===== -->
-  <section class="bottom-description" id="bottom-info">
-    <div class="container">
-      <div class="info-section">
-        <h2>예금과 적금의 차이점</h2>
-        <div class="info-grid">
-          <div class="info-card">
-            <h3>🏦 정기예금</h3>
-            <p>
-              목돈을 일정 기간 동안 은행에 맡기고 만기 시 원금과 이자를 함께
-              지급받는 금융 상품입니다. 목돈이 있고 일정 기간 사용하지 않을
-              경우 적합합니다. 가입 후 만기까지 추가 입금이 불가하며, 중도해지
-              시 약정 금리보다 낮은 이율이 적용될 수 있습니다.
-            </p>
-          </div>
-          <div class="info-card">
-            <h3>📅 정기적금</h3>
-            <p>
-              매월 일정 금액을 정해진 기간 동안 납입하고 만기 시 원금과 이자를
-              지급받는 금융 상품입니다. 여유 자금이 많지 않아 매월 일정액을
-              저축하며 목돈을 마련하고자 할 때 적합합니다. 납입금액·기간에
-              따라 이자가 달라집니다.
-            </p>
-          </div>
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-logo">
+          <span class="logo-icon">💰</span>
+          <!-- prettier-ignore -->
+          <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
         </div>
-      </div>
-
-      <div class="info-section">
-        <h2>이자 계산 방식</h2>
-        <div class="info-grid">
-          <div class="info-card">
-            <h3>📐 단리 계산 방식</h3>
-            <p><strong>단리</strong>는 원금에만 이자가 붙는 방식입니다.</p>
-            <div class="formula-box">
-              <p><strong>예금 단리:</strong></p>
-              <code>만기수령액 = 원금 × (1 + 연이율 × 기간(년))</code>
-              <p class="mt-8"><strong>적금 단리:</strong></p>
-              <code>총이자 = 월납입액 × 월이율 × n(n+1)/2</code>
-              <p class="formula-note">n = 납입 개월 수</p>
-            </div>
-          </div>
-          <div class="info-card">
-            <h3>📊 복리 계산 방식</h3>
-            <p>
-              <strong>복리</strong>는 이자에 이자가 더해지는 방식입니다. 장기
-              투자일수록 복리 효과가 커집니다.
-            </p>
-            <div class="formula-box">
-              <p><strong>예금 월복리:</strong></p>
-              <code>만기수령액 = 원금 × (1 + 연이율/12)^기간(월)</code>
-              <p class="mt-8"><strong>적금 월복리:</strong></p>
-              <code>각 회차별 복리 산출 후 합산</code>
-            </div>
-          </div>
+        <div class="footer-links">
+          <a href="../terms/index.html">이용약관</a>
+          <a href="../privacy-policy/index.html">개인정보처리방침</a>
+          <a href="../contact/index.html">문의하기</a>
         </div>
-      </div>
-
-      <div class="info-section">
-        <h2>이자소득세 계산 방법</h2>
-        <p>
-          은행 이자는 이자소득세 과세 대상입니다. 이자소득세는 이자소득의
-          <strong>14%</strong>이며, 여기에 지방소득세(이자소득세의 10%)인
-          <strong>1.4%</strong>가 추가되어 총 <strong>15.4%</strong>가
-          원천징수됩니다.
+        <p class="footer-disclaimer">
+          본 계산기는 참고용으로만 사용하시기 바랍니다. 실제 수령액은 금융기관에
+          따라 다를 수 있으며, 본 사이트는 계산 결과에 대한 법적 책임을 지지
+          않습니다.
         </p>
-        <div class="tax-example-box">
-          <h4>계산 예시</h4>
-          <ul>
-            <li>세전이자: 350,000원</li>
-            <li>이자소득세: 350,000 × 14% = 49,000원</li>
-            <li>지방소득세: 49,000 × 10% = 4,900원</li>
-            <li>총 세금: 53,900원 (15.4%)</li>
-            <li><strong>세후이자: 296,100원</strong></li>
-          </ul>
-        </div>
-        <p>단, 다음 경우에는 세금 혜택이 있습니다:</p>
-        <ul class="benefit-list">
-          <li>
-            <strong>세금우대 저축 (9.9%)</strong> – 조합원 출자금 등 일부
-            금융상품에 적용
-          </li>
-          <li>
-            <strong>비과세 저축 (0%)</strong> – 개인종합자산관리계좌(ISA),
-            장기주택마련저축 등에 적용
-          </li>
-        </ul>
+        <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
       </div>
+    </footer>
 
-      <div class="info-section" id="faq">
-        <h2>자주 묻는 질문 (FAQ)</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>예금과 적금 중 어느 것이 더 유리한가요?</summary>
-            <p>
-              목돈 보유 시에는 <strong>예금</strong>이, 매월 일정액을 저축할
-              경우에는 <strong>적금</strong>이 적합합니다. 동일 금리
-              조건이라면 예금이 이자가 더 많습니다. 적금은 매월 납입하므로
-              평균 예치기간이 절반 정도이기 때문입니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>중도해지 시 이자는 어떻게 계산되나요?</summary>
-            <p>
-              중도해지 시에는 약정금리보다 낮은
-              <strong>중도해지이율</strong>이 적용됩니다. 일반적으로
-              약정금리의 10~70% 수준으로 예치 기간이 짧을수록 이율이 더
-              낮아집니다. 정확한 중도해지이율은 가입 금융기관에 문의하시기
-              바랍니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>비과세 예금 계좌는 누가 만들 수 있나요?</summary>
-            <p>
-              ISA(개인종합자산관리계좌)의 경우 근로소득자, 사업소득자, 농어민
-              등이 가입할 수 있습니다. 비과세 한도는 계좌
-              유형(일반형·서민형·농어민형)에 따라 다릅니다. 자세한 사항은
-              금융기관 또는 금융감독원에 문의하세요.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>이 계산기의 계산 결과는 얼마나 정확한가요?</summary>
-            <p>
-              본 계산기는 표준 금융 공식을 사용하여 계산합니다. 다만, 실제
-              금융기관마다 이자 계산 방식(영업일 기준, 입금일 산입 여부 등)이
-              미세하게 다를 수 있으므로, 정확한 수령액은 해당 금융기관에서
-              직접 확인하시길 권장합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>세금우대 저축 상품은 어디서 가입하나요?</summary>
-            <p>
-              신협, 새마을금고, 수협, 산림조합 등 상호금융기관에서 조합원
-              자격으로 가입하면 세금우대 혜택을 받을 수 있습니다. 1인당
-              3,000만원 한도로 이자소득세가 9.9%로 경감됩니다.
-            </p>
-          </details>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== BOTTOM AD ===== -->
-  <div class="ad-banner-bottom">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal" id="ad-bottom">
-        <span class="ad-placeholder-text">광고</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-logo">
-        <span class="logo-icon">💰</span>
-        <!-- prettier-ignore -->
-        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-      </div>
-      <div class="footer-links">
-        <a href="../terms/index.html">이용약관</a>
-        <a href="../privacy-policy/index.html">개인정보처리방침</a>
-        <a href="../contact/index.html">문의하기</a>
-      </div>
-      <p class="footer-disclaimer">
-        본 계산기는 참고용으로만 사용하시기 바랍니다. 실제 수령액은 금융기관에
-        따라 다를 수 있으며, 본 사이트는 계산 결과에 대한 법적 책임을 지지
-        않습니다.
-      </p>
-      <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script src="calculator.js"></script>
-</body>
-
+    <script src="calculator.js"></script>
+  </body>
 </html>

@@ -1,204 +1,221 @@
 <!doctype html>
 <html lang="ko">
+  <head>
+    <meta
+      name="naver-site-verification"
+      content="a06011ac826bc5ab12896ed43961cb7960df04ed"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-<head>
-  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+      gtag("config", "G-B1TE1JHHE3");
+    </script>
 
-    gtag("config", "G-B1TE1JHHE3");
-  </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>환율 계산기 - 원화 달러 엔화 유로 위안화 환산 | 금융계산기</title>
+    <meta
+      name="description"
+      content="원화(KRW)와 달러(USD), 엔화(JPY), 유로(EUR), 위안화(CNY), 파운드(GBP) 등 주요 통화를 환율 기준으로 환산합니다. 환전 수수료 계산 기능도 제공합니다."
+    />
+    <meta
+      name="keywords"
+      content="환율 계산기, 원달러 환율, 원엔 환율, 원유로 환율, 외환 계산기, 환전 수수료 계산"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../savings-calculator/style.css" />
+    <style>
+      :root {
+        --primary: #0891b2;
+        --primary-dark: #0e7490;
+        --primary-light: #ecfeff;
+        --primary-mid: #cffafe;
+      }
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>환율 계산기 - 원화 달러 엔화 유로 위안화 환산 | 금융계산기</title>
-  <meta name="description"
-    content="원화(KRW)와 달러(USD), 엔화(JPY), 유로(EUR), 위안화(CNY), 파운드(GBP) 등 주요 통화를 환율 기준으로 환산합니다. 환전 수수료 계산 기능도 제공합니다." />
-  <meta name="keywords" content="환율 계산기, 원달러 환율, 원엔 환율, 원유로 환율, 외환 계산기, 환전 수수료 계산" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="../savings-calculator/style.css" />
-  <style>
-    :root {
-      --primary: #0891b2;
-      --primary-dark: #0e7490;
-      --primary-light: #ecfeff;
-      --primary-mid: #cffafe;
-    }
-
-    .top-description {
-      background: linear-gradient(135deg,
+      .top-description {
+        background: linear-gradient(
+          135deg,
           #0891b2 0%,
           #0e7490 50%,
-          #164e63 100%);
-    }
+          #164e63 100%
+        );
+      }
 
-    .calc-btn {
-      background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
-      box-shadow: 0 4px 16px rgba(8, 145, 178, 0.4);
-    }
+      .calc-btn {
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        box-shadow: 0 4px 16px rgba(8, 145, 178, 0.4);
+      }
 
-    .calc-btn:hover {
-      box-shadow: 0 8px 24px rgba(8, 145, 178, 0.5);
-    }
+      .calc-btn:hover {
+        box-shadow: 0 8px 24px rgba(8, 145, 178, 0.5);
+      }
 
-    .result-card {
-      border-color: #0891b2;
-    }
+      .result-card {
+        border-color: #0891b2;
+      }
 
-    .result-summary-box {
-      background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
-    }
+      .result-summary-box {
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+      }
 
-    .info-section>h2 {
-      border-bottom-color: #0891b2;
-    }
+      .info-section > h2 {
+        border-bottom-color: #0891b2;
+      }
 
-    .faq-item summary:hover {
-      background: var(--primary-light);
-    }
+      .faq-item summary:hover {
+        background: var(--primary-light);
+      }
 
-    .faq-item summary::after {
-      color: #0891b2;
-    }
+      .faq-item summary::after {
+        color: #0891b2;
+      }
 
-    .sidebar-link:hover,
-    .sidebar-link.active-link {
-      background: var(--primary-light);
-      color: #0891b2;
-    }
+      .sidebar-link:hover,
+      .sidebar-link.active-link {
+        background: var(--primary-light);
+        color: #0891b2;
+      }
 
-    .nav-link:hover,
-    .nav-link.active {
-      background: var(--primary-light);
-      color: #0891b2;
-    }
+      .nav-link:hover,
+      .nav-link.active {
+        background: var(--primary-light);
+        color: #0891b2;
+      }
 
-    .form-input:focus {
-      border-color: #0891b2;
-      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
-    }
+      .form-input:focus {
+        border-color: #0891b2;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+      }
 
-    .select-input {
-      padding: 13px 16px;
-      border: 1.5px solid #e2e8f4;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      background: #f8faff;
-      color: #0f172a;
-      outline: none;
-      cursor: pointer;
-      transition: all 0.22s;
-    }
+      .select-input {
+        padding: 13px 16px;
+        border: 1.5px solid #e2e8f4;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        background: #f8faff;
+        color: #0f172a;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.22s;
+      }
 
-    .select-input:focus {
-      border-color: #0891b2;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
-    }
+      .select-input:focus {
+        border-color: #0891b2;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+      }
 
-    .result-item-value.accent {
-      color: #0891b2;
-    }
+      .result-item-value.accent {
+        color: #0891b2;
+      }
 
-    .result-item-value.large {
-      color: #164e63;
-    }
+      .result-item-value.large {
+        color: #164e63;
+      }
 
-    .exchange-display {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 16px;
-      background: #f0f9ff;
-      border: 1.5px solid #bae6fd;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+      .exchange-display {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 16px;
+        background: #f0f9ff;
+        border: 1.5px solid #bae6fd;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
 
-    .ex-from,
-    .ex-to {
-      text-align: center;
-    }
+      .ex-from,
+      .ex-to {
+        text-align: center;
+      }
 
-    .ex-amount {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #0f172a;
-    }
+      .ex-amount {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
 
-    .ex-currency {
-      font-size: 0.85rem;
-      color: #0891b2;
-      font-weight: 600;
-      margin-top: 2px;
-    }
+      .ex-currency {
+        font-size: 0.85rem;
+        color: #0891b2;
+        font-weight: 600;
+        margin-top: 2px;
+      }
 
-    .ex-arrow {
-      font-size: 1.8rem;
-      color: #0891b2;
-    }
+      .ex-arrow {
+        font-size: 1.8rem;
+        color: #0891b2;
+      }
 
-    .rate-info-note {
-      font-size: 0.8rem;
-      color: #64748b;
-      background: #f8faff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border-left: 3px solid #cbd5e1;
-    }
+      .rate-info-note {
+        font-size: 0.8rem;
+        color: #64748b;
+        background: #f8faff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border-left: 3px solid #cbd5e1;
+      }
 
-    .currency-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+      .currency-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
 
-    .currency-card {
-      background: #f8faff;
-      border: 1.5px solid #e2e8f4;
-      border-radius: 10px;
-      padding: 12px;
-      text-align: center;
-    }
+      .currency-card {
+        background: #f8faff;
+        border: 1.5px solid #e2e8f4;
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+      }
 
-    .cc-name {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-bottom: 3px;
-    }
+      .cc-name {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-bottom: 3px;
+      }
 
-    .cc-rate {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
+      .cc-rate {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
 
-    .cc-amount {
-      font-size: 0.82rem;
-      color: #0891b2;
-      font-weight: 600;
-      margin-top: 3px;
-    }
-  </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-    crossorigin="anonymous"></script>
+      .cc-amount {
+        font-size: 0.82rem;
+        color: #0891b2;
+        font-weight: 600;
+        margin-top: 3px;
+      }
+    </style>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+      crossorigin="anonymous"
+    ></script>
 
-  <!-- SEO & Favicon for Google Search -->
-  <meta property="og:site_name" content="금융계산기.kr" />
-  <link rel="icon" href="/favicon.svg" />
-  <script type="application/ld+json">
+    <!-- SEO & Favicon for Google Search -->
+    <meta property="og:site_name" content="금융계산기.kr" />
+    <link rel="icon" href="/favicon.svg" />
+    <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -206,385 +223,484 @@
         "url": "https://richcalc.kr/"
       }
     </script>
-</head>
+    <script src="../loader.js"></script>
+  </head>
 
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="../index.html" class="logo"><span class="logo-icon">💰</span><span class="logo-text">금융계산기<span
-            class="logo-accent">.kr</span></span></a>
-      <nav class="header-nav">
-        <a href="../index.html" class="nav-link">🏠 홈</a><a href="#calculator" class="nav-link active">환율 계산기</a><a
-          href="#bottom-info" class="nav-link">환율 안내</a><a href="#faq" class="nav-link">FAQ</a>
-      </nav>
-    </div>
-  </header>
-  <div class="ad-banner-top">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="../index.html" class="logo"
+          ><span class="logo-icon">💰</span
+          ><span class="logo-text"
+            >금융계산기<span class="logo-accent">.kr</span></span
+          ></a
+        >
+        <nav class="header-nav">
+          <a href="../index.html" class="nav-link">🏠 홈</a
+          ><a href="#calculator" class="nav-link active">환율 계산기</a
+          ><a href="#bottom-info" class="nav-link">환율 안내</a
+          ><a href="#faq" class="nav-link">FAQ</a>
+        </nav>
+      </div>
+    </header>
+    <div class="ad-banner-top">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
       </div>
     </div>
-  </div>
-  <section class="top-description">
-    <div class="container">
-      <div class="breadcrumb">
-        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span><span
-          class="bc-current">환율 계산기</span>
+    <section class="top-description">
+      <div class="container">
+        <div class="breadcrumb">
+          <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span
+          ><span class="bc-sep">›</span
+          ><span class="bc-current">환율 계산기</span>
+        </div>
+        <h1 class="main-title">환율 계산기</h1>
+        <p class="main-subtitle">
+          원화(KRW)와 <strong>달러·엔화·유로·위안화·파운드</strong> 등 주요
+          통화를 환산합니다. 환전 수수료를 포함한 실제 환전 금액도 계산합니다.
+        </p>
+        <div class="top-desc-tags">
+          <span class="tag">✓ KRW ↔ USD·JPY·EUR·CNY·GBP</span
+          ><span class="tag">✓ 환전 수수료 계산</span
+          ><span class="tag">✓ 주요 6개 통화 동시 비교</span
+          ><span class="tag">✓ 무료 사용</span>
+        </div>
       </div>
-      <h1 class="main-title">환율 계산기</h1>
-      <p class="main-subtitle">
-        원화(KRW)와 <strong>달러·엔화·유로·위안화·파운드</strong> 등 주요
-        통화를 환산합니다. 환전 수수료를 포함한 실제 환전 금액도 계산합니다.
-      </p>
-      <div class="top-desc-tags">
-        <span class="tag">✓ KRW ↔ USD·JPY·EUR·CNY·GBP</span><span class="tag">✓ 환전 수수료 계산</span><span class="tag">✓ 주요
-          6개 통화 동시 비교</span><span class="tag">✓ 무료 사용</span>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <main class="main-content">
-    <div class="container content-grid">
-      <section class="calculator-section" id="calculator">
-        <div class="calc-card">
-          <h2 class="calc-card-title">환율 계산</h2>
-          <p class="calc-card-desc">
-            환율과 금액을 입력하면
-            <strong>주요 6개 통화를 동시에 환산</strong>합니다.
-          </p>
+    <main class="main-content">
+      <div class="container content-grid">
+        <section class="calculator-section" id="calculator">
+          <div class="calc-card">
+            <h2 class="calc-card-title">환율 계산</h2>
+            <p class="calc-card-desc">
+              환율과 금액을 입력하면
+              <strong>주요 6개 통화를 동시에 환산</strong>합니다.
+            </p>
 
-          <div class="rate-info-note" style="margin-bottom: 20px">
-            ℹ️ 아래 환율은 <strong>참고용 기본값</strong>입니다. 실제 환율은
-            네이버/하나은행 등에서 확인 후 직접 입력하세요. (2026.03 기준
-            대략값)
-          </div>
+            <div class="rate-info-note" style="margin-bottom: 20px">
+              ℹ️ 아래 환율은 <strong>참고용 기본값</strong>입니다. 실제 환율은
+              네이버/하나은행 등에서 확인 후 직접 입력하세요. (2026.03 기준
+              대략값)
+            </div>
 
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">변환 방향</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="ex-dir" value="from-krw" checked /><span
-                    class="radio-custom"></span>원화 → 외화</label>
-                <label class="radio-label"><input type="radio" name="ex-dir" value="to-krw" /><span
-                    class="radio-custom"></span>외화 → 원화</label>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">변환 방향</label>
+                <div class="radio-group">
+                  <label class="radio-label"
+                    ><input
+                      type="radio"
+                      name="ex-dir"
+                      value="from-krw"
+                      checked
+                    /><span class="radio-custom"></span>원화 → 외화</label
+                  >
+                  <label class="radio-label"
+                    ><input type="radio" name="ex-dir" value="to-krw" /><span
+                      class="radio-custom"
+                    ></span
+                    >외화 → 원화</label
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ex-amount">금액</label>
+                <div class="input-wrap">
+                  <input
+                    type="text"
+                    id="ex-amount"
+                    class="form-input"
+                    placeholder="1,000,000"
+                    inputmode="numeric"
+                  /><span class="input-unit" id="ex-amount-unit">원</span>
+                </div>
+                <span class="form-hint" id="ex-amount-hint"></span>
+              </div>
+              <div class="form-group" id="ex-currency-group">
+                <label class="form-label" for="ex-currency"
+                  >대상 통화 (외화 → 원화 시)</label
+                >
+                <select
+                  id="ex-currency"
+                  class="select-input form-input"
+                  style="padding-right: 16px"
+                >
+                  <option value="USD">USD - 미국 달러 ($)</option>
+                  <option value="JPY">JPY - 일본 엔화 (¥)</option>
+                  <option value="EUR">EUR - 유로 (€)</option>
+                  <option value="CNY">CNY - 중국 위안화 (¥)</option>
+                  <option value="GBP">GBP - 영국 파운드 (£)</option>
+                  <option value="VND">VND - 베트남 동 (₫)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ex-fee">환전 수수료</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="ex-fee"
+                    class="form-input"
+                    placeholder="1.75"
+                    value="1.75"
+                    min="0"
+                    max="10"
+                    step="0.05"
+                  /><span class="input-unit">%</span>
+                </div>
+                <span class="form-hint"
+                  >은행 창구 약 1.5~1.75%, 온라인 0.5~1%</span
+                >
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="ex-amount">금액</label>
-              <div class="input-wrap">
-                <input type="text" id="ex-amount" class="form-input" placeholder="1,000,000" inputmode="numeric" /><span
-                  class="input-unit" id="ex-amount-unit">원</span>
-              </div>
-              <span class="form-hint" id="ex-amount-hint"></span>
-            </div>
-            <div class="form-group" id="ex-currency-group">
-              <label class="form-label" for="ex-currency">대상 통화 (외화 → 원화 시)</label>
-              <select id="ex-currency" class="select-input form-input" style="padding-right: 16px">
-                <option value="USD">USD - 미국 달러 ($)</option>
-                <option value="JPY">JPY - 일본 엔화 (¥)</option>
-                <option value="EUR">EUR - 유로 (€)</option>
-                <option value="CNY">CNY - 중국 위안화 (¥)</option>
-                <option value="GBP">GBP - 영국 파운드 (£)</option>
-                <option value="VND">VND - 베트남 동 (₫)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="ex-fee">환전 수수료</label>
-              <div class="input-wrap">
-                <input type="number" id="ex-fee" class="form-input" placeholder="1.75" value="1.75" min="0" max="10"
-                  step="0.05" /><span class="input-unit">%</span>
-              </div>
-              <span class="form-hint">은행 창구 약 1.5~1.75%, 온라인 0.5~1%</span>
-            </div>
-          </div>
 
-          <h3 style="
+            <h3
+              style="
                 font-size: 0.95rem;
                 font-weight: 700;
                 margin-bottom: 12px;
                 color: #475569;
-              ">
-            📋 현재 환율 입력 (직접 수정 가능)
-          </h3>
-          <div style="
+              "
+            >
+              📋 현재 환율 입력 (직접 수정 가능)
+            </h3>
+            <div
+              style="
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
                 margin-bottom: 24px;
-              " id="rate-inputs">
-            <div class="form-group">
-              <label class="form-label">USD (달러)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-USD" class="form-input" value="1450" step="0.01" /><span
-                  class="input-unit">₩</span>
+              "
+              id="rate-inputs"
+            >
+              <div class="form-group">
+                <label class="form-label">USD (달러)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-USD"
+                    class="form-input"
+                    value="1450"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">JPY (100엔)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-JPY"
+                    class="form-input"
+                    value="968"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">EUR (유로)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-EUR"
+                    class="form-input"
+                    value="1510"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">CNY (위안)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-CNY"
+                    class="form-input"
+                    value="200"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">GBP (파운드)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-GBP"
+                    class="form-input"
+                    value="1840"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">VND (1000동)</label>
+                <div class="input-wrap">
+                  <input
+                    type="number"
+                    id="rate-VND"
+                    class="form-input"
+                    value="57"
+                    step="0.01"
+                  /><span class="input-unit">₩</span>
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">JPY (100엔)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-JPY" class="form-input" value="968" step="0.01" /><span
-                  class="input-unit">₩</span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">EUR (유로)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-EUR" class="form-input" value="1510" step="0.01" /><span
-                  class="input-unit">₩</span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">CNY (위안)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-CNY" class="form-input" value="200" step="0.01" /><span
-                  class="input-unit">₩</span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">GBP (파운드)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-GBP" class="form-input" value="1840" step="0.01" /><span
-                  class="input-unit">₩</span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">VND (1000동)</label>
-              <div class="input-wrap">
-                <input type="number" id="rate-VND" class="form-input" value="57" step="0.01" /><span
-                  class="input-unit">₩</span>
-              </div>
-            </div>
+
+            <button class="calc-btn" onclick="calcExchange()">
+              <span class="btn-icon">⚡</span>계산하기
+            </button>
           </div>
 
-          <button class="calc-btn" onclick="calcExchange()">
-            <span class="btn-icon">⚡</span>계산하기
-          </button>
-        </div>
+          <div class="result-card" id="result-ex" style="display: none">
+            <h3 class="result-title">💱 환율 계산 결과</h3>
+            <div id="result-ex-content"></div>
+          </div>
+        </section>
 
-        <div class="result-card" id="result-ex" style="display: none">
-          <h3 class="result-title">💱 환율 계산 결과</h3>
-          <div id="result-ex-content"></div>
-        </div>
-      </section>
+        <aside class="sidebar">
+          <div class="ad-slot ad-slot--sidebar">
+            <span class="ad-placeholder-text">광고</span>
+          </div>
+          <nav class="sidebar-widget">
+            <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+            <ul class="sidebar-links">
+              <li>
+                <a href="../index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info">
+                    <strong>전체 계산기 홈</strong
+                    ><small>금융계산기.kr 메인</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../salary-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">💼</span>
+                  <div class="link-info">
+                    <strong>연봉 계산기</strong
+                    ><small>월 실수령액·4대보험 계산</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../severance-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📦</span>
+                  <div class="link-info">
+                    <strong>퇴직금 계산기</strong
+                    ><small>퇴직소득세·DB/DC형</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../savings-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏦</span>
+                  <div class="link-info">
+                    <strong>예적금 만기 계산기</strong>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../loan-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏠</span>
+                  <div class="link-info"><strong>대출 이자 계산기</strong></div>
+                </a>
+              </li>
+              <li>
+                <a href="../compound-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">📈</span>
+                  <div class="link-info">
+                    <strong>복리 수익률 계산기</strong>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../jeonse-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">🏗️</span>
+                  <div class="link-info">
+                    <strong>전세/월세 전환 계산기</strong>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="../pension-calculator/index.html" class="sidebar-link"
+                  ><span class="link-icon">👴</span>
+                  <div class="link-info">
+                    <strong>연금 수령액 계산기</strong>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../tax-interest-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">💸</span>
+                  <div class="link-info"><strong>세후 이자 계산기</strong></div>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="../inflation-calculator/index.html"
+                  class="sidebar-link"
+                  ><span class="link-icon">📊</span>
+                  <div class="link-info">
+                    <strong>물가상승률 계산기</strong>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="sidebar-link active-link"
+                  ><span class="link-icon">💱</span>
+                  <div class="link-info">
+                    <strong>환율 계산기</strong><small>현재 페이지</small>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="sidebar-widget info-widget">
+            <h2 class="widget-title">💱 참고 환율</h2>
+            <table class="tax-table">
+              <thead>
+                <tr>
+                  <th>통화</th>
+                  <th>기준 (₩)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>USD ($1)</td>
+                  <td class="tax-rate">1,450원</td>
+                </tr>
+                <tr>
+                  <td>JPY (¥100)</td>
+                  <td class="tax-rate preferred">968원</td>
+                </tr>
+                <tr>
+                  <td>EUR (€1)</td>
+                  <td class="tax-rate">1,510원</td>
+                </tr>
+                <tr>
+                  <td>CNY (¥1)</td>
+                  <td class="tax-rate exempt">200원</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="widget-note">
+              ※ 2026.03 기준 참고값. 실시간 환율은 네이버 또는 은행 앱에서
+              확인하세요.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
 
-      <aside class="sidebar">
-        <div class="ad-slot ad-slot--sidebar">
+    <div class="ad-banner-middle">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
           <span class="ad-placeholder-text">광고</span>
         </div>
-        <nav class="sidebar-widget">
-          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-          <ul class="sidebar-links">
-            <li>
-              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info">
-                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
-                <div class="link-info">
-                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
-                <div class="link-info">
-                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
-                <div class="link-info">
-                  <strong>예적금 만기 계산기</strong>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
-                <div class="link-info"><strong>대출 이자 계산기</strong></div>
-              </a>
-            </li>
-            <li>
-              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
-                <div class="link-info">
-                  <strong>복리 수익률 계산기</strong>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
-                <div class="link-info">
-                  <strong>전세/월세 전환 계산기</strong>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
-                <div class="link-info">
-                  <strong>연금 수령액 계산기</strong>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
-                <div class="link-info"><strong>세후 이자 계산기</strong></div>
-              </a>
-            </li>
-            <li>
-              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
-                <div class="link-info">
-                  <strong>물가상승률 계산기</strong>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="sidebar-link active-link"><span class="link-icon">💱</span>
-                <div class="link-info">
-                  <strong>환율 계산기</strong><small>현재 페이지</small>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div class="sidebar-widget info-widget">
-          <h2 class="widget-title">💱 참고 환율</h2>
-          <table class="tax-table">
-            <thead>
-              <tr>
-                <th>통화</th>
-                <th>기준 (₩)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>USD ($1)</td>
-                <td class="tax-rate">1,450원</td>
-              </tr>
-              <tr>
-                <td>JPY (¥100)</td>
-                <td class="tax-rate preferred">968원</td>
-              </tr>
-              <tr>
-                <td>EUR (€1)</td>
-                <td class="tax-rate">1,510원</td>
-              </tr>
-              <tr>
-                <td>CNY (¥1)</td>
-                <td class="tax-rate exempt">200원</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="widget-note">
-            ※ 2026.03 기준 참고값. 실시간 환율은 네이버 또는 은행 앱에서
-            확인하세요.
-          </p>
-        </div>
-      </aside>
-    </div>
-  </main>
-
-  <div class="ad-banner-middle">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
       </div>
     </div>
-  </div>
 
-  <section class="bottom-description" id="bottom-info">
-    <div class="container">
-      <div class="info-section">
-        <h2>환율과 환전 수수료 이해하기</h2>
-        <div class="info-grid">
-          <div class="info-card" style="border-color: #0891b2; background: #ecfeff">
-            <h3>💱 매매기준율 vs 실제 환율</h3>
-            <p>
-              <strong>매매기준율</strong>은 은행이 외환을 사고팔 때 기준이
-              되는 환율입니다. 우리가 환전할 때 적용받는 환율은 여기에
-              수수료(스프레드)가 더해진 것입니다.
-            </p>
-            <ul class="feature-list">
-              <li>살 때(원→외화): 기준율 + 수수료</li>
-              <li>팔 때(외화→원): 기준율 - 수수료</li>
-              <li>은행 창구: 약 1.5~1.75% 수수료</li>
-              <li>온라인 환전: 약 0.3~1% 수수료</li>
-            </ul>
+    <section class="bottom-description" id="bottom-info">
+      <div class="container">
+        <div class="info-section">
+          <h2>환율과 환전 수수료 이해하기</h2>
+          <div class="info-grid">
+            <div
+              class="info-card"
+              style="border-color: #0891b2; background: #ecfeff"
+            >
+              <h3>💱 매매기준율 vs 실제 환율</h3>
+              <p>
+                <strong>매매기준율</strong>은 은행이 외환을 사고팔 때 기준이
+                되는 환율입니다. 우리가 환전할 때 적용받는 환율은 여기에
+                수수료(스프레드)가 더해진 것입니다.
+              </p>
+              <ul class="feature-list">
+                <li>살 때(원→외화): 기준율 + 수수료</li>
+                <li>팔 때(외화→원): 기준율 - 수수료</li>
+                <li>은행 창구: 약 1.5~1.75% 수수료</li>
+                <li>온라인 환전: 약 0.3~1% 수수료</li>
+              </ul>
+            </div>
+            <div class="info-card">
+              <h3>💡 환전 절약 방법</h3>
+              <ul class="feature-list">
+                <li>온라인(앱) 환전: 최대 90% 우대</li>
+                <li>공항 환전소보다 시내 은행 유리</li>
+                <li>환율 우대 쿠폰 활용</li>
+                <li>트래블카드(트래블로그, 위비트래블 등)</li>
+                <li>달러를 미리 사두는 '달러 예금' 활용</li>
+              </ul>
+            </div>
           </div>
-          <div class="info-card">
-            <h3>💡 환전 절약 방법</h3>
-            <ul class="feature-list">
-              <li>온라인(앱) 환전: 최대 90% 우대</li>
-              <li>공항 환전소보다 시내 은행 유리</li>
-              <li>환율 우대 쿠폰 활용</li>
-              <li>트래블카드(트래블로그, 위비트래블 등)</li>
-              <li>달러를 미리 사두는 '달러 예금' 활용</li>
-            </ul>
+        </div>
+        <div class="info-section" id="faq">
+          <h2>자주 묻는 질문 (FAQ)</h2>
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>은행과 환전소 중 어디가 더 유리한가요?</summary>
+              <p>
+                일반적으로 <strong>시중은행 온라인 환전</strong>이 가장
+                유리합니다. 주거래 은행의 모바일 앱에서 환전 신청 후 가까운
+                지점에서 수령하면 70~90% 수수료 우대를 받을 수 있습니다. 공항
+                환전소는 수수료가 가장 높습니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>엔화 계산에서 100엔 기준인 이유는?</summary>
+              <p>
+                일본 엔화는 단위가 작아 1엔당 환율이 매우 낮기 때문에, 100엔
+                단위로 환율을 표시하는 것이 관행입니다. 따라서 이 계산기에서도
+                JPY 환율은 100엔 기준으로 입력합니다.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>
+                해외 결제 시 실제 적용 환율은 어떻게 확인하나요?
+              </summary>
+              <p>
+                신용카드 해외 결제 시 적용되는 환율은 결제일의 VISA/Mastercard
+                국제브랜드 수수료(약 1~1.5%)가 추가된 환율이 적용됩니다. 카드사
+                앱에서 확인하거나, 트래블카드 사용 시 별도 환율이 적용됩니다.
+              </p>
+            </details>
           </div>
         </div>
       </div>
-      <div class="info-section" id="faq">
-        <h2>자주 묻는 질문 (FAQ)</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>은행과 환전소 중 어디가 더 유리한가요?</summary>
-            <p>
-              일반적으로 <strong>시중은행 온라인 환전</strong>이 가장
-              유리합니다. 주거래 은행의 모바일 앱에서 환전 신청 후 가까운
-              지점에서 수령하면 70~90% 수수료 우대를 받을 수 있습니다. 공항
-              환전소는 수수료가 가장 높습니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>엔화 계산에서 100엔 기준인 이유는?</summary>
-            <p>
-              일본 엔화는 단위가 작아 1엔당 환율이 매우 낮기 때문에, 100엔
-              단위로 환율을 표시하는 것이 관행입니다. 따라서 이 계산기에서도
-              JPY 환율은 100엔 기준으로 입력합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>
-              해외 결제 시 실제 적용 환율은 어떻게 확인하나요?
-            </summary>
-            <p>
-              신용카드 해외 결제 시 적용되는 환율은 결제일의 VISA/Mastercard
-              국제브랜드 수수료(약 1~1.5%)가 추가된 환율이 적용됩니다. 카드사
-              앱에서 확인하거나, 트래블카드 사용 시 별도 환율이 적용됩니다.
-            </p>
-          </details>
+    </section>
+    <div class="ad-banner-bottom">
+      <div class="container">
+        <div class="ad-slot ad-slot--horizontal">
+          <span class="ad-placeholder-text">광고</span>
         </div>
       </div>
     </div>
-  </section>
-  <div class="ad-banner-bottom">
-    <div class="container">
-      <div class="ad-slot ad-slot--horizontal">
-        <span class="ad-placeholder-text">광고</span>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-logo">
+          <span class="logo-icon">💰</span>
+          <!-- prettier-ignore -->
+          <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+        </div>
+        <div class="footer-links">
+          <a href="../terms/index.html">이용약관</a
+          ><a href="../privacy-policy/index.html">개인정보처리방침</a
+          ><a href="../contact/index.html">문의하기</a>
+        </div>
+        <p class="footer-disclaimer">
+          본 계산기의 환율은 참고용입니다. 실제 환율은 금융기관에서 확인하세요.
+        </p>
+        <p class="footer-copy">© 2026 금융계산기.kr</p>
       </div>
-    </div>
-  </div>
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-logo">
-        <span class="logo-icon">💰</span>
-        <!-- prettier-ignore -->
-        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-      </div>
-      <div class="footer-links">
-        <a href="../terms/index.html">이용약관</a><a href="../privacy-policy/index.html">개인정보처리방침</a><a
-          href="../contact/index.html">문의하기</a>
-      </div>
-      <p class="footer-disclaimer">
-        본 계산기의 환율은 참고용입니다. 실제 환율은 금융기관에서 확인하세요.
-      </p>
-      <p class="footer-copy">© 2026 금융계산기.kr</p>
-    </div>
-  </footer>
-  <script src="calculator.js"></script>
-</body>
-
+    </footer>
+    <script src="calculator.js"></script>
+  </body>
 </html>
