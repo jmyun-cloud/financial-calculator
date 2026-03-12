@@ -544,49 +544,35 @@ ul {
   animation: fadeSlideIn 0.4s ease;
 }
 
-/* ===== SAVE AS IMAGE BUTTON - absolute top-right ===== */
-.result-card {
-  position: relative;
-}
-
-.result-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--text-primary);
-}
-
+/* ===== SAVE AS IMAGE BUTTON ===== */
 .save-image-btn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 5px 11px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(4px);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
+  background: rgba(5, 150, 105, 0.1);
+  border: none;
+  border-radius: 20px;
   font-family: inherit;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--primary, #059669);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: all 0.2s;
   white-space: nowrap;
-  z-index: 2;
+  flex-shrink: 0;
 }
 
 .save-image-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--primary-light);
+  background: var(--primary, #059669);
+  color: white;
+  transform: translateY(-1px);
 }
 
 .save-image-btn:active {
   transform: scale(0.95);
 }
+
 
 
 /* Summary highlight box */

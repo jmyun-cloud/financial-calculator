@@ -1,12 +1,15 @@
 /**
  * 금융계산기.kr - 결과 화면 이미지 저장 기능
  * html2canvas를 이용하여 결과 카드를 PNG 이미지로 다운로드합니다.
+ *
+ * [포지셔닝 전략]
+ * toast.js 의 injectCopyButtons() 가 .result-title 을 display:flex 로 만들고
+ * 그 안에 .copy-result-btn 을 appendChild 합니다.
+ * 저장 버튼도 같은 flex 행(.result-title) 안에 삽입하여 복사하기 버튼 바로 옆에 배치합니다.
  */
-
 (function () {
   /**
-   * result-card 우상단에 "📸 저장" 버튼을 absolute 위치로 추가.
-   * DOM 구조를 변경하지 않아 레이아웃에 영향을 주지 않습니다.
+   * 저장 버튼을 .result-title 의 flex 행, 복사하기 버튼 옆에 삽입.
    */
   function addSaveImageButton(resultCardId) {
     var card = document.getElementById(resultCardId);
@@ -16,34 +19,43 @@
     var btn = document.createElement("button");
     btn.className = "save-image-btn";
     btn.type = "button";
-    btn.innerHTML = "📸 저장";
+    btn.innerHTML = "🖼️ 저장";
     btn.title = "계산 결과를 이미지로 저장합니다";
 
     btn.addEventListener("click", function () {
       saveResultAsImage(card);
     });
 
-    // absolute 배치를 위해 카드에 position:relative 보장
-    var pos = window.getComputedStyle(card).position;
-    if (pos === "static") {
-      card.style.position = "relative";
+    // toast.js 가 이미 실행된 후라면 .result-title 이 flex 가 되어 있고
+    // .copy-result-btn 이 그 안에 있습니다 → 바로 그 옆에 삽입
+    var titleEl = card.querySelector(".result-title");
+    if (titleEl) {
+      // flex 행이 안 되어 있으면(toast.js 보다 먼저 실행된 경우) 임시 적용
+      if (getComputedStyle(titleEl).display !== "flex") {
+        titleEl.style.display = "flex";
+        titleEl.style.justifyContent = "space-between";
+        titleEl.style.alignItems = "center";
+      }
+      titleEl.appendChild(btn);
+    } else {
+      // 타이틀이 없으면 카드 첫 줄에 삽입
+      card.insertBefore(btn, card.firstChild);
     }
-
-    // 카드의 마지막 자식으로 추가 (CSS로 absolute 우상단 배치)
-    card.appendChild(btn);
   }
 
   /**
-   * html2canvas로 카드를 캡처하고 PNG로 다운로드
+   * html2canvas 로 카드 캡처 → PNG 다운로드
    */
   function saveResultAsImage(cardElement) {
     var btn = cardElement.querySelector(".save-image-btn");
+    var titleEl = cardElement.querySelector(".result-title");
     var originalText = btn ? btn.innerHTML : "";
 
-    if (btn) {
-      btn.style.opacity = "0"; // 캡처에서 숨김
-      btn.disabled = true;
-    }
+    // 캡처 전 result-title flex 항목 일시 숨김 (버튼들)
+    if (titleEl) titleEl.style.justifyContent = "flex-start";
+    if (btn) btn.style.display = "none";
+    var copyBtn = cardElement.querySelector(".copy-result-btn");
+    if (copyBtn) copyBtn.style.display = "none";
 
     var pageName =
       (document.querySelector(".main-title, h1") || {}).textContent || "계산결과";
@@ -57,13 +69,13 @@
 
     function doCapture() {
       html2canvas(cardElement, {
-        backgroundColor: "#ffffff",
+        backgroundColor:
+          document.documentElement.getAttribute("data-theme") === "dark"
+            ? "#1a2435"
+            : "#ffffff",
         scale: 2,
         useCORS: true,
         logging: false,
-        ignoreElements: function (el) {
-          return el.classList && el.classList.contains("save-image-btn");
-        },
         onclone: function (clonedDoc) {
           var cloned = clonedDoc.querySelector(".result-card");
           if (cloned) {
@@ -81,14 +93,13 @@
           link.href = canvas.toDataURL("image/png");
           link.click();
 
-          if (btn) {
-            btn.innerHTML = "✅ 완료!";
-            btn.style.opacity = "1";
-            btn.disabled = false;
-            setTimeout(function () {
-              btn.innerHTML = originalText;
-            }, 2000);
-          }
+          // 버튼 복원
+          if (titleEl) titleEl.style.justifyContent = "space-between";
+          if (btn) { btn.style.display = ""; btn.innerHTML = "✅ 완료!"; }
+          if (copyBtn) copyBtn.style.display = "";
+          setTimeout(function () {
+            if (btn) btn.innerHTML = originalText;
+          }, 2000);
 
           if (typeof showToast === "function") {
             showToast("📸 이미지로 저장되었습니다!");
@@ -96,11 +107,9 @@
         })
         .catch(function (err) {
           console.error("이미지 저장 오류:", err);
-          if (btn) {
-            btn.innerHTML = originalText;
-            btn.style.opacity = "1";
-            btn.disabled = false;
-          }
+          if (titleEl) titleEl.style.justifyContent = "space-between";
+          if (btn) { btn.style.display = ""; btn.innerHTML = originalText; }
+          if (copyBtn) copyBtn.style.display = "";
           alert("이미지 저장 중 오류가 발생했습니다.");
         });
     }
@@ -112,10 +121,9 @@
       s.onload = doCapture;
       s.onerror = function () {
         alert("라이브러리 로드에 실패했습니다. 인터넷 연결을 확인하세요.");
-        if (btn) {
-          btn.style.opacity = "1";
-          btn.disabled = false;
-        }
+        if (titleEl) titleEl.style.justifyContent = "space-between";
+        if (btn) { btn.style.display = ""; }
+        if (copyBtn) copyBtn.style.display = "";
       };
       document.head.appendChild(s);
     } else {
