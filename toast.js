@@ -124,6 +124,7 @@
                 btnGroup.style.display = 'flex';
                 btnGroup.style.gap = '8px';
                 btnGroup.style.alignItems = 'center';
+
                 // Move any existing buttons into the group
                 Array.from(titleEl.children).forEach(child => {
                     if (child.tagName === 'BUTTON') {
@@ -145,11 +146,8 @@
                 // Extract inner text
                 let textToCopy = container.innerText;
 
-                // Clean up string: remove the '📋 복사하기' text itself
+                // Clean up string: remove button texts itself
                 textToCopy = textToCopy.replace('📋 복사하기', '').replace('🖼️ 저장', '').trim();
-
-                // Optionally remove very redundant chart text if it litters the clipboard too much
-                // For now, innerText is usually quite nice and readable as is.
 
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     showToast('계산 결과가 복사되었습니다!');

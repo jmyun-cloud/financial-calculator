@@ -1,16 +1,16 @@
 /**
  * 금융계산기.kr - 결과 화면 이미지 저장 기능
- * html2canvas를 이용하여 결과 카드를 PNG 이미지로 다운로드합니다.
  *
  * [포지셔닝 전략]
- * toast.js 의 injectCopyButtons() 가 .result-title 을 display:flex 로 만들고
+ * toast.js 가 .result-title 에 display:flex + justifyContent:space-between 을 설정하고
  * 그 안에 .copy-result-btn 을 appendChild 합니다.
- * 저장 버튼도 같은 flex 행(.result-title) 안에 삽입하여 복사하기 버튼 바로 옆에 배치합니다.
+ * 세 개의 flex 아이템(타이틀 텍스트, 복사버튼, 저장버튼)이 생기면 space-between 에 의해
+ * 서로 떨어져서 나타나는 문제가 발생합니다.
+ *
+ * 해결책: 복사하기 + 저장 버튼을 하나의 .result-btn-group div 로 묶어서
+ * flex 아이템이 [타이틀 텍스트] / [버튼 그룹] 두 개만 되도록 합니다.
  */
 (function () {
-  /**
-   * 저장 버튼을 .result-title 의 flex 행, 복사하기 버튼 옆에 삽입.
-   */
   function addSaveImageButton(resultCardId) {
     var card = document.getElementById(resultCardId);
     if (!card) return;
@@ -21,45 +21,55 @@
     btn.type = "button";
     btn.innerHTML = "🖼️ 저장";
     btn.title = "계산 결과를 이미지로 저장합니다";
-
     btn.addEventListener("click", function () {
       saveResultAsImage(card);
     });
 
-    // toast.js 가 이미 실행된 후라면 .result-title 이 flex 가 되어 있고
-    // .copy-result-btn 이 그 안에 있습니다 → 바로 그 옆에 삽입
     var titleEl = card.querySelector(".result-title");
-    if (titleEl) {
-      // flex 행이 안 되어 있으면(toast.js 보다 먼저 실행된 경우) 임시 적용
+    if (!titleEl) {
+      card.insertBefore(btn, card.firstChild);
+      return;
+    }
+
+    // toast.js 가 이미 실행되어 copy 버튼이 있으면 → 함께 그룹으로 묶기
+    var copyBtn = titleEl.querySelector(".copy-result-btn");
+    if (copyBtn) {
+      var existingGroup = titleEl.querySelector(".result-btn-group");
+      if (!existingGroup) {
+        // 새 그룹 div 생성
+        var group = document.createElement("div");
+        group.className = "result-btn-group";
+        group.style.cssText = "display:flex;align-items:center;gap:6px;flex-shrink:0;";
+        // copy 버튼을 그룹 안으로 이동
+        titleEl.insertBefore(group, copyBtn);
+        group.appendChild(copyBtn);
+        group.appendChild(btn);
+      } else {
+        existingGroup.appendChild(btn);
+      }
+    } else {
+      // toast.js 보다 먼저 실행된 경우 - 그냥 append (나중에 toast.js 가 flex 처리)
       if (getComputedStyle(titleEl).display !== "flex") {
         titleEl.style.display = "flex";
         titleEl.style.justifyContent = "space-between";
         titleEl.style.alignItems = "center";
       }
       titleEl.appendChild(btn);
-    } else {
-      // 타이틀이 없으면 카드 첫 줄에 삽입
-      card.insertBefore(btn, card.firstChild);
     }
   }
 
-  /**
-   * html2canvas 로 카드 캡처 → PNG 다운로드
-   */
   function saveResultAsImage(cardElement) {
-    var btn = cardElement.querySelector(".save-image-btn");
-    var titleEl = cardElement.querySelector(".result-title");
+    var card = cardElement;
+    var btn = card.querySelector(".save-image-btn");
+    var copyBtn = card.querySelector(".copy-result-btn");
     var originalText = btn ? btn.innerHTML : "";
 
-    // 캡처 전 result-title flex 항목 일시 숨김 (버튼들)
-    if (titleEl) titleEl.style.justifyContent = "flex-start";
+    // 버튼 숨기기 (캡처 제외)
     if (btn) btn.style.display = "none";
-    var copyBtn = cardElement.querySelector(".copy-result-btn");
     if (copyBtn) copyBtn.style.display = "none";
 
     var pageName =
-      (document.querySelector(".main-title, h1") || {}).textContent || "계산결과";
-    pageName = pageName.trim();
+      ((document.querySelector(".main-title, h1") || {}).textContent || "계산결과").trim();
     var now = new Date();
     var dateStr =
       now.getFullYear() +
@@ -67,8 +77,13 @@
       String(now.getDate()).padStart(2, "0");
     var fileName = pageName + "_" + dateStr + ".png";
 
+    function restore() {
+      if (btn) { btn.style.display = ""; btn.innerHTML = originalText; }
+      if (copyBtn) copyBtn.style.display = "";
+    }
+
     function doCapture() {
-      html2canvas(cardElement, {
+      html2canvas(card, {
         backgroundColor:
           document.documentElement.getAttribute("data-theme") === "dark"
             ? "#1a2435"
@@ -76,14 +91,14 @@
         scale: 2,
         useCORS: true,
         logging: false,
-        onclone: function (clonedDoc) {
-          var cloned = clonedDoc.querySelector(".result-card");
-          if (cloned) {
-            var wm = clonedDoc.createElement("div");
+        onclone: function (doc) {
+          var cl = doc.querySelector(".result-card");
+          if (cl) {
+            var wm = doc.createElement("div");
             wm.style.cssText =
               "text-align:right;font-size:11px;color:#94a3b8;padding:6px 16px 2px;font-family:sans-serif;";
             wm.textContent = "💰 richcalc.kr";
-            cloned.appendChild(wm);
+            cl.appendChild(wm);
           }
         },
       })
@@ -92,39 +107,25 @@
           link.download = fileName;
           link.href = canvas.toDataURL("image/png");
           link.click();
-
-          // 버튼 복원
-          if (titleEl) titleEl.style.justifyContent = "space-between";
-          if (btn) { btn.style.display = ""; btn.innerHTML = "✅ 완료!"; }
-          if (copyBtn) copyBtn.style.display = "";
-          setTimeout(function () {
-            if (btn) btn.innerHTML = originalText;
-          }, 2000);
-
-          if (typeof showToast === "function") {
-            showToast("📸 이미지로 저장되었습니다!");
+          restore();
+          if (btn) {
+            btn.innerHTML = "✅ 완료!";
+            setTimeout(function () { if (btn) btn.innerHTML = originalText; }, 2000);
           }
+          if (typeof showToast === "function") showToast("📸 이미지로 저장되었습니다!");
         })
         .catch(function (err) {
           console.error("이미지 저장 오류:", err);
-          if (titleEl) titleEl.style.justifyContent = "space-between";
-          if (btn) { btn.style.display = ""; btn.innerHTML = originalText; }
-          if (copyBtn) copyBtn.style.display = "";
+          restore();
           alert("이미지 저장 중 오류가 발생했습니다.");
         });
     }
 
     if (typeof html2canvas === "undefined") {
       var s = document.createElement("script");
-      s.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
       s.onload = doCapture;
-      s.onerror = function () {
-        alert("라이브러리 로드에 실패했습니다. 인터넷 연결을 확인하세요.");
-        if (titleEl) titleEl.style.justifyContent = "space-between";
-        if (btn) { btn.style.display = ""; }
-        if (copyBtn) copyBtn.style.display = "";
-      };
+      s.onerror = function () { restore(); alert("라이브러리 로드 실패"); };
       document.head.appendChild(s);
     } else {
       doCapture();
