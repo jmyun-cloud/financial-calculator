@@ -117,6 +117,22 @@
             titleEl.style.justifyContent = 'space-between';
             titleEl.style.alignItems = 'center';
 
+            let btnGroup = titleEl.querySelector('.result-btn-group');
+            if (!btnGroup) {
+                btnGroup = document.createElement('div');
+                btnGroup.className = 'result-btn-group';
+                btnGroup.style.display = 'flex';
+                btnGroup.style.gap = '8px';
+                btnGroup.style.alignItems = 'center';
+                // Move any existing buttons into the group
+                Array.from(titleEl.children).forEach(child => {
+                    if (child.tagName === 'BUTTON') {
+                        btnGroup.appendChild(child);
+                    }
+                });
+                titleEl.appendChild(btnGroup);
+            }
+
             const copyBtn = document.createElement('button');
             copyBtn.className = 'copy-result-btn';
             copyBtn.innerHTML = '📋 복사하기';
@@ -130,7 +146,7 @@
                 let textToCopy = container.innerText;
 
                 // Clean up string: remove the '📋 복사하기' text itself
-                textToCopy = textToCopy.replace('📋 복사하기', '').trim();
+                textToCopy = textToCopy.replace('📋 복사하기', '').replace('🖼️ 저장', '').trim();
 
                 // Optionally remove very redundant chart text if it litters the clipboard too much
                 // For now, innerText is usually quite nice and readable as is.
@@ -143,7 +159,8 @@
                 });
             });
 
-            titleEl.appendChild(copyBtn);
+            // Prepend copy button so it displays before the save button
+            btnGroup.insertBefore(copyBtn, btnGroup.firstChild);
         });
     }
 
