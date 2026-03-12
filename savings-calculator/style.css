@@ -297,9 +297,11 @@ ul {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg,
-      var(--primary) 0%,
-      var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   color: white;
   box-shadow: 0 4px 12px rgba(26, 86, 232, 0.35);
 }
@@ -544,29 +546,43 @@ ul {
   animation: fadeSlideIn 0.4s ease;
 }
 
+/* ===== SAVE AS IMAGE BUTTON ===== */
+.result-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
 .result-title {
   font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   color: var(--text-primary);
 }
 
-/* ===== SAVE AS IMAGE BUTTON ===== */
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .save-image-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  margin-bottom: 16px;
+  gap: 5px;
+  padding: 6px 12px;
   background: transparent;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition);
+  white-space: nowrap;
 }
 
 .save-image-btn:hover {
@@ -578,7 +594,6 @@ ul {
 .save-image-btn:active {
   transform: scale(0.97);
 }
-
 
 /* Summary highlight box */
 .result-summary-box {
@@ -883,7 +898,7 @@ ul {
   margin-bottom: 0;
 }
 
-.info-section>h2 {
+.info-section > h2 {
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -893,7 +908,7 @@ ul {
   display: inline-block;
 }
 
-.info-section>p {
+.info-section > p {
   color: var(--text-secondary);
   margin-bottom: 14px;
   max-width: 780px;

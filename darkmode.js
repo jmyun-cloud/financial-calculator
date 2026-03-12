@@ -1,12 +1,12 @@
 (function () {
-    // 1. Theme Configuration
-    const LIGHT_THEME = 'light';
-    const DARK_THEME = 'dark';
-    const THEME_STORAGE_KEY = 'richcalc_theme';
+  // 1. Theme Configuration
+  const LIGHT_THEME = "light";
+  const DARK_THEME = "dark";
+  const THEME_STORAGE_KEY = "richcalc_theme";
 
-    // 2. CSS Overrides for Dark Mode
-    const darkThemeStyle = document.createElement('style');
-    darkThemeStyle.textContent = `
+  // 2. CSS Overrides for Dark Mode
+  const darkThemeStyle = document.createElement("style");
+  darkThemeStyle.textContent = `
         /* ===== DARK MODE VARIABLES & OVERRIDES ===== */
         html[data-theme="dark"] {
             --bg: #0f172a;
@@ -77,6 +77,7 @@
         html[data-theme="dark"] .nav-link:hover, 
         html[data-theme="dark"] .nav-link.active {
             background-color: var(--surface-2);
+            color: var(--text-primary);
         }
 
         /* Ads Banners */
@@ -119,6 +120,8 @@
         html[data-theme="dark"] .radio-label:hover,
         html[data-theme="dark"] .sidebar-link:hover {
             background-color: var(--surface-2);
+            color: var(--text-primary);
+            border-color: var(--border);
         }
         
         html[data-theme="dark"] .sidebar-link.active-link {
@@ -196,73 +199,80 @@
             }
         }
     `;
-    document.head.appendChild(darkThemeStyle);
+  document.head.appendChild(darkThemeStyle);
 
-    // 3. Theme Logic
-    function getInitialTheme() {
-        const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        if (storedTheme) {
-            return storedTheme;
-        }
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        return prefersDark ? DARK_THEME : LIGHT_THEME;
+  // 3. Theme Logic
+  function getInitialTheme() {
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (storedTheme) {
+      return storedTheme;
     }
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    return prefersDark ? DARK_THEME : LIGHT_THEME;
+  }
 
-    function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
-        updateToggleButton(theme);
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    updateToggleButton(theme);
+  }
+
+  // 4. Mount Toggle Button
+  function updateToggleButton(theme) {
+    const btn = document.getElementById("theme-toggle-btn");
+    if (btn) {
+      btn.innerHTML = theme === DARK_THEME ? "☀️" : "🌙";
+      btn.setAttribute(
+        "aria-label",
+        theme === DARK_THEME ? "라이트 모드로 전환" : "다크 모드로 전환",
+      );
     }
+  }
 
-    // 4. Mount Toggle Button
-    function updateToggleButton(theme) {
-        const btn = document.getElementById('theme-toggle-btn');
-        if (btn) {
-            btn.innerHTML = theme === DARK_THEME ? '☀️' : '🌙';
-            btn.setAttribute('aria-label', theme === DARK_THEME ? '라이트 모드로 전환' : '다크 모드로 전환');
-        }
-    }
+  function injectToggleButton() {
+    // Prevent duplicate injection
+    if (document.getElementById("theme-toggle-btn")) return;
 
-    function injectToggleButton() {
-        // Prevent duplicate injection
-        if (document.getElementById('theme-toggle-btn')) return;
+    const headerInner = document.querySelector(".header-inner");
+    if (!headerInner) return;
 
-        const headerInner = document.querySelector('.header-inner');
-        if (!headerInner) return;
+    const btn = document.createElement("button");
+    btn.id = "theme-toggle-btn";
+    btn.className = "theme-toggle-btn";
+    btn.addEventListener("click", () => {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+      setTheme(newTheme);
+    });
 
-        const btn = document.createElement('button');
-        btn.id = 'theme-toggle-btn';
-        btn.className = 'theme-toggle-btn';
-        btn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-            setTheme(newTheme);
-        });
-
-        // Add to the right side of the header
-        // If there's a header-nav, we can put it there or directly in header-inner
-        const headerNav = headerInner.querySelector('.header-nav');
-        if (headerNav) {
-            headerNav.appendChild(btn);
-            headerNav.style.display = 'flex';
-            headerNav.style.alignItems = 'center';
-        } else {
-            headerInner.appendChild(btn);
-            headerInner.style.display = 'flex';
-            headerInner.style.alignItems = 'center';
-        }
-
-        updateToggleButton(document.documentElement.getAttribute('data-theme') || LIGHT_THEME);
-    }
-
-    // 5. Initialize
-    const initialTheme = getInitialTheme();
-    document.documentElement.setAttribute('data-theme', initialTheme);
-
-    // Inject button when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectToggleButton);
+    // Add to the right side of the header
+    // If there's a header-nav, we can put it there or directly in header-inner
+    const headerNav = headerInner.querySelector(".header-nav");
+    if (headerNav) {
+      headerNav.appendChild(btn);
+      headerNav.style.display = "flex";
+      headerNav.style.alignItems = "center";
     } else {
-        injectToggleButton();
+      headerInner.appendChild(btn);
+      headerInner.style.display = "flex";
+      headerInner.style.alignItems = "center";
     }
+
+    updateToggleButton(
+      document.documentElement.getAttribute("data-theme") || LIGHT_THEME,
+    );
+  }
+
+  // 5. Initialize
+  const initialTheme = getInitialTheme();
+  document.documentElement.setAttribute("data-theme", initialTheme);
+
+  // Inject button when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", injectToggleButton);
+  } else {
+    injectToggleButton();
+  }
 })();
