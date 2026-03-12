@@ -3,28 +3,30 @@
    2026년 기준 4대보험 + 소득세 계산
    ========================================= */
 
-'use strict';
+"use strict";
 
 // ===== 탭 전환 =====
 function switchTab(type) {
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.remove('active');
-    b.setAttribute('aria-selected', 'false');
+  document.querySelectorAll(".tab-btn").forEach((b) => {
+    b.classList.remove("active");
+    b.setAttribute("aria-selected", "false");
   });
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document
+    .querySelectorAll(".tab-panel")
+    .forEach((p) => p.classList.remove("active"));
 
-  document.getElementById('tab-' + type).classList.add('active');
-  document.getElementById('tab-' + type).setAttribute('aria-selected', 'true');
-  document.getElementById('panel-' + type).classList.add('active');
+  document.getElementById("tab-" + type).classList.add("active");
+  document.getElementById("tab-" + type).setAttribute("aria-selected", "true");
+  document.getElementById("panel-" + type).classList.add("active");
 }
 
 // ===== 숫자 포매팅 =====
 function formatKRW(num) {
-  return Math.round(num).toLocaleString('ko-KR');
+  return Math.round(num).toLocaleString("ko-KR");
 }
 
 function parseAmount(str) {
-  return parseFloat(String(str).replace(/,/g, '')) || 0;
+  return parseFloat(String(str).replace(/,/g, "")) || 0;
 }
 
 function getHumanReadable(num) {
@@ -48,16 +50,16 @@ function getHumanReadable(num) {
 function setupCommaInput(inputId, hintId) {
   const input = document.getElementById(inputId);
   if (!input) return;
-  input.addEventListener('input', function () {
-    const raw = this.value.replace(/[^0-9]/g, '');
+  input.addEventListener("input", function () {
+    const raw = this.value.replace(/[^0-9]/g, "");
     const num = parseInt(raw, 10);
     if (!isNaN(num) && num > 0) {
-      this.value = num.toLocaleString('ko-KR');
+      this.value = num.toLocaleString("ko-KR");
       if (hintId) {
         const hint = document.getElementById(hintId);
         if (hint) {
           hint.textContent = getHumanReadable(num);
-          hint.className = 'form-hint formatted';
+          hint.className = "form-hint formatted";
         }
       }
     } else {
@@ -65,8 +67,8 @@ function setupCommaInput(inputId, hintId) {
       if (hintId) {
         const hint = document.getElementById(hintId);
         if (hint) {
-          hint.textContent = '';
-          hint.className = 'form-hint';
+          hint.textContent = "";
+          hint.className = "form-hint";
         }
       }
     }
@@ -77,75 +79,84 @@ function setupCommaInput(inputId, hintId) {
 const chartInstances = {};
 
 function renderDonutChart(canvasId, legendId, data) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+  const ctx = document.getElementById(canvasId).getContext("2d");
   if (chartInstances[canvasId]) {
     chartInstances[canvasId].destroy();
   }
 
   chartInstances[canvasId] = new Chart(ctx, {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
-      labels: data.map(d => d.label),
-      datasets: [{
-        data: data.map(d => d.value),
-        backgroundColor: data.map(d => d.color),
-        borderWidth: 0,
-        hoverOffset: 8,
-      }]
+      labels: data.map((d) => d.label),
+      datasets: [
+        {
+          data: data.map((d) => d.value),
+          backgroundColor: data.map((d) => d.color),
+          borderWidth: 0,
+          hoverOffset: 8,
+        },
+      ],
     },
     options: {
-      cutout: '62%',
+      cutout: "62%",
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
             label: function (ctx) {
-              return ' ' + formatKRW(ctx.parsed) + '원';
-            }
-          }
-        }
+              return " " + formatKRW(ctx.parsed) + "원";
+            },
+          },
+        },
       },
-      animation: { animateScale: true, duration: 600 }
-    }
+      animation: { animateScale: true, duration: 600 },
+    },
   });
 
   const legend = document.getElementById(legendId);
-  legend.innerHTML = data.map(d =>
-    `<div class="legend-item">
+  legend.innerHTML = data
+    .map(
+      (d) =>
+        `<div class="legend-item">
       <span class="legend-dot" style="background:${d.color}"></span>
       <div class="legend-info">
         <span class="legend-label">${d.label}</span>
         <span class="legend-val">${formatKRW(d.value)}원</span>
       </div>
-    </div>`
-  ).join('');
+    </div>`,
+    )
+    .join("");
 }
 
 // ===================================================
 // 2026년 4대보험 계산
 // ===================================================
 const INS_2026 = {
-  pension_rate: 0.045,         // 국민연금 4.5%
-  pension_cap: 6_370_000,       // 상한 637만원
-  pension_floor: 370_000,       // 하한 37만원
-  health_rate: 0.03545,         // 건강보험 3.545%
-  longterm_rate: 0.1295,        // 장기요양 = 건강보험료 × 12.95%
-  employment_rate: 0.009,       // 고용보험 0.9%
+  pension_rate: 0.045, // 국민연금 4.5%
+  pension_cap: 6_370_000, // 상한 637만원
+  pension_floor: 370_000, // 하한 37만원
+  health_rate: 0.03545, // 건강보험 3.545%
+  longterm_rate: 0.1295, // 장기요양 = 건강보험료 × 12.95%
+  employment_rate: 0.009, // 고용보험 0.9%
 };
 
 function calcInsurance(monthlyGross) {
   // 국민연금
-  const pensionBase = Math.min(Math.max(monthlyGross, INS_2026.pension_floor), INS_2026.pension_cap);
-  const pension = Math.floor(pensionBase * INS_2026.pension_rate / 10) * 10; // 10원 단위 절사
+  const pensionBase = Math.min(
+    Math.max(monthlyGross, INS_2026.pension_floor),
+    INS_2026.pension_cap,
+  );
+  const pension = Math.floor((pensionBase * INS_2026.pension_rate) / 10) * 10; // 10원 단위 절사
 
   // 건강보험
-  const health = Math.floor(monthlyGross * INS_2026.health_rate / 10) * 10;
+  const health = Math.floor((monthlyGross * INS_2026.health_rate) / 10) * 10;
 
   // 장기요양
-  const longterm = Math.floor(health * INS_2026.longterm_rate / 10) * 10;
+  const longterm = Math.floor((health * INS_2026.longterm_rate) / 10) * 10;
 
   // 고용보험
-  const employment = Math.floor(monthlyGross * INS_2026.employment_rate / 10) * 10;
+  const employment =
+    Math.floor((monthlyGross * INS_2026.employment_rate) / 10) * 10;
 
   return { pension, health, longterm, employment };
 }
@@ -161,7 +172,7 @@ const TAX_BRACKETS = [
   { limit: 88_000_000, rate: 0.24, deduction: 5_760_000 },
   { limit: 150_000_000, rate: 0.35, deduction: 15_440_000 },
   { limit: 300_000_000, rate: 0.38, deduction: 19_940_000 },
-  { limit: 500_000_000, rate: 0.40, deduction: 25_940_000 },
+  { limit: 500_000_000, rate: 0.4, deduction: 25_940_000 },
   { limit: 1_000_000_000, rate: 0.42, deduction: 35_940_000 },
   { limit: Infinity, rate: 0.45, deduction: 65_940_000 },
 ];
@@ -169,9 +180,12 @@ const TAX_BRACKETS = [
 // 근로소득공제
 function calcEmploymentDeduction(annualGross) {
   if (annualGross <= 5_000_000) return annualGross * 0.7;
-  if (annualGross <= 15_000_000) return 3_500_000 + (annualGross - 5_000_000) * 0.4;
-  if (annualGross <= 45_000_000) return 7_500_000 + (annualGross - 15_000_000) * 0.15;
-  if (annualGross <= 100_000_000) return 12_000_000 + (annualGross - 45_000_000) * 0.05;
+  if (annualGross <= 15_000_000)
+    return 3_500_000 + (annualGross - 5_000_000) * 0.4;
+  if (annualGross <= 45_000_000)
+    return 7_500_000 + (annualGross - 15_000_000) * 0.15;
+  if (annualGross <= 100_000_000)
+    return 12_000_000 + (annualGross - 45_000_000) * 0.05;
   return 14_750_000 + (annualGross - 100_000_000) * 0.02; // 상한 2,000만원
 }
 
@@ -194,15 +208,15 @@ function calcIncomeTax(taxableIncome) {
 // 근로소득세액공제 (산출세액 기준)
 function calcTaxCredit(incomeTax) {
   if (incomeTax <= 1_300_000) return incomeTax * 0.55;
-  return 715_000 + (incomeTax - 1_300_000) * 0.30;
+  return 715_000 + (incomeTax - 1_300_000) * 0.3;
 }
 
 // 자녀세액공제
 function calcChildCredit(children) {
   if (children <= 0) return 0;
-  if (children === 1) return 150_000;
-  if (children === 2) return 350_000;
-  return 350_000 + (children - 2) * 300_000;
+  if (children === 1) return 250_000;
+  if (children === 2) return 550_000;
+  return 550_000 + (children - 2) * 400_000;
 }
 
 /**
@@ -215,7 +229,10 @@ function calcChildCredit(children) {
  */
 function calcAnnualTax(annualTaxable, dependants, children, annualInsurance) {
   // 1. 근로소득공제
-  const employmentDeduction = Math.min(calcEmploymentDeduction(annualTaxable), 20_000_000);
+  const employmentDeduction = Math.min(
+    calcEmploymentDeduction(annualTaxable),
+    20_000_000,
+  );
 
   // 2. 근로소득금액 = 총급여 - 근로소득공제
   const workIncome = Math.max(0, annualTaxable - employmentDeduction);
@@ -232,11 +249,14 @@ function calcAnnualTax(annualTaxable, dependants, children, annualInsurance) {
   const grossTax = calcIncomeTax(taxBase);
 
   // 6. 세액공제
-  const creditWork = calcTaxCredit(grossTax);        // 근로세액공제
-  const creditChild = calcChildCredit(children);      // 자녀세액공제
+  const creditWork = calcTaxCredit(grossTax); // 근로세액공제
+  const creditChild = calcChildCredit(children); // 자녀세액공제
 
   // 7. 결정세액
-  const incomeTax = Math.max(0, Math.round(grossTax - creditWork - creditChild));
+  const incomeTax = Math.max(
+    0,
+    Math.round(grossTax - creditWork - creditChild),
+  );
 
   // 8. 지방소득세 = 소득세 × 10%
   const localTax = Math.round(incomeTax * 0.1);
@@ -248,15 +268,21 @@ function calcAnnualTax(annualTaxable, dependants, children, annualInsurance) {
 // 연봉 계산 메인
 // ===================================================
 function calculateSalary() {
-  const annualRaw = parseAmount(document.getElementById('s-annual').value);
-  const dependants = parseInt(document.getElementById('s-dependants').value, 10) || 1;
-  const children = parseInt(document.getElementById('s-children').value, 10) || 0;
-  const nontaxMonthly = parseAmount(document.getElementById('s-nontax').value) || 200_000;
+  const annualRaw = parseAmount(document.getElementById("s-annual").value);
+  const dependants =
+    parseInt(document.getElementById("s-dependants").value, 10) || 1;
+  const children =
+    parseInt(document.getElementById("s-children").value, 10) || 0;
+  const nontaxMonthly =
+    parseAmount(document.getElementById("s-nontax").value) || 200_000;
 
   if (!annualRaw || annualRaw <= 0) {
-    alert('세전 연봉을 올바르게 입력해 주세요.');
-    document.getElementById('s-annual').classList.add('error');
-    setTimeout(() => document.getElementById('s-annual').classList.remove('error'), 2000);
+    alert("세전 연봉을 올바르게 입력해 주세요.");
+    document.getElementById("s-annual").classList.add("error");
+    setTimeout(
+      () => document.getElementById("s-annual").classList.remove("error"),
+      2000,
+    );
     return;
   }
 
@@ -266,14 +292,14 @@ function calculateSalary() {
 
   // 4대보험 (과세+비과세 합산 기준)
   const ins = calcInsurance(monthlyGross);
-  const monthlyInsTotal = ins.pension + ins.health + ins.longterm + ins.employment;
+  const monthlyInsTotal =
+    ins.pension + ins.health + ins.longterm + ins.employment;
   const annualInsTotal = monthlyInsTotal * 12;
 
   // 소득세 (연간 계산 후 월 분할)
   const annualPensionDeduction = ins.pension * 12; // 국민연금만 소득공제
-  const { incomeTax: annualIncomeTax, localTax: annualLocalTax } = calcAnnualTax(
-    annualTaxable, dependants, children, annualPensionDeduction
-  );
+  const { incomeTax: annualIncomeTax, localTax: annualLocalTax } =
+    calcAnnualTax(annualTaxable, dependants, children, annualPensionDeduction);
   const monthlyIncomeTax = Math.round(annualIncomeTax / 12 / 10) * 10;
   const monthlyLocalTax = Math.round(annualLocalTax / 12 / 10) * 10;
   const monthlyTaxTotal = monthlyIncomeTax + monthlyLocalTax;
@@ -284,16 +310,23 @@ function calculateSalary() {
   const annualTakeHome = monthlyTakeHome * 12;
 
   displaySalaryResult({
-    annualRaw, monthlyGross, nontaxMonthly,
-    ins, monthlyInsTotal,
-    monthlyIncomeTax, monthlyLocalTax, monthlyTaxTotal,
-    monthlyTotalDeduction, monthlyTakeHome, annualTakeHome
+    annualRaw,
+    monthlyGross,
+    nontaxMonthly,
+    ins,
+    monthlyInsTotal,
+    monthlyIncomeTax,
+    monthlyLocalTax,
+    monthlyTaxTotal,
+    monthlyTotalDeduction,
+    monthlyTakeHome,
+    annualTakeHome,
   });
 }
 
 function displaySalaryResult(r) {
-  const resultEl = document.getElementById('result-salary');
-  const summaryEl = document.getElementById('result-salary-summary');
+  const resultEl = document.getElementById("result-salary");
+  const summaryEl = document.getElementById("result-salary-summary");
 
   summaryEl.innerHTML = `
     <div class="summary-label">월 실수령액 (세전 연봉 ${formatKRW(r.annualRaw)}원 기준)</div>
@@ -302,7 +335,7 @@ function displaySalaryResult(r) {
   `;
 
   // 공제 내역 테이블
-  const table = document.getElementById('deduction-table');
+  const table = document.getElementById("deduction-table");
   table.innerHTML = `
     <thead>
       <tr>
@@ -368,32 +401,39 @@ function displaySalaryResult(r) {
   `;
 
   // 도넛 차트
-  renderDonutChart('chart-salary', 'legend-salary', [
-    { label: '실수령액', value: r.monthlyTakeHome, color: '#059669' },
-    { label: '국민연금', value: r.ins.pension, color: '#3b82f6' },
-    { label: '건강보험', value: r.ins.health + r.ins.longterm, color: '#06b6d4' },
-    { label: '고용보험', value: r.ins.employment, color: '#8b5cf6' },
-    { label: '소득세+지방세', value: r.monthlyTaxTotal, color: '#f59e0b' },
+  renderDonutChart("chart-salary", "legend-salary", [
+    { label: "실수령액", value: r.monthlyTakeHome, color: "#059669" },
+    { label: "국민연금", value: r.ins.pension, color: "#3b82f6" },
+    {
+      label: "건강보험",
+      value: r.ins.health + r.ins.longterm,
+      color: "#06b6d4",
+    },
+    { label: "고용보험", value: r.ins.employment, color: "#8b5cf6" },
+    { label: "소득세+지방세", value: r.monthlyTaxTotal, color: "#f59e0b" },
   ]);
 
-  resultEl.style.display = 'block';
-  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  resultEl.style.display = "block";
+  resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 // ===================================================
 // 시급 계산
 // ===================================================
 function calculateHourly() {
-  const wageRaw = parseAmount(document.getElementById('h-wage').value);
-  const weeklyHours = parseFloat(document.getElementById('h-hours').value) || 40;
-  const includeHoliday = document.querySelector('input[name="h-weekly-holiday"]:checked').value === 'yes';
+  const wageRaw = parseAmount(document.getElementById("h-wage").value);
+  const weeklyHours =
+    parseFloat(document.getElementById("h-hours").value) || 40;
+  const includeHoliday =
+    document.querySelector('input[name="h-weekly-holiday"]:checked').value ===
+    "yes";
 
   if (!wageRaw || wageRaw <= 0) {
-    alert('시급을 올바르게 입력해 주세요.');
+    alert("시급을 올바르게 입력해 주세요.");
     return;
   }
   if (weeklyHours <= 0 || weeklyHours > 52) {
-    alert('주 근로시간을 1~52시간으로 입력해 주세요.');
+    alert("주 근로시간을 1~52시간으로 입력해 주세요.");
     return;
   }
 
@@ -413,35 +453,52 @@ function calculateHourly() {
   }
   const monthlyHolidayHours = weeklyHolidayHours * weeksPerMonth;
 
-  const monthlyPay = Math.round(wageRaw * (monthlyWorkHours + monthlyHolidayHours));
+  const monthlyPay = Math.round(
+    wageRaw * (monthlyWorkHours + monthlyHolidayHours),
+  );
   const annualPay = monthlyPay * 12;
 
   // 4대보험 간이 계산 (소득세는 최소 수준)
   const ins = calcInsurance(monthlyPay);
-  const monthlyInsTotal = ins.pension + ins.health + ins.longterm + ins.employment;
-  const { incomeTax, localTax } = calcAnnualTax(Math.max(0, monthlyPay - 200_000) * 12, 1, 0, ins.pension * 12);
+  const monthlyInsTotal =
+    ins.pension + ins.health + ins.longterm + ins.employment;
+  const { incomeTax, localTax } = calcAnnualTax(
+    Math.max(0, monthlyPay - 200_000) * 12,
+    1,
+    0,
+    ins.pension * 12,
+  );
   const monthlyTax = Math.round((incomeTax + localTax) / 12 / 10) * 10;
   const monthlyTakeHome = monthlyPay - monthlyInsTotal - monthlyTax;
 
   displayHourlyResult({
-    wageRaw, weeklyHours, includeHoliday, belowMin,
-    monthlyWorkHours, monthlyHolidayHours,
-    monthlyPay, annualPay, ins, monthlyInsTotal, monthlyTax, monthlyTakeHome
+    wageRaw,
+    weeklyHours,
+    includeHoliday,
+    belowMin,
+    monthlyWorkHours,
+    monthlyHolidayHours,
+    monthlyPay,
+    annualPay,
+    ins,
+    monthlyInsTotal,
+    monthlyTax,
+    monthlyTakeHome,
   });
 }
 
 function displayHourlyResult(r) {
-  const resultEl = document.getElementById('result-hourly');
-  const summaryEl = document.getElementById('result-hourly-summary');
+  const resultEl = document.getElementById("result-hourly");
+  const summaryEl = document.getElementById("result-hourly-summary");
 
   summaryEl.innerHTML = `
-    <div class="summary-label">월 급여 (${formatKRW(r.wageRaw)}원 × 주 ${r.weeklyHours}시간${r.includeHoliday ? ' + 주휴수당' : ''})</div>
+    <div class="summary-label">월 급여 (${formatKRW(r.wageRaw)}원 × 주 ${r.weeklyHours}시간${r.includeHoliday ? " + 주휴수당" : ""})</div>
     <div class="summary-amount">${formatKRW(r.monthlyPay)}원</div>
     <div class="summary-sub">월 실수령액 ≈ ${formatKRW(r.monthlyTakeHome)}원 | 연봉 ≈ ${getHumanReadable(r.annualPay)}</div>
-    ${r.belowMin ? '<div style="margin-top:10px;background:rgba(239,68,68,.15);padding:6px 14px;border-radius:6px;font-size:.82rem">⚠️ 2026년 최저시급(10,030원) 미만입니다.</div>' : ''}
+    ${r.belowMin ? '<div style="margin-top:10px;background:rgba(239,68,68,.15);padding:6px 14px;border-radius:6px;font-size:.82rem">⚠️ 2026년 최저시급(10,030원) 미만입니다.</div>' : ""}
   `;
 
-  const gridEl = document.getElementById('result-hourly-grid');
+  const gridEl = document.getElementById("result-hourly-grid");
   gridEl.innerHTML = `
     <div class="result-item">
       <div class="result-item-label">시급</div>
@@ -457,7 +514,7 @@ function displayHourlyResult(r) {
     </div>
     <div class="result-item">
       <div class="result-item-label">월 주휴수당</div>
-      <div class="result-item-value positive">${r.monthlyHolidayHours > 0 ? '+' + formatKRW(Math.round(r.wageRaw * r.monthlyHolidayHours)) : '0'}원</div>
+      <div class="result-item-value positive">${r.monthlyHolidayHours > 0 ? "+" + formatKRW(Math.round(r.wageRaw * r.monthlyHolidayHours)) : "0"}원</div>
     </div>
     <div class="result-item">
       <div class="result-item-label">4대보험 공제</div>
@@ -477,19 +534,19 @@ function displayHourlyResult(r) {
     </div>
   `;
 
-  resultEl.style.display = 'block';
-  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  resultEl.style.display = "block";
+  resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 // ===== 초기화 =====
-document.addEventListener('DOMContentLoaded', function () {
-  setupCommaInput('s-annual', 's-annual-hint');
-  setupCommaInput('s-nontax', null);
-  setupCommaInput('h-wage', 'h-wage-hint');
+document.addEventListener("DOMContentLoaded", function () {
+  setupCommaInput("s-annual", "s-annual-hint");
+  setupCommaInput("s-nontax", null);
+  setupCommaInput("h-wage", "h-wage-hint");
 
   // 비과세 기본값 200,000 표시
-  const nontaxInput = document.getElementById('s-nontax');
+  const nontaxInput = document.getElementById("s-nontax");
   if (nontaxInput && !nontaxInput.value) {
-    nontaxInput.value = '200,000';
+    nontaxInput.value = "200,000";
   }
 });
