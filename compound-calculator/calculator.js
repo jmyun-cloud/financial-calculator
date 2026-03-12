@@ -333,6 +333,7 @@ function displayResult({ initial, monthlyAdd, rate, years, freq, taxRate,
   `;
 
     document.getElementById('result-compound').style.display = 'block';
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-compound');
     document.getElementById('growth-table-card').style.display = 'block';
     document.getElementById('result-compound').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }

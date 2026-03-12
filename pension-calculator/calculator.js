@@ -39,6 +39,7 @@ function calcNational() {
     <div class="result-notice">국민연금 A값(전체 가입자 평균소득) 기준 간이 계산. 실제 수령액과 차이가 있을 수 있습니다.</div>
   `;
   el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-national');
 }
 
 // 퇴직연금

@@ -67,4 +67,5 @@ function calcTaxInterest() {
     </div>
   `;
     el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-ti');
 }

@@ -98,6 +98,7 @@ function calcToMonthly() {
     ${rate > 4.5 ? `<div class="result-notice">⚠️ 입력한 전환율(${rate}%)이 법정 상한(4.5%)을 초과합니다. 법정 기준 월세는 ${fmt(legalMonthly)}원입니다.</div>` : ""}
   `;
   el.style.display = "block";
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-tm');
   el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 

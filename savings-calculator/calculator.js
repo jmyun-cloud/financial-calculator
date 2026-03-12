@@ -222,6 +222,7 @@ function displayDepositResult(principal, grossInterest, taxAmount, netInterest, 
 
   const result = document.getElementById('result-deposit');
   result.style.display = 'block';
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-deposit');
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   renderDonutChart('chart-deposit', 'legend-deposit', principal, grossInterest, taxAmount);

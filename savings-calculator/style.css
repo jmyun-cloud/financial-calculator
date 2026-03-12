@@ -297,11 +297,9 @@ ul {
 }
 
 .tab-btn.active {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--primary) 0%,
+      var(--primary-dark) 100%);
   color: white;
   box-shadow: 0 4px 12px rgba(26, 86, 232, 0.35);
 }
@@ -549,9 +547,38 @@ ul {
 .result-title {
   font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   color: var(--text-primary);
 }
+
+/* ===== SAVE AS IMAGE BUTTON ===== */
+.save-image-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  margin-bottom: 16px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.save-image-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.save-image-btn:active {
+  transform: scale(0.97);
+}
+
 
 /* Summary highlight box */
 .result-summary-box {
@@ -856,7 +883,7 @@ ul {
   margin-bottom: 0;
 }
 
-.info-section > h2 {
+.info-section>h2 {
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -866,7 +893,7 @@ ul {
   display: inline-block;
 }
 
-.info-section > p {
+.info-section>p {
   color: var(--text-secondary);
   margin-bottom: 14px;
   max-width: 780px;

@@ -239,6 +239,22 @@
     <script src="../loader.js"></script>
     <script src="../darkmode.js"></script>
     <script src="../currency_helper.js"></script>
+      <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1a56e8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="금융계산기" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function(err) {
+            console.log('SW registration failed: ', err);
+          });
+        });
+      }
+    </script>
   </head>
 
   <body>
@@ -879,5 +895,7 @@
     <script src="../toast.js"></script>
     <script src="../seo_script.js"></script>
     <script src="../reset_form.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+      <script src="../export_image.js"></script>
   </body>
 </html>

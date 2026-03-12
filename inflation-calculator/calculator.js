@@ -24,6 +24,7 @@ function calcFuture() {
     <div class="result-notice">매년 지출이 물가 상승률만큼 늘어난다는 가정 하에 미래에 동일한 생활 수준을 유지하기 위해 필요한 금액입니다.</div>
   `;
     el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-fv');
 }
 
 function calcPresent() {

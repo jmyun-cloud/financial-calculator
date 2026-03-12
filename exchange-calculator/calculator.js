@@ -164,6 +164,7 @@ function calcExchange() {
   }
 
   el.style.display = "block";
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-ex');
   el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 

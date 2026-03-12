@@ -414,6 +414,7 @@ function displaySalaryResult(r) {
   ]);
 
   resultEl.style.display = "block";
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-salary');
   resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 

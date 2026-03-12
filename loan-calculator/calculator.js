@@ -327,6 +327,7 @@ function displayResult(principal, totalInterest, totalPayment, firstPayment, las
   `).join('');
 
     document.getElementById('result-loan').style.display = 'block';
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-loan');
     document.getElementById('schedule-card').style.display = 'block';
     document.getElementById('result-loan').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
