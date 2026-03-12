@@ -74,6 +74,10 @@
                     html[data-theme="dark"] .ko-currency-hint {
                         color: #818cf8 !important;
                     }
+                    /* Hide old manually injected form-hints that conflict with this global helper */
+                    .form-hint.formatted {
+                        display: none !important;
+                    }
                 `;
                 // Only append once
                 if (!document.getElementById('ko-currency-style')) {
