@@ -1,6 +1,6 @@
 (function () {
-    const style = document.createElement('style');
-    style.textContent = `
+  const style = document.createElement("style");
+  style.textContent = `
         .action-buttons {
             display: flex;
             gap: 12px;
@@ -48,67 +48,72 @@
             color: var(--text-primary);
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 
-    function injectResetButtons() {
-        const calcBtns = document.querySelectorAll('.calc-btn');
-        calcBtns.forEach(btn => {
-            const parent = btn.parentElement;
-            if (parent.classList.contains('action-buttons')) return;
+  function injectResetButtons() {
+    const calcBtns = document.querySelectorAll(".calc-btn");
+    calcBtns.forEach((btn) => {
+      const parent = btn.parentElement;
+      if (parent.classList.contains("action-buttons")) return;
 
-            const wrapper = document.createElement('div');
-            wrapper.className = 'action-buttons';
+      const wrapper = document.createElement("div");
+      wrapper.className = "action-buttons";
 
-            // Replicate any inline or computed margin top purely if we want perfectly identical,
-            // but usually setting margin-top 24px is clean. Let's just remove margin top from calc-btn
-            const currentMarginTop = window.getComputedStyle(btn).marginTop;
-            if (currentMarginTop && currentMarginTop !== '0px') {
-                wrapper.style.marginTop = currentMarginTop;
-            } else {
-                // If it had no margin, we might not want to force 24px if the parent handled it, 
-                // so we can just let it inherit or keep 0
-                wrapper.style.marginTop = '0';
-            }
-            btn.style.marginTop = '0';
+      // Replicate any inline or computed margin top purely if we want perfectly identical,
+      // but usually setting margin-top 24px is clean. Let's just remove margin top from calc-btn
+      const currentMarginTop = window.getComputedStyle(btn).marginTop;
+      if (currentMarginTop && currentMarginTop !== "0px") {
+        wrapper.style.marginTop = currentMarginTop;
+      } else {
+        // If it had no margin, we might not want to force 24px if the parent handled it,
+        // so we can just let it inherit or keep 0
+        wrapper.style.marginTop = "0";
+      }
+      btn.style.marginTop = "0";
 
-            parent.insertBefore(wrapper, btn);
-            wrapper.appendChild(btn);
+      parent.insertBefore(wrapper, btn);
+      wrapper.appendChild(btn);
 
-            const resetBtn = document.createElement('button');
-            resetBtn.className = 'reset-btn';
-            resetBtn.innerHTML = '<span class="btn-icon">↺</span> 초기화';
-            resetBtn.type = 'button';
+      const resetBtn = document.createElement("button");
+      resetBtn.className = "reset-btn";
+      resetBtn.innerHTML = '<span class="btn-icon">↺</span> 초기화';
+      resetBtn.type = "button";
 
-            resetBtn.addEventListener('click', () => {
-                let scope = btn.closest('.tab-panel');
-                if (!scope) {
-                    scope = btn.closest('.calc-card')?.parentElement || document.body;
-                }
+      resetBtn.addEventListener("click", () => {
+        let scope = btn.closest(".tab-panel");
+        if (!scope) {
+          scope = btn.closest(".calc-card")?.parentElement || document.body;
+        }
 
-                // Clear text inputs
-                scope.querySelectorAll('input[type="text"], input[type="number"], input[inputmode="numeric"]').forEach(input => {
-                    input.value = '';
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                });
+        // Clear text inputs, but ignore the live rate inputs on the exchange calculator
+        scope
+          .querySelectorAll(
+            'input[type="text"], input[type="number"], input[inputmode="numeric"]',
+          )
+          .forEach((input) => {
+            if (input.classList.contains("live-rate")) return;
+            input.value = "";
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+          });
 
-                // Hide result cards
-                scope.querySelectorAll('.result-card').forEach(card => {
-                    card.style.display = 'none';
-                });
-
-                // Remove custom error borders nicely
-                scope.querySelectorAll('.error').forEach(err => {
-                    err.classList.remove('error');
-                });
-            });
-
-            wrapper.insertBefore(resetBtn, btn);
+        // Hide result cards
+        scope.querySelectorAll(".result-card").forEach((card) => {
+          card.style.display = "none";
         });
-    }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectResetButtons);
-    } else {
-        injectResetButtons();
-    }
+        // Remove custom error borders nicely
+        scope.querySelectorAll(".error").forEach((err) => {
+          err.classList.remove("error");
+        });
+      });
+
+      wrapper.insertBefore(resetBtn, btn);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", injectResetButtons);
+  } else {
+    injectResetButtons();
+  }
 })();
