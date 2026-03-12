@@ -1,216 +1,125 @@
 (function () {
   // 1. Theme Configuration
-  const LIGHT_THEME = "light";
-  const DARK_THEME = "dark";
-  const THEME_STORAGE_KEY = "richcalc_theme";
+  var LIGHT_THEME = "light";
+  var DARK_THEME = "dark";
+  var THEME_STORAGE_KEY = "richcalc_theme";
 
   // 2. CSS Overrides for Dark Mode
-  const darkThemeStyle = document.createElement("style");
-  darkThemeStyle.textContent = `
-        /* ===== DARK MODE VARIABLES & OVERRIDES ===== */
-        html[data-theme="dark"] {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --surface-2: #334155;
-            --border: #475569;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --text-inverse: #ffffff;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
-        }
-        
-        /* General dark mode tweaks */
-        html[data-theme="dark"] body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-        }
+  var darkThemeStyle = document.createElement("style");
+  darkThemeStyle.textContent =
+    '/* ===== DARK MODE VARIABLES ===== */\n' +
+    'html[data-theme="dark"] {\n' +
+    '  --bg: #101827;\n' +
+    '  --surface: #1a2435;\n' +
+    '  --surface-2: #243146;\n' +
+    '  --border: #354a65;\n' +
+    '  --text-primary: #e8edf5;\n' +
+    '  --text-secondary: #9eb3cc;\n' +
+    '  --text-muted: #6b8097;\n' +
+    '  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);\n' +
+    '  --shadow-md: 0 4px 16px rgba(0,0,0,.5);\n' +
+    '  --shadow-lg: 0 10px 40px rgba(0,0,0,.55);\n' +
+    '}\n' +
+    'html[data-theme="dark"] body { background-color: var(--bg); color: var(--text-primary); }\n' +
 
-        /* Surfaces */
-        html[data-theme="dark"] .calc-card,
-        html[data-theme="dark"] .result-card,
-        html[data-theme="dark"] .sidebar-widget,
-        html[data-theme="dark"] .info-card,
-        html[data-theme="dark"] .terms-section,
-        html[data-theme="dark"] .toc-box,
-        html[data-theme="dark"] .feature-item,
-        html[data-theme="dark"] .popular-item,
-        html[data-theme="dark"] .ad-slot,
-        html[data-theme="dark"] .calculator-card {
-            background-color: var(--surface);
-            border-color: var(--border);
-            color: var(--text-primary);
-        }
+    /* Cards */
+    'html[data-theme="dark"] .calc-card,\n' +
+    'html[data-theme="dark"] .result-card,\n' +
+    'html[data-theme="dark"] .schedule-card,\n' +
+    'html[data-theme="dark"] .sidebar-widget,\n' +
+    'html[data-theme="dark"] .info-card,\n' +
+    'html[data-theme="dark"] .terms-section,\n' +
+    'html[data-theme="dark"] .toc-box,\n' +
+    'html[data-theme="dark"] .feature-item,\n' +
+    'html[data-theme="dark"] .popular-item,\n' +
+    'html[data-theme="dark"] .ad-slot,\n' +
+    'html[data-theme="dark"] .calculator-card { background-color: var(--surface); border-color: var(--border); color: var(--text-primary); }\n' +
 
-        /* Inputs */
-        html[data-theme="dark"] .form-input,
-        html[data-theme="dark"] .currency-helper {
-            background-color: var(--surface-2);
-            border-color: var(--border);
-            color: var(--text-primary);
-        }
+    /* Bottom description */
+    'html[data-theme="dark"] .bottom-description { background-color: var(--bg); color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .bottom-description h2,\n' +
+    'html[data-theme="dark"] .bottom-description h3,\n' +
+    'html[data-theme="dark"] .info-section h2,\n' +
+    'html[data-theme="dark"] .info-section p,\n' +
+    'html[data-theme="dark"] .info-section li,\n' +
+    'html[data-theme="dark"] .bottom-description p,\n' +
+    'html[data-theme="dark"] .bottom-description li { color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .info-card h3 { color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .info-card p, html[data-theme="dark"] .info-card li { color: var(--text-secondary); }\n' +
 
-        html[data-theme="dark"] .input-unit {
-            color: var(--text-secondary);
-        }
+    /* Highlight card (복리 카드 등) */
+    'html[data-theme="dark"] .info-card.highlight-card { background-color: #182a18; border-color: #2a4a2a; }\n' +
 
-        /* Header */
-        html[data-theme="dark"] .site-header {
-            background-color: var(--surface);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        html[data-theme="dark"] .logo-text,
-        html[data-theme="dark"] .nav-link,
-        html[data-theme="dark"] .header-desc {
-            color: var(--text-primary);
-        }
+    /* Formula boxes */
+    'html[data-theme="dark"] .formula-box { background-color: #0f1e10; border-color: #1c3520; }\n' +
+    'html[data-theme="dark"] .formula-box code, html[data-theme="dark"] .formula-box p { color: #80cfa0; }\n' +
 
-        html[data-theme="dark"] .logo-icon,
-        html[data-theme="dark"] .logo-accent {
-            /* Keep accent/icons vibrant */
-            filter: brightness(1.2);
-        }
+    /* comparison-note */
+    'html[data-theme="dark"] .comparison-note { background-color: var(--surface-2); border-color: var(--border); }\n' +
+    'html[data-theme="dark"] .comparison-note p, html[data-theme="dark"] .comparison-note li { color: var(--text-secondary); }\n' +
 
-        html[data-theme="dark"] .nav-link:hover, 
-        html[data-theme="dark"] .nav-link.active {
-            background-color: var(--surface-2);
-            color: var(--text-primary);
-        }
+    /* result-notice, result-item */
+    'html[data-theme="dark"] .result-notice { background-color: var(--surface-2); border-color: var(--border); color: var(--text-muted); }\n' +
+    'html[data-theme="dark"] .result-item, html[data-theme="dark"] .compare-item { background-color: var(--surface-2); border-color: var(--border); }\n' +
 
-        /* Ads Banners */
-        html[data-theme="dark"] .ad-banner-top, 
-        html[data-theme="dark"] .ad-banner-middle, 
-        html[data-theme="dark"] .ad-banner-bottom {
-            background-color: var(--surface);
-            border-color: var(--border);
-        }
+    /* Inputs */
+    'html[data-theme="dark"] .form-input, html[data-theme="dark"] .currency-helper { background-color: var(--surface-2); border-color: var(--border); color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .input-unit { color: var(--text-muted); }\n' +
 
-        /* Ad Slots */
-        html[data-theme="dark"] .ad-slot {
-            background-color: #1e293b;
-            border: 2px dashed #475569;
-        }
+    /* Header */
+    'html[data-theme="dark"] .site-header { background-color: var(--surface); border-bottom: 1px solid var(--border); }\n' +
+    'html[data-theme="dark"] .logo-text, html[data-theme="dark"] .nav-link, html[data-theme="dark"] .header-desc { color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .nav-link:hover, html[data-theme="dark"] .nav-link.active { background-color: var(--surface-2); color: var(--text-primary); }\n' +
 
-        /* Typography Text colors */
-        html[data-theme="dark"] .calc-card-desc,
-        html[data-theme="dark"] .form-hint,
-        html[data-theme="dark"] .result-item-label,
-        html[data-theme="dark"] .faq-item p,
-        html[data-theme="dark"] .widget-note,
-        html[data-theme="dark"] .radio-desc,
-        html[data-theme="dark"] .feature-desc,
-        html[data-theme="dark"] .footer-disclaimer,
-        html[data-theme="dark"] .footer-copy {
-            color: var(--text-secondary);
-        }
+    /* Ads */
+    'html[data-theme="dark"] .ad-banner-top, html[data-theme="dark"] .ad-banner-middle, html[data-theme="dark"] .ad-banner-bottom { background-color: var(--surface); border-color: var(--border); }\n' +
+    'html[data-theme="dark"] .ad-slot { background-color: var(--surface); border: 2px dashed var(--border); }\n' +
 
-        /* Buttons & Toggles */
-        html[data-theme="dark"] .radio-label,
-        html[data-theme="dark"] .tab-btn,
-        html[data-theme="dark"] .sidebar-link {
-            background-color: var(--surface);
-            border-color: var(--border);
-            color: var(--text-primary);
-        }
+    /* Typography */
+    'html[data-theme="dark"] .calc-card-desc, html[data-theme="dark"] .form-hint, html[data-theme="dark"] .result-item-label, html[data-theme="dark"] .faq-item p, html[data-theme="dark"] .widget-note, html[data-theme="dark"] .footer-disclaimer, html[data-theme="dark"] .footer-copy { color: var(--text-secondary); }\n' +
+    'html[data-theme="dark"] .faq-item summary, html[data-theme="dark"] .faq-item { border-color: var(--border); color: var(--text-primary); }\n' +
 
-        html[data-theme="dark"] .tab-btn:not(.active):hover,
-        html[data-theme="dark"] .radio-label:hover,
-        html[data-theme="dark"] .sidebar-link:hover {
-            background-color: var(--surface-2);
-            color: var(--text-primary);
-            border-color: var(--border);
-        }
-        
-        html[data-theme="dark"] .sidebar-link.active-link {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-color: var(--border-focus);
-        }
+    /* Buttons */
+    'html[data-theme="dark"] .radio-label, html[data-theme="dark"] .tab-btn, html[data-theme="dark"] .sidebar-link { background-color: var(--surface); border-color: var(--border); color: var(--text-secondary); }\n' +
+    'html[data-theme="dark"] .tab-btn:not(.active):hover, html[data-theme="dark"] .radio-label:hover, html[data-theme="dark"] .sidebar-link:hover { background-color: var(--surface-2); color: var(--text-primary); border-color: #4a6380; }\n' +
+    'html[data-theme="dark"] .sidebar-link.active-link { background-color: rgba(255,255,255,.04); border-color: var(--border); }\n' +
 
-        /* Result Colors */
-        html[data-theme="dark"] .cr-value, 
-        html[data-theme="dark"] .amount,
-        html[data-theme="dark"] .result-item-value {
-           color: #fff;
-        }
+    /* Save button */
+    'html[data-theme="dark"] .save-image-btn { background: rgba(26,36,53,.9); border-color: var(--border); color: var(--text-muted); }\n' +
+    'html[data-theme="dark"] .save-image-btn:hover { background: var(--surface-2); color: var(--text-primary); border-color: #4a6380; }\n' +
 
-        /* Result Highlight Box (e.g. Total Final Amount) */
-        html[data-theme="dark"] .result-highlight {
-            background-color: rgba(255, 255, 255, 0.05); /* Subtle dark overlay on primary area */
-            border-color: var(--border-focus);
-        }
-        
-        html[data-theme="dark"] .result-highlight .amount {
-            color: #fff;
-        }
-        
-        html[data-theme="dark"] .result-highlight .label {
-            color: var(--text-secondary);
-        }
+    /* Result values */
+    'html[data-theme="dark"] .cr-value, html[data-theme="dark"] .amount, html[data-theme="dark"] .result-item-value { color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .result-highlight { background-color: rgba(255,255,255,.04); border-color: var(--border); }\n' +
+    'html[data-theme="dark"] .result-highlight .amount { color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .result-highlight .label { color: var(--text-secondary); }\n' +
 
-        /* Footer */
-        html[data-theme="dark"] .site-footer {
-            background-color: #0b1120;
-            border-top: 1px solid var(--border);
-        }
-        
-        html[data-theme="dark"] .footer-logo .logo-text {
-            color: var(--text-primary);
-        }
+    /* Tables */
+    'html[data-theme="dark"] .tax-table th { background-color: var(--surface-2); color: var(--text-secondary); border-color: var(--border); }\n' +
+    'html[data-theme="dark"] .tax-table td { border-color: var(--border); color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .schedule-table th { background-color: var(--surface-2); color: var(--text-secondary); }\n' +
+    'html[data-theme="dark"] .schedule-table td { border-color: var(--border); color: var(--text-primary); }\n' +
+    'html[data-theme="dark"] .schedule-table tr:nth-child(even) td { background-color: rgba(255,255,255,.02); }\n' +
+    'html[data-theme="dark"] .schedule-table tr:hover td { background-color: rgba(255,255,255,.05); }\n' +
 
-        /* Table */
-        html[data-theme="dark"] .tax-table th,
-        html[data-theme="dark"] .tax-table td {
-            border-color: var(--border);
-        }
-        html[data-theme="dark"] .tax-table th {
-            background-color: var(--surface-2);
-            color: var(--text-secondary);
-        }
+    /* Footer */
+    'html[data-theme="dark"] .site-footer { background-color: #0a1220; border-top: 1px solid var(--border); }\n' +
+    'html[data-theme="dark"] .footer-logo .logo-text { color: var(--text-primary); }\n' +
 
-        /* Toggle Button Styles */
-        .theme-toggle-btn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s, transform 0.2s;
-            margin-left: 12px;
-        }
-        
-        .theme-toggle-btn:hover {
-            background-color: var(--surface-2);
-            transform: scale(1.05);
-        }
-        
-        @media (max-width: 600px) {
-            .theme-toggle-btn {
-                margin-left: 4px;
-                font-size: 1.15rem;
-                padding: 6px;
-            }
-        }
-    `;
+    /* Toggle button */
+    '.theme-toggle-btn { background: none; border: none; color: var(--text-primary); font-size: 1.25rem; cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.2s; margin-left: 12px; }\n' +
+    '.theme-toggle-btn:hover { background-color: rgba(128,128,128,.15); transform: scale(1.05); }\n' +
+    '@media (max-width:600px) { .theme-toggle-btn { margin-left:4px; font-size:1.15rem; padding:6px; } }\n';
+
   document.head.appendChild(darkThemeStyle);
 
   // 3. Theme Logic
   function getInitialTheme() {
-    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    if (storedTheme) {
-      return storedTheme;
-    }
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    return prefersDark ? DARK_THEME : LIGHT_THEME;
+    var storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (storedTheme) return storedTheme;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? DARK_THEME
+      : LIGHT_THEME;
   }
 
   function setTheme(theme) {
@@ -219,37 +128,31 @@
     updateToggleButton(theme);
   }
 
-  // 4. Mount Toggle Button
   function updateToggleButton(theme) {
-    const btn = document.getElementById("theme-toggle-btn");
+    var btn = document.getElementById("theme-toggle-btn");
     if (btn) {
       btn.innerHTML = theme === DARK_THEME ? "☀️" : "🌙";
       btn.setAttribute(
         "aria-label",
-        theme === DARK_THEME ? "라이트 모드로 전환" : "다크 모드로 전환",
+        theme === DARK_THEME ? "라이트 모드로 전환" : "다크 모드로 전환"
       );
     }
   }
 
   function injectToggleButton() {
-    // Prevent duplicate injection
     if (document.getElementById("theme-toggle-btn")) return;
-
-    const headerInner = document.querySelector(".header-inner");
+    var headerInner = document.querySelector(".header-inner");
     if (!headerInner) return;
 
-    const btn = document.createElement("button");
+    var btn = document.createElement("button");
     btn.id = "theme-toggle-btn";
     btn.className = "theme-toggle-btn";
-    btn.addEventListener("click", () => {
-      const currentTheme = document.documentElement.getAttribute("data-theme");
-      const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-      setTheme(newTheme);
+    btn.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme");
+      setTheme(current === DARK_THEME ? LIGHT_THEME : DARK_THEME);
     });
 
-    // Add to the right side of the header
-    // If there's a header-nav, we can put it there or directly in header-inner
-    const headerNav = headerInner.querySelector(".header-nav");
+    var headerNav = headerInner.querySelector(".header-nav");
     if (headerNav) {
       headerNav.appendChild(btn);
       headerNav.style.display = "flex";
@@ -261,15 +164,14 @@
     }
 
     updateToggleButton(
-      document.documentElement.getAttribute("data-theme") || LIGHT_THEME,
+      document.documentElement.getAttribute("data-theme") || LIGHT_THEME
     );
   }
 
   // 5. Initialize
-  const initialTheme = getInitialTheme();
+  var initialTheme = getInitialTheme();
   document.documentElement.setAttribute("data-theme", initialTheme);
 
-  // Inject button when DOM is ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", injectToggleButton);
   } else {
