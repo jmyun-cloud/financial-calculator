@@ -47,6 +47,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
@@ -59,8 +60,10 @@ body {
   background: var(--bg);
   color: var(--text-primary);
   line-height: 1.7;
-  font-size: 15px;
+  font-size: 0.9375rem;
   -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -1185,6 +1188,10 @@ ul {
 }
 
 @media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+
   .header-nav {
     display: none;
   }
