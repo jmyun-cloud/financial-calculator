@@ -135,8 +135,8 @@ const INS_2026 = {
   pension_rate: 0.045, // 국민연금 4.5%
   pension_cap: 6_370_000, // 상한 637만원
   pension_floor: 370_000, // 하한 37만원
-  health_rate: 0.03545, // 건강보험 3.545%
-  longterm_rate: 0.1295, // 장기요양 = 건강보험료 × 12.95%
+  health_rate: 0.03595, // 건강보험 3.595%
+  longterm_rate: 0.1314, // 장기요양 = 건강보험료 × 13.14%
   employment_rate: 0.009, // 고용보험 0.9%
 };
 
@@ -363,12 +363,12 @@ function displaySalaryResult(r) {
       </tr>
       <tr>
         <td style="padding-left:16px">건강보험</td>
-        <td class="deduction-rate">3.545%</td>
+        <td class="deduction-rate">3.595%</td>
         <td class="deduction-amount">- ${formatKRW(r.ins.health)}원</td>
       </tr>
       <tr>
         <td style="padding-left:16px">장기요양보험</td>
-        <td class="deduction-rate">건강보험료 × 12.95%</td>
+        <td class="deduction-rate">건강보험료 × 13.14%</td>
         <td class="deduction-amount">- ${formatKRW(r.ins.longterm)}원</td>
       </tr>
       <tr>
@@ -458,6 +458,10 @@ function calculateHourly() {
   );
   const annualPay = monthlyPay * 12;
 
+  const minHourly = 10320;
+  const standardHours = 209;
+  const minMonthly = minHourly * standardHours;
+
   // 4대보험 간이 계산 (소득세는 최소 수준)
   const ins = calcInsurance(monthlyPay);
   const monthlyInsTotal =
@@ -495,7 +499,7 @@ function displayHourlyResult(r) {
     <div class="summary-label">월 급여 (${formatKRW(r.wageRaw)}원 × 주 ${r.weeklyHours}시간${r.includeHoliday ? " + 주휴수당" : ""})</div>
     <div class="summary-amount">${formatKRW(r.monthlyPay)}원</div>
     <div class="summary-sub">월 실수령액 ≈ ${formatKRW(r.monthlyTakeHome)}원 | 연봉 ≈ ${getHumanReadable(r.annualPay)}</div>
-    ${r.belowMin ? '<div style="margin-top:10px;background:rgba(239,68,68,.15);padding:6px 14px;border-radius:6px;font-size:.82rem">⚠️ 2026년 최저시급(10,030원) 미만입니다.</div>' : ""}
+    ${r.belowMin ? '<div style="margin-top:10px;background:rgba(239,68,68,.15);padding:6px 14px;border-radius:6px;font-size:.82rem">⚠️ 2026년 최저시급(10,320원) 미만입니다.</div>' : ""}
   `;
 
   const gridEl = document.getElementById("result-hourly-grid");
