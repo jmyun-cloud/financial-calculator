@@ -1,189 +1,171 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta
-      name="naver-site-verification"
-      content="a06011ac826bc5ab12896ed43961cb7960df04ed"
-    />
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
 
-      gtag("config", "G-B1TE1JHHE3");
-    </script>
+<head>
+  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      세후 이자 계산기 - 이자소득세 공제 후 실수령 이자 계산 | 금융계산기
-    </title>
-    <meta
-      name="description"
-      content="예금·적금 이자에서 이자소득세(15.4%) 또는 세금우대(9.9%)를 공제한 세후 이자와 실수령액을 계산합니다. 세금 종류별 비교도 가능합니다."
-    />
-    <meta
-      name="keywords"
-      content="세후 이자 계산기, 이자소득세, 이자 세금 계산, 세금우대 이자, 비과세 이자, 실수령 이자"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../savings-calculator/style.css?v=4" />
-    <style>
-      :root {
-        --primary: #d97706;
-        --primary-dark: #b45309;
-        --primary-light: #fffbeb;
-        --primary-mid: #fef3c7;
-      }
+    gtag("config", "G-B1TE1JHHE3");
+  </script>
 
-      .top-description {
-        background: linear-gradient(
-          135deg,
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    세후 이자 계산기 - 이자소득세 공제 후 실수령 이자 계산 | 금융계산기
+  </title>
+  <meta name="description" content="예금·적금 이자에서 이자소득세(15.4%) 또는 세금우대(9.9%)를 공제한 세후 이자와 실수령액을 계산합니다. 세금 종류별 비교도 가능합니다." />
+  <meta name="keywords" content="세후 이자 계산기, 이자소득세, 이자 세금 계산, 세금우대 이자, 비과세 이자, 실수령 이자" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../savings-calculator/style.css?v=4" />
+  <style>
+    :root {
+      --primary: #d97706;
+      --primary-dark: #b45309;
+      --primary-light: #fffbeb;
+      --primary-mid: #fef3c7;
+    }
+
+    .top-description {
+      background: linear-gradient(135deg,
           #d97706 0%,
           #b45309 50%,
-          #92400e 100%
-        );
-      }
+          #92400e 100%);
+    }
 
-      .calc-btn {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
-      }
+    .calc-btn {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+    }
 
-      .calc-btn:hover {
-        box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5);
-      }
+    .calc-btn:hover {
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5);
+    }
 
-      .result-card {
-        border-color: #d97706;
-      }
+    .result-card {
+      border-color: #d97706;
+    }
 
-      .result-summary-box {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-      }
+    .result-summary-box {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
 
-      .info-section > h2 {
-        border-bottom-color: #d97706;
-      }
+    .info-section>h2 {
+      border-bottom-color: #d97706;
+    }
 
-      .faq-item summary:hover {
-        background: var(--primary-light);
-      }
+    .faq-item summary:hover {
+      background: var(--primary-light);
+    }
 
-      .faq-item summary::after {
-        color: #d97706;
-      }
+    .faq-item summary::after {
+      color: #d97706;
+    }
 
-      .sidebar-link:hover,
-      .sidebar-link.active-link {
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .sidebar-link:hover,
+    .sidebar-link.active-link {
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .nav-link:hover,
-      .nav-link.active {
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .form-input:focus {
-        border-color: #d97706;
-        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
-      }
+    .form-input:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+    }
 
-      .radio-label:hover {
-        border-color: #d97706;
-        color: #d97706;
-        background: var(--primary-light);
-      }
+    .radio-label:hover {
+      border-color: #d97706;
+      color: #d97706;
+      background: var(--primary-light);
+    }
 
-      .radio-label:has(input:checked) {
-        border-color: #d97706;
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .radio-label:has(input:checked) {
+      border-color: #d97706;
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .radio-label:has(input:checked) .radio-custom {
-        border-color: #d97706;
-        background: #d97706;
-      }
+    .radio-label:has(input:checked) .radio-custom {
+      border-color: #d97706;
+      background: #d97706;
+    }
 
-      .result-item-value.accent {
-        color: #d97706;
-      }
+    .result-item-value.accent {
+      color: #d97706;
+    }
 
-      .result-item-value.large {
-        color: #92400e;
-      }
+    .result-item-value.large {
+      color: #92400e;
+    }
 
-      .tax-compare-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
-      }
+    .tax-compare-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-      .tax-compare-item {
-        background: #fff;
-        border: 1.5px solid #e2e8f4;
-        border-radius: 12px;
-        padding: 16px;
-        text-align: center;
-      }
+    .tax-compare-item {
+      background: #fff;
+      border: 1.5px solid #e2e8f4;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
 
-      .tax-compare-item.best {
-        border-color: #059669;
-        background: #ecfdf5;
-      }
+    .tax-compare-item.best {
+      border-color: #059669;
+      background: #ecfdf5;
+    }
 
-      .tc-label {
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #94a3b8;
-        margin-bottom: 6px;
-        text-transform: uppercase;
-      }
+    .tc-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
 
-      .tc-net {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 3px;
-      }
+    .tc-net {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
 
-      .tc-tax {
-        font-size: 0.8rem;
-        color: #e85d1a;
-      }
+    .tc-tax {
+      font-size: 0.8rem;
+      color: #e85d1a;
+    }
 
-      .tc-badge {
-        font-size: 0.72rem;
-        color: #059669;
-        font-weight: 700;
-        margin-top: 4px;
-      }
-    </style>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-      crossorigin="anonymous"
-    ></script>
+    .tc-badge {
+      font-size: 0.72rem;
+      color: #059669;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+    crossorigin="anonymous"></script>
 
-    <!-- SEO & Favicon for Google Search -->
-    <meta property="og:site_name" content="금융계산기.kr" />
-    <link rel="icon" href="/favicon.svg" />
-    <script type="application/ld+json">
+  <!-- SEO & Favicon for Google Search -->
+  <meta property="og:site_name" content="금융계산기.kr" />
+  <link rel="icon" href="/favicon.svg" />
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -191,396 +173,380 @@
         "url": "https://richcalc.kr/"
       }
     </script>
-    <script src="../loader.js?v=4"></script>
-    <script src="../darkmode.js?v=4"></script>
-    <script src="../currency_helper.js?v=4"></script>
-      <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#1a56e8" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="금융계산기" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function(err) {
-            console.log('SW registration failed: ', err);
-          });
+  <script src="../loader.js?v=4"></script>
+  <script src="../darkmode.js?v=4"></script>
+  <script src="../currency_helper.js?v=4"></script>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1a56e8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="금융계산기" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function (err) {
+          console.log('SW registration failed: ', err);
         });
-      }
-    </script>
-  </head>
+      });
+    }
+  </script>
+</head>
 
-  <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="../index.html" class="logo"
-          ><span class="logo-icon">💰</span
-          ><span class="logo-text"
-            >금융계산기<span class="logo-accent">.kr</span></span
-          ></a
-        >
-        <nav class="header-nav">
-          <a href="../index.html" class="nav-link">🏠 홈</a
-          ><a href="#calculator" class="nav-link active">세후 이자</a
-          ><a href="#bottom-info" class="nav-link">세금 안내</a
-          ><a href="#faq" class="nav-link">FAQ</a>
-        </nav>
-      </div>
-    </header>
-    <div class="ad-banner-top">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
-        </div>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo"><span class="logo-icon">💰</span><span class="logo-text">금융계산기<span
+            class="logo-accent">.kr</span></span></a>
+      <nav class="header-nav">
+        <a href="../index.html" class="nav-link">🏠 홈</a><a href="#calculator" class="nav-link active">세후 이자</a><a
+          href="#bottom-info" class="nav-link">세금 안내</a><a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
+  <div class="ad-banner-top">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
       </div>
     </div>
-    <section class="top-description">
-      <div class="container">
-        <div class="breadcrumb">
-          <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span
-          ><span class="bc-sep">›</span
-          ><span class="bc-current">세후 이자 계산기</span>
-        </div>
-        <h1 class="main-title">세후 이자 계산기</h1>
-        <p class="main-subtitle">
-          예금·적금 이자에서 <strong>이자소득세를 공제</strong>한 세후 실수령
-          이자를 계산합니다. 일반과세(15.4%), 세금우대(9.9%), 비과세(0%) 세 가지
-          세금 유형을 비교해 드립니다.
-        </p>
-        <div class="top-desc-tags">
-          <span class="tag">✓ 일반과세 15.4%</span
-          ><span class="tag">✓ 세금우대 9.9%</span
-          ><span class="tag">✓ 비과세 0%</span
-          ><span class="tag">✓ 세금 절감액 계산</span
-          ><span class="tag">✓ 무료 사용</span>
-        </div>
+  </div>
+  <section class="top-description">
+    <div class="container">
+      <div class="breadcrumb">
+        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span><span
+          class="bc-current">세후 이자 계산기</span>
       </div>
-    </section>
-
-    <main class="main-content">
-      <div class="container content-grid">
-        <section class="calculator-section" id="calculator">
-          <div class="calc-card">
-            <h2 class="calc-card-title">세후 이자 계산</h2>
-            <p class="calc-card-desc">
-              원금, 이율, 기간을 입력하면
-              <strong>세금 3가지 유형을 동시에 비교</strong>합니다.
-            </p>
-            <div class="form-grid">
-              <div class="form-group">
-                <label class="form-label" for="ti-amount">원금</label>
-                <div class="input-wrap">
-                  <input
-                    type="text"
-                    id="ti-amount"
-                    class="form-input"
-                    placeholder="10,000,000"
-                    inputmode="numeric"
-                  /><span class="input-unit">원</span>
-                </div>
-                <span class="form-hint" id="ti-amount-hint"></span>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="ti-rate">연 이율</label>
-                <div class="input-wrap">
-                  <input
-                    type="number"
-                    id="ti-rate"
-                    class="form-input"
-                    placeholder="3.50"
-                    min="0.01"
-                    max="30"
-                    step="0.01"
-                  /><span class="input-unit">%</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="ti-months">예치 기간</label>
-                <div class="input-wrap">
-                  <input
-                    type="number"
-                    id="ti-months"
-                    class="form-input"
-                    placeholder="12"
-                    min="1"
-                    max="600"
-                    step="1"
-                  /><span class="input-unit">개월</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">이자 방식</label>
-                <div class="radio-group">
-                  <label class="radio-label"
-                    ><input
-                      type="radio"
-                      name="ti-type"
-                      value="simple"
-                      checked
-                    /><span class="radio-custom"></span>단리</label
-                  ><label class="radio-label"
-                    ><input type="radio" name="ti-type" value="compound" /><span
-                      class="radio-custom"
-                    ></span
-                    >월복리</label
-                  >
-                </div>
-              </div>
-            </div>
-            <button class="calc-btn" onclick="calcTaxInterest()">
-              <span class="btn-icon">⚡</span>계산하기
-            </button>
-          </div>
-          <div class="result-card" id="result-ti" style="display: none">
-            <h3 class="result-title">💸 세후 이자 계산 결과</h3>
-            <div id="result-ti-content"></div>
-            <div class="result-notice">
-              ※ 이자소득세 = 이자 × 14% + 지방소득세 이자 × 1.4% = 합계 15.4%
-            </div>
-          </div>
-        </section>
-        <aside class="sidebar">
-          <div class="ad-slot ad-slot--sidebar">
-            <span class="ad-placeholder-text">광고</span>
-          </div>
-          <nav class="sidebar-widget">
-            <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-            <ul class="sidebar-links">
-              <li>
-                <a href="../index.html" class="sidebar-link"
-                  ><span class="link-icon">🏠</span>
-                  <div class="link-info">
-                    <strong>전체 계산기 홈</strong
-                    ><small>금융계산기.kr 메인</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../salary-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">💼</span>
-                  <div class="link-info">
-                    <strong>연봉 계산기</strong
-                    ><small>월 실수령액·4대보험 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="../severance-calculator/index.html"
-                  class="sidebar-link"
-                  ><span class="link-icon">📦</span>
-                  <div class="link-info">
-                    <strong>퇴직금 계산기</strong
-                    ><small>퇴직소득세·DB/DC형</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../savings-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏦</span>
-                  <div class="link-info">
-                    <strong>예적금 만기 계산기</strong
-                    ><small>예금·적금 수령액</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../loan-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏠</span>
-                  <div class="link-info">
-                    <strong>대출 이자 계산기</strong
-                    ><small>원리금균등·원금균등</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../compound-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">📈</span>
-                  <div class="link-info">
-                    <strong>복리 수익률 계산기</strong
-                    ><small>투자 수익률 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../jeonse-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏗️</span>
-                  <div class="link-info">
-                    <strong>전세/월세 전환 계산기</strong
-                    ><small>전월세 전환보증금</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../pension-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">👴</span>
-                  <div class="link-info">
-                    <strong>연금 수령액 계산기</strong
-                    ><small>국민·퇴직·개인연금</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="sidebar-link active-link"
-                  ><span class="link-icon">💸</span>
-                  <div class="link-info">
-                    <strong>세후 이자 계산기</strong><small>현재 페이지</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="../inflation-calculator/index.html"
-                  class="sidebar-link"
-                  ><span class="link-icon">📊</span>
-                  <div class="link-info">
-                    <strong>물가상승률 계산기</strong
-                    ><small>실질 구매력 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../exchange-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">💱</span>
-                  <div class="link-info">
-                    <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div class="sidebar-widget info-widget">
-            <h2 class="widget-title">💰 세금 종류</h2>
-            <table class="tax-table">
-              <thead>
-                <tr>
-                  <th>종류</th>
-                  <th>세율</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>일반과세</td>
-                  <td class="tax-rate">15.4%</td>
-                </tr>
-                <tr>
-                  <td>세금우대</td>
-                  <td class="tax-rate preferred">9.9%</td>
-                </tr>
-                <tr>
-                  <td>비과세</td>
-                  <td class="tax-rate exempt">0%</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="widget-note">
-              ※ 세금우대: 조합예탁금 등 3,000만원 한도. 비과세: ISA,
-              비과세종합저축 등.
-            </p>
-          </div>
-        </aside>
-      </div>
-    </main>
-    <div class="ad-banner-middle">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
-        </div>
+      <h1 class="main-title">세후 이자 계산기</h1>
+      <p class="main-subtitle">
+        예금·적금 이자에서 <strong>이자소득세를 공제</strong>한 세후 실수령
+        이자를 계산합니다. 일반과세(15.4%), 세금우대(9.9%), 비과세(0%) 세 가지
+        세금 유형을 비교해 드립니다.
+      </p>
+      <div class="top-desc-tags">
+        <span class="tag">✓ 일반과세 15.4%</span><span class="tag">✓ 세금우대 9.9%</span><span class="tag">✓ 비과세 0%</span><span
+          class="tag">✓ 세금 절감액 계산</span><span class="tag">✓ 무료 사용</span>
       </div>
     </div>
-    <section class="bottom-description" id="bottom-info">
-      <div class="container">
-        <div class="info-section">
-          <h2>이자소득세란?</h2>
-          <p>
-            이자소득세는 예금·적금 등에서 발생하는 이자 수익에 부과되는
-            세금입니다. <strong>이자의 14%</strong>를 소득세로,
-            <strong>1.4%</strong>를 지방소득세로 납부하며 합계
-            <strong>15.4%</strong>가 원천징수됩니다.
+  </section>
+
+  <main class="main-content">
+    <div class="container content-grid">
+      <section class="calculator-section" id="calculator">
+        <div class="calc-card">
+          <h2 class="calc-card-title">세후 이자 계산</h2>
+          <p class="calc-card-desc">
+            원금, 이율, 기간을 입력하면
+            <strong>세금 3가지 유형을 동시에 비교</strong>합니다.
           </p>
-          <div class="info-grid">
-            <div
-              class="info-card"
-              style="border-color: #d97706; background: #fffbeb"
-            >
-              <h3>📐 계산 공식</h3>
-              <div class="formula-box">
-                <code>세전 이자 = 원금 × 연이율 × (기간/12)</code
-                ><code class="mt-8">이자소득세 = 세전이자 × 15.4%</code
-                ><code class="mt-8">세후 이자 = 세전이자 - 이자소득세</code>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="ti-amount">원금</label>
+              <div class="input-wrap">
+                <input type="text" id="ti-amount" class="form-input" placeholder="10,000,000"
+                  inputmode="numeric" /><span class="input-unit">원</span>
+              </div>
+              <span class="form-hint" id="ti-amount-hint"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ti-rate">연 이율</label>
+              <div class="input-wrap">
+                <input type="number" id="ti-rate" class="form-input" placeholder="3.50" min="0.01" max="30"
+                  step="0.01" /><span class="input-unit">%</span>
               </div>
             </div>
-            <div class="info-card">
-              <h3>🏦 비과세 절약 방법</h3>
-              <ul class="feature-list">
-                <li>ISA(개인종합자산관리계좌): 200만원 비과세</li>
-                <li>비과세종합저축: 5,000만원 한도 (만65세+)</li>
-                <li>조합 예탁금: 3,000만원 한도 세금우대 9.9%</li>
-                <li>재형저축: 분리과세 9.9%</li>
-              </ul>
+            <div class="form-group">
+              <label class="form-label" for="ti-months">예치 기간</label>
+              <div class="input-wrap">
+                <input type="number" id="ti-months" class="form-input" placeholder="12" min="1" max="600"
+                  step="1" /><span class="input-unit">개월</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">이자 방식</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="ti-type" value="simple" checked /><span
+                    class="radio-custom"></span>단리</label><label class="radio-label"><input type="radio" name="ti-type"
+                    value="compound" /><span class="radio-custom"></span>월복리</label>
+              </div>
             </div>
           </div>
+          <button class="calc-btn" onclick="calcTaxInterest()">
+            <span class="btn-icon">⚡</span>계산하기
+          </button>
         </div>
-        <div class="info-section" id="faq">
-          <h2>자주 묻는 질문 (FAQ)</h2>
-          <div class="faq-list">
-            <details class="faq-item">
-              <summary>이자소득세는 자동으로 공제되나요?</summary>
-              <p>
-                네, 금융기관이 이자 지급 시 이자소득세(15.4%)를 원천징수한 후
-                세후 이자를 지급합니다. 별도로 신고나 납부를 할 필요가 없습니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>비과세 종합저축은 누구나 가입할 수 있나요?</summary>
-              <p>
-                만 65세 이상, 장애인, 독립유공자 등 특정 요건을 갖춘 분만 가입
-                가능합니다. 1인당 5,000만원 한도로 이자·배당소득이 전액
-                비과세됩니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>ISA 계좌의 비과세 한도는 얼마인가요?</summary>
-              <p>
-                ISA(개인종합자산관리계좌)는 일반형 200만원, 서민·농어민형
-                400만원까지 비과세이며, 초과분은 9.9% 분리과세됩니다. 5년 이상
-                유지 시 혜택을 받을 수 있습니다.
-              </p>
-            </details>
+        <div class="result-card" id="result-ti" style="display: none">
+          <h3 class="result-title">💸 세후 이자 계산 결과</h3>
+          <div id="result-ti-content"></div>
+          <div class="result-notice">
+            ※ 이자소득세 = 이자 × 14% + 지방소득세 이자 × 1.4% = 합계 15.4%
+          </div>
+        </div>
+      </section>
+      <aside class="sidebar">
+        <div class="ad-slot ad-slot--sidebar">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+        <nav class="sidebar-widget">
+          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+          <ul class="sidebar-links">
+            <li>
+              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
+                <div class="link-info">
+                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../severance-calculator/index.html" class="sidebar-link"><span class="link-icon">📦</span>
+                <div class="link-info">
+                  <strong>퇴직금 계산기</strong><small>퇴직소득세·DB/DC형</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
+                <div class="link-info">
+                  <strong>예적금 만기 계산기</strong><small>예금·적금 수령액</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
+                <div class="link-info">
+                  <strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
+                <div class="link-info">
+                  <strong>전세/월세 전환 계산기</strong><small>전월세 전환보증금</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
+                <div class="link-info">
+                  <strong>연금 수령액 계산기</strong><small>국민·퇴직·개인연금</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar-link active-link"><span class="link-icon">💸</span>
+                <div class="link-info">
+                  <strong>세후 이자 계산기</strong><small>현재 페이지</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
+                <div class="link-info">
+                  <strong>물가상승률 계산기</strong><small>실질 구매력 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
+                <div class="link-info">
+                  <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">💰 세금 종류</h2>
+          <table class="tax-table">
+            <thead>
+              <tr>
+                <th>종류</th>
+                <th>세율</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>일반과세</td>
+                <td class="tax-rate">15.4%</td>
+              </tr>
+              <tr>
+                <td>세금우대</td>
+                <td class="tax-rate preferred">9.9%</td>
+              </tr>
+              <tr>
+                <td>비과세</td>
+                <td class="tax-rate exempt">0%</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="widget-note">
+            ※ 세금우대: 조합예탁금 등 3,000만원 한도. 비과세: ISA,
+            비과세종합저축 등.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <div class="ad-banner-middle">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+  <section class="bottom-description" id="bottom-info">
+    <div class="container">
+      <div class="info-section">
+        <h2>이자소득세란?</h2>
+        <p>
+          이자소득세는 예금·적금 등에서 발생하는 이자 수익에 부과되는
+          세금입니다. <strong>이자의 14%</strong>를 소득세로,
+          <strong>1.4%</strong>를 지방소득세로 납부하며 합계
+          <strong>15.4%</strong>가 원천징수됩니다.
+        </p>
+        <div class="info-grid">
+          <div class="info-card" style="border-color: #d97706; background: #fffbeb">
+            <h3>📐 계산 공식</h3>
+            <div class="formula-box">
+              <code>세전 이자 = 원금 × 연이율 × (기간/12)</code><code class="mt-8">이자소득세 = 세전이자 × 15.4%</code><code
+                class="mt-8">세후 이자 = 세전이자 - 이자소득세</code>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>🏦 비과세 절약 방법</h3>
+            <ul class="feature-list">
+              <li>ISA(개인종합자산관리계좌): 200만원 비과세</li>
+              <li>비과세종합저축: 5,000만원 한도 (만65세+)</li>
+              <li>조합 예탁금: 3,000만원 한도 세금우대 9.9%</li>
+              <li>재형저축: 분리과세 9.9%</li>
+            </ul>
           </div>
         </div>
       </div>
-    </section>
-    <div class="ad-banner-bottom">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
+      <div class="info-section" id="tax-pro-guide">
+        <h2>세금 전문가 가이드: 세후 수익률이 진짜 내 돈이다! 절세의 기술</h2>
+        <div class="pro-guide-content" style="line-height: 1.8; color: var(--text-secondary);">
+          <p style="margin-bottom: 16px;">
+            금융 상품을 고를 때 연 5% 금리만 보고 가입했다면, 실제로는 15.4%의 세금을 떼인 <strong>연 4.228%</strong>의 수익만 가져가게 됩니다. 특히 금융소득종합과세 대상자가
+            될 가능성이 있다면 절세는 선택이 아닌 필수입니다. 자산 증식을 위한 세금 관리 전략을 공개합니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">1. 금융소득종합과세(2,000만원) 기준점 관리
+          </h3>
+          <p>
+            연간 이자와 배당 소득의 합계가 <strong>2,000만원</strong>을 초과하면 근로소득 등 다른 소득과 합산하여 누진세율이 적용됩니다.
+            이를 피하려면 만기 시점을 여러 해로 분산하거나, 배우자와 자녀에게 증여를 통해 명의를 분산하는 전략이 필요합니다. 세금 구간이 올라가는 순간 수익률은 급격히 하락하므로 철저한 분산 관리가
+            핵심입니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">2. ISA(개인종합관리계좌) 활용의 완성: 비과세와
+            분리과세</h3>
+          <p>
+            ISA는 <strong>'마법의 절세 바구니'</strong>로 불립니다. 발생한 순이익 중 일부(일반형 200만원, 서민형 400만원)에 대해 비과세 혜택을 주고, 초과분은 9.9% 낮은
+            세율로 분리과세합니다.
+            특히 국내 상장 주식이나 ETF 투자를 병행한다면, 일반 계좌보다 ISA 계좌를 통해 운용하는 것이 세후 수익률 측면에서 압도적으로 유리합니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">3. 비과세종합저축과 상호금융 세금우대 혜택</h3>
+          <p>
+            만 65세 이상이라면 5,000만원까지 이자가 전액 비과세되는 <strong>비과세종합저축</strong>을 최우선으로 가입해야 합니다.
+            또한 신협, 새마을금고 등 상호금융권의 <strong>조합원 예탁금(3,000만원 한도)</strong>은 농특세 1.4%만 내고 이자소득세 14%가 면제되는 강력한 혜택이 있습니다.
+            시중은행보다 금리가 높으면서 세금까지 아끼는 최선의 대안입니다.
+          </p>
+        </div>
+      </div>
+      <div class="info-section" id="faq">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>세금우대 9.9%와 일반과세 15.4%, 실제 이득은 얼마인가요?</summary>
+            <p>
+              단순 계산으로 이자의 약 <strong>5.5%</strong>를 더 가져가는 셈입니다. 이자가 100만원이라면 일반과세는 15.4만원을 떼고 84.6만원을 받지만, 세금우대는 9.9만원만
+              떼고 90.1만원을 받습니다. 5.5만원의 차이는 예금 금리로 환산하면 약 0.2~0.3%p 금리 인상 효과와 맞먹습니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>금융소득종합과세 대상이 되면 세금을 얼마나 더 내나요?</summary>
+            <p>
+              이자·배당 소득이 2,000만원을 넘기면 초과분에 대해 <strong>다른 소득(근로, 사업 등)과 합산</strong>하여 누진세율(6%~45%)을 적용합니다. 특히 고소득자의 경우
+              지방소득세를 포함해 최대 49.5%까지 세율이 올라갈 수 있으므로, 분리과세 상품을 적극 활용해야 합니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>건강보험료도 이자 소득 때문에 오를 수 있나요?</summary>
+            <p>
+              네, 그렇습니다. 금융소득이 일정 금액(현재 기준 연 1,000만원 초과)을 넘으면 <strong>지역가입자 건강보험료 산정</strong> 시 합산됩니다. 피부양자의 경우에도 금융소득이
+              기준을 초과하면 자격이 박탈될 수 있으므로, 세후 이자뿐만 아니라 건보료 상승분까지 고려하는 것이 중요합니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>주식 배당금에도 15.4% 세금을 내나요?</summary>
+            <p>
+              네, 국내 주식 배당금 역시 <strong>금융소득</strong>으로 분류되어 15.4%가 원천징수됩니다. 다만 국내 상장 주식 매매차익은 현재 비과세(대주주 제외)이므로, 시세 차익
+              비중이 높은 투자자가 세무상 유리할 수 있습니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>해외 ETF 투자 시 세금은 어떻게 되나요?</summary>
+            <p>
+              국내 상장 해외 ETF는 배당소득세 15.4%가 과세되며 금융소득종합과세에 포함됩니다. 반면 미국 등 해외에 상장된 ETF는 <strong>양도소득세 22%</strong>(연 250만원
+              공제)를 내며 분류과세되어 종합과세 합산에서 제외됩니다. 투자 금액과 소득 수준에 따라 유리한 계좌가 달라집니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>미성년 자녀 명의 계좌의 세금 혜택은?</summary>
+            <p>
+              자녀 명의로 증여(10년 2,000만원 한도 비과세) 후 예적금을 운용하면 자녀의 금융 소득으로 잡히므로 부모의 종합과세를 피할 수 있습니다. 다만 자녀의 소득이 많아지면
+              <strong>피부양자 자격</strong>에 영향이 있을 수 있으니 전문가와 상담이 필요합니다.
+            </p>
+          </details>
         </div>
       </div>
     </div>
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div class="footer-logo">
-          <span class="logo-icon">💰</span>
-          <!-- prettier-ignore -->
-          <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-        </div>
-        <div class="footer-links">
-          <a href="../terms/index.html">이용약관</a
-          ><a href="../privacy-policy/index.html">개인정보처리방침</a
-          ><a href="../contact/index.html">문의하기</a>
-        </div>
-        <p class="footer-copy">© 2026 금융계산기.kr</p>
+  </section>
+  <div class="ad-banner-bottom">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
       </div>
-    </footer>
-    <script src="calculator.js?v=4"></script>
-    <script src="../countup.js?v=4"></script>
-    <script src="../toast.js?v=4"></script>
-    <script src="../seo_script.js?v=4"></script>
-    <script src="../reset_form.js?v=4"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=4"></script>
-      <script src="../export_image.js?v=4"></script>
-  </body>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">💰</span>
+        <!-- prettier-ignore -->
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+      </div>
+      <div class="footer-links">
+        <a href="../terms/index.html">이용약관</a><a href="../privacy-policy/index.html">개인정보처리방침</a><a
+          href="../contact/index.html">문의하기</a>
+      </div>
+      <p class="footer-copy">© 2026 금융계산기.kr</p>
+    </div>
+  </footer>
+  <script src="calculator.js?v=4"></script>
+  <script src="../countup.js?v=4"></script>
+  <script src="../toast.js?v=4"></script>
+  <script src="../seo_script.js?v=4"></script>
+  <script src="../reset_form.js?v=4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=4"></script>
+  <script src="../export_image.js?v=4"></script>
+</body>
+
 </html>
