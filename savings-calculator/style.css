@@ -253,9 +253,9 @@ ul {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  grid-template-areas: "calculator sidebar";
-  gap: 28px;
+  grid-template-columns: 310px 1fr;
+  grid-template-areas: "sidebar calculator";
+  gap: 32px;
   align-items: start;
 }
 

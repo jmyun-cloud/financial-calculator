@@ -270,16 +270,6 @@
           </div>
         </div>
 
-        <!-- 최근 계산 기록 -->
-        <section id="calc-history" class="history-section" style="display: none;">
-          <div class="history-header">
-            <h2><span>🕒</span> 최근 계산 기록</h2>
-            <button class="btn-clear-all" onclick="clearHistory()">기록 전체 삭제</button>
-          </div>
-          <div id="history-list" class="history-list">
-            <!-- 이력 항목이 여기에 동적으로 추가됨 -->
-          </div>
-        </section>
 
         <!-- ===== AMORTIZATION SCHEDULE ===== -->
         <div class="schedule-card" id="schedule-card" style="display: none">
@@ -312,6 +302,18 @@
 
       <!-- ===== SIDEBAR ===== -->
       <aside class="sidebar">
+        <!-- 최근 계산 기록 -->
+        <section id="calc-history" class="history-section" style="display: none;">
+          <div class="history-header">
+            <h2><span>🕒</span> 최근 계산 기록</h2>
+            <button class="btn-clear-all" onclick="clearHistory()">기록 전체 삭제</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <!-- 이력 항목이 여기에 동적으로 추가됨 -->
+          </div>
+        </section>
+
+        <!-- Sidebar Navigation -->
         <div class="ad-slot ad-slot--sidebar" id="ad-sidebar">
           <span class="ad-placeholder-text">광고</span>
         </div>
