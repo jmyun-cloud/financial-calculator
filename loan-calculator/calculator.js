@@ -282,10 +282,12 @@ function calculate(skipHistory = false) {
 
     // 이력 저장
     if (!skipHistory && window.HistoryManager) {
-        const methodLabel = typeLabels[type]; // Use typeLabels for consistency
+        const methodLabel = typeLabels[type];
         HistoryManager.save('loan', {
-            inputs: { principal, rate, period, grace, type }, // Save grace and type
-            result: totalPayment, // totalPayment is the total amount paid
+            inputs: { principal, rate, period, grace, type },
+            result: totalPayment, // totalPayment is total amount
+            monthly: firstPayment,
+            totalInterest: totalInterest,
             methodLabel: methodLabel
         });
         renderHistory();
@@ -375,15 +377,16 @@ function renderHistory() {
     list.innerHTML = history.map(item => {
         const date = new Date(item.timestamp);
         const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-        const detail = `${formatKRW(item.inputs.principal)}원 / ${item.inputs.period}개월`;
+        const principalStr = `${formatKRW(item.inputs.principal)}원`;
 
         return `
       <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
         <div class="history-main">
           <div class="history-icon">💳</div>
           <div class="history-content">
-            <div class="history-title">대출 - ${detail}</div>
+            <div class="history-title">대출 원금: ${principalStr}</div>
             <div class="history-tags">
+              <span class="history-tag">${item.inputs.period}개월</span>
               <span class="history-tag">${item.inputs.rate}%</span>
               <span class="history-tag">${item.methodLabel}</span>
               ${item.inputs.grace > 0 ? `<span class="history-tag">거치 ${item.inputs.grace}개월</span>` : ''}
@@ -392,8 +395,19 @@ function renderHistory() {
         </div>
         <div class="history-right" onclick="event.stopPropagation()">
           <div class="history-result-box">
-            <span class="history-amount">${formatKRW(item.result)}원</span>
-            <span class="history-date">${dateStr}</span>
+            <div class="history-result-row">
+              <span class="history-result-label">월 상환액</span>
+              <span class="history-amount highlight">${formatKRW(item.monthly)}원</span>
+            </div>
+            <div class="history-result-row">
+              <span class="history-result-label">총 상환액</span>
+              <span class="history-amount">${formatKRW(item.result)}원</span>
+            </div>
+            <div class="history-result-row">
+              <span class="history-result-label">총 이자</span>
+              <span class="history-amount">${formatKRW(item.totalInterest)}원</span>
+            </div>
+            <div class="history-date">${dateStr}</div>
           </div>
           <button class="btn-delete-item" onclick="deleteHistoryItem(${item.timestamp})" title="삭제">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>

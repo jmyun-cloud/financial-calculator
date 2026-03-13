@@ -183,13 +183,15 @@ function calculateDeposit(skipHistory = false) {
 
   displayDepositResult(principalRaw, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType);
 
+  // 이력 저장
   if (!skipHistory && window.HistoryManager) {
     HistoryManager.save('savings', {
       subType: 'deposit',
       inputs: { principal: principalRaw, rate, period, interestType, taxType },
       result: netMaturity,
-      interestLabel: interestType === 'simple' ? '단리' : '월복리',
-      taxLabel: taxType === 'exempt' ? '비과세' : taxType === 'preferred' ? '세금우대' : '일반과세'
+      totalInterest: netInterest,
+      interestLabel: document.querySelector(`input[name="d-interest-type"][value="${interestType}"]`).parentElement.textContent.trim(),
+      taxLabel: document.querySelector(`input[name="d-tax-type"][value="${taxType}"]`).parentElement.textContent.trim()
     });
     renderHistory();
   }
@@ -276,13 +278,15 @@ function calculateInstallment(skipHistory = false) {
 
   displayInstallmentResult(totalPrincipal, monthlyRaw, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType);
 
+  // 이력 저장
   if (!skipHistory && window.HistoryManager) {
     HistoryManager.save('savings', {
       subType: 'installment',
       inputs: { monthly: monthlyRaw, rate, period, interestType, taxType },
       result: netMaturity,
-      interestLabel: interestType === 'simple' ? '단리' : '월복리',
-      taxLabel: taxType === 'exempt' ? '비과세' : taxType === 'preferred' ? '세금우대' : '일반과세'
+      totalInterest: netInterest,
+      interestLabel: document.querySelector(`input[name="i-interest-type"][value="${interestType}"]`).parentElement.textContent.trim(),
+      taxLabel: document.querySelector(`input[name="i-tax-type"][value="${taxType}"]`).parentElement.textContent.trim()
     });
     renderHistory();
   }
@@ -371,17 +375,20 @@ function renderHistory() {
     const isDeposit = item.subType === 'deposit';
     const label = isDeposit ? '예금' : '적금';
     const icon = isDeposit ? '🏦' : '💰';
-    const detail = isDeposit
-      ? `${formatKRW(item.inputs.principal)}원 / ${item.inputs.period}개월`
-      : `${formatKRW(item.inputs.monthly)}원 / ${item.inputs.period}개월`;
+
+    // 원금 라벨링
+    const principalValue = isDeposit ? item.inputs.principal : (item.inputs.monthly * item.inputs.period);
+    const principalTitle = isDeposit ? '예치 원금' : '총 납입원금';
+    const titleStr = `${principalTitle}: ${formatKRW(principalValue)}원`;
 
     return `
       <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
         <div class="history-main">
           <div class="history-icon">${icon}</div>
           <div class="history-content">
-            <div class="history-title">${label} - ${detail}</div>
+            <div class="history-title">${label} - ${titleStr}</div>
             <div class="history-tags">
+              <span class="history-tag">${item.inputs.period}개월</span>
               <span class="history-tag">${item.inputs.rate}%</span>
               <span class="history-tag">${item.interestLabel}</span>
               <span class="history-tag">${item.taxLabel}</span>
@@ -390,8 +397,15 @@ function renderHistory() {
         </div>
         <div class="history-right" onclick="event.stopPropagation()">
           <div class="history-result-box">
-            <span class="history-amount">${formatKRW(item.result)}원</span>
-            <span class="history-date">${dateStr}</span>
+            <div class="history-result-row">
+              <span class="history-result-label">만기 수령액</span>
+              <span class="history-amount highlight">${formatKRW(item.result)}원</span>
+            </div>
+            <div class="history-result-row">
+              <span class="history-result-label">총 이자(세후)</span>
+              <span class="history-amount">${formatKRW(item.totalInterest)}원</span>
+            </div>
+            <div class="history-date">${dateStr}</div>
           </div>
           <button class="btn-delete-item" onclick="deleteHistoryItem(${item.timestamp})" title="삭제">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>

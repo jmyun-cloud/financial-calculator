@@ -150,20 +150,42 @@
 }
 
 .history-result-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     text-align: right;
+    min-width: 140px;
+}
+
+.history-result-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.history-result-label {
+    font-size: 0.7rem;
+    color: var(--h-text-sub);
+    font-weight: 500;
 }
 
 .history-amount {
-    display: block;
-    font-weight: 800;
+    font-weight: 700;
+    color: var(--h-text-main);
+    font-size: 0.95rem;
+}
+
+.history-amount.highlight {
     color: var(--h-primary);
-    font-size: 1.15rem;
-    line-height: 1.2;
+    font-weight: 800;
+    font-size: 1.05rem;
 }
 
 .history-date {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--h-text-sub);
+    margin-top: 2px;
 }
 
 .btn-delete-item {
