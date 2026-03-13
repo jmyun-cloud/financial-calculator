@@ -32,6 +32,7 @@
     rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js?v=4"></script>
   <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="../css/history.css?v=1" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
     crossorigin="anonymous"></script>
 
@@ -270,15 +271,12 @@
         </div>
 
         <!-- 최근 계산 기록 -->
-        <section id="calc-history" class="history-section" style="display: none; margin-top: 32px;">
-          <div class="section-header"
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h2 style="font-size: 1.25rem; color: var(--text-primary); margin: 0;">🕒 최근 계산 기록</h2>
-            <button onclick="clearHistory()"
-              style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem;">기록
-              전체 삭제</button>
+        <section id="calc-history" class="history-section" style="display: none;">
+          <div class="history-header">
+            <h2><span>🕒</span> 최근 계산 기록</h2>
+            <button class="btn-clear-all" onclick="clearHistory()">기록 전체 삭제</button>
           </div>
-          <div id="history-list" class="history-list" style="display: flex; flex-direction: column; gap: 12px;">
+          <div id="history-list" class="history-list">
             <!-- 이력 항목이 여기에 동적으로 추가됨 -->
           </div>
         </section>

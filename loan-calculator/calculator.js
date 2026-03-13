@@ -379,17 +379,36 @@ function renderHistory() {
 
         return `
       <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
-        <div class="history-info">
-          <div class="history-title">대출 - ${detail}</div>
-          <div class="history-meta">${item.inputs.rate}% / ${item.methodLabel}${item.inputs.grace > 0 ? ` / 거치 ${item.inputs.grace}개월` : ''}</div>
+        <div class="history-main">
+          <div class="history-icon">💳</div>
+          <div class="history-content">
+            <div class="history-title">대출 - ${detail}</div>
+            <div class="history-tags">
+              <span class="history-tag">${item.inputs.rate}%</span>
+              <span class="history-tag">${item.methodLabel}</span>
+              ${item.inputs.grace > 0 ? `<span class="history-tag">거치 ${item.inputs.grace}개월</span>` : ''}
+            </div>
+          </div>
         </div>
-        <div class="history-result">
-          <span class="history-amount">${formatKRW(item.result)}원</span>
-          <span class="history-date">${dateStr}</span>
+        <div class="history-right" onclick="event.stopPropagation()">
+          <div class="history-result-box">
+            <span class="history-amount">${formatKRW(item.result)}원</span>
+            <span class="history-date">${dateStr}</span>
+          </div>
+          <button class="btn-delete-item" onclick="deleteHistoryItem(${item.timestamp})" title="삭제">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+          </button>
         </div>
       </div>
     `;
     }).join('');
+}
+
+function deleteHistoryItem(timestamp) {
+    if (confirm('이 기록을 삭제하시겠습니까?')) {
+        HistoryManager.remove('loan', timestamp);
+        renderHistory();
+    }
 }
 
 function loadHistoryItem(timestamp) {
@@ -400,8 +419,8 @@ function loadHistoryItem(timestamp) {
     document.getElementById('loan-amount').value = item.inputs.principal.toLocaleString();
     document.getElementById('loan-rate').value = item.inputs.rate;
     document.getElementById('loan-period').value = item.inputs.period;
-    document.getElementById('loan-grace').value = item.inputs.grace; // Load grace period
-    document.querySelector(`input[name="repayment-type"][value="${item.inputs.type}"]`).checked = true; // Load repayment type
+    document.getElementById('loan-grace').value = item.inputs.grace;
+    document.querySelector(`input[name="repayment-type"][value="${item.inputs.type}"]`).checked = true;
 
     // 힌트 갱신
     const hint = document.getElementById('loan-amount-hint');
@@ -410,18 +429,18 @@ function loadHistoryItem(timestamp) {
         hint.className = 'form-hint formatted';
     }
 
-    // 기간 힌트 갱신 (수동 트리거)
+    // 기간 힌트 갱신
     const periodInput = document.getElementById('loan-period');
     if (periodInput) {
-        const event = new Event('input', { bubbles: true });
-        periodInput.dispatchEvent(event);
+        periodInput.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
     calculate(true); // history 저장은 건너뜜
 
     // 결과 섹션으로 스크롤
     setTimeout(() => {
-        document.getElementById('result-loan').scrollIntoView({ behavior: 'smooth', block: 'center' }); // Changed to result-loan
+        const el = document.getElementById('result-loan');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
 }
 

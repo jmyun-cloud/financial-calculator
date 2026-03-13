@@ -368,24 +368,45 @@ function renderHistory() {
   list.innerHTML = history.map(item => {
     const date = new Date(item.timestamp);
     const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-    const label = item.subType === 'deposit' ? '예금' : '적금';
-    const detail = item.subType === 'deposit'
+    const isDeposit = item.subType === 'deposit';
+    const label = isDeposit ? '예금' : '적금';
+    const icon = isDeposit ? '🏦' : '💰';
+    const detail = isDeposit
       ? `${formatKRW(item.inputs.principal)}원 / ${item.inputs.period}개월`
       : `${formatKRW(item.inputs.monthly)}원 / ${item.inputs.period}개월`;
 
     return `
       <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
-        <div class="history-info">
-          <div class="history-title">${label} - ${detail}</div>
-          <div class="history-meta">${item.inputs.rate}% / ${item.interestLabel} / ${item.taxLabel}</div>
+        <div class="history-main">
+          <div class="history-icon">${icon}</div>
+          <div class="history-content">
+            <div class="history-title">${label} - ${detail}</div>
+            <div class="history-tags">
+              <span class="history-tag">${item.inputs.rate}%</span>
+              <span class="history-tag">${item.interestLabel}</span>
+              <span class="history-tag">${item.taxLabel}</span>
+            </div>
+          </div>
         </div>
-        <div class="history-result">
-          <span class="history-amount">${formatKRW(item.result)}원</span>
-          <span class="history-date">${dateStr}</span>
+        <div class="history-right" onclick="event.stopPropagation()">
+          <div class="history-result-box">
+            <span class="history-amount">${formatKRW(item.result)}원</span>
+            <span class="history-date">${dateStr}</span>
+          </div>
+          <button class="btn-delete-item" onclick="deleteHistoryItem(${item.timestamp})" title="삭제">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+          </button>
         </div>
       </div>
     `;
   }).join('');
+}
+
+function deleteHistoryItem(timestamp) {
+  if (confirm('이 기록을 삭제하시겠습니까?')) {
+    HistoryManager.remove('savings', timestamp);
+    renderHistory();
+  }
 }
 
 function loadHistoryItem(timestamp) {
@@ -430,7 +451,8 @@ function loadHistoryItem(timestamp) {
   // 결과 섹션으로 스크롤
   setTimeout(() => {
     const resultId = item.subType === 'deposit' ? 'result-deposit' : 'result-installment';
-    document.getElementById(resultId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const el = document.getElementById(resultId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 100);
 }
 
