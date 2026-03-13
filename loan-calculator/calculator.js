@@ -233,9 +233,10 @@ function buildScheduleWithGrace(P, r, n, grace, type) {
     return rows;
 }
 
-// ===== 메인 계산 함수 =====
-function calculateLoan() {
-    const principal = parseAmount(document.getElementById('loan-amount').value);
+// ===== 계산 실행 =====
+function calculate(skipHistory = false) {
+    const principalRaw = document.getElementById('loan-amount').value;
+    const principal = parseAmount(principalRaw);
     const rate = parseFloat(document.getElementById('loan-rate').value);
     const period = parseInt(document.getElementById('loan-period').value, 10);
     const grace = parseInt(document.getElementById('loan-grace').value, 10) || 0;
@@ -278,6 +279,17 @@ function calculateLoan() {
     showAll = false;
     renderScheduleTable(schedule, grace, false);
     document.getElementById('btn-show-all').textContent = '전체 보기';
+
+    // 이력 저장
+    if (!skipHistory && window.HistoryManager) {
+        const methodLabel = typeLabels[type]; // Use typeLabels for consistency
+        HistoryManager.save('loan', {
+            inputs: { principal, rate, period, grace, type }, // Save grace and type
+            result: totalPayment, // totalPayment is the total amount paid
+            methodLabel: methodLabel
+        });
+        renderHistory();
+    }
 }
 
 const typeLabels = { 'equal-installment': '원리금균등', 'equal-principal': '원금균등', 'bullet': '만기일시' };
@@ -327,7 +339,7 @@ function displayResult(principal, totalInterest, totalPayment, firstPayment, las
   `).join('');
 
     document.getElementById('result-loan').style.display = 'block';
-  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-loan');
+    if (typeof addSaveImageButton === 'function') addSaveImageButton('result-loan');
     document.getElementById('schedule-card').style.display = 'block';
     document.getElementById('result-loan').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -340,6 +352,82 @@ document.addEventListener('DOMContentLoaded', function () {
     setupPeriodHint();
 
     document.querySelectorAll('#calculator input').forEach(el => {
-        el.addEventListener('keydown', e => { if (e.key === 'Enter') calculateLoan(); });
+        el.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
     });
+
+    // 첫 화면 최근 기록 렌더링
+    if (typeof renderHistory === 'function') renderHistory();
 });
+
+// ===== 히스토리 기능 =====
+function renderHistory() {
+    if (!window.HistoryManager) return;
+    const history = HistoryManager.get('loan');
+    const container = document.getElementById('calc-history');
+    const list = document.getElementById('history-list');
+
+    if (!history || history.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'block';
+    list.innerHTML = history.map(item => {
+        const date = new Date(item.timestamp);
+        const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+        const detail = `${formatKRW(item.inputs.principal)}원 / ${item.inputs.period}개월`;
+
+        return `
+      <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
+        <div class="history-info">
+          <div class="history-title">대출 - ${detail}</div>
+          <div class="history-meta">${item.inputs.rate}% / ${item.methodLabel}${item.inputs.grace > 0 ? ` / 거치 ${item.inputs.grace}개월` : ''}</div>
+        </div>
+        <div class="history-result">
+          <span class="history-amount">${formatKRW(item.result)}원</span>
+          <span class="history-date">${dateStr}</span>
+        </div>
+      </div>
+    `;
+    }).join('');
+}
+
+function loadHistoryItem(timestamp) {
+    const history = HistoryManager.get('loan');
+    const item = history.find(h => h.timestamp === timestamp);
+    if (!item) return;
+
+    document.getElementById('loan-amount').value = item.inputs.principal.toLocaleString();
+    document.getElementById('loan-rate').value = item.inputs.rate;
+    document.getElementById('loan-period').value = item.inputs.period;
+    document.getElementById('loan-grace').value = item.inputs.grace; // Load grace period
+    document.querySelector(`input[name="repayment-type"][value="${item.inputs.type}"]`).checked = true; // Load repayment type
+
+    // 힌트 갱신
+    const hint = document.getElementById('loan-amount-hint');
+    if (hint) {
+        hint.textContent = getHumanReadable(item.inputs.principal);
+        hint.className = 'form-hint formatted';
+    }
+
+    // 기간 힌트 갱신 (수동 트리거)
+    const periodInput = document.getElementById('loan-period');
+    if (periodInput) {
+        const event = new Event('input', { bubbles: true });
+        periodInput.dispatchEvent(event);
+    }
+
+    calculate(true); // history 저장은 건너뜜
+
+    // 결과 섹션으로 스크롤
+    setTimeout(() => {
+        document.getElementById('result-loan').scrollIntoView({ behavior: 'smooth', block: 'center' }); // Changed to result-loan
+    }, 100);
+}
+
+function clearHistory() {
+    if (confirm('최근 계산 기록을 모두 삭제하시겠습니까?')) {
+        HistoryManager.clear('loan');
+        renderHistory();
+    }
+}

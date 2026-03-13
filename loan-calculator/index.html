@@ -240,7 +240,7 @@
             </div>
           </div>
 
-          <button class="calc-btn" id="btn-loan" onclick="calculateLoan()">
+          <button class="calc-btn" id="btn-loan" onclick="calculate()">
             <span class="btn-icon">⚡</span> 계산하기
           </button>
         </div>
@@ -268,6 +268,20 @@
             등에 따라 다를 수 있습니다.
           </div>
         </div>
+
+        <!-- 최근 계산 기록 -->
+        <section id="calc-history" class="history-section" style="display: none; margin-top: 32px;">
+          <div class="section-header"
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="font-size: 1.25rem; color: var(--text-primary); margin: 0;">🕒 최근 계산 기록</h2>
+            <button onclick="clearHistory()"
+              style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem;">기록
+              전체 삭제</button>
+          </div>
+          <div id="history-list" class="history-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- 이력 항목이 여기에 동적으로 추가됨 -->
+          </div>
+        </section>
 
         <!-- ===== AMORTIZATION SCHEDULE ===== -->
         <div class="schedule-card" id="schedule-card" style="display: none">
@@ -569,6 +583,7 @@
     </div>
   </footer>
 
+  <script src="../js/history-manager.js?v=1"></script>
   <script src="calculator.js?v=4"></script>
   <script src="../countup.js?v=4"></script>
   <script src="../toast.js?v=4"></script>

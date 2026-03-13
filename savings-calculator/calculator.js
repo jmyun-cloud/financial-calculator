@@ -151,7 +151,7 @@ function showError(inputId, message) {
 }
 
 // ===== 예금 계산 =====
-function calculateDeposit() {
+function calculateDeposit(skipHistory = false) {
   const principalRaw = parseAmount(document.getElementById('d-principal').value);
   const rate = parseFloat(document.getElementById('d-rate').value);
   const period = parseInt(document.getElementById('d-period').value, 10);
@@ -182,6 +182,17 @@ function calculateDeposit() {
   const netMaturity = principalRaw + netInterest;
 
   displayDepositResult(principalRaw, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType);
+
+  if (!skipHistory && window.HistoryManager) {
+    HistoryManager.save('savings', {
+      subType: 'deposit',
+      inputs: { principal: principalRaw, rate, period, interestType, taxType },
+      result: netMaturity,
+      interestLabel: interestType === 'simple' ? '단리' : '월복리',
+      taxLabel: taxType === 'exempt' ? '비과세' : taxType === 'preferred' ? '세금우대' : '일반과세'
+    });
+    renderHistory();
+  }
 }
 
 function displayDepositResult(principal, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType) {
@@ -229,7 +240,7 @@ function displayDepositResult(principal, grossInterest, taxAmount, netInterest, 
 }
 
 // ===== 적금 계산 =====
-function calculateInstallment() {
+function calculateInstallment(skipHistory = false) {
   const monthlyRaw = parseAmount(document.getElementById('i-monthly').value);
   const rate = parseFloat(document.getElementById('i-rate').value);
   const period = parseInt(document.getElementById('i-period').value, 10);
@@ -264,6 +275,17 @@ function calculateInstallment() {
   const netMaturity = totalPrincipal + netInterest;
 
   displayInstallmentResult(totalPrincipal, monthlyRaw, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType);
+
+  if (!skipHistory && window.HistoryManager) {
+    HistoryManager.save('savings', {
+      subType: 'installment',
+      inputs: { monthly: monthlyRaw, rate, period, interestType, taxType },
+      result: netMaturity,
+      interestLabel: interestType === 'simple' ? '단리' : '월복리',
+      taxLabel: taxType === 'exempt' ? '비과세' : taxType === 'preferred' ? '세금우대' : '일반과세'
+    });
+    renderHistory();
+  }
 }
 
 function displayInstallmentResult(totalPrincipal, monthly, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType) {
@@ -326,4 +348,95 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('panel-installment').querySelectorAll('input').forEach(el => {
     el.addEventListener('keydown', e => { if (e.key === 'Enter') calculateInstallment(); });
   });
+
+  renderHistory();
 });
+
+// ===== 히스토리 기능 =====
+function renderHistory() {
+  if (!window.HistoryManager) return;
+  const history = HistoryManager.get('savings');
+  const container = document.getElementById('calc-history');
+  const list = document.getElementById('history-list');
+
+  if (!history || history.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  list.innerHTML = history.map(item => {
+    const date = new Date(item.timestamp);
+    const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+    const label = item.subType === 'deposit' ? '예금' : '적금';
+    const detail = item.subType === 'deposit'
+      ? `${formatKRW(item.inputs.principal)}원 / ${item.inputs.period}개월`
+      : `${formatKRW(item.inputs.monthly)}원 / ${item.inputs.period}개월`;
+
+    return `
+      <div class="history-item" onclick="loadHistoryItem(${item.timestamp})">
+        <div class="history-info">
+          <div class="history-title">${label} - ${detail}</div>
+          <div class="history-meta">${item.inputs.rate}% / ${item.interestLabel} / ${item.taxLabel}</div>
+        </div>
+        <div class="history-result">
+          <span class="history-amount">${formatKRW(item.result)}원</span>
+          <span class="history-date">${dateStr}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function loadHistoryItem(timestamp) {
+  const history = HistoryManager.get('savings');
+  const item = history.find(h => h.timestamp === timestamp);
+  if (!item) return;
+
+  if (item.subType === 'deposit') {
+    switchTab('deposit');
+    document.getElementById('d-principal').value = item.inputs.principal.toLocaleString();
+    document.getElementById('d-rate').value = item.inputs.rate;
+    document.getElementById('d-period').value = item.inputs.period;
+    document.querySelector(`input[name="d-interest-type"][value="${item.inputs.interestType}"]`).checked = true;
+    document.querySelector(`input[name="d-tax-type"][value="${item.inputs.taxType}"]`).checked = true;
+
+    // 힌트 갱신
+    const hint = document.getElementById('d-principal-hint');
+    if (hint) {
+      hint.textContent = getHumanReadable(item.inputs.principal);
+      hint.className = 'form-hint formatted';
+    }
+
+    calculateDeposit(true); // history 저장은 건너뜀
+  } else {
+    switchTab('installment');
+    document.getElementById('i-monthly').value = item.inputs.monthly.toLocaleString();
+    document.getElementById('i-rate').value = item.inputs.rate;
+    document.getElementById('i-period').value = item.inputs.period;
+    document.querySelector(`input[name="i-interest-type"][value="${item.inputs.interestType}"]`).checked = true;
+    document.querySelector(`input[name="i-tax-type"][value="${item.inputs.taxType}"]`).checked = true;
+
+    // 힌트 갱신
+    const hint = document.getElementById('i-monthly-hint');
+    if (hint) {
+      hint.textContent = getHumanReadable(item.inputs.monthly);
+      hint.className = 'form-hint formatted';
+    }
+
+    calculateInstallment(true);
+  }
+
+  // 결과 섹션으로 스크롤
+  setTimeout(() => {
+    const resultId = item.subType === 'deposit' ? 'result-deposit' : 'result-installment';
+    document.getElementById(resultId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function clearHistory() {
+  if (confirm('최근 계산 기록을 모두 삭제하시겠습니까?')) {
+    HistoryManager.clear('savings');
+    renderHistory();
+  }
+}
