@@ -52,6 +52,11 @@
       border-color: #1a56e8 !important;
       color: #1a56e8 !important;
     }
+
+    /* 결과 타이틀과 하단 박스 간격 조정 */
+    .result-title {
+      margin-bottom: 24px !important;
+    }
   `;
   document.head.appendChild(style);
 
