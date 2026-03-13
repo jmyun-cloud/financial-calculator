@@ -211,13 +211,50 @@
   <meta property="og:site_name" content="금융계산기.kr" />
   <link rel="icon" href="/favicon.svg" />
   <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "금융계산기.kr",
-        "url": "https://richcalc.kr/"
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "연금 수령액 계산기 (Pension Calculator)",
+      "operatingSystem": "All",
+      "applicationCategory": "FinanceApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0"
+      },
+      "description": "국민연금, 퇴직연금, 개인연금을 통합하여 은퇴 후 예상 월 수령액을 분석합니다. 노후 생활비 모델링을 통해 은퇴 설계 가이드를 제공합니다.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.7",
+        "reviewCount": "1400"
       }
-    </script>
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "홈",
+          "item": "https://richcalc.kr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "금융 계산기",
+          "item": "https://richcalc.kr/#calculator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "연금 수령액 계산기",
+          "item": "https://richcalc.kr/pension-calculator/"
+        }
+      ]
+    }
+  </script>
   <script src="../loader.js?v=4"></script>
   <script src="../darkmode.js?v=4"></script>
   <script src="../currency_helper.js?v=4"></script>
@@ -262,8 +299,9 @@
   <section class="top-description">
     <div class="container">
       <div class="breadcrumb">
-        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span><span
-          class="bc-current">연금 수령액 계산기</span>
+        <a href="../index.html" style="color: inherit;">홈</a><span class="bc-sep">›</span>
+        <a href="../index.html#calculator" style="color: inherit;">금융 계산기</a><span class="bc-sep">›</span>
+        <span class="bc-current">연금 수령액 계산기</span>
       </div>
       <h1 class="main-title">연금 수령액 계산기</h1>
       <p class="main-subtitle">

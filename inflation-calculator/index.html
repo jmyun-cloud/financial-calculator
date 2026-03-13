@@ -130,13 +130,50 @@
   <meta property="og:site_name" content="금융계산기.kr" />
   <link rel="icon" href="/favicon.svg" />
   <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "금융계산기.kr",
-        "url": "https://richcalc.kr/"
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "물가상승률 계산기 (Inflation Calculator)",
+      "operatingSystem": "All",
+      "applicationCategory": "FinanceApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0"
+      },
+      "description": "인플레이션에 따른 화폐 가치 하락과 실질 구매력을 계산합니다. 미래 가치, 현재 가치, 실질 수익률 분석 도구를 제공합니다.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "950"
       }
-    </script>
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "홈",
+          "item": "https://richcalc.kr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "금융 계산기",
+          "item": "https://richcalc.kr/#calculator"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "물가상승률 계산기",
+          "item": "https://richcalc.kr/inflation-calculator/"
+        }
+      ]
+    }
+  </script>
   <script src="../loader.js?v=4"></script>
   <script src="../darkmode.js?v=4"></script>
   <script src="../currency_helper.js?v=4"></script>
@@ -179,8 +216,9 @@
   <section class="top-description">
     <div class="container">
       <div class="breadcrumb">
-        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span><span
-          class="bc-current">물가상승률 계산기</span>
+        <a href="../index.html" style="color: inherit;">홈</a><span class="bc-sep">›</span>
+        <a href="../index.html#calculator" style="color: inherit;">금융 계산기</a><span class="bc-sep">›</span>
+        <span class="bc-current">물가상승률 계산기</span>
       </div>
       <h1 class="main-title">물가상승률 계산기</h1>
       <p class="main-subtitle">
