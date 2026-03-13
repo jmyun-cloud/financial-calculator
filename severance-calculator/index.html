@@ -1,307 +1,284 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta
-      name="naver-site-verification"
-      content="a06011ac826bc5ab12896ed43961cb7960df04ed"
-    />
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
 
-      gtag("config", "G-B1TE1JHHE3");
-    </script>
+<head>
+  <meta name="naver-site-verification" content="a06011ac826bc5ab12896ed43961cb7960df04ed" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B1TE1JHHE3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      퇴직금 계산기 2026 - 퇴직소득세·DB/DC형 비교 자동 계산 | 금융계산기
-    </title>
-    <meta
-      name="description"
-      content="2026년 기준 퇴직금 계산기. 근속기간과 평균임금 입력으로 퇴직금·퇴직소득세·실수령액을 자동 계산합니다. DB형·DC형 퇴직연금 비교도 지원합니다."
-    />
-    <meta
-      name="keywords"
-      content="퇴직금 계산기, 퇴직소득세 계산기, 퇴직금 실수령액, DB형 DC형 비교, 2026 퇴직금, 평균임금 계산"
-    />
-    <meta
-      property="og:title"
-      content="2026 퇴직금 계산기 - 퇴직소득세·실수령액 자동 계산"
-    />
-    <meta
-      property="og:description"
-      content="근속기간·평균임금 입력으로 퇴직금과 퇴직소득세를 자동 계산합니다. DB/DC형 퇴직연금 비교도 지원합니다."
-    />
-    <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js?v=4"></script>
-    <link rel="stylesheet" href="../savings-calculator/style.css?v=4" />
-    <style>
-      :root {
-        --primary: #d97706;
-        --primary-dark: #b45309;
-        --primary-light: #fffbeb;
-        --primary-mid: #fef3c7;
-      }
+    gtag("config", "G-B1TE1JHHE3");
+  </script>
 
-      .top-description {
-        background: linear-gradient(
-          135deg,
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    퇴직금 계산기 2026 - 퇴직소득세·DB/DC형 비교 자동 계산 | 금융계산기
+  </title>
+  <meta name="description"
+    content="2026년 기준 퇴직금 계산기. 근속기간과 평균임금 입력으로 퇴직금·퇴직소득세·실수령액을 자동 계산합니다. DB형·DC형 퇴직연금 비교도 지원합니다." />
+  <meta name="keywords" content="퇴직금 계산기, 퇴직소득세 계산기, 퇴직금 실수령액, DB형 DC형 비교, 2026 퇴직금, 평균임금 계산" />
+  <meta property="og:title" content="2026 퇴직금 계산기 - 퇴직소득세·실수령액 자동 계산" />
+  <meta property="og:description" content="근속기간·평균임금 입력으로 퇴직금과 퇴직소득세를 자동 계산합니다. DB/DC형 퇴직연금 비교도 지원합니다." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js?v=4"></script>
+  <link rel="stylesheet" href="../savings-calculator/style.css?v=4" />
+  <style>
+    :root {
+      --primary: #d97706;
+      --primary-dark: #b45309;
+      --primary-light: #fffbeb;
+      --primary-mid: #fef3c7;
+    }
+
+    .top-description {
+      background: linear-gradient(135deg,
           #d97706 0%,
           #b45309 50%,
-          #92400e 100%
-        );
-      }
+          #92400e 100%);
+    }
 
-      .calc-btn {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
-      }
+    .calc-btn {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+    }
 
-      .calc-btn:hover {
-        box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5);
-      }
+    .calc-btn:hover {
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5);
+    }
 
-      .result-card {
-        border-color: #d97706;
-      }
+    .result-card {
+      border-color: #d97706;
+    }
 
-      .result-summary-box {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-      }
+    .result-summary-box {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
 
-      .info-section > h2 {
-        border-bottom-color: #d97706;
-      }
+    .info-section>h2 {
+      border-bottom-color: #d97706;
+    }
 
-      .faq-item summary::after {
-        color: #d97706;
-      }
+    .faq-item summary::after {
+      color: #d97706;
+    }
 
-      .faq-item summary:hover {
-        background: var(--primary-light);
-      }
+    .faq-item summary:hover {
+      background: var(--primary-light);
+    }
 
-      .sidebar-link:hover,
-      .sidebar-link.active-link {
-        background: var(--primary-light);
-        color: #d97706;
-        border-color: rgba(217, 119, 6, 0.2);
-      }
+    .sidebar-link:hover,
+    .sidebar-link.active-link {
+      background: var(--primary-light);
+      color: #d97706;
+      border-color: rgba(217, 119, 6, 0.2);
+    }
 
-      .nav-link:hover,
-      .nav-link.active {
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .form-input:focus {
-        border-color: #d97706;
-        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
-      }
+    .form-input:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+    }
 
-      .radio-label:hover {
-        border-color: #d97706;
-        color: #d97706;
-        background: var(--primary-light);
-      }
+    .radio-label:hover {
+      border-color: #d97706;
+      color: #d97706;
+      background: var(--primary-light);
+    }
 
-      .radio-label:has(input:checked) {
-        border-color: #d97706;
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .radio-label:has(input:checked) {
+      border-color: #d97706;
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .radio-label:has(input:checked) .radio-custom {
-        border-color: #d97706;
-        background: #d97706;
-      }
+    .radio-label:has(input:checked) .radio-custom {
+      border-color: #d97706;
+      background: #d97706;
+    }
 
-      .result-item-value.accent {
-        color: #d97706;
-      }
+    .result-item-value.accent {
+      color: #d97706;
+    }
 
-      .result-item-value.large {
-        color: #b45309;
-      }
+    .result-item-value.large {
+      color: #b45309;
+    }
 
-      .tab-btn.active {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
-      }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+    }
 
-      .tab-btn:not(.active):hover {
-        background: var(--primary-light);
-        color: #d97706;
-      }
+    .tab-btn:not(.active):hover {
+      background: var(--primary-light);
+      color: #d97706;
+    }
 
-      .widget-title {
-        border-bottom-color: var(--primary-light);
-      }
+    .widget-title {
+      border-bottom-color: var(--primary-light);
+    }
 
-      /* 퇴직금 특화 */
-      .sev-result-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-        margin-bottom: 20px;
-      }
+    /* 퇴직금 특화 */
+    .sev-result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+    }
 
-      .sev-result-table th,
-      .sev-result-table td {
-        padding: 10px 14px;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-      }
+    .sev-result-table th,
+    .sev-result-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
 
-      .sev-result-table th {
-        background: var(--surface-2);
-        font-weight: 700;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-        text-transform: uppercase;
-      }
+    .sev-result-table th {
+      background: var(--surface-2);
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
 
-      .sev-result-table tr:last-child td {
-        border-bottom: none;
-      }
+    .sev-result-table tr:last-child td {
+      border-bottom: none;
+    }
 
-      .sev-amount {
-        font-weight: 700;
-        text-align: right;
-      }
+    .sev-amount {
+      font-weight: 700;
+      text-align: right;
+    }
 
-      .sev-amount.plus {
-        color: var(--success);
-      }
+    .sev-amount.plus {
+      color: var(--success);
+    }
 
-      .sev-amount.minus {
-        color: var(--danger);
-      }
+    .sev-amount.minus {
+      color: var(--danger);
+    }
 
-      .sev-amount.main {
-        color: #d97706;
-        font-size: 1.05rem;
-      }
+    .sev-amount.main {
+      color: #d97706;
+      font-size: 1.05rem;
+    }
 
-      .sev-total-row td {
-        background: #fffbeb;
-        font-weight: 700;
-        border-top: 2px solid #fcd34d;
-      }
+    .sev-total-row td {
+      background: #fffbeb;
+      font-weight: 700;
+      border-top: 2px solid #fcd34d;
+    }
 
-      .sev-final-row td {
-        background: var(--primary-light);
-        font-weight: 700;
-        color: #b45309;
-        border-top: 2px solid #d97706;
-      }
+    .sev-final-row td {
+      background: var(--primary-light);
+      font-weight: 700;
+      color: #b45309;
+      border-top: 2px solid #d97706;
+    }
 
-      .sev-final-row .sev-amount {
-        font-size: 1.05rem;
-        color: #b45309;
-      }
+    .sev-final-row .sev-amount {
+      font-size: 1.05rem;
+      color: #b45309;
+    }
 
-      /* 연도 비교 바 */
-      .compare-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 20px;
-      }
+    /* 연도 비교 바 */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
 
-      .compare-card {
-        background: var(--surface-2);
-        border: 2px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 20px;
-        text-align: center;
-        transition: all 0.25s;
-      }
+    .compare-card {
+      background: var(--surface-2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      transition: all 0.25s;
+    }
 
-      .compare-card.winner {
-        border-color: #d97706;
-        background: var(--primary-light);
-      }
+    .compare-card.winner {
+      border-color: #d97706;
+      background: var(--primary-light);
+    }
 
-      .compare-card-label {
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
+    .compare-card-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
 
-      .compare-card-amount {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-      }
+    .compare-card-amount {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
 
-      .compare-card.winner .compare-card-amount {
-        color: #b45309;
-      }
+    .compare-card.winner .compare-card-amount {
+      color: #b45309;
+    }
 
-      .compare-card-sub {
-        font-size: 0.78rem;
-        color: var(--text-muted);
-      }
+    .compare-card-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
 
-      .winner-badge {
-        display: inline-block;
-        background: #d97706;
-        color: white;
-        font-size: 0.7rem;
-        font-weight: 700;
-        padding: 2px 10px;
-        border-radius: 100px;
-        margin-top: 8px;
-      }
+    .winner-badge {
+      display: inline-block;
+      background: #d97706;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 100px;
+      margin-top: 8px;
+    }
 
-      .year-badge {
-        display: inline-flex;
-        align-items: center;
-        background: rgba(217, 119, 6, 0.15);
-        border: 1px solid rgba(217, 119, 6, 0.3);
-        color: #d97706;
-        padding: 3px 10px;
-        border-radius: 100px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        margin-left: 8px;
-      }
+    .year-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(217, 119, 6, 0.15);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: #d97706;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
 
-      /* 날짜 입력 */
-      input[type="date"].form-input {
-        padding: 12px 16px;
-        cursor: pointer;
-      }
-    </style>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
-      crossorigin="anonymous"
-    ></script>
+    /* 날짜 입력 */
+    input[type="date"].form-input {
+      padding: 12px 16px;
+      cursor: pointer;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
+    crossorigin="anonymous"></script>
 
-    <!-- SEO & Favicon for Google Search -->
-    <meta property="og:site_name" content="금융계산기.kr" />
-    <link rel="icon" href="/favicon.svg" />
-    <script type="application/ld+json">
+  <!-- SEO & Favicon for Google Search -->
+  <meta property="og:site_name" content="금융계산기.kr" />
+  <link rel="icon" href="/favicon.svg" />
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -309,725 +286,635 @@
         "url": "https://richcalc.kr/"
       }
     </script>
-    <script src="../loader.js?v=4"></script>
-    <script src="../darkmode.js?v=4"></script>
-    <script src="../currency_helper.js?v=4"></script>
-      <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#1a56e8" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="금융계산기" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js').catch(function(err) {
-            console.log('SW registration failed: ', err);
-          });
+  <script src="../loader.js?v=4"></script>
+  <script src="../darkmode.js?v=4"></script>
+  <script src="../currency_helper.js?v=4"></script>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1a56e8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="금융계산기" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function (err) {
+          console.log('SW registration failed: ', err);
         });
-      }
-    </script>
-  </head>
+      });
+    }
+  </script>
+</head>
 
-  <body>
-    <!-- ===== HEADER ===== -->
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="../index.html" class="logo">
-          <span class="logo-icon">💰</span>
-          <span class="logo-text"
-            >금융계산기<span class="logo-accent">.kr</span></span
-          >
-        </a>
-        <nav class="header-nav">
-          <a href="../index.html" class="nav-link">🏠 홈</a>
-          <a href="#calculator" class="nav-link active">퇴직금 계산기</a>
-          <a href="#bottom-info" class="nav-link">계산 방법</a>
-          <a href="#faq" class="nav-link">FAQ</a>
-        </nav>
-      </div>
-    </header>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html" class="nav-link">🏠 홈</a>
+        <a href="#calculator" class="nav-link active">퇴직금 계산기</a>
+        <a href="#bottom-info" class="nav-link">계산 방법</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+    </div>
+  </header>
 
-    <!-- ===== TOP AD ===== -->
-    <div class="ad-banner-top">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
-        </div>
+  <!-- ===== TOP AD ===== -->
+  <div class="ad-banner-top">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
       </div>
     </div>
+  </div>
 
-    <!-- ===== TOP DESCRIPTION ===== -->
-    <section class="top-description">
-      <div class="container">
-        <div class="breadcrumb">
-          <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span
-          ><span class="bc-sep">›</span>
-          <span class="bc-current">퇴직금 계산기</span>
-        </div>
-        <h1 class="main-title">
-          퇴직금 계산기
-          <span style="font-size: 1.2rem; opacity: 0.8">2026</span>
-        </h1>
-        <p class="main-subtitle">
-          근속기간과 평균임금 입력으로
-          <strong>퇴직금·퇴직소득세·실수령액</strong>을 자동 계산합니다.
-          DB형/DC형 퇴직연금 비교도 지원합니다.
-        </p>
-        <div class="top-desc-tags">
-          <span class="tag">✓ 2026년 퇴직소득세</span>
-          <span class="tag">✓ 근속연수공제 자동 계산</span>
-          <span class="tag">✓ DB형 / DC형 비교</span>
-          <span class="tag">✓ 실수령액 산출</span>
-          <span class="tag">✓ 무료 사용</span>
-        </div>
+  <!-- ===== TOP DESCRIPTION ===== -->
+  <section class="top-description">
+    <div class="container">
+      <div class="breadcrumb">
+        <span>홈</span><span class="bc-sep">›</span><span>금융 계산기</span><span class="bc-sep">›</span>
+        <span class="bc-current">퇴직금 계산기</span>
       </div>
-    </section>
+      <h1 class="main-title">
+        퇴직금 계산기
+        <span style="font-size: 1.2rem; opacity: 0.8">2026</span>
+      </h1>
+      <p class="main-subtitle">
+        근속기간과 평균임금 입력으로
+        <strong>퇴직금·퇴직소득세·실수령액</strong>을 자동 계산합니다.
+        DB형/DC형 퇴직연금 비교도 지원합니다.
+      </p>
+      <div class="top-desc-tags">
+        <span class="tag">✓ 2026년 퇴직소득세</span>
+        <span class="tag">✓ 근속연수공제 자동 계산</span>
+        <span class="tag">✓ DB형 / DC형 비교</span>
+        <span class="tag">✓ 실수령액 산출</span>
+        <span class="tag">✓ 무료 사용</span>
+      </div>
+    </div>
+  </section>
 
-    <!-- ===== MAIN ===== -->
-    <main class="main-content">
-      <div class="container content-grid">
-        <!-- ===== CALCULATOR ===== -->
-        <section class="calculator-section" id="calculator">
-          <div class="tab-switcher" role="tablist">
-            <button
-              class="tab-btn active"
-              id="tab-basic"
-              role="tab"
-              onclick="switchTab('basic')"
-            >
-              💼 퇴직금 계산
-            </button>
-            <button
-              class="tab-btn"
-              id="tab-pension"
-              role="tab"
-              onclick="switchTab('pension')"
-            >
-              📊 DB형 vs DC형 비교
+  <!-- ===== MAIN ===== -->
+  <main class="main-content">
+    <div class="container content-grid">
+      <!-- ===== CALCULATOR ===== -->
+      <section class="calculator-section" id="calculator">
+        <div class="tab-switcher" role="tablist">
+          <button class="tab-btn active" id="tab-basic" role="tab" onclick="switchTab('basic')">
+            💼 퇴직금 계산
+          </button>
+          <button class="tab-btn" id="tab-pension" role="tab" onclick="switchTab('pension')">
+            📊 DB형 vs DC형 비교
+          </button>
+        </div>
+
+        <!-- ===== 탭 1: 퇴직금 계산 ===== -->
+        <div class="tab-panel active" id="panel-basic">
+          <div class="calc-card">
+            <h2 class="calc-card-title">
+              퇴직금 계산 <span class="year-badge">2026 기준</span>
+            </h2>
+            <p class="calc-card-desc">
+              입사일·퇴직일과 최근 3개월 급여를 입력하면
+              <strong>퇴직금 및 퇴직소득세</strong>를 자동 계산합니다.
+            </p>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="b-join">입사일</label>
+                <div class="input-wrap">
+                  <input type="date" id="b-join" class="form-input" />
+                </div>
+                <span class="form-hint" id="b-join-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="b-retire">퇴직일</label>
+                <div class="input-wrap">
+                  <input type="date" id="b-retire" class="form-input" />
+                </div>
+                <span class="form-hint" id="b-tenure-hint"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="b-wage1">최근 1개월 임금총액</label>
+                <div class="input-wrap">
+                  <input type="text" id="b-wage1" class="form-input" placeholder="4,000,000" inputmode="numeric" />
+                  <span class="input-unit">원</span>
+                </div>
+                <span class="form-hint" id="b-wage1-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="b-wage2">최근 2개월 임금총액</label>
+                <div class="input-wrap">
+                  <input type="text" id="b-wage2" class="form-input" placeholder="4,000,000" inputmode="numeric" />
+                  <span class="input-unit">원</span>
+                </div>
+                <span class="form-hint" id="b-wage2-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="b-wage3">최근 3개월 임금총액</label>
+                <div class="input-wrap">
+                  <input type="text" id="b-wage3" class="form-input" placeholder="4,000,000" inputmode="numeric" />
+                  <span class="input-unit">원</span>
+                </div>
+                <span class="form-hint" id="b-wage3-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="b-bonus">연간 상여금 · 연차수당</label>
+                <div class="input-wrap">
+                  <input type="text" id="b-bonus" class="form-input" placeholder="5,000,000" inputmode="numeric" />
+                  <span class="input-unit">원/년</span>
+                </div>
+                <span class="form-hint">평균임금에 1/12 반영</span>
+              </div>
+            </div>
+
+            <button class="calc-btn" onclick="calculateSeverance()">
+              <span class="btn-icon">⚡</span> 퇴직금 계산하기
             </button>
           </div>
 
-          <!-- ===== 탭 1: 퇴직금 계산 ===== -->
-          <div class="tab-panel active" id="panel-basic">
-            <div class="calc-card">
-              <h2 class="calc-card-title">
-                퇴직금 계산 <span class="year-badge">2026 기준</span>
-              </h2>
-              <p class="calc-card-desc">
-                입사일·퇴직일과 최근 3개월 급여를 입력하면
-                <strong>퇴직금 및 퇴직소득세</strong>를 자동 계산합니다.
-              </p>
+          <!-- 결과 -->
+          <div class="result-card" id="result-basic" style="display: none">
+            <h3 class="result-title">💼 퇴직금 계산 결과</h3>
+            <div class="result-summary-box" id="result-basic-summary"></div>
 
-              <div class="form-grid">
-                <div class="form-group">
-                  <label class="form-label" for="b-join">입사일</label>
-                  <div class="input-wrap">
-                    <input type="date" id="b-join" class="form-input" />
-                  </div>
-                  <span class="form-hint" id="b-join-hint"></span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="b-retire">퇴직일</label>
-                  <div class="input-wrap">
-                    <input type="date" id="b-retire" class="form-input" />
-                  </div>
-                  <span class="form-hint" id="b-tenure-hint"></span>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="b-wage1"
-                    >최근 1개월 임금총액</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="b-wage1"
-                      class="form-input"
-                      placeholder="4,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원</span>
-                  </div>
-                  <span class="form-hint" id="b-wage1-hint"></span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="b-wage2"
-                    >최근 2개월 임금총액</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="b-wage2"
-                      class="form-input"
-                      placeholder="4,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원</span>
-                  </div>
-                  <span class="form-hint" id="b-wage2-hint"></span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="b-wage3"
-                    >최근 3개월 임금총액</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="b-wage3"
-                      class="form-input"
-                      placeholder="4,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원</span>
-                  </div>
-                  <span class="form-hint" id="b-wage3-hint"></span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="b-bonus"
-                    >연간 상여금 · 연차수당</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="b-bonus"
-                      class="form-input"
-                      placeholder="5,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원/년</span>
-                  </div>
-                  <span class="form-hint">평균임금에 1/12 반영</span>
-                </div>
-              </div>
-
-              <button class="calc-btn" onclick="calculateSeverance()">
-                <span class="btn-icon">⚡</span> 퇴직금 계산하기
-              </button>
-            </div>
-
-            <!-- 결과 -->
-            <div class="result-card" id="result-basic" style="display: none">
-              <h3 class="result-title">💼 퇴직금 계산 결과</h3>
-              <div class="result-summary-box" id="result-basic-summary"></div>
-
-              <h4
-                style="
+            <h4 style="
                   font-size: 0.95rem;
                   font-weight: 700;
                   margin: 20px 0 12px;
                   color: var(--text-primary);
-                "
-              >
-                📋 퇴직소득세 계산 내역
-              </h4>
-              <table class="sev-result-table" id="sev-detail-table"></table>
+                ">
+              📋 퇴직소득세 계산 내역
+            </h4>
+            <table class="sev-result-table" id="sev-detail-table"></table>
 
-              <div class="chart-wrap" id="sev-chart-wrap">
-                <canvas id="chart-sev" width="220" height="220"></canvas>
-                <div class="chart-legend" id="legend-sev"></div>
-              </div>
+            <div class="chart-wrap" id="sev-chart-wrap">
+              <canvas id="chart-sev" width="220" height="220"></canvas>
+              <div class="chart-legend" id="legend-sev"></div>
+            </div>
 
-              <div class="result-notice">
-                ※ 본 계산기는 2026년 퇴직소득세 기준으로 근사 계산합니다. 실제
-                세액은 연말정산 결과·연금 수령 방식·퇴직금 중간精산 이력에 따라
-                다를 수 있으며, 정확한 금액은 국세청 또는 세무전문가에게
-                确認하시기 바랍니다.
-              </div>
+            <div class="result-notice">
+              ※ 본 계산기는 2026년 퇴직소득세 기준으로 근사 계산합니다. 실제
+              세액은 연말정산 결과·연금 수령 방식·퇴직금 중간精산 이력에 따라
+              다를 수 있으며, 정확한 금액은 국세청 또는 세무전문가에게
+              确認하시기 바랍니다.
             </div>
           </div>
+        </div>
 
-          <!-- ===== 탭 2: DB형 vs DC형 비교 ===== -->
-          <div class="tab-panel" id="panel-pension">
-            <div class="calc-card">
-              <h2 class="calc-card-title">
-                DB형 vs DC형 퇴직연금 비교 <span class="year-badge">2026</span>
-              </h2>
-              <p class="calc-card-desc">
-                퇴직 시점 예상 급여와 현재 급여를 입력하여
-                <strong>어느 유형이 더 유리한지</strong> 비교합니다.
-              </p>
+        <!-- ===== 탭 2: DB형 vs DC형 비교 ===== -->
+        <div class="tab-panel" id="panel-pension">
+          <div class="calc-card">
+            <h2 class="calc-card-title">
+              DB형 vs DC형 퇴직연금 비교 <span class="year-badge">2026</span>
+            </h2>
+            <p class="calc-card-desc">
+              퇴직 시점 예상 급여와 현재 급여를 입력하여
+              <strong>어느 유형이 더 유리한지</strong> 비교합니다.
+            </p>
 
-              <div class="form-grid">
-                <div class="form-group">
-                  <label class="form-label" for="p-current-monthly"
-                    >현재 월 기본급</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="p-current-monthly"
-                      class="form-input"
-                      placeholder="4,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원</span>
-                  </div>
-                  <span class="form-hint" id="p-current-hint"></span>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="p-current-monthly">현재 월 기본급</label>
+                <div class="input-wrap">
+                  <input type="text" id="p-current-monthly" class="form-input" placeholder="4,000,000"
+                    inputmode="numeric" />
+                  <span class="input-unit">원</span>
                 </div>
-                <div class="form-group">
-                  <label class="form-label" for="p-retire-monthly"
-                    >퇴직 예상 월 기본급</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="text"
-                      id="p-retire-monthly"
-                      class="form-input"
-                      placeholder="6,000,000"
-                      inputmode="numeric"
-                    />
-                    <span class="input-unit">원</span>
-                  </div>
-                  <span class="form-hint" id="p-retire-hint"></span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="p-years">예상 근속연수</label>
-                  <div class="input-wrap">
-                    <input
-                      type="number"
-                      id="p-years"
-                      class="form-input"
-                      placeholder="20"
-                      min="1"
-                      max="50"
-                      step="1"
-                    />
-                    <span class="input-unit">년</span>
-                  </div>
-                  <span class="form-hint">전체 근속 예상 기간</span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="p-dc-rate"
-                    >DC형 운용 수익률 (연)</label
-                  >
-                  <div class="input-wrap">
-                    <input
-                      type="number"
-                      id="p-dc-rate"
-                      class="form-input"
-                      placeholder="3.0"
-                      min="0"
-                      max="20"
-                      step="0.1"
-                      value="3.0"
-                    />
-                    <span class="input-unit">%</span>
-                  </div>
-                  <span class="form-hint">DC형은 투자 수익률에 따라 변동</span>
-                </div>
+                <span class="form-hint" id="p-current-hint"></span>
               </div>
-
-              <button class="calc-btn" onclick="comparePension()">
-                <span class="btn-icon">⚡</span> 비교 계산하기
-              </button>
-            </div>
-
-            <div class="result-card" id="result-pension" style="display: none">
-              <h3 class="result-title">📊 DB형 vs DC형 비교 결과</h3>
-              <div class="compare-grid" id="compare-grid"></div>
-              <div class="result-grid" id="result-pension-grid"></div>
-              <div class="result-notice">
-                ※ DB형은 최종 급여 기준으로 확정, DC형은 적립금 운용 성과에 따라
-                달라집니다. 임금 상승률이 높거나 안정적 직장이라면 DB형이 유리한
-                경우가 많습니다.
+              <div class="form-group">
+                <label class="form-label" for="p-retire-monthly">퇴직 예상 월 기본급</label>
+                <div class="input-wrap">
+                  <input type="text" id="p-retire-monthly" class="form-input" placeholder="6,000,000"
+                    inputmode="numeric" />
+                  <span class="input-unit">원</span>
+                </div>
+                <span class="form-hint" id="p-retire-hint"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="p-years">예상 근속연수</label>
+                <div class="input-wrap">
+                  <input type="number" id="p-years" class="form-input" placeholder="20" min="1" max="50" step="1" />
+                  <span class="input-unit">년</span>
+                </div>
+                <span class="form-hint">전체 근속 예상 기간</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="p-dc-rate">DC형 운용 수익률 (연)</label>
+                <div class="input-wrap">
+                  <input type="number" id="p-dc-rate" class="form-input" placeholder="3.0" min="0" max="20" step="0.1"
+                    value="3.0" />
+                  <span class="input-unit">%</span>
+                </div>
+                <span class="form-hint">DC형은 투자 수익률에 따라 변동</span>
               </div>
             </div>
-          </div>
-        </section>
 
-        <!-- ===== SIDEBAR ===== -->
-        <aside class="sidebar">
-          <div class="ad-slot ad-slot--sidebar">
-            <span class="ad-placeholder-text">광고</span>
+            <button class="calc-btn" onclick="comparePension()">
+              <span class="btn-icon">⚡</span> 비교 계산하기
+            </button>
           </div>
 
-          <nav class="sidebar-widget" aria-label="다른 금융 계산기">
-            <h2 class="widget-title">🔗 다른 금융 계산기</h2>
-            <ul class="sidebar-links">
-              <li>
-                <a href="../index.html" class="sidebar-link"
-                  ><span class="link-icon">🏠</span>
-                  <div class="link-info">
-                    <strong>전체 계산기 홈</strong
-                    ><small>금융계산기.kr 메인</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="sidebar-link active-link"
-                  ><span class="link-icon">📦</span>
-                  <div class="link-info">
-                    <strong>퇴직금 계산기</strong><small>현재 페이지</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../salary-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">💼</span>
-                  <div class="link-info">
-                    <strong>연봉 계산기</strong
-                    ><small>월 실수령액·4대보험</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../savings-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏦</span>
-                  <div class="link-info">
-                    <strong>예적금 만기 계산기</strong
-                    ><small>예금·적금 수령액 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../loan-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏠</span>
-                  <div class="link-info">
-                    <strong>대출 이자 계산기</strong
-                    ><small>원리금균등·원금균등</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../compound-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">📈</span>
-                  <div class="link-info">
-                    <strong>복리 수익률 계산기</strong
-                    ><small>투자 수익률 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../jeonse-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">🏗️</span>
-                  <div class="link-info">
-                    <strong>전세/월세 전환 계산기</strong
-                    ><small>전환보증금 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../pension-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">👴</span>
-                  <div class="link-info">
-                    <strong>연금 수령액 계산기</strong
-                    ><small>국민연금·퇴직연금</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="../tax-interest-calculator/index.html"
-                  class="sidebar-link"
-                  ><span class="link-icon">💸</span>
-                  <div class="link-info">
-                    <strong>세후 이자 계산기</strong
-                    ><small>이자소득세 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="../inflation-calculator/index.html"
-                  class="sidebar-link"
-                  ><span class="link-icon">📊</span>
-                  <div class="link-info">
-                    <strong>물가상승률 계산기</strong
-                    ><small>실질 구매력 계산</small>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="../exchange-calculator/index.html" class="sidebar-link"
-                  ><span class="link-icon">💱</span>
-                  <div class="link-info">
-                    <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          <!-- 퇴직금 공식 위젯 -->
-          <div class="sidebar-widget info-widget">
-            <h2 class="widget-title">📋 퇴직금 계산 공식</h2>
-            <div class="rate-info-box">
-              <div class="rate-item">
-                <span class="rate-label">1일 평균임금</span>
-                <span class="rate-value small">3개월 총임금 ÷ 달력일수</span>
-              </div>
-              <div class="rate-item">
-                <span class="rate-label">퇴직금</span>
-                <span class="rate-value">× 30일 × (근속일/365)</span>
-              </div>
+          <div class="result-card" id="result-pension" style="display: none">
+            <h3 class="result-title">📊 DB형 vs DC형 비교 결과</h3>
+            <div class="compare-grid" id="compare-grid"></div>
+            <div class="result-grid" id="result-pension-grid"></div>
+            <div class="result-notice">
+              ※ DB형은 최종 급여 기준으로 확정, DC형은 적립금 운용 성과에 따라
+              달라집니다. 임금 상승률이 높거나 안정적 직장이라면 DB형이 유리한
+              경우가 많습니다.
             </div>
-            <p class="widget-note">
-              ※ 1년 미만 근속 시 퇴직금 지급 의무 없음 <br />※ 상여금·연차수당
-              1/12 포함
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SIDEBAR ===== -->
+      <aside class="sidebar">
+        <div class="ad-slot ad-slot--sidebar">
+          <span class="ad-placeholder-text">광고</span>
+        </div>
+
+        <nav class="sidebar-widget" aria-label="다른 금융 계산기">
+          <h2 class="widget-title">🔗 다른 금융 계산기</h2>
+          <ul class="sidebar-links">
+            <li>
+              <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>전체 계산기 홈</strong><small>금융계산기.kr 메인</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar-link active-link"><span class="link-icon">📦</span>
+                <div class="link-info">
+                  <strong>퇴직금 계산기</strong><small>현재 페이지</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../salary-calculator/index.html" class="sidebar-link"><span class="link-icon">💼</span>
+                <div class="link-info">
+                  <strong>연봉 계산기</strong><small>월 실수령액·4대보험</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../savings-calculator/index.html" class="sidebar-link"><span class="link-icon">🏦</span>
+                <div class="link-info">
+                  <strong>예적금 만기 계산기</strong><small>예금·적금 수령액 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../loan-calculator/index.html" class="sidebar-link"><span class="link-icon">🏠</span>
+                <div class="link-info">
+                  <strong>대출 이자 계산기</strong><small>원리금균등·원금균등</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../compound-calculator/index.html" class="sidebar-link"><span class="link-icon">📈</span>
+                <div class="link-info">
+                  <strong>복리 수익률 계산기</strong><small>투자 수익률 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../jeonse-calculator/index.html" class="sidebar-link"><span class="link-icon">🏗️</span>
+                <div class="link-info">
+                  <strong>전세/월세 전환 계산기</strong><small>전환보증금 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../pension-calculator/index.html" class="sidebar-link"><span class="link-icon">👴</span>
+                <div class="link-info">
+                  <strong>연금 수령액 계산기</strong><small>국민연금·퇴직연금</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../tax-interest-calculator/index.html" class="sidebar-link"><span class="link-icon">💸</span>
+                <div class="link-info">
+                  <strong>세후 이자 계산기</strong><small>이자소득세 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../inflation-calculator/index.html" class="sidebar-link"><span class="link-icon">📊</span>
+                <div class="link-info">
+                  <strong>물가상승률 계산기</strong><small>실질 구매력 계산</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="../exchange-calculator/index.html" class="sidebar-link"><span class="link-icon">💱</span>
+                <div class="link-info">
+                  <strong>환율 계산기</strong><small>달러·엔·유로 환산</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- 퇴직금 공식 위젯 -->
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">📋 퇴직금 계산 공식</h2>
+          <div class="rate-info-box">
+            <div class="rate-item">
+              <span class="rate-label">1일 평균임금</span>
+              <span class="rate-value small">3개월 총임금 ÷ 달력일수</span>
+            </div>
+            <div class="rate-item">
+              <span class="rate-label">퇴직금</span>
+              <span class="rate-value">× 30일 × (근속일/365)</span>
+            </div>
+          </div>
+          <p class="widget-note">
+            ※ 1년 미만 근속 시 퇴직금 지급 의무 없음 <br />※ 상여금·연차수당
+            1/12 포함
+          </p>
+        </div>
+
+        <!-- 근속연수 공제 위젯 -->
+        <div class="sidebar-widget info-widget">
+          <h2 class="widget-title">📋 2026 근속연수공제</h2>
+          <table class="tax-table">
+            <thead>
+              <tr>
+                <th>근속연수</th>
+                <th>공제액</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5년 이하</td>
+                <td class="tax-rate exempt">100만원 × 연수</td>
+              </tr>
+              <tr>
+                <td>6~10년</td>
+                <td class="tax-rate exempt">500만 + 200만×(연수-5)</td>
+              </tr>
+              <tr>
+                <td>11~20년</td>
+                <td class="tax-rate preferred">1,500만 + 250만×(연수-10)</td>
+              </tr>
+              <tr>
+                <td>20년 초과</td>
+                <td class="tax-rate preferred">4,000만 + 300만×(연수-20)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===== MIDDLE AD ===== -->
+  <div class="ad-banner-middle">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM DESCRIPTION ===== -->
+  <section class="bottom-description" id="bottom-info">
+    <div class="container">
+      <div class="info-section">
+        <h2>퇴직금 계산 방법</h2>
+        <div class="info-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))">
+          <div class="info-card" style="border-color: #d97706; background: #fffbeb">
+            <h3>💼 퇴직금 기본 공식</h3>
+            <div class="formula-box">
+              <p>① 1일 평균임금 = 최근 3개월 총임금 / 달력일수</p>
+              <p>② 퇴직금 = 1일 평균임금 × 30일 × (재직일수 / 365)</p>
+              <code>※ 상여금·연차수당은 연간 합계의 1/12를 월 임금에 합산</code>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>⚖️ 1년 미만 근속</h3>
+            <p>
+              근로기준법상 퇴직금은 <strong>계속 근로기간 1년 이상</strong>인
+              경우에만 지급 의무가 발생합니다. 단, 단체협약이나 취업규칙으로
+              별도 규정 시 지급 가능합니다.
             </p>
           </div>
+          <div class="info-card">
+            <h3>🏛️ 퇴직금 지급 시기</h3>
+            <p>
+              퇴직일로부터 <strong>14일 이내</strong>에 퇴직금을 지급해야
+              합니다. 당사자 합의 시 기한 연장이 가능하며, 미지급 시 연 20%
+              지연이자가 발생합니다.
+            </p>
+          </div>
+        </div>
+      </div>
 
-          <!-- 근속연수 공제 위젯 -->
-          <div class="sidebar-widget info-widget">
-            <h2 class="widget-title">📋 2026 근속연수공제</h2>
-            <table class="tax-table">
+      <div class="info-section">
+        <h2>퇴직소득세 계산 방법 (2026)</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>📐 퇴직소득세 계산 순서</h3>
+            <div class="formula-box">
+              <p>① 퇴직소득금액 = 퇴직급여 (비과세 제외)</p>
+              <p>② 근속연수공제 차감</p>
+              <p>③ 환산급여 = (① - ②) × 12 / 근속연수</p>
+              <p>④ 환산급여공제 차감</p>
+              <p>⑤ 과세표준 = (③ - ④) × 근속연수 / 12</p>
+              <p>⑥ 산출세액 = 과세표준 × 종합소득세율</p>
+              <code>지방소득세 = 퇴직소득세 × 10%</code>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>📊 환산급여공제율 (2026)</h3>
+            <table class="tax-table" style="margin-top: 8px">
               <thead>
                 <tr>
-                  <th>근속연수</th>
-                  <th>공제액</th>
+                  <th>환산급여</th>
+                  <th>공제</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>5년 이하</td>
-                  <td class="tax-rate exempt">100만원 × 연수</td>
+                  <td>800만원 이하</td>
+                  <td class="tax-rate exempt">100%</td>
                 </tr>
                 <tr>
-                  <td>6~10년</td>
-                  <td class="tax-rate exempt">500만 + 200만×(연수-5)</td>
+                  <td>~7,000만원</td>
+                  <td class="tax-rate exempt">800만 + 초과분 × 60%</td>
                 </tr>
                 <tr>
-                  <td>11~20년</td>
-                  <td class="tax-rate preferred">1,500만 + 250만×(연수-10)</td>
+                  <td>~1억원</td>
+                  <td class="tax-rate preferred">4,520만 + 초과분 × 55%</td>
                 </tr>
                 <tr>
-                  <td>20년 초과</td>
-                  <td class="tax-rate preferred">4,000만 + 300만×(연수-20)</td>
+                  <td>~3억원</td>
+                  <td class="tax-rate preferred">6,170만 + 초과분 × 45%</td>
+                </tr>
+                <tr>
+                  <td>3억원 초과</td>
+                  <td class="tax-rate">15,170만 + 초과분 × 35%</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </aside>
+        </div>
       </div>
-    </main>
 
-    <!-- ===== MIDDLE AD ===== -->
-    <div class="ad-banner-middle">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
+      <div class="info-section">
+        <h2>DB형 vs DC형 퇴직연금 차이</h2>
+        <div class="info-grid">
+          <div class="info-card" style="border-color: #d97706; background: #fffbeb">
+            <h3>🏦 DB형 (확정급여형)</h3>
+            <p>퇴직 시 받을 급여가 <strong>미리 확정</strong>됩니다.</p>
+            <p>퇴직금 = 퇴직 직전 3개월 평균 급여 × 근속연수</p>
+            <p>
+              <strong>유리한 경우:</strong> 임금 인상률이 높거나 안정적 직장,
+              투자에 자신 없는 경우
+            </p>
+          </div>
+          <div class="info-card">
+            <h3>📈 DC형 (확정기여형)</h3>
+            <p>
+              회사가 매년 연간 임금의 <strong>1/12 이상을 적립</strong>하고,
+              근로자가 직접 운용합니다.
+            </p>
+            <p>
+              <strong>유리한 경우:</strong> 투자 수익률이 임금인상률보다 높을
+              경우, 직장 이동이 잦은 경우
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" id="pro-guide">
+        <h2>퇴직금 전문가 가이드: 더 많이 받고 덜 내는 법</h2>
+        <div class="pro-guide-content" style="line-height: 1.8; color: var(--text-secondary);">
+          <p style="margin-bottom: 16px;">
+            퇴직금은 단순한 보너스가 아니라 근로자의 소중한 후불적 임금이자 노후 자금입니다. 2026년 기준 최신 법령과 실무 지식을 바탕으로 퇴직금을 극대화하고 세금을 줄이는 핵심 전략을 정리해
+            드립니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">1. 평균임금 높여서 퇴직금 키우기</h3>
+          <p>
+            퇴직금은 '퇴직 전 3개월간의 평균임금'에 비례합니다. 따라서 퇴직 시점을 전략적으로 잡는 것만으로도 수십만 원에서 수백만 원의 차이를 만들 수 있습니다.
+            <strong>연차수당이나 정기 상여금</strong>이 지급되는 시기를 포함하여 퇴직하거나, 임금 협상 체결 직후 퇴직하는 것이 유리합니다. 또한 퇴직 전 3개월 동안 시간 외 근무를 늘려
+            수당을 확보하는 것도 평균임금을 높이는 합법적인 방법입니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">2. 퇴직소득세 절세의 핵심, IRP 활용</h3>
+          <p>
+            퇴직금을 바로 현금으로 수령하면 최대 45%에 달하는 퇴직소득세가 원천징수됩니다. 하지만 이를 <strong>IRP(개인형 퇴직연금) 계좌</strong>로 이체하면 세급 납부가 뒤로 미뤄지는
+            '과세이연' 혜택을 받습니다.
+            이후 55세부터 연금으로 수령할 경우 원래 내야 했던 퇴직소득세의 30~40%를 감면받을 수 있어 실질 수령액이 크게 늘어납니다.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin: 24px 0 12px; font-size: 1.15rem;">3. 계속근로기간 산정 시 주의할 점</h3>
+          <p>
+            근속연수는 퇴직금의 배수를 결정짓는 중요한 요소입니다. 많은 분이 헷갈려하시는 부분 중 하나가 <strong>휴직 기간</strong>입니다.
+            남녀고용평등법에 따른 육아휴직이나 업무상 부상으로 인한 휴업 기간은 모두 계속근로기간에 포함됩니다. 하지만 개인적인 사유로 인한 무급 휴직은 회사의 취업규칙에 따라 제외될 수 있으므로 인사팀에
+            미리 확인하는 것이 필수입니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-section" id="faq">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>퇴직금과 퇴직연금은 다른가요?</summary>
+            <p>
+              <strong>퇴직금</strong>은 회사가 퇴직 시 일시금으로 지급하는 방식입니다. <strong>퇴직연금</strong>은 DB형(확정급여)과 DC형(확정기여) 두 가지로, 회사가
+              금융기관에 사전 적립하는 방식입니다. 사용자는 이 중 하나를 선택해 운영해야 하며, 퇴직 시 일시금 또는 연금 형태로 수령 가능합니다. 현재 법적으로 신규 사업장은 퇴직연금 도입이 의무화되는
+              추세입니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>퇴직금에 상여금과 연차수당이 포함되나요?</summary>
+            <p>
+              네, 포함됩니다. <strong>연간 상여금 총액의 3/12</strong>와 <strong>미사용 연차수당의 3/12</strong>가 평균임금 계산에 합산됩니다. 단, 연차수당의 경우
+              퇴직으로 인해 발생하는 수당이 아니라, 전년도 근로의 대가로 이미 발생해 있던 수당이 대상입니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>아르바이트나 계약직도 퇴직금을 받을 수 있나요?</summary>
+            <p>
+              네, 가능합니다. 근로 형태(정규직, 계약직, 일용직, 아르바이트 등)와 상관없이 <strong>주 15시간 이상, 1년 이상</strong> 계속 근로했다면 법정 퇴직금 지급 대상이
+              됩니다. '프리랜서' 계약을 맺었더라도 실질적인 업무 지휘를 받는 근로자성이 인정된다면 퇴직금을 청구할 수 있습니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>중간정산 후 퇴직금은 어떻게 되나요?</summary>
+            <p>
+              퇴직금 중간정산 후에는 정산 시점을 새로운 입사일로 보아 퇴직금을 재산정합니다. 즉, 정산 이후 기간에 대해서만 퇴직금이 새롭게 누적됩니다. 중간정산은 무주택자의 주택구입, 전세자금 마련,
+              6개월 이상의 요양 등 법령에서 정한 <strong>긴급한 사유</strong>가 있을 때만 예외적으로 허용됩니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>퇴직금을 안 주면 어떻게 대응해야 하나요?</summary>
+            <p>
+              회사는 근로자가 퇴직한 날로부터 <strong>14일 이내</strong>에 퇴직금을 지급해야 합니다. 협의 없이 지연될 경우 고용노동부 홈페이지를 통해 '임금체불 진정'을 제기할 수
+              있습니다. 미지급 기간에 대해서는 연 20%의 지연이자가 발생하며, 고의적인 미지급 시 사업주는 형사 처벌 대상이 될 수 있습니다.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>퇴직연금 DC형에서 투자 손실이 나면 어떡하죠?</summary>
+            <p>
+              DC형은 회사가 매달 또는 매년 정해진 금액(임금의 1/12)을 넣어주면 근로자가 직접 운용하는 방식입니다. 따라서 <strong>운용 결과에 따른 책임은 근로자</strong>에게
+              있습니다. 수익이 나면 퇴직금이 늘어나지만, 손실이 나면 원금보다 적어질 수 있습니다. 안정적인 수령을 원하신다면 원리금 보장 상품의 비중을 높이는 것이 좋습니다.
+            </p>
+          </details>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- ===== BOTTOM DESCRIPTION ===== -->
-    <section class="bottom-description" id="bottom-info">
-      <div class="container">
-        <div class="info-section">
-          <h2>퇴직금 계산 방법</h2>
-          <div
-            class="info-grid"
-            style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))"
-          >
-            <div
-              class="info-card"
-              style="border-color: #d97706; background: #fffbeb"
-            >
-              <h3>💼 퇴직금 기본 공식</h3>
-              <div class="formula-box">
-                <p>① 1일 평균임금 = 최근 3개월 총임금 / 달력일수</p>
-                <p>② 퇴직금 = 1일 평균임금 × 30일 × (재직일수 / 365)</p>
-                <code
-                  >※ 상여금·연차수당은 연간 합계의 1/12를 월 임금에 합산</code
-                >
-              </div>
-            </div>
-            <div class="info-card">
-              <h3>⚖️ 1년 미만 근속</h3>
-              <p>
-                근로기준법상 퇴직금은 <strong>계속 근로기간 1년 이상</strong>인
-                경우에만 지급 의무가 발생합니다. 단, 단체협약이나 취업규칙으로
-                별도 규정 시 지급 가능합니다.
-              </p>
-            </div>
-            <div class="info-card">
-              <h3>🏛️ 퇴직금 지급 시기</h3>
-              <p>
-                퇴직일로부터 <strong>14일 이내</strong>에 퇴직금을 지급해야
-                합니다. 당사자 합의 시 기한 연장이 가능하며, 미지급 시 연 20%
-                지연이자가 발생합니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="info-section">
-          <h2>퇴직소득세 계산 방법 (2026)</h2>
-          <div class="info-grid">
-            <div class="info-card">
-              <h3>📐 퇴직소득세 계산 순서</h3>
-              <div class="formula-box">
-                <p>① 퇴직소득금액 = 퇴직급여 (비과세 제외)</p>
-                <p>② 근속연수공제 차감</p>
-                <p>③ 환산급여 = (① - ②) × 12 / 근속연수</p>
-                <p>④ 환산급여공제 차감</p>
-                <p>⑤ 과세표준 = (③ - ④) × 근속연수 / 12</p>
-                <p>⑥ 산출세액 = 과세표준 × 종합소득세율</p>
-                <code>지방소득세 = 퇴직소득세 × 10%</code>
-              </div>
-            </div>
-            <div class="info-card">
-              <h3>📊 환산급여공제율 (2026)</h3>
-              <table class="tax-table" style="margin-top: 8px">
-                <thead>
-                  <tr>
-                    <th>환산급여</th>
-                    <th>공제</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>800만원 이하</td>
-                    <td class="tax-rate exempt">100%</td>
-                  </tr>
-                  <tr>
-                    <td>~7,000만원</td>
-                    <td class="tax-rate exempt">800만 + 초과분 × 60%</td>
-                  </tr>
-                  <tr>
-                    <td>~1억원</td>
-                    <td class="tax-rate preferred">4,520만 + 초과분 × 55%</td>
-                  </tr>
-                  <tr>
-                    <td>~3억원</td>
-                    <td class="tax-rate preferred">6,170만 + 초과분 × 45%</td>
-                  </tr>
-                  <tr>
-                    <td>3억원 초과</td>
-                    <td class="tax-rate">15,170만 + 초과분 × 35%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="info-section">
-          <h2>DB형 vs DC형 퇴직연금 차이</h2>
-          <div class="info-grid">
-            <div
-              class="info-card"
-              style="border-color: #d97706; background: #fffbeb"
-            >
-              <h3>🏦 DB형 (확정급여형)</h3>
-              <p>퇴직 시 받을 급여가 <strong>미리 확정</strong>됩니다.</p>
-              <p>퇴직금 = 퇴직 직전 3개월 평균 급여 × 근속연수</p>
-              <p>
-                <strong>유리한 경우:</strong> 임금 인상률이 높거나 안정적 직장,
-                투자에 자신 없는 경우
-              </p>
-            </div>
-            <div class="info-card">
-              <h3>📈 DC형 (확정기여형)</h3>
-              <p>
-                회사가 매년 연간 임금의 <strong>1/12 이상을 적립</strong>하고,
-                근로자가 직접 운용합니다.
-              </p>
-              <p>
-                <strong>유리한 경우:</strong> 투자 수익률이 임금인상률보다 높을
-                경우, 직장 이동이 잦은 경우
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="info-section" id="faq">
-          <h2>자주 묻는 질문 (FAQ)</h2>
-          <div class="faq-list">
-            <details class="faq-item">
-              <summary>퇴직금과 퇴직연금은 다른가요?</summary>
-              <p>
-                <strong>퇴직금</strong>은 회사가 퇴직 시 일시금으로 지급하는
-                방식입니다. <strong>퇴직연금</strong>은 DB형(확정급여)과
-                DC형(확정기여) 두 가지로, 회사가 금융기관에 사전 적립하는
-                방식입니다. 사용자는 이 중 하나를 선택해 운영해야 하며, 퇴직 시
-                일시금 또는 연금 형태로 수령 가능합니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>퇴직금에 상여금이 포함되나요?</summary>
-              <p>
-                네, 포함됩니다. 연간 상여금·연차수당·성과급 등 정기적으로
-                지급되는 임금은 <strong>연간 합계의 1/12</strong>를 월 임금에
-                포함하여 평균임금을 계산합니다. 단, 비정기적 특별상여금이나
-                경영성과금은 포함 여부에 대해 판례마다 다를 수 있습니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>중간정산 후 퇴직금은 어떻게 되나요?</summary>
-              <p>
-                퇴직금 중간정산 후에는 정산 시점을 새로운 입사일로 보아 퇴직금을
-                재산정합니다. 즉, 정산 이후 기간에 대해서만 퇴직금이 새롭게
-                누적됩니다. 중간정산은 주택구입, 본인/가족 질병, 파산 등
-                법령에서 정한 사유에만 허용됩니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>
-                퇴직금을 IRP(개인형 퇴직연금)로 받으면 세금이 줄어드나요?
-              </summary>
-              <p>
-                네. 퇴직금을
-                <strong
-                  >IRP 계좌로 입금 시 퇴직소득세가 이연(나중에 납부)</strong
-                >됩니다. 55세 이후 연금으로 수령 시 퇴직소득세의 30~40%를
-                감면받을 수 있습니다(10년 이상 연금 수령 시 최대 40% 감면).
-                일시금 수령 시에는 이연 없이 전액 과세됩니다.
-              </p>
-            </details>
-            <details class="faq-item">
-              <summary>계속 근로기간을 어떻게 산정하나요?</summary>
-              <p>
-                입사일부터 퇴직일까지의 <strong>달력 기준 일수</strong>로
-                계산합니다. 육아휴직·업무상 부상 휴직 기간도 근속기간에
-                포함됩니다. 단, 무급 개인 휴직은 취업규칙에 따라 포함 여부가
-                다를 수 있습니다. 근속연수가 1년 미만이라도 일수로 비례 계산하여
-                퇴직금을 지급하는 회사도 있습니다.
-              </p>
-            </details>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== BOTTOM AD ===== -->
-    <div class="ad-banner-bottom">
-      <div class="container">
-        <div class="ad-slot ad-slot--horizontal">
-          <span class="ad-placeholder-text">광고</span>
-        </div>
+  <!-- ===== BOTTOM AD ===== -->
+  <div class="ad-banner-bottom">
+    <div class="container">
+      <div class="ad-slot ad-slot--horizontal">
+        <span class="ad-placeholder-text">광고</span>
       </div>
     </div>
+  </div>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div class="footer-logo">
-          <span class="logo-icon">💰</span>
-          <!-- prettier-ignore -->
-          <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
-        </div>
-        <div class="footer-links">
-          <a href="../terms/index.html">이용약관</a>
-          <a href="../privacy-policy/index.html">개인정보처리방침</a>
-          <a href="../contact/index.html">문의하기</a>
-        </div>
-        <p class="footer-disclaimer">
-          본 계산기는 참고용으로만 사용하시기 바랍니다. 실제 퇴직금 및 세금은
-          개인 상황에 따라 다를 수 있으며, 정확한 금액은 전문가에게 확인하세요.
-        </p>
-        <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">💰</span>
+        <!-- prettier-ignore -->
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
       </div>
-    </footer>
+      <div class="footer-links">
+        <a href="../terms/index.html">이용약관</a>
+        <a href="../privacy-policy/index.html">개인정보처리방침</a>
+        <a href="../contact/index.html">문의하기</a>
+      </div>
+      <p class="footer-disclaimer">
+        본 계산기는 참고용으로만 사용하시기 바랍니다. 실제 퇴직금 및 세금은
+        개인 상황에 따라 다를 수 있으며, 정확한 금액은 전문가에게 확인하세요.
+      </p>
+      <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+    </div>
+  </footer>
 
-    <script src="calculator.js?v=4"></script>
-    <script src="../countup.js?v=4"></script>
-    <script src="../toast.js?v=4"></script>
-    <script src="../seo_script.js?v=4"></script>
-    <script src="../reset_form.js?v=4"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=4"></script>
-      <script src="../export_image.js?v=4"></script>
-  </body>
+  <script src="calculator.js?v=4"></script>
+  <script src="../countup.js?v=4"></script>
+  <script src="../toast.js?v=4"></script>
+  <script src="../seo_script.js?v=4"></script>
+  <script src="../reset_form.js?v=4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=4"></script>
+  <script src="../export_image.js?v=4"></script>
+</body>
+
 </html>
