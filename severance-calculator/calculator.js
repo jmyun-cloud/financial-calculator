@@ -311,7 +311,6 @@ function displaySeveranceResult(r) {
   ]);
 
   resultEl.style.display = 'block';
-  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-basic');
   resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 

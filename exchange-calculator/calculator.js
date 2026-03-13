@@ -4,12 +4,12 @@ const fmtF = (n) => n.toLocaleString("ko-KR", { maximumFractionDigits: 2 });
 const parse = (s) => parseFloat(String(s).replace(/,/g, "")) || 0;
 
 const CURRENCIES = [
-  { code: "USD", label: "미국 달러", symbol: "$", jpyBase: false },
-  { code: "JPY", label: "일본 엔화 (100엔)", symbol: "¥", jpyBase: true },
-  { code: "EUR", label: "유로", symbol: "€", jpyBase: false },
-  { code: "CNY", label: "중국 위안화", symbol: "¥", jpyBase: false },
-  { code: "GBP", label: "영국 파운드", symbol: "£", jpyBase: false },
-  { code: "VND", label: "베트남 동 (1000동)", symbol: "₫", jpyBase: true },
+  { code: "USD", label: "미국 달러", symbol: "$", unitBase: 1 },
+  { code: "JPY", label: "일본 엔화 (100엔)", symbol: "¥", unitBase: 100 },
+  { code: "EUR", label: "유로", symbol: "€", unitBase: 1 },
+  { code: "CNY", label: "중국 위안화", symbol: "¥", unitBase: 1 },
+  { code: "GBP", label: "영국 파운드", symbol: "£", unitBase: 1 },
+  { code: "VND", label: "베트남 동 (1000동)", symbol: "₫", unitBase: 1000 },
 ];
 
 function getRate(code) {
@@ -20,7 +20,7 @@ function getRate(code) {
 function toKRW(code) {
   const r = getRate(code);
   const c = CURRENCIES.find((c) => c.code === code);
-  return c.jpyBase ? r / 100 : r; // JPY/VND: per 100 or 1000
+  return r / c.unitBase; // e.g. JPY: rate/100, VND: rate/1000
 }
 
 async function fetchLiveRates() {
@@ -73,14 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const raw = this.value.replace(/[^0-9]/g, "");
       const n = parseInt(raw, 10);
       this.value = !isNaN(n) && n > 0 ? n.toLocaleString("ko-KR") : raw;
-      const h = document.getElementById("ex-amount-hint");
-      if (h && !isNaN(n) && n > 0) {
-        if (n >= 1e8) {
-          const e = Math.floor(n / 1e8);
-          h.textContent = `${e}억원`;
-        } else if (n >= 1e4) h.textContent = `${Math.floor(n / 1e4)}만원`;
-        else h.textContent = "";
-      }
+      // Hint logic is now handled by currency_helper.js for all money inputs
     });
 
   document.querySelectorAll('input[name="ex-dir"]').forEach((r) =>

@@ -83,22 +83,21 @@ function calcToMonthly() {
     <div class="result-highlight"><div class="label">월 납부 금액 (전환율 ${rate}%)</div><div class="amount">${fmt(monthly)}원 / 월</div></div>
     <div class="result-grid">
       ${resultHTML([
-        { label: "전세 보증금", val: fmt(jeonse) + "원" },
-        { label: "전환 후 보증금", val: fmt(deposit) + "원" },
-        { label: "전환 대상금액", val: fmt(diff) + "원" },
-        { label: "적용 전환율", val: rate + "%" },
-        { label: "월세 (전환)", val: fmt(monthly) + "원/월", cls: "accent" },
-        {
-          label: "법정 전환율 기준 월세",
-          val: fmt(legalMonthly) + "원/월",
-          cls: rate > 4.5 ? "negative" : "",
-        },
-      ])}
+    { label: "전세 보증금", val: fmt(jeonse) + "원" },
+    { label: "전환 후 보증금", val: fmt(deposit) + "원" },
+    { label: "전환 대상금액", val: fmt(diff) + "원" },
+    { label: "적용 전환율", val: rate + "%" },
+    { label: "월세 (전환)", val: fmt(monthly) + "원/월", cls: "accent" },
+    {
+      label: "법정 전환율 기준 월세",
+      val: fmt(legalMonthly) + "원/월",
+      cls: rate > 4.5 ? "negative" : "",
+    },
+  ])}
     </div>
     ${rate > 4.5 ? `<div class="result-notice">⚠️ 입력한 전환율(${rate}%)이 법정 상한(4.5%)을 초과합니다. 법정 기준 월세는 ${fmt(legalMonthly)}원입니다.</div>` : ""}
   `;
   el.style.display = "block";
-  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-tm');
   el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -114,12 +113,12 @@ function calcToDeposit() {
     <div class="result-highlight"><div class="label">전세 환산 금액</div><div class="amount">${fmt(totalJeonse)}원</div></div>
     <div class="result-grid">
       ${resultHTML([
-        { label: "현재 월세", val: fmt(monthly) + "원/월" },
-        { label: "현재 보증금", val: fmt(deposit) + "원" },
-        { label: "월세 전환 금액", val: fmt(addDeposit) + "원" },
-        { label: "전세 환산 총액", val: fmt(totalJeonse) + "원", cls: "large" },
-        { label: "연간 월세 총액", val: fmt(monthly * 12) + "원" },
-      ])}
+    { label: "현재 월세", val: fmt(monthly) + "원/월" },
+    { label: "현재 보증금", val: fmt(deposit) + "원" },
+    { label: "월세 전환 금액", val: fmt(addDeposit) + "원" },
+    { label: "전세 환산 총액", val: fmt(totalJeonse) + "원", cls: "large" },
+    { label: "연간 월세 총액", val: fmt(monthly * 12) + "원" },
+  ])}
     </div>
     <div class="result-notice">전세 환산 금액 = 보증금 + (월세 × 12 ÷ 전환율 × 100)</div>
   `;
@@ -147,25 +146,25 @@ function calcAdjust() {
     <div class="result-highlight"><div class="label">변경 후 월세</div><div class="amount">${fmt(Math.max(0, newMonthly))}원 / 월</div></div>
     <div class="result-grid">
       ${resultHTML([
-        { label: "현재 월세", val: fmt(curMonthly) + "원/월" },
-        { label: "현재 보증금", val: fmt(curDeposit) + "원" },
-        { label: "변경 후 보증금", val: fmt(newDeposit) + "원" },
-        {
-          label: "보증금 변동",
-          val: (isUp ? "+" : "") + fmt(depositDiff) + "원",
-          cls: isUp ? "positive" : "negative",
-        },
-        {
-          label: "월세 변동",
-          val: (isUp ? "-" : "+") + fmt(Math.abs(monthlyChange)) + "원",
-          cls: isUp ? "accent" : "negative",
-        },
-        {
-          label: "변경 후 월세",
-          val: fmt(Math.max(0, newMonthly)) + "원/월",
-          cls: "large",
-        },
-      ])}
+    { label: "현재 월세", val: fmt(curMonthly) + "원/월" },
+    { label: "현재 보증금", val: fmt(curDeposit) + "원" },
+    { label: "변경 후 보증금", val: fmt(newDeposit) + "원" },
+    {
+      label: "보증금 변동",
+      val: (isUp ? "+" : "") + fmt(depositDiff) + "원",
+      cls: isUp ? "positive" : "negative",
+    },
+    {
+      label: "월세 변동",
+      val: (isUp ? "-" : "+") + fmt(Math.abs(monthlyChange)) + "원",
+      cls: isUp ? "accent" : "negative",
+    },
+    {
+      label: "변경 후 월세",
+      val: fmt(Math.max(0, newMonthly)) + "원/월",
+      cls: "large",
+    },
+  ])}
     </div>
   `;
   el.style.display = "block";

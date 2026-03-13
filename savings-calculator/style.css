@@ -546,32 +546,49 @@ ul {
 
 /* ===== SAVE AS IMAGE BUTTON ===== */
 .save-image-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 11px;
-  background: rgba(5, 150, 105, 0.1);
-  border: none;
-  border-radius: 20px;
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--primary, #059669);
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 16px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f4 !important;
+  border-radius: 100px !important;
+  font-family: inherit !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  cursor: pointer !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .save-image-btn:hover {
-  background: var(--primary, #059669);
-  color: white;
-  transform: translateY(-1px);
+  background: #f8faff !important;
+  border-color: #1a56e8 !important;
+  color: #1a56e8 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
 }
 
 .save-image-btn:active {
-  transform: scale(0.95);
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
 }
+
+html[data-theme="dark"] .save-image-btn {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .save-image-btn:hover {
+  background: #2d3748 !important;
+  border-color: #1a56e8 !important;
+  color: #1a56e8 !important;
+}
+
 
 
 

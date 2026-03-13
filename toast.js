@@ -43,36 +43,47 @@
 
         /* Copy Button Styles */
         .copy-result-btn {
-            background: rgba(26, 86, 232, 0.1);
-            color: var(--primary);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
-            font-family: inherit;
+            background: #ffffff !important;
+            color: #475569 !important;
+            border: 1px solid #e2e8f4 !important;
+            padding: 8px 16px !important;
+            border-radius: 100px !important;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            font-family: inherit !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
         }
 
         .copy-result-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-1px);
+            background: #f8faff !important;
+            border-color: #1a56e8 !important;
+            color: #1a56e8 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+        }
+
+        .copy-result-btn:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
         }
 
         html[data-theme="dark"] .copy-result-btn {
-            background: rgba(129, 140, 248, 0.15);
-            color: #818cf8;
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #94a3b8 !important;
         }
         
         html[data-theme="dark"] .copy-result-btn:hover {
-            background: #818cf8;
-            color: #0f172a;
+            background: #2d3748 !important;
+            border-color: #1a56e8 !important;
+            color: #1a56e8 !important;
         }
+
     `;
     document.head.appendChild(style);
 

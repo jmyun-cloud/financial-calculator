@@ -308,6 +308,7 @@ function displayInstallmentResult(totalPrincipal, monthly, grossInterest, taxAmo
 
   const result = document.getElementById('result-installment');
   result.style.display = 'block';
+  if (typeof addSaveImageButton === 'function') addSaveImageButton('result-installment');
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   renderDonutChart('chart-installment', 'legend-installment', totalPrincipal, grossInterest, taxAmount);
