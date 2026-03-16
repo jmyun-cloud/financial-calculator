@@ -108,9 +108,17 @@
   <!-- 문의하기 -->
   <url>
     <loc>https://richcalc.kr/contact/</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-03-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+
+  <!-- 사이트 소개 -->
+  <url>
+    <loc>https://richcalc.kr/about/</loc>
+    <lastmod>2026-03-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
 
   <!-- 사이트맵 페이지 -->
