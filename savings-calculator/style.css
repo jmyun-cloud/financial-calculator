@@ -253,8 +253,8 @@ ul {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 310px 1fr;
-  grid-template-areas: "sidebar calculator";
+  grid-template-columns: 1fr 310px;
+  grid-template-areas: "calculator sidebar";
   gap: 32px;
   align-items: start;
 }
