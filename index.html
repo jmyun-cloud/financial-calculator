@@ -566,22 +566,24 @@
       margin-bottom: 16px;
     }
 
-    .footer-nav {
+    .footer-links {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 8px 20px;
-      margin-bottom: 20px;
+      gap: 12px 32px;
+      margin-bottom: 24px;
     }
 
-    .footer-nav a {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.35);
-      transition: color 0.2s;
+    .footer-links a {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.45);
+      transition: all 0.2s;
+      font-weight: 500;
     }
 
-    .footer-nav a:hover {
-      color: rgba(255, 255, 255, 0.7);
+    .footer-links a:hover {
+      color: #818cf8;
+      transform: translateY(-1px);
     }
 
     .footer-calc-links {
@@ -1042,15 +1044,14 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-logo">
-        <!-- prettier-ignore -->
-        <span style="font-size: 1.5rem">💰</span>금융계산기<span class="logo-accent">.kr</span>
+        <span class="logo-icon">💰</span>금융계산기<span class="logo-accent">.kr</span>
       </div>
       <div class="footer-links">
-        <a href="/about/">사이트 소개</a>
-        <a href="/privacy-policy/">개인정보처리방침</a>
-        <a href="/terms/">이용약관</a>
-        <a href="/contact/">문의하기</a>
-        <a href="/sitemap-page/">사이트맵</a>
+        <a href="about/index.html">사이트 소개</a>
+        <a href="privacy-policy/index.html">개인정보처리방침</a>
+        <a href="terms/index.html">이용약관</a>
+        <a href="contact/index.html">문의하기</a>
+        <a href="sitemap-page/index.html">사이트맵</a>
       </div>
       <div class="footer-calc-links">
         <a href="savings-calculator/index.html" class="footer-calc-link">예적금 계산기</a>

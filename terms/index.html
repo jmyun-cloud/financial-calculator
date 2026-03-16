@@ -252,6 +252,32 @@
       text-decoration: none;
     }
 
+    .footer-copy {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    .footer-logo .logo-accent {
+      color: #818cf8;
+    }
+
     @media (max-width: 600px) {
       .terms-section {
         padding: 24px 20px;
@@ -542,25 +568,18 @@
   </div>
 
   <footer class="site-footer">
-    <div style="max-width: 820px; margin: 0 auto">
-      <div style="
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 14px;
-          ">
-        💰 금융계산기<span style="color: #818cf8">.kr</span>
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">💰</span>
+        <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
       </div>
       <div class="footer-links">
-        <a href="../index.html">홈</a>
         <a href="../about/index.html">사이트 소개</a>
-        <a href="#" style="color: #a5b4fc">이용약관 (현재)</a>
         <a href="../privacy-policy/index.html">개인정보처리방침</a>
+        <a href="../terms/index.html">이용약관</a>
         <a href="../contact/index.html">문의하기</a>
       </div>
-      <p style="font-size: 0.78rem">
-        © 2026 금융계산기.kr | All rights reserved.
-      </p>
+      <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
     </div>
   </footer>
   <script src="../countup.js?v=4"></script>

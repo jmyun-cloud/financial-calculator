@@ -1129,17 +1129,21 @@ ul {
 
 .footer-links {
   display: flex;
-  gap: 20px;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .footer-links a {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.85rem;
-  transition: color var(--transition);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.88rem;
+  transition: all var(--transition);
+  font-weight: 500;
 }
 
 .footer-links a:hover {
-  color: white;
+  color: #7dd3fc;
+  transform: translateY(-1px);
 }
 
 .footer-disclaimer {
