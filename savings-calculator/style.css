@@ -940,8 +940,16 @@ html[data-theme="dark"] .save-image-btn:hover {
 .formula-box {
   background: var(--text-primary);
   border-radius: var(--radius-sm);
-  padding: 16px;
-  margin-top: 12px;
+  padding: 14px;
+  margin-top: 10px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease;
+  cursor: default;
+}
+
+.formula-box:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  background: #1e293b;
 }
 
 .formula-box p {
