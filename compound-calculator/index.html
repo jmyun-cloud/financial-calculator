@@ -113,8 +113,9 @@
         <span class="logo-text">금융계산기<span class="logo-accent">.kr</span></span>
       </a>
       <nav class="header-nav">
+        <a href="../index.html" class="nav-link">🏠 홈</a>
         <a href="#schedule" class="nav-link">연도별 성장</a>
-        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="../guide/compound.html" class="nav-link">금융 가이드</a>
       </nav>
     </div>
   </header>
@@ -475,154 +476,20 @@
   </div>
 
   <!-- ===== BOTTOM DESCRIPTION ===== -->
-  <div class="seo-accordion-container" id="bottom-info">
-    <button class="seo-toggle-btn" aria-expanded="false" aria-controls="seo-compound-1">
-      💡 복리의 마법: 부의 축적을 앞당기는 핵심 원리 및 전문가 가이드
-      <span class="seo-toggle-icon">﹀</span>
-    </button>
-    <div class="seo-content" id="seo-compound-1">
-      <h3>1. 복리(Compound Interest)의 원리</h3>
-      <p>
-        복리는 원금뿐만 아니라 발생한 이자에도 다시 이자가 붙는 방식입니다. "세계 8대 불가사의"라고 불릴 만큼 시간이 흐를수록 자산 성장 속도가 비약적으로 빨라지는 특징이 있습니다. 복리 효과를
-        극대화하려면 <strong>투자 기간</strong>과 <strong>수익률</strong>, 그리고 이자가 재투자되는 <strong>복리 주기</strong>가 중요합니다.
+  <div class="container" style="margin: 40px auto; text-align: center;">
+    <a href="../guide/compound.html"
+      style="display: inline-block; max-width: 800px; width: 100%; padding: 24px; background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 16px; color: var(--text-primary); text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;"
+      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 30px rgba(0, 0, 0, 0.15)';"
+      onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+      <h3
+        style="margin: 0 0 10px 0; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 1.4rem;">📖</span> 단리와 복리 비교 & 72의 법칙 가이드 보기
+      </h3>
+      <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem;">
+        자산 증식의 핵심! 복리/단리 산식과 투자 기간에 따른 기하급수적 성장 원리를 확인하세요. 👉
       </p>
-
-      <h3>2. 72의 법칙: 자산이 2배가 되는 시간</h3>
-      <p>
-        72를 연간 수익률(%)로 나누면 투자금이 2배가 되는 대략적인 기간(년)을 계산할 수 있습니다. 예를 들어 연 6% 수익률이라면 12년마다, 연 10%라면 약 7.2년마다 원금이 두 배로 늘어납니다.
-        이 법칙을 통해 본인의 재무 목표 달성 시점을 쉽게 예측할 수 있습니다.
-      </p>
-
-      <h3>3. 하락장 관리와 복리의 안정성</h3>
-      <p>
-        복리는 꾸준함이 생명입니다. 큰 손실(MDD)을 입으면 이를 복구하기 위해 훨씬 더 높은 수익률이 필요하므로, 무리한 고수익보다는 <strong>지속 가능한 안정적 수익</strong>을 추구하는 것이
-        장기 복리 관점에서 훨씬 유리합니다.
-      </p>
-
-      <h3>4. 절세 계좌를 활용한 복리 극대화</h3>
-      <p>
-        세금과 수수료는 복리의 적입니다. ISA, 연금저축, IRP와 같은 절세 계좌를 활용하여 세금으로 나갈 자금이 온전히 재투자하면, 시간이 흐를수록 일반 계좌와의 자산 격차는 기하급수적으로 벌어지게
-        됩니다.
-      </p>
-
-      <h3>5. 계산 방법 및 상세 공식</h3>
-      <div class="formula-box"
-        style="background: var(--surface-2); padding: 25px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--border);">
-        <p style="margin-bottom: 20px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-          📈 복리 (Compound Interest) 공식</p>
-        <code
-          style="display: block; background: var(--surface); padding: 12px; border-radius: 6px; font-family: monospace; margin-bottom: 15px;">A = P × (1 + r/n)^(n×t)</code>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">P=원금 | r=연이율 | n=복리주기/년 | t=기간(년)
-        </p>
-
-        <p style="margin-bottom: 10px; font-weight: 600;">월 추가투자 포함 시:</p>
-        <code
-          style="display: block; background: var(--surface); padding: 12px; border-radius: 6px; font-family: monospace; margin-bottom: 5px;">A = P×(1+r/n)^(n×t) + M×[(1+r/n)^(n×t)-1]/(r/n)</code>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">M = 월 추가 투자금</p>
-      </div>
-
-      <div class="formula-box"
-        style="background: var(--surface-2); padding: 25px; border-radius: 12px; margin: 25px 0; border: 1px solid var(--border);">
-        <p style="margin-bottom: 20px; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-          📐 단리 (Simple Interest) 공식</p>
-        <code
-          style="display: block; background: var(--surface); padding: 12px; border-radius: 6px; font-family: monospace; margin-bottom: 15px;">A = P × (1 + r × t)</code>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">
-          📌 <strong>핵심 차이:</strong> 동일한 조건에서 기간이 길수록 복리가 단리보다 훨씬 큰 수익을 냅니다.
-          1,000만원을 연 7%로 30년 투자 시 <strong>복리는 약 7,612만원</strong>으로 단리(3,100만원)보다 2배 이상 높습니다.
-        </p>
-      </div>
-    </div>
+    </a>
   </div>
-
-  <section class="bottom-description" id="faq">
-    <div class="container">
-      <div class="info-section">
-        <h2>72의 법칙 (Rule of 72)</h2>
-        <p>
-          72의 법칙은 투자금이 <strong>2배가 되는 기간</strong>을 간단하게
-          계산하는 방법입니다. 72를 연간 수익률(%)로 나누면 자산이 2배가 되는
-          대략적인 기간(년)을 알 수 있습니다.
-        </p>
-        <div class="info-grid three-col">
-          <div class="info-card">
-            <h3>📌 계산 방법</h3>
-            <p><strong>2배 기간 ≈ 72 ÷ 연이율(%)</strong></p>
-            <p>
-              연 6% 수익률이라면 72 ÷ 6 = <strong>12년</strong>마다 자산이
-              2배가 됩니다.
-            </p>
-          </div>
-          <div class="info-card">
-            <h3>📌 활용 예시</h3>
-            <ul class="feature-list">
-              <li>연 4% → 18년 후 2배</li>
-              <li>연 6% → 12년 후 2배</li>
-              <li>연 8% → 9년 후 2배</li>
-              <li>연 10% → 7.2년 후 2배</li>
-              <li>연 12% → 6년 후 2배</li>
-            </ul>
-          </div>
-          <div class="info-card">
-            <h3>📌 인플레이션 응용</h3>
-            <p>
-              물가상승률에도 적용할 수 있습니다. 물가가 연 3% 오른다면 72 ÷ 3
-              = <strong>24년</strong> 후에 현재 화폐 가치의 절반으로 줄어들 수
-              있습니다.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-section" id="faq">
-        <h2>자주 묻는 질문 (FAQ)</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>복리 효과가 눈에 띄게 나타나는 시점은 언제인가요?</summary>
-            <p>
-              일반적으로 <strong>10년~15년</strong> 이상 경과했을 때 자산 성장 곡선이 가팔라지는 '변곡점'이 나타납니다. 초기에는 원금이 이자보다 훨씬 크지만, 시간이 지날수록 이자가
-              원금을 추월하는 '스노우볼 효과'가 본격화됩니다. 인내심을 갖고 이 한계점을 넘기는 것이 중요합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>월복리와 연복리, 실제 수령액 차이가 많이 나나요?</summary>
-            <p>
-              수익률 10%로 20년 투자 시, 월복리가 연복리보다 최종 자산이 약 3~4% 정도 더 높습니다. 단기적으로는 무시할 수준일 수 있으나, <strong>투자 금액이 크고 기간이
-                길어질수록</strong> 그 절대적인 금액 차이는 무시할 수 없는 수준이 됩니다. 가능하다면 복리 주기가 짧은 상품이 유리합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>하이이익(High Risk) 복리 투자는 위험한가요?</summary>
-            <p>
-              연 20% 이상의 고수익 복리 계획은 실현 가능성이 매우 낮습니다. 복리는 <strong>안정적이고 지속 가능한 수익률</strong>일 때 가장 강력합니다. 한 해에 50% 수익을 내고
-              다음 해에 40% 손실을 보는 것보다, 매년 꾸준히 7~8% 수익을 내는 것이 장기 복리 관점에서는 훨씬 유리합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>추가 투자 없이 원금만으로도 복리 효과가 있나요?</summary>
-            <p>
-              물론입니다. 원금에서 발생한 이자가 다시 재투자되는 구조이므로 원금만으로도 복리 효과는 발생합니다. 하지만 <strong>월 추가 투자</strong>를 병행하면 복리의 바퀴가 더 빨리
-              돌아가게 되어 최종 목표 금액에 도달하는 시간을 획기적으로 단축할 수 있습니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>인플레이션 환경에서 복리 투자의 의미는?</summary>
-            <p>
-              인플레이션은 현금의 가치를 깎아먹기 때문에, 이를 극복하기 위해서는 <strong>실질 수익률(명목 수익률 - 물가상승률)</strong>이 플러스인 복리 투자가 필수입니다. 예금 금리가
-              물가상승률보다 낮다면 복리 효과가 있다 하더라도 실질 자산은 줄어드는 셈이므로, 자산 배분이 중요합니다.
-            </p>
-          </details>
-          <details class="faq-item">
-            <summary>배당금 재투자가 복리에 왜 중요한가요?</summary>
-            <p>
-              주식 투자의 경우 주가 상승 수익뿐만 아니라 <strong>배당금</strong>을 찾아 쓰지 않고 다시 주식을 사는 데 투입하면, 보유 주식 수가 기하급수적으로 늘어나는 또 다른 복리의
-              축이 형성됩니다. 장기 투자 성과의 절반 이상이 배당 재투자에서 나온다는 연구 결과도 있습니다.
-            </p>
-          </details>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===== BOTTOM AD ===== -->
   <div class="ad-banner-bottom">
