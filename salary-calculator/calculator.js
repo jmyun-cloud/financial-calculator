@@ -332,7 +332,13 @@ function displaySalaryResult(r) {
     <div class="summary-label">월 실수령액 (세전 연봉 ${formatKRW(r.annualRaw)}원 기준)</div>
     <div class="summary-amount">${formatKRW(r.monthlyTakeHome)}원</div>
     <div class="summary-sub">연간 실수령액 ≈ ${getHumanReadable(r.annualTakeHome)}</div>
-  `;
+  
+    <div style="margin-top: 15px;">
+      <button onclick="if(window.saveGoal) saveGoal('salary', '올해의 연봉 목표', r.annualTakeHome, '예상 연 실수령액')" style="padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+        📌 대시보드에 목표로 저장
+      </button>
+    </div>
+`;
 
   // 공제 내역 테이블
   const table = document.getElementById("deduction-table");
@@ -547,7 +553,13 @@ function displayHourlyResult(r) {
       <div class="result-item-label">연 환산 (세전)</div>
       <div class="result-item-value accent">${formatKRW(r.annualPay)}원 (${getHumanReadable(r.annualPay)})</div>
     </div>
-  `;
+  
+    <div style="margin-top: 15px;">
+      <button onclick="if(window.saveGoal) saveGoal('salary', '올해의 연봉 목표', r.annualTakeHome, '예상 연 실수령액')" style="padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+        📌 대시보드에 목표로 저장
+      </button>
+    </div>
+`;
 
   resultEl.style.display = "block";
   resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });

@@ -208,7 +208,13 @@ function displayDepositResult(principal, grossInterest, taxAmount, netInterest, 
     <div class="summary-label">만기 세후 수령액 (${period}개월 / ${rate}% / ${interestLabel} / ${taxLabel})</div>
     <div class="summary-amount">${formatKRW(netMaturity)}원</div>
     <div class="summary-sub">${getHumanReadable(netMaturity)}</div>
-  `;
+  
+    <div style="margin-top: 15px;">
+      <button onclick="if(window.saveGoal) saveGoal('savings', '정기예금 목표', netMaturity, '세후 달성 목표')" style="padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+        📌 대시보드에 목표로 저장
+      </button>
+    </div>
+`;
 
   gridEl.innerHTML = `
     <div class="result-item">
@@ -320,7 +326,13 @@ function displayInstallmentResult(totalPrincipal, monthly, grossInterest, taxAmo
     <div class="summary-label">만기 세후 수령액 (${period}개월 / ${rate}% / ${interestLabel} / ${taxLabel})</div>
     <div class="summary-amount">${formatKRW(netMaturity)}원</div>
     <div class="summary-sub">${getHumanReadable(netMaturity)}</div>
-  `;
+  
+    <div style="margin-top: 15px;">
+      <button onclick="if(window.saveGoal) saveGoal('savings', '정기예금 목표', netMaturity, '세후 달성 목표')" style="padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+        📌 대시보드에 목표로 저장
+      </button>
+    </div>
+`;
 
   gridEl.innerHTML = `
     <div class="result-item">
