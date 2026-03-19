@@ -415,6 +415,21 @@ function displaySalaryResult(r) {
 
   resultEl.style.display = "block";
   resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  // Dwell Time Enhancement: Quick Tip
+  let tipEl = document.getElementById('s-tip');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 's-tip';
+    tipEl.className = 'quick-tip fade-in';
+    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+    document.getElementById('result-salary').appendChild(tipEl);
+  }
+  tipEl.innerHTML = `
+    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>실수령액 모으기</strong></h4>
+    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">이번 달 실수령액 중 일부를 먼저 저축하세요. 매달 일정액을 적금하면 만기에 얼마가 되는지 확인해보세요.</p>
+    <a href="../savings-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">정기적금 계산해보기 &rarr;</a>
+  `;
 }
 
 // ===================================================
@@ -438,7 +453,7 @@ function calculateHourly() {
   }
 
   // 최저시급 체크
-  const MIN_WAGE_2026 = 10030;
+  const MIN_WAGE_2026 = 10320;
   const belowMin = wageRaw < MIN_WAGE_2026;
 
   // 주 근로시간 → 월 환산 (4.345주/월)
@@ -457,10 +472,6 @@ function calculateHourly() {
     wageRaw * (monthlyWorkHours + monthlyHolidayHours),
   );
   const annualPay = monthlyPay * 12;
-
-  const minHourly = 10320;
-  const standardHours = 209;
-  const minMonthly = minHourly * standardHours;
 
   // 4대보험 간이 계산 (소득세는 최소 수준)
   const ins = calcInsurance(monthlyPay);
@@ -540,6 +551,21 @@ function displayHourlyResult(r) {
 
   resultEl.style.display = "block";
   resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  // Dwell Time Enhancement: Quick Tip
+  let tipEl = document.getElementById('h-tip');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 'h-tip';
+    tipEl.className = 'quick-tip fade-in';
+    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+    document.getElementById('result-hourly').appendChild(tipEl);
+  }
+  tipEl.innerHTML = `
+    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>시급을 월급처럼</strong></h4>
+    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">시급으로 환산한 월 급여를 적금으로 모은다면 목돈이 될 수 있습니다.</p>
+    <a href="../savings-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">적금 계산해보기 &rarr;</a>
+  `;
 }
 
 // ===== 초기화 =====

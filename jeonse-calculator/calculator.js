@@ -69,15 +69,18 @@ function resultHTML(items, notice = "") {
 }
 
 function calcToMonthly() {
+  const LEGAL_RATE = 5.5; // 법정 전환율 (한국은행 기준금리 3.5% + 2.0% 기준)
   const jeonse = parse(document.getElementById("tm-jeonse").value);
   const deposit = parse(document.getElementById("tm-deposit").value);
-  const rate = parseFloat(document.getElementById("tm-rate").value) || 4.5;
+  const rate = parseFloat(document.getElementById("tm-rate").value) || LEGAL_RATE;
   if (!jeonse) return alert("전세 보증금을 입력해 주세요.");
   if (deposit >= jeonse)
     return alert("전환 후 보증금은 전세 보증금보다 작아야 합니다.");
   const diff = jeonse - deposit;
-  const monthly = (diff * rate) / 100 / 12;
-  const legalMonthly = (diff * 4.5) / 100 / 12;
+  const Math_floor = Math.floor;
+  // 월세 (원 미만 절사)
+  const monthly = Math_floor((diff * rate) / 100 / 12);
+  const legalMonthly = Math_floor((diff * LEGAL_RATE) / 100 / 12);
   const el = document.getElementById("result-tm");
   document.getElementById("result-tm-content").innerHTML = `
     <div class="result-highlight"><div class="label">월 납부 금액 (전환율 ${rate}%)</div><div class="amount">${fmt(monthly)}원 / 월</div></div>
@@ -91,22 +94,23 @@ function calcToMonthly() {
     {
       label: "법정 전환율 기준 월세",
       val: fmt(legalMonthly) + "원/월",
-      cls: rate > 4.5 ? "negative" : "",
+      cls: rate > LEGAL_RATE ? "negative" : "",
     },
   ])}
     </div>
-    ${rate > 4.5 ? `<div class="result-notice">⚠️ 입력한 전환율(${rate}%)이 법정 상한(4.5%)을 초과합니다. 법정 기준 월세는 ${fmt(legalMonthly)}원입니다.</div>` : ""}
+    ${rate > LEGAL_RATE ? `<div class="result-notice">⚠️ 입력한 전환율(${rate}%)이 법정 상한(${LEGAL_RATE}%)을 초과합니다. 법정 상한월세는 ${fmt(legalMonthly)}원입니다.</div>` : ""}
   `;
   el.style.display = "block";
   el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function calcToDeposit() {
+  const LEGAL_RATE = 5.5; // 전월세전환율 (예상 시장/상한율)
   const monthly = parse(document.getElementById("td-monthly").value);
   const deposit = parse(document.getElementById("td-deposit").value);
-  const rate = parseFloat(document.getElementById("td-rate").value) || 4.5;
+  const rate = parseFloat(document.getElementById("td-rate").value) || LEGAL_RATE;
   if (!monthly) return alert("월세를 입력해 주세요.");
-  const addDeposit = ((monthly * 12) / rate) * 100;
+  const addDeposit = Math.floor(((monthly * 12) / rate) * 100);
   const totalJeonse = deposit + addDeposit;
   const el = document.getElementById("result-td");
   document.getElementById("result-td-content").innerHTML = `
@@ -127,6 +131,7 @@ function calcToDeposit() {
 }
 
 function calcAdjust() {
+  const LEGAL_RATE = 5.5;
   const curMonthly = parse(
     document.getElementById("adj-current-monthly").value,
   );
@@ -134,11 +139,11 @@ function calcAdjust() {
     document.getElementById("adj-current-deposit").value,
   );
   const newDeposit = parse(document.getElementById("adj-new-deposit").value);
-  const rate = parseFloat(document.getElementById("adj-rate").value) || 4.5;
+  const rate = parseFloat(document.getElementById("adj-rate").value) || LEGAL_RATE;
   if (!curMonthly) return alert("현재 월세를 입력해 주세요.");
   if (!newDeposit) return alert("변경 후 보증금을 입력해 주세요.");
   const depositDiff = newDeposit - curDeposit;
-  const monthlyChange = (depositDiff * rate) / 100 / 12;
+  const monthlyChange = Math.floor((depositDiff * rate) / 100 / 12);
   const newMonthly = curMonthly - monthlyChange;
   const el = document.getElementById("result-adj");
   const isUp = depositDiff > 0;

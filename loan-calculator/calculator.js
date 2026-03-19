@@ -166,47 +166,70 @@ function renderScheduleTable(rows, gracePeriod, all) {
 
 // ===== 원리금균등상환 계산 =====
 function calcEqualInstallment(P, r, n) {
-    // r: 월이율, n: 납입 개월
     if (r === 0) {
-        const payment = P / n;
+        const payment = Math.floor(P / n);
+        let balance = P;
         return Array.from({ length: n }, (_, i) => {
-            const balance = P - payment * (i + 1);
-            return { month: i + 1, principal: payment, interest: 0, payment, balance: Math.max(0, balance) };
+            const isLast = i === n - 1;
+            const principal = isLast ? balance : payment;
+            balance -= principal;
+            return { month: i + 1, principal, interest: 0, payment: principal, balance: Math.max(0, balance) };
         });
     }
-    const m = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+
+    // 원리금균등 상환액 (원 미만 절사)
+    const m = Math.floor(P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1));
     let balance = P;
+
     return Array.from({ length: n }, (_, i) => {
-        const interest = balance * r;
-        const principal = m - interest;
-        balance -= principal;
-        return { month: i + 1, principal: Math.round(principal), interest: Math.round(interest), payment: Math.round(m), balance: Math.max(0, Math.round(balance)) };
+        const isLast = i === n - 1;
+        const interest = Math.floor(balance * r); // 이자 원 미만 절사
+        let principal = 0;
+        let payment = 0;
+
+        if (isLast) {
+            principal = balance;
+            payment = principal + interest;
+            balance = 0;
+        } else {
+            principal = m - interest;
+            payment = m;
+            balance -= principal;
+        }
+
+        return { month: i + 1, principal, interest, payment, balance };
     });
 }
 
 // ===== 원금균등상환 계산 =====
 function calcEqualPrincipal(P, r, n) {
-    const principalPerMonth = P / n;
+    const principalPerMonth = Math.floor(P / n);
     let balance = P;
     return Array.from({ length: n }, (_, i) => {
-        const interest = balance * r;
-        const payment = principalPerMonth + interest;
-        balance -= principalPerMonth;
-        return { month: i + 1, principal: Math.round(principalPerMonth), interest: Math.round(interest), payment: Math.round(payment), balance: Math.max(0, Math.round(balance)) };
+        const isLast = i === n - 1;
+        const principal = isLast ? balance : principalPerMonth;
+        const interest = Math.floor(balance * r);
+        const payment = principal + interest;
+        balance -= principal;
+        return { month: i + 1, principal, interest, payment, balance };
     });
 }
 
 // ===== 만기일시상환 계산 =====
 function calcBullet(P, r, n) {
-    const interest = P * r;
-    const rows = Array.from({ length: n }, (_, i) => ({
-        month: i + 1,
-        principal: i === n - 1 ? Math.round(P) : 0,
-        interest: Math.round(interest),
-        payment: i === n - 1 ? Math.round(P + interest) : Math.round(interest),
-        balance: i === n - 1 ? 0 : Math.round(P),
-    }));
-    return rows;
+    return Array.from({ length: n }, (_, i) => {
+        const isLast = i === n - 1;
+        const interest = Math.floor(P * r);
+        const principal = isLast ? P : 0;
+        const payment = principal + interest;
+        return {
+            month: i + 1,
+            principal,
+            interest,
+            payment,
+            balance: isLast ? 0 : P,
+        };
+    });
 }
 
 // ===== 거치 기간 포함 스케줄 생성 =====
@@ -215,8 +238,8 @@ function buildScheduleWithGrace(P, r, n, grace, type) {
 
     // 거치 기간: 이자만 납부
     for (let i = 1; i <= grace; i++) {
-        const interest = P * r;
-        rows.push({ month: i, principal: 0, interest: Math.round(interest), payment: Math.round(interest), balance: Math.round(P) });
+        const interest = Math.floor(P * r);
+        rows.push({ month: i, principal: 0, interest, payment: interest, balance: P });
     }
 
     // 상환 기간
@@ -346,6 +369,21 @@ function displayResult(principal, totalInterest, totalPayment, firstPayment, las
     document.getElementById('result-loan').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
     renderDonutChart('chart-loan', 'legend-loan', principal, totalInterest);
+
+  // Dwell Time Enhancement: Quick Tip
+  let tipEl = document.getElementById('l-tip');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 'l-tip';
+    tipEl.className = 'quick-tip fade-in';
+    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+    document.getElementById('result-loan').appendChild(tipEl);
+  }
+  tipEl.innerHTML = `
+    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>대출 상환 달성 후 계획</strong></h4>
+    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">무사히 상환을 마친 뒤, 대출금 상환에 쓰던 돈을 그대로 적금에 넣는다면? 엄청난 목돈이 됩니다.</p>
+    <a href="../savings-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">적금 계산기로 시뮬레이션 &rarr;</a>
+  `;
 }
 
 // ===== 초기화 =====

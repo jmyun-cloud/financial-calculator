@@ -175,9 +175,9 @@ function calculateDeposit(skipHistory = false) {
     maturity = principalRaw * Math.pow(1 + monthlyRate, period);
   }
 
-  const grossInterest = maturity - principalRaw;
+  const grossInterest = Math.floor(maturity - principalRaw);
   const taxRate = getTaxRate(taxType);
-  const taxAmount = grossInterest * taxRate;
+  const taxAmount = Math.floor((grossInterest * taxRate) / 10) * 10; // 원단위 절사
   const netInterest = grossInterest - taxAmount;
   const netMaturity = principalRaw + netInterest;
 
@@ -239,6 +239,21 @@ function displayDepositResult(principal, grossInterest, taxAmount, netInterest, 
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   renderDonutChart('chart-deposit', 'legend-deposit', principal, grossInterest, taxAmount);
+
+  // Dwell Time Enhancement: Quick Tip
+  let tipEl = document.getElementById('d-tip');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 'd-tip';
+    tipEl.className = 'quick-tip fade-in';
+    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+    document.getElementById('result-deposit').appendChild(tipEl);
+  }
+  tipEl.innerHTML = `
+    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>다음 단계: 복리로 굴리기</strong></h4>
+    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">예금 만기 후 이 목돈을 어떻게 굴릴지 고민이신가요? 복리 수익률 계산기로 재투자 계획을 세워보세요.</p>
+    <a href="../compound-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">복리 계산기로 이동 &rarr;</a>
+  `;
 }
 
 // ===== 적금 계산 =====
@@ -263,16 +278,18 @@ function calculateInstallment(skipHistory = false) {
     // 1회차가 (n)개월 이자, 마지막 회차가 1개월 이자
     grossInterest = monthlyRaw * (rate / 100 / 12) * period * (period + 1) / 2;
   } else {
-    // 월복리 적금
+    // 월복리 적금 (기초불 기준: 첫 달은 period개월, 마지막 달은 1개월 이자)
     for (let i = 1; i <= period; i++) {
-      const remainingMonths = period - i;
+      const remainingMonths = period - i + 1;
       const futureValue = monthlyRaw * Math.pow(1 + monthlyRate, remainingMonths);
       grossInterest += futureValue - monthlyRaw;
     }
   }
 
+  // 이자는 원단위 절사 및 세금도 원단위 절사 (은행 기준)
+  grossInterest = Math.floor(grossInterest);
   const taxRate = getTaxRate(taxType);
-  const taxAmount = grossInterest * taxRate;
+  const taxAmount = Math.floor((grossInterest * taxRate) / 10) * 10; // 원단위 절사
   const netInterest = grossInterest - taxAmount;
   const netMaturity = totalPrincipal + netInterest;
 
@@ -338,6 +355,21 @@ function displayInstallmentResult(totalPrincipal, monthly, grossInterest, taxAmo
   result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   renderDonutChart('chart-installment', 'legend-installment', totalPrincipal, grossInterest, taxAmount);
+
+  // Dwell Time Enhancement: Quick Tip
+  let tipEl = document.getElementById('i-tip');
+  if (!tipEl) {
+    tipEl = document.createElement('div');
+    tipEl.id = 'i-tip';
+    tipEl.className = 'quick-tip fade-in';
+    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+    document.getElementById('result-installment').appendChild(tipEl);
+  }
+  tipEl.innerHTML = `
+    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>다음 단계: 목돈 굴리기</strong></h4>
+    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">적금 만기 후 모인 돈을 다시 굴릴 계획이 필요합니다. 모은 돈이 복리로 얼마나 불어날지 시뮬레이션 해보세요.</p>
+    <a href="../compound-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">복리 계산기로 이동 &rarr;</a>
+  `;
 }
 
 // ===== 초기화 =====
