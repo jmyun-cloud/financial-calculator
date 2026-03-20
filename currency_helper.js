@@ -87,6 +87,17 @@
             }
 
             const updateHelper = () => {
+                // Auto-format the input value with commas if it's numeric
+                if (!input.value.includes('.')) {
+                    const raw = input.value.replace(/[^0-9]/g, '');
+                    const num = parseInt(raw, 10);
+                    if (!isNaN(num) && num > 0) {
+                        input.value = num.toLocaleString('ko-KR');
+                    } else if (raw === '') {
+                        input.value = '';
+                    }
+                }
+
                 const val = input.value;
                 const kor = numberToKorean(val);
                 if (kor) {

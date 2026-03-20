@@ -104,10 +104,72 @@ function renderDonutChart(canvasId, legendId, principal, totalInterest) {
       <span class="legend-dot" style="background:${d.color}"></span>
       <div class="legend-info">
         <span class="legend-label">${d.label}</span>
-        <span class="legend-val">${formatKRW(d.val)}원</span>
+        <span class="legend-label" style="font-weight: 600;">${formatKRW(d.val)}원</span>
       </div>
     </div>`
     ).join('');
+}
+
+// ===== 상환 스케줄 시간순 차트 (Timeline) =====
+function renderAmortizationChart(canvasId, schedule, gracePeriod) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+
+    // Data extraction
+    const labels = schedule.map(r => `${r.month}회차`);
+    const principalData = schedule.map(r => r.principal);
+    const interestData = schedule.map(r => r.interest);
+    const balanceData = schedule.map(r => r.balance);
+
+    chartInstances[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    type: 'line',
+                    label: '잔여 원금',
+                    data: balanceData,
+                    borderColor: '#94a3b8',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    yAxisID: 'y1',
+                    order: 1
+                },
+                {
+                    type: 'bar',
+                    label: '납입 이자',
+                    data: interestData,
+                    backgroundColor: '#e85d1a',
+                    yAxisID: 'y',
+                    order: 2
+                },
+                {
+                    type: 'bar',
+                    label: '납입 원금',
+                    data: principalData,
+                    backgroundColor: '#1a56e8',
+                    yAxisID: 'y',
+                    order: 3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: { stacked: true, ticks: { maxTicksLimit: 12 } },
+                y: { stacked: true, position: 'left', title: { display: true, text: '월 납입액' }, ticks: { callback: v => (v / 10000).toLocaleString() + '만' } },
+                y1: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '잔여 원금' }, ticks: { callback: v => (v / 10000).toLocaleString() + '만' } }
+            },
+            plugins: {
+                legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + formatKRW(ctx.raw) + '원' } }
+            }
+        }
+    });
 }
 
 // ===== 전체/요약 스케줄 토글 =====
@@ -301,6 +363,7 @@ function calculate(skipHistory = false) {
     lastGracePeriod = grace;
     showAll = false;
     renderScheduleTable(schedule, grace, false);
+    renderAmortizationChart('amortization-chart', schedule, grace);
     document.getElementById('btn-show-all').textContent = '전체 보기';
 
     // 이력 저장
@@ -370,16 +433,16 @@ function displayResult(principal, totalInterest, totalPayment, firstPayment, las
 
     renderDonutChart('chart-loan', 'legend-loan', principal, totalInterest);
 
-  // Dwell Time Enhancement: Quick Tip
-  let tipEl = document.getElementById('l-tip');
-  if (!tipEl) {
-    tipEl = document.createElement('div');
-    tipEl.id = 'l-tip';
-    tipEl.className = 'quick-tip fade-in';
-    tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
-    document.getElementById('result-loan').appendChild(tipEl);
-  }
-  tipEl.innerHTML = getTipHtml('loan', 1);
+    // Dwell Time Enhancement: Quick Tip
+    let tipEl = document.getElementById('l-tip');
+    if (!tipEl) {
+        tipEl = document.createElement('div');
+        tipEl.id = 'l-tip';
+        tipEl.className = 'quick-tip fade-in';
+        tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
+        document.getElementById('result-loan').appendChild(tipEl);
+    }
+    tipEl.innerHTML = getTipHtml('loan', 1);
 }
 
 // ===== 초기화 =====
