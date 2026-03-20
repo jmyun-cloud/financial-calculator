@@ -10,7 +10,7 @@
   // 프리미엄 버튼 스타일 (CSS 주입)
   const style = document.createElement('style');
   style.textContent = `
-    .save-image-btn {
+    .save-image-btn, .share-result-btn {
       background: #ffffff !important;
       color: #475569 !important;
       border: 1px solid #e2e8f4 !important;
@@ -28,7 +28,7 @@
       white-space: nowrap !important;
     }
 
-    .save-image-btn:hover {
+    .save-image-btn:hover, .share-result-btn:hover {
       background: #f8faff !important;
       border-color: #1a56e8 !important;
       color: #1a56e8 !important;
@@ -36,18 +36,18 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
     }
 
-    .save-image-btn:active {
+    .save-image-btn:active, .share-result-btn:active {
       transform: translateY(0) !important;
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
     }
 
-    html[data-theme="dark"] .save-image-btn {
+    html[data-theme="dark"] .save-image-btn, html[data-theme="dark"] .share-result-btn {
       background: #1e293b !important;
       border-color: #334155 !important;
       color: #94a3b8 !important;
     }
     
-    html[data-theme="dark"] .save-image-btn:hover {
+    html[data-theme="dark"] .save-image-btn:hover, html[data-theme="dark"] .share-result-btn:hover {
       background: #2d3748 !important;
       border-color: #1a56e8 !important;
       color: #1a56e8 !important;
@@ -63,24 +63,63 @@
   /**
    * 버튼 주입 함수
    */
-  function injectSaveButton() {
+  function injectActionButtons() {
     // 결과창 타이틀들을 모두 찾음
     const titles = document.querySelectorAll('.result-title, .result-header h3');
 
     titles.forEach(titleEl => {
       if (titleEl.querySelector('.save-image-btn')) return; // 중복 방지
 
-      // 버튼 생성
-      const btn = document.createElement('button');
-      btn.className = 'save-image-btn';
-      btn.type = 'button';
-      btn.innerHTML = '🖼️ 저장';
-      btn.title = '결과를 이미지로 저장합니다';
+      // 1. 이미지 저장 버튼
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-image-btn';
+      saveBtn.type = 'button';
+      saveBtn.innerHTML = '🖼️ 저장';
+      saveBtn.title = '결과를 이미지로 저장합니다';
 
-      btn.addEventListener('click', function (e) {
+      saveBtn.addEventListener('click', function (e) {
         e.preventDefault();
         const card = titleEl.closest('.result-card, .calc-card, .calculator-card') || titleEl.parentElement;
         saveResultAsImage(card);
+      });
+
+      // 2. 결과 공유 버튼 (Web Share API)
+      const shareBtn = document.createElement('button');
+      shareBtn.className = 'share-result-btn';
+      shareBtn.type = 'button';
+      shareBtn.innerHTML = '🔗 공유';
+      shareBtn.title = '결과 링크를 복사하거나 기기로 공유합니다';
+
+      shareBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const pageName = ((document.querySelector('.main-title, h1') || {}).textContent || '금융계산기.kr').trim();
+        const shareData = {
+          title: pageName,
+          text: `[${pageName}] 금융계산기.kr에서 쉽고 빠르게 계산한 결과를 확인해 보세요!`,
+          url: window.location.href
+        };
+
+        // 스마트 폴백 로직: 모바일 환경이거나 Web Share API가 완벽지원되는 경우
+        if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+          navigator.share(shareData).catch(err => {
+            console.log("Share cancelled or failed: ", err);
+          });
+        } else {
+          // 데스크탑 PC 환경 (URL 클립보드 복사)
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            const originalText = shareBtn.innerHTML;
+            shareBtn.innerHTML = '✅ 복사 완료!';
+            shareBtn.style.color = '#10b981';
+            shareBtn.style.borderColor = '#10b981';
+            setTimeout(() => {
+              shareBtn.innerHTML = originalText;
+              shareBtn.style.color = '';
+              shareBtn.style.borderColor = '';
+            }, 2000);
+          }).catch(err => {
+            alert('링크 복사에 실패했습니다.');
+          });
+        }
       });
 
       // 버튼 그룹 관리 (toast.js와 공유)
@@ -102,7 +141,9 @@
         titleEl.appendChild(group);
       }
 
-      group.appendChild(btn);
+      // 화면이 좁을 수 있으므로 공유버튼 먼저, 그다음 저장버튼
+      group.appendChild(shareBtn);
+      group.appendChild(saveBtn);
     });
   }
 
@@ -115,8 +156,9 @@
     const copyBtn = cardElement.querySelector('.copy-result-btn');
     const originalText = saveBtn ? saveBtn.innerHTML : "🖼️ 저장";
 
-    // 캡처 전 UI 정리
     if (saveBtn) saveBtn.style.display = 'none';
+    const shareBtn = cardElement.querySelector('.share-result-btn');
+    if (shareBtn) shareBtn.style.display = 'none';
     if (copyBtn) copyBtn.style.display = 'none';
 
     const pageName = ((document.querySelector('.main-title, h1') || {}).textContent || '계산결과').trim();
@@ -125,6 +167,8 @@
 
     function restore() {
       if (saveBtn) { saveBtn.style.display = ''; saveBtn.innerHTML = originalText; }
+      const shareBtn = cardElement.querySelector('.share-result-btn');
+      if (shareBtn) shareBtn.style.display = '';
       if (copyBtn) copyBtn.style.display = '';
     }
 
@@ -173,9 +217,9 @@
 
   // 초기화 및 관찰 시작
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectSaveButton);
+    document.addEventListener('DOMContentLoaded', injectActionButtons);
   } else {
-    injectSaveButton();
+    injectActionButtons();
   }
 
   const observer = new MutationObserver((mutations) => {
@@ -186,7 +230,7 @@
         break;
       }
     }
-    if (shouldInject) injectSaveButton();
+    if (shouldInject) injectActionButtons();
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
