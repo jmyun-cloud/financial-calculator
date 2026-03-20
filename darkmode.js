@@ -9,16 +9,16 @@
   var css = [
     /* ======== VARIABLES ======== */
     'html[data-theme="dark"] {',
-    "  --bg: #101827;",
-    "  --surface: #1a2435;",
-    "  --surface-2: #243146;",
-    "  --border: #354a65;",
-    "  --text-primary: #e8edf5;",
-    "  --text-secondary: #9eb3cc;",
-    "  --text-muted: #6b8097;",
-    "  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);",
-    "  --shadow-md: 0 4px 16px rgba(0,0,0,.5);",
-    "  --shadow-lg: 0 10px 40px rgba(0,0,0,.55);",
+    "  --bg: #090e17;",
+    "  --surface: #111827;",
+    "  --surface-2: #1e293b;",
+    "  --border: #334155;",
+    "  --text-primary: #f8fafc;",
+    "  --text-secondary: #cbd5e1;",
+    "  --text-muted: #94a3b8;",
+    "  --shadow-sm: 0 1px 3px rgba(0,0,0,.6);",
+    "  --shadow-md: 0 8px 24px rgba(0,0,0,.7);",
+    "  --shadow-lg: 0 10px 40px rgba(0,0,0,.8);",
     "}",
 
     /* ======== BASE ======== */
