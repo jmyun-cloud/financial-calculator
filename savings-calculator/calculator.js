@@ -255,11 +255,7 @@ function displayDepositResult(principal, grossInterest, taxAmount, netInterest, 
     tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
     document.getElementById('result-deposit').appendChild(tipEl);
   }
-  tipEl.innerHTML = `
-    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>다음 단계: 복리로 굴리기</strong></h4>
-    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">예금 만기 후 이 목돈을 어떻게 굴릴지 고민이신가요? 복리 수익률 계산기로 재투자 계획을 세워보세요.</p>
-    <a href="../compound-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">복리 계산기로 이동 &rarr;</a>
-  `;
+  tipEl.innerHTML = getTipHtml('savings-deposit', 1);
 }
 
 // ===== 적금 계산 =====
@@ -377,11 +373,7 @@ function displayInstallmentResult(totalPrincipal, monthly, grossInterest, taxAmo
     tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
     document.getElementById('result-installment').appendChild(tipEl);
   }
-  tipEl.innerHTML = `
-    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>다음 단계: 목돈 굴리기</strong></h4>
-    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">적금 만기 후 모인 돈을 다시 굴릴 계획이 필요합니다. 모은 돈이 복리로 얼마나 불어날지 시뮬레이션 해보세요.</p>
-    <a href="../compound-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">복리 계산기로 이동 &rarr;</a>
-  `;
+  tipEl.innerHTML = getTipHtml('savings-deposit', 1);
 }
 
 // ===== 초기화 =====

@@ -346,11 +346,7 @@ function displayResult({ initial, monthlyAdd, rate, years, freq, taxRate,
     tipEl.style.cssText = 'margin-top: 24px; padding: 20px; background: rgba(5, 150, 105, 0.08); border-left: 4px solid #059669; border-radius: 8px;';
     document.getElementById('result-compound').appendChild(tipEl);
   }
-  tipEl.innerHTML = `
-    <h4 style="margin: 0 0 8px 0; color: #059669; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><span style="font-size: 1.2rem;">💡</span> <strong>투자 은퇴 계획 세우기</strong></h4>
-    <p style="margin: 0 0 16px 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">이 시드머니로 노후를 준비한다면 연금을 얼마나 받을 수 있을까요?</p>
-    <a href="../pension-calculator/index.html" class="btn-next-step" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; background: var(--surface-1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='var(--surface-2)';" onmouseout="this.style.background='var(--surface-1)';">연금 수령액 알아보기 &rarr;</a>
-  `;
+  tipEl.innerHTML = getTipHtml('compound', 1);
 }
 
 function renderGrowthTable(yearlyData, totalInvested, taxRate) {
