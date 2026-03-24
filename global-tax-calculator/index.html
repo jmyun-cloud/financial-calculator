@@ -24,7 +24,8 @@
     content="프리랜서, 개인사업자를 위한 2026년 종합소득세 예상세액 계산기. 총수입과 필요경비, 소득공제를 입력하면 5월 종소세 신고 시 내야 할 예상 세금(또는 환급금)을 즉시 계산합니다." />
   <meta name="keywords" content="종합소득세 계산기, 종소세 계산, 프리랜서 종소세, 5월 종합소득세, 삼쩜삼 환급, 사업소득세, 누진세율" />
   <meta property="og:title" content="종합소득세 계산기 (2026년 신고분) - 예상세액 3초 확인" />
-  <meta property="og:description" content="사업소득, 프리랜서 등 총수입과 경비를 입력하여 5월 종합소득세 신고 시 나의 예상 세액(또는 환급금)을 빠르고 정확하게 계산합니다." />
+  <meta property="og:description"
+    content="사업소득, 프리랜서 등 총수입과 경비를 입력하여 5월 종합소득세 신고 시 나의 예상 세액(또는 환급금)을 빠르고 정확하게 계산합니다." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -382,11 +383,12 @@
   <main class="main-content">
     <div class="container content-grid">
       <!-- ===== CALCULATOR ===== -->
-      
+
       <section class="calculator-section" id="calculator">
         <!-- 탭 -->
         <div class="tab-switcher" role="tablist">
-          <button class="tab-btn active" id="tab-globaltax" role="tab" aria-selected="true" aria-controls="panel-globaltax" onclick="switchTab('globaltax')">
+          <button class="tab-btn active" id="tab-globaltax" role="tab" aria-selected="true"
+            aria-controls="panel-globaltax" onclick="switchTab('globaltax')">
             📑 종합소득세 예상세액 계산
           </button>
         </div>
@@ -404,7 +406,9 @@
               <div class="form-group" style="grid-column: span 2">
                 <label class="form-label" for="t-gross">연간 총 수입 (매출)</label>
                 <div class="input-wrap">
-                  <input type="text" id="t-gross" class="form-input large-input" placeholder="30,000,000" inputmode="numeric" onkeyup="formatCurrencyInput(this); updateKoreanHelper(this, 't-gross-hint', '원');" />
+                  <input type="text" id="t-gross" class="form-input large-input" placeholder="30,000,000"
+                    inputmode="numeric"
+                    onkeyup="formatCurrencyInput(this); updateKoreanHelper(this, 't-gross-hint', '원');" />
                   <span class="input-unit">원</span>
                 </div>
                 <span class="form-hint" id="t-gross-hint">세전 총 수입금액</span>
@@ -413,7 +417,8 @@
               <div class="form-group" style="grid-column: span 2">
                 <label class="form-label" for="t-expense">필요경비 (단순/기준경비율 적용 후 금액 또는 장부상 지출액)</label>
                 <div class="input-wrap">
-                  <input type="text" id="t-expense" class="form-input" placeholder="10,000,000" inputmode="numeric" onkeyup="formatCurrencyInput(this);" />
+                  <input type="text" id="t-expense" class="form-input" placeholder="10,000,000" inputmode="numeric"
+                    onkeyup="formatCurrencyInput(this);" />
                   <span class="input-unit">원</span>
                 </div>
                 <span class="form-hint">총 수입에서 차감될 업무상 비용</span>
@@ -422,7 +427,8 @@
               <div class="form-group">
                 <label class="form-label" for="t-deduction">소득공제 (인적공제 등)</label>
                 <div class="input-wrap">
-                  <input type="text" id="t-deduction" class="form-input" placeholder="1,500,000" inputmode="numeric" onkeyup="formatCurrencyInput(this);" value="1,500,000" />
+                  <input type="text" id="t-deduction" class="form-input" placeholder="1,500,000" inputmode="numeric"
+                    onkeyup="formatCurrencyInput(this);" value="1,500,000" />
                   <span class="input-unit">원</span>
                 </div>
                 <span class="form-hint">기본 인적공제 본인 150만원 자동적용</span>
@@ -431,7 +437,8 @@
               <div class="form-group">
                 <label class="form-label" for="t-paid">기납부세액 (미리 낸 세금)</label>
                 <div class="input-wrap">
-                  <input type="text" id="t-paid" class="form-input" placeholder="0" inputmode="numeric" onkeyup="formatCurrencyInput(this);" />
+                  <input type="text" id="t-paid" class="form-input" placeholder="0" inputmode="numeric"
+                    onkeyup="formatCurrencyInput(this);" />
                   <span class="input-unit">원</span>
                 </div>
                 <span class="form-hint">프리랜서 3.3% 떼인 총액 등</span>
@@ -447,8 +454,10 @@
           <div class="result-card" id="result-tax" style="display: none">
             <h3 class="result-title" id="tax-result-title">📑 예상 납부/환급 결과</h3>
             <div class="result-summary-box" id="result-tax-summary"></div>
-            
-            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; margin-top: 24px; color: var(--text-primary);">📋 과세표준 및 세금 산출 내역</h4>
+
+            <h4
+              style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; margin-top: 24px; color: var(--text-primary);">
+              📋 과세표준 및 세금 산출 내역</h4>
             <table class="deduction-table" id="deduction-table-t"></table>
 
             <div class="chart-wrap" style="margin-top: 30px;">
@@ -460,12 +469,6 @@
               ※ 누진세율은 현행 6% ~ 45% 누진 공제 방식을 채택하고 있습니다.<br>
               ※ 지방소득세 10%가 최종 산출세액에 자동으로 합산·계산되었습니다.<br>
               ※ 세액공제(자녀, 연금계좌, 의료비 등)가 있다면 이 계산기가 산출한 금액보다 최종 세금이 더 <strong>적게(또는 환급액이 더 많게)</strong> 나올 수 있습니다.
-            </div>
-            
-            <div style="margin-top: 15px; text-align: right;">
-              <button class="action-btn" onclick="exportToImage('result-tax', '종합소득세예상결과.png')">
-                <span class="btn-icon">📸</span> 결과 이미지로 저장
-              </button>
             </div>
           </div>
         </div>
@@ -568,7 +571,7 @@
           </ul>
         </nav>
 
-        
+
         <!-- 누진세율 위젯 -->
         <div class="sidebar-widget info-widget">
           <h2 class="widget-title">📋 최신 종합소득세 세율 (누진공제)</h2>
