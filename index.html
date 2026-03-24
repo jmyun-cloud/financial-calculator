@@ -889,7 +889,7 @@
       </a>
       <div class="header-search">
         <span>🔍</span>
-        <input type="text" placeholder="예: 종부세, 복리, 청약..." />
+        <input type="text" id="main-search-input" placeholder="예: 종소세, 복리, 프리랜서..." />
       </div>
       <nav class="header-nav" style="display: flex; gap: 20px; margin-left: auto; align-items: center;">
         <a href="#toolbox" class="nav-link"
@@ -1081,6 +1081,39 @@
       }, { rootMargin: "0px 0px -50px 0px" });
 
       reveals.forEach(el => revealObserver.observe(el));
+
+      // Main Search Logic
+      const searchInput = document.getElementById('main-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          const allCards = document.querySelectorAll('.calc-grid .calc-card');
+
+          allCards.forEach(card => {
+            const title = card.querySelector('.card-title')?.innerText.toLowerCase() || '';
+            const desc = card.querySelector('.card-desc')?.innerText.toLowerCase() || '';
+            const tags = card.querySelector('.card-features')?.innerText.toLowerCase() || '';
+
+            if (title.includes(query) || desc.includes(query) || tags.includes(query)) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // Hide empty categories
+          document.querySelectorAll('.toolbox-category').forEach(cat => {
+            // Check if there are any cards not strictly hidden
+            const visibleCards = Array.from(cat.querySelectorAll('.calc-card')).filter(c => c.style.display !== 'none');
+            cat.style.display = visibleCards.length > 0 ? 'block' : 'none';
+          });
+
+          // Optional: Scroll to toolbox to show results if user starts typing at top
+          if (query.length > 0 && window.scrollY < document.getElementById('toolbox').offsetTop - 100) {
+            document.getElementById('toolbox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
     });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=4"></script>
