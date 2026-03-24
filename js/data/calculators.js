@@ -73,6 +73,24 @@ const calculatorCategories = [
                 tags: ["4대보험", "소득세", "시급→월급", "부양가족 반영"]
             },
             {
+                id: "freelancer",
+                path: "freelancer-calculator/index.html",
+                themeStyle: "--card-color: #8b5cf6;",
+                icon: "💸",
+                title: "프리랜서 계산기",
+                description: "알바, N잡러의 3.3% 원천징수 세금을 떼고 남은 정확한 실수령액을 구하거나, 입금액으로 세전 역산을 지원합니다.",
+                tags: ["3.3% 공제", "종합소득세", "실수령액 역산", "사업소득"]
+            },
+            {
+                id: "globaltax",
+                path: "global-tax-calculator/index.html",
+                themeStyle: "--card-color: #e11d48;",
+                icon: "📑",
+                title: "종합소득세 계산기",
+                description: "프리랜서, 소규모 개인사업자를 위해 최신 2026 누진세율(6%~45%)을 적용하여 5월 예상세액(납부/환급)을 계산합니다.",
+                tags: ["5월 종소세", "누진세율", "예상 환급액", "기납부세액"]
+            },
+            {
                 id: "severance",
                 path: "severance-calculator/index.html",
                 themeStyle: "--card-color: #d97706;",
