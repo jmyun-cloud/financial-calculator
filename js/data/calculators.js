@@ -50,6 +50,15 @@ const calculatorCategories = [
                 tags: ["청약 가점", "아파트 분양", "84점 만점", "특별공급"]
             },
             {
+                id: "dsr",
+                path: "dsr-calculator/index.html",
+                themeStyle: "--card-color: #2563eb;",
+                icon: "📊",
+                title: "DSR 대출 한도 계산기",
+                description: "내 연소득과 기존 부채를 바탕으로 추가로 받을 수 있는 최대 주담대·신용대출 한도를 DSR 40% 규제에 맞춰 정확히 계산합니다.",
+                tags: ["DSR 40%", "대출 한도", "주담대", "신용대출"]
+            },
+            {
                 id: "loan",
                 path: "loan-calculator/index.html",
                 themeStyle: "--card-color: #0284c7;",
