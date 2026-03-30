@@ -273,11 +273,9 @@
                     </div>
 
                     <form id="subscription-form">
-                        <div class="input-group">
-                            <label for="無주택기간">1. 무주택기간 (최고 32점) <span class="tooltip-icon"
-                                    title="만 30세 이상부터 산정되거나, 혼인신고일 중 빠른 날을 기준으로 1년마다 2점씩 가산됩니다.">ℹ️</span></label>
+                        <div class="form-group">
+                            <label class="form-label" for="無주택기간">1. 무주택기간 (최고 32점) <span class="tooltip-icon" data-tooltip="만 30세 이상부터 산정되거나, 혼인신고일 중 빠른 날을 기준으로 1년마다 2점씩 가산됩니다."></span></label>
                             <div class="input-wrap">
-                                <span class="input-icon">🏠</span>
                                 <select id="t-homeless" class="form-input" onchange="calculatePoints()">
                                     <option value="0">만 30세 미만 미혼 무주택자 (0점)</option>
                                     <option value="2">1년 미만 (유주택자 포함) (2점)</option>
@@ -300,11 +298,9 @@
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <label for="부양가족수">2. 부양가족 수 (최고 35점) <span class="tooltip-icon"
-                                    title="본인을 제외한 세대원 수. 1명당 5점씩 가산되며 기본점수는 5점입니다.">ℹ️</span></label>
+                        <div class="form-group">
+                            <label class="form-label" for="부양가족수">2. 부양가족 수 (최고 35점) <span class="tooltip-icon" data-tooltip="본인을 제외한 세대원 수. 1명당 5점씩 가산되며 기본점수는 5점입니다."></span></label>
                             <div class="input-wrap">
-                                <span class="input-icon">👨‍👩‍👧‍👦</span>
                                 <select id="t-family" class="form-input" onchange="calculatePoints()">
                                     <option value="5">0명 (본인 뿐인 경우) (5점)</option>
                                     <option value="10">1명 (10점)</option>
@@ -317,11 +313,9 @@
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <label for="가입기간">3. 청약통장 가입기간 (최고 17점) <span class="tooltip-icon"
-                                    title="최초 가입일 기준으로 은행에서 자동 산정됩니다. 1년마다 1점씩 가산.">ℹ️</span></label>
+                        <div class="form-group">
+                            <label class="form-label" for="가입기간">3. 청약통장 가입기간 (최고 17점) <span class="tooltip-icon" data-tooltip="최초 가입일 기준으로 은행에서 자동 산정됩니다. 1년마다 1점씩 가산."></span></label>
                             <div class="input-wrap">
-                                <span class="input-icon">🏦</span>
                                 <select id="t-bank" class="form-input" onchange="calculatePoints()">
                                     <option value="1">6개월 미만 (1점)</option>
                                     <option value="2">6개월 이상 ~ 1년 미만 (2점)</option>
