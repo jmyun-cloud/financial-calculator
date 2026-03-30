@@ -21,10 +21,9 @@ def bump_versions(directory):
                 # Group 1: href/src="
                 # Group 2: path/file.css/js
                 # Group 3: ?v=X (optional)
-                # Group 4: "
                 pattern = r'(href="|src=")([^" ]+\.(?:css|js))(\?v=\d+)?(")'
                 
-                new_content = re.sub(pattern, r'\1\2?v=4\4', content)
+                new_content = re.sub(pattern, r'\1\2?v=7\4', content)
                 
                 if content != new_content:
                     with open(filepath, 'w', encoding='utf-8') as f:
