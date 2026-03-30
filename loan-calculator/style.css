@@ -1406,3 +1406,37 @@ select.form-input {
   background: var(--surface-2);
   transition: background 0.2s ease;
 }
+
+
+/* ===== RESET BUTTON ===== */
+.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reset-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: transparent;
+}
+
+.reset-btn:hover svg {
+  transform: rotate(180deg);
+}
