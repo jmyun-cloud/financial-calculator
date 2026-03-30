@@ -8,8 +8,8 @@
   --primary: #1a56e8;
   --primary-dark: #1340b8;
   --primary-light: #e8f0fe;
-  --accent: #e85d1a;
-  --accent-light: #fff3ee;
+  --accent: var(--primary);
+  --accent-light: var(--primary-light);
 
   --bg: #f4f6fb;
   --surface: #ffffff;
@@ -181,7 +181,7 @@ ul {
 
 /* ===== TOP DESCRIPTION ===== */
 .top-description {
-  background: linear-gradient(135deg, #e85d1a 0%, #c0390a 50%, #8b2000 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #8b2000 100%);
   padding: 36px 0 32px;
   color: white;
 }
@@ -459,7 +459,7 @@ select.form-input {
 .calc-btn {
   width: 100%;
   padding: 16px 24px;
-  background: linear-gradient(135deg, #e85d1a 0%, #c0390a 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -472,12 +472,12 @@ select.form-input {
   justify-content: center;
   gap: 8px;
   transition: all var(--transition);
-  box-shadow: 0 4px 16px rgba(232, 93, 26, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .calc-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(232, 93, 26, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .calc-btn:active {
@@ -494,7 +494,7 @@ select.form-input {
   border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow: var(--shadow-lg);
-  border: 2px solid #e85d1a;
+  border: 2px solid var(--primary);
   margin-bottom: 20px;
   animation: fadeSlideIn 0.4s ease;
 }
@@ -518,7 +518,7 @@ select.form-input {
 }
 
 .result-summary-box {
-  background: linear-gradient(135deg, #e85d1a 0%, #c0390a 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   border-radius: var(--radius-md);
   padding: 24px;
   color: white;
@@ -571,8 +571,8 @@ select.form-input {
 }
 
 .compare-item.active-type {
-  border-color: #e85d1a;
-  background: #fff3ee;
+  border-color: var(--primary);
+  background: var(--primary-light);
 }
 
 .compare-type {
@@ -584,7 +584,7 @@ select.form-input {
 }
 
 .compare-item.active-type .compare-type {
-  color: #e85d1a;
+  color: var(--primary);
 }
 
 .compare-monthly {
@@ -634,12 +634,12 @@ select.form-input {
 }
 
 .result-item-value.accent {
-  color: #e85d1a;
+  color: var(--primary);
 }
 
 .result-item-value.large {
   font-size: 1.3rem;
-  color: #c0390a;
+  color: var(--primary-dark);
 }
 
 /* Chart */
@@ -789,10 +789,10 @@ select.form-input {
 }
 
 .schedule-table .total-row td {
-  background: #fff3ee;
+  background: var(--primary-light);
   font-weight: 700;
-  color: #c0390a;
-  border-top: 2px solid #e85d1a;
+  color: var(--primary-dark);
+  border-top: 2px solid var(--primary);
 }
 
 .schedule-table .grace-row td {
@@ -976,7 +976,7 @@ select.form-input {
   font-weight: 700;
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 3px solid #e85d1a;
+  border-bottom: 3px solid var(--primary);
   display: inline-block;
 }
 
@@ -1004,8 +1004,8 @@ select.form-input {
 }
 
 .info-card.highlight-card {
-  border-color: #e85d1a;
-  background: #fff3ee;
+  border-color: var(--primary);
+  background: var(--primary-light);
 }
 
 .info-card h3 {
@@ -1102,7 +1102,7 @@ select.form-input {
 .faq-item summary::after {
   content: "+";
   font-size: 1.3rem;
-  color: #e85d1a;
+  color: var(--primary);
   flex-shrink: 0;
   margin-left: 12px;
 }
@@ -1112,7 +1112,7 @@ select.form-input {
 }
 
 .faq-item summary:hover {
-  background: #fff3ee;
+  background: var(--primary-light);
 }
 
 .faq-item p {
@@ -1282,4 +1282,69 @@ select.form-input {
   .compare-grid {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* ===== TOOLTIP ===== */
+.tooltip-icon {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-style: normal;
+  color: var(--text-muted);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.tooltip-icon::before {
+  content: "?";
+  font-family: Pretendard, sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.tooltip-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.95);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 8px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+.tooltip-icon:hover::after,
+.tooltip-icon:active::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dark-mode .tooltip-icon::after {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
