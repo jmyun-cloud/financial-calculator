@@ -38,25 +38,34 @@ const calculatorCategories = [
         ]
     },
     {
-        categoryTitle: "대출 및 부동산",
+        categoryTitle: "주택 및 부동산",
         calculators: [
+            {
+                id: "subscription",
+                path: "subscription-calculator/index.html",
+                themeStyle: "--card-color: #0d9488;",
+                icon: "🏆",
+                title: "주택청약 가점 계산기",
+                description: "점수 계산 헷갈리시죠? 무주택기간, 부양가족, 통장가입기간을 통해 내 청약 점수(만점 84점)를 1초 만에 확인하세요.",
+                tags: ["청약 가점", "아파트 분양", "84점 만점", "특별공급"]
+            },
             {
                 id: "loan",
                 path: "loan-calculator/index.html",
-                themeType: "card-orange",
+                themeStyle: "--card-color: #0284c7;",
                 icon: "🏠",
                 title: "대출 이자 계산기",
-                description: "주택담보·신용대출의 월 상환금과 총 이자를 원리금균등·원금균등·만기일시 방식으로 계산합니다.",
-                tags: ["원리금균등", "원금균등", "만기일시", "상환 스케줄"]
+                description: "원리금균등, 원금균등, 만기일시 상환 방식에 따른 월 상환액과 총 이자를 정확한 명세서 형태로 볼 수 있습니다.",
+                tags: ["원리금균등", "원금균등", "내집마련"]
             },
             {
                 id: "jeonse",
                 path: "jeonse-calculator/index.html",
-                themeType: "card-purple",
-                icon: "🏗️",
-                title: "전세/월세 전환 계산기",
-                description: "전세금을 월세로, 월세를 전세로 전환할 때 적정 금액을 계산합니다. 법정 전월세 전환율(연 6%) 기준.",
-                tags: ["전세→월세", "월세→전세", "보증금 조정"]
+                themeStyle: "--card-color: #10b981;",
+                icon: "🏢",
+                title: "전월세 전환 계산기",
+                description: "법정 전월세 전환율을 적용하여 전세와 반전세, 월세 간의 보증금 및 월세를 정확하게 변환해 드립니다.",
+                tags: ["전월세 전환", "반전세", "보증금 조율"]
             }
         ]
     },
