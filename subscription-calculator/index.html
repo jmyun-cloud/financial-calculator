@@ -18,7 +18,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2026 주택청약 가점 계산기 (84점 만점) - 금융계산기.kr</title>
-    <meta name="description" content="2026 주택청약 가점 계산기입니다. 무주택기간, 부양가족수, 통장가입기간을 입력하여 내 청약 점수(최대 84점)를 정확하고 빠르게 확인하세요." />
+    <meta name="description"
+        content="2026 주택청약 가점 계산기입니다. 무주택기간, 부양가족수, 통장가입기간을 입력하여 내 청약 점수(최대 84점)를 정확하고 빠르게 확인하세요." />
     <meta name="keywords" content="주택청약, 청약가점, 무주택기간, 부양가족, 청약통장, 아파트 청약, 84점 만점" />
     <meta property="og:title" content="2026 주택청약 가점 계산기 (84점 만점) - 금융계산기.kr" />
     <meta property="og:description" content="2026년 기준 연봉 및 실수령액 관련 상세 가이드, 4대보험 요율 계산법을 알아봅니다." />
@@ -241,8 +242,7 @@
             <div class="top-desc-inner">
                 <div class="breadcrumb">
                     <a href="../index.html" style="color: inherit;">홈</a> <span class="bc-sep">›</span>
-                    <a href="../salary-calculator/index.html" style="color: inherit;">연봉 계산기</a> <span class="bc-sep">›</span>
-                    <span class="bc-current">연봉 실수령액 가이드</span>
+                    <span class="bc-current">주택청약 가점 계산기</span>
                 </div>
                 <h1 class="main-title">주택청약 가점 계산기</h1>
                 <p class="main-subtitle">
@@ -255,14 +255,18 @@
     <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
         <div class="container">
-            
+
             <!-- Calculator Container -->
-            <div class="calc-container" style="background:transparent; border:none; box-shadow:none; padding:0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                
+            <div class="calc-container"
+                style="background:transparent; border:none; box-shadow:none; padding:0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+
                 <!-- Left: Inputs -->
-                <div class="input-section" style="background: var(--surface); padding: 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h2 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin: 0;">조건 입력</h2>
+                <div class="input-section"
+                    style="background: var(--surface); padding: 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin: 0;">조건 입력
+                        </h2>
                         <button class="reset-btn" onclick="resetForm('subscription-form')" title="초기화">
                             <span class="btn-icon">🔄</span>
                         </button>
@@ -270,10 +274,11 @@
 
                     <form id="subscription-form">
                         <div class="input-group">
-                            <label for="無주택기간">1. 무주택기간 (최고 32점) <span class="tooltip-icon" title="만 30세 이상부터 산정되거나, 혼인신고일 중 빠른 날을 기준으로 1년마다 2점씩 가산됩니다.">ℹ️</span></label>
-                            <div class="input-wrapper">
+                            <label for="無주택기간">1. 무주택기간 (최고 32점) <span class="tooltip-icon"
+                                    title="만 30세 이상부터 산정되거나, 혼인신고일 중 빠른 날을 기준으로 1년마다 2점씩 가산됩니다.">ℹ️</span></label>
+                            <div class="input-wrap">
                                 <span class="input-icon">🏠</span>
-                                <select id="t-homeless" class="calc-input" onchange="calculatePoints()">
+                                <select id="t-homeless" class="form-input" onchange="calculatePoints()">
                                     <option value="0">만 30세 미만 미혼 무주택자 (0점)</option>
                                     <option value="2">1년 미만 (유주택자 포함) (2점)</option>
                                     <option value="4">1년 이상 ~ 2년 미만 (4점)</option>
@@ -296,10 +301,11 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="부양가족수">2. 부양가족 수 (최고 35점) <span class="tooltip-icon" title="본인을 제외한 세대원 수. 1명당 5점씩 가산되며 기본점수는 5점입니다.">ℹ️</span></label>
-                            <div class="input-wrapper">
+                            <label for="부양가족수">2. 부양가족 수 (최고 35점) <span class="tooltip-icon"
+                                    title="본인을 제외한 세대원 수. 1명당 5점씩 가산되며 기본점수는 5점입니다.">ℹ️</span></label>
+                            <div class="input-wrap">
                                 <span class="input-icon">👨‍👩‍👧‍👦</span>
-                                <select id="t-family" class="calc-input" onchange="calculatePoints()">
+                                <select id="t-family" class="form-input" onchange="calculatePoints()">
                                     <option value="5">0명 (본인 뿐인 경우) (5점)</option>
                                     <option value="10">1명 (10점)</option>
                                     <option value="15">2명 (15점)</option>
@@ -312,10 +318,11 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="가입기간">3. 청약통장 가입기간 (최고 17점) <span class="tooltip-icon" title="최초 가입일 기준으로 은행에서 자동 산정됩니다. 1년마다 1점씩 가산.">ℹ️</span></label>
-                            <div class="input-wrapper">
+                            <label for="가입기간">3. 청약통장 가입기간 (최고 17점) <span class="tooltip-icon"
+                                    title="최초 가입일 기준으로 은행에서 자동 산정됩니다. 1년마다 1점씩 가산.">ℹ️</span></label>
+                            <div class="input-wrap">
                                 <span class="input-icon">🏦</span>
-                                <select id="t-bank" class="calc-input" onchange="calculatePoints()">
+                                <select id="t-bank" class="form-input" onchange="calculatePoints()">
                                     <option value="1">6개월 미만 (1점)</option>
                                     <option value="2">6개월 이상 ~ 1년 미만 (2점)</option>
                                     <option value="3">1년 이상 ~ 2년 미만 (3점)</option>
@@ -342,22 +349,27 @@
                 <!-- Right: Result -->
                 <div class="result-section" id="result-subscription">
                     <div class="result-card" style="margin-top:0;">
-                        <h3 class="result-title" style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 class="result-title"
+                            style="display:flex; justify-content:space-between; align-items:center;">
                             <span>🏆 나의 최종 청약 가점</span>
                             <div class="result-btn-group"></div>
                         </h3>
-                        
-                        <div class="result-summary" style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height: 180px;">
+
+                        <div class="result-summary"
+                            style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height: 180px;">
                             <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 5px;">현재 예상 점수는 84점 만점에</div>
-                            <div id="result-total-score" style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--primary);">
+                            <div id="result-total-score"
+                                style="font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--primary);">
                                 0점
                             </div>
                         </div>
-                        
-                        <div style="position: relative; height: 260px; width: 100%; margin-top: 20px; display: none;" id="chart-container">
+
+                        <div style="position: relative; height: 260px; width: 100%; margin-top: 20px; display: none;"
+                            id="chart-container">
                             <canvas id="chart-subscription"></canvas>
                         </div>
-                        <div id="legend-subscription" class="chart-legend" style="margin-top:20px; display:flex; gap:10px; justify-content:center;"></div>
+                        <div id="legend-subscription" class="chart-legend"
+                            style="margin-top:20px; display:flex; gap:10px; justify-content:center;"></div>
 
                         <div class="deduction-details" style="margin-top: 25px;">
                             <table class="deduction-table">
@@ -375,10 +387,11 @@
 
                         <div class="result-notice">
                             ※ 주택청약 가점 만점은 총 84점입니다. (무주택기간 32점 + 부양가족 35점 + 가입기간 17점)<br>
-                            ※ 이 계산 결과는 법적 효력이 없으며, 실제 당첨 시 증빙 서류와 점수가 다를 경우 청약이 취소(부적격 처리)될 수 있으므로 청약홈(Applyhome) 등에서 본인의 정확한 조건을 한 번 더 확인하시기 바랍니다.
+                            ※ 이 계산 결과는 법적 효력이 없으며, 실제 당첨 시 증빙 서류와 점수가 다를 경우 청약이 취소(부적격 처리)될 수 있으므로 청약홈(Applyhome) 등에서
+                            본인의 정확한 조건을 한 번 더 확인하시기 바랍니다.
                         </div>
                     </div>
-                    
+
                     <!-- Appended Ad slot -->
                     <div style="margin-top: 30px;">
                         <div class="ad-slot ad-slot--square" id="ad-result">
