@@ -1440,3 +1440,12 @@ select.form-input {
 .reset-btn:hover svg {
   transform: rotate(180deg);
 }
+
+
+/* ===== FORM STACK ===== */
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 24px;
+}
