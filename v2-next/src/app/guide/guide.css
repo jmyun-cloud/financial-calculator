@@ -1,0 +1,72 @@
+
+.guide-article {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--shadow-md);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+.guide-article h2 {
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.guide-article h2:first-child { margin-top: 0; }
+.guide-article h2::before {
+    content: ""; display: block; width: 4px; height: 24px;
+    background: var(--primary); border-radius: 2px;
+}
+.guide-article h3 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+.guide-article p { margin-bottom: 20px; }
+.guide-article strong { color: var(--primary); font-weight: 700; }
+.guide-article ul { margin-bottom: 20px; padding-left: 20px; }
+.guide-article li { margin-bottom: 10px; }
+.formula-box {
+    background: var(--surface-2); padding: 24px; border-radius: 12px;
+    margin: 20px 0; border: 1px solid var(--border);
+}
+.formula-box ul { list-style: none; padding: 0; margin: 0; }
+.formula-box li { margin-bottom: 12px; }
+.formula-box li:last-child { margin-bottom: 0; }
+
+.faq-list { margin-top: 30px; }
+.faq-item {
+    background: var(--surface-2); border-radius: 12px;
+    margin-bottom: 12px; border: 1px solid var(--border); overflow: hidden;
+}
+.faq-item summary {
+    padding: 18px 24px; font-weight: 700; font-size: 1.05rem;
+    color: var(--text-primary); cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: "﹀"; font-size: 0.9rem; color: var(--primary); transition: transform 0.3s ease;
+}
+.faq-item[open] summary::after { transform: rotate(180deg); }
+.faq-item[open] summary { border-bottom: 1px solid var(--border); }
+.faq-item p {
+    padding: 20px 24px; margin: 0; color: var(--text-secondary);
+    font-size: 0.95rem; line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .guide-article { padding: 25px; }
+  .guide-article h2 { font-size: 1.3rem; }
+  .guide-article h3 { font-size: 1.15rem; }
+}
