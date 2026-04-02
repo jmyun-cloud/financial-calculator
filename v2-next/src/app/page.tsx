@@ -7,14 +7,14 @@ import UserDashboard from "@/components/portal/UserDashboard";
 
 export default function Home() {
   return (
-    <>
+    <div className="portal-page-wrapper">
       {/* ===== TICKER BAR (Investing.com Style) ===== */}
       <TickerBar />
 
       {/* ===== PORTAL DASHBOARD ===== */}
-      <main className="main-content portal-main">
+      <div className="main-content portal-main">
         <div className="container portal-grid">
-
+          
           {/* LEFT COLUMN: Content Feed (Toss Feed Style) */}
           <div className="portal-content">
             <MagazineFeed />
@@ -26,9 +26,9 @@ export default function Home() {
             <MiniToolbox />
             <MarketWidget />
           </aside>
-
+          
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 }
