@@ -8,9 +8,6 @@ import UserDashboard from "@/components/portal/UserDashboard";
 export default function Home() {
   return (
     <div className="portal-page-wrapper">
-      {/* ===== TICKER BAR (Investing.com Style) ===== */}
-      <TickerBar />
-
       {/* ===== PORTAL DASHBOARD ===== */}
       <div className="main-content portal-main">
         <div className="container portal-grid">

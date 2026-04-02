@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TickerBar from "@/components/portal/TickerBar";
 
 const GA_ID = "G-B1TE1JHHE3";
 
@@ -45,6 +46,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#1a56e8" />
       </head>
       <body>
+        <TickerBar />
         <Header />
         <main>{children}</main>
         <Footer />
