@@ -10,7 +10,8 @@ export default function Header() {
                 </Link>
                 <nav className="header-nav">
                     <Link href="/" className="nav-link">🏠 홈</Link>
-                    <Link href="/sitemap-page" className="nav-link">🗺️ 사이트맵</Link>
+                    <Link href="#toolbox" className="nav-link">계산기 도구</Link>
+                    <Link href="/guide/salary" className="nav-link">금융 매거진</Link>
                     <a
                         href="#"
                         className="nav-link"
