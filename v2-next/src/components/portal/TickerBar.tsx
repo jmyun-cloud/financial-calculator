@@ -11,7 +11,7 @@ interface MarketData {
     isPositive: boolean;
 }
 
-const SYMBOLS = ['^KS11', '^KQ11', 'KRW=X', 'GC=F'];
+const SYMBOLS_ORDER = ['BASE', '^KS11', '^KQ11', 'KRW=X', 'GC=F'];
 const NAMES: Record<string, string> = {
     '^KS11': 'KOSPI',
     '^KQ11': 'KOSDAQ',
@@ -20,77 +20,47 @@ const NAMES: Record<string, string> = {
     'BASE': '금리'
 };
 
-const CACHE_KEY = 'richcalc_ticker_data_v2';
+const CACHE_KEY = 'richcalc_ticker_data_v3';
 
 export default function TickerBar() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
-
-    // Use a ref to keep track of the latest data for merging
     const latestDataRef = useRef<Record<string, MarketData>>({});
 
     const fetchMarketData = async () => {
         try {
-            const fetchPromises = SYMBOLS.map(async (symbol) => {
-                try {
-                    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`;
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
+            const res = await fetch('/api/market');
+            if (!res.ok) throw new Error('Ticker API fetch failed');
+            const json = await res.json();
+            if (!json.success) throw new Error('Ticker API failure');
 
-                    const res = await fetch(proxyUrl);
-                    if (!res.ok) return null;
-
-                    const rawData = await res.json();
-                    const data = JSON.parse(rawData.contents);
-
-                    if (!data.chart || !data.chart.result) return null;
-
-                    const meta = data.chart.result[0].meta;
-                    const currentPrice = meta.regularMarketPrice;
-                    const prevClose = meta.previousClose;
-                    const change = currentPrice - prevClose;
+            const newIndicators: MarketData[] = [];
+            SYMBOLS_ORDER.forEach(symbol => {
+                const raw = json.data[symbol];
+                if (raw) {
+                    const priceNum = raw.price;
+                    const prevClose = raw.prevClose;
+                    const change = priceNum - prevClose;
                     const changePercent = (change / prevClose) * 100;
 
                     const item = {
                         symbol,
                         name: NAMES[symbol] || symbol,
-                        price: currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                        change: change.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                        changePercent: changePercent.toFixed(2),
+                        price: priceNum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (symbol === 'BASE' ? '%' : ''),
+                        change: Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                        changePercent: Math.abs(changePercent).toFixed(2),
                         isPositive: change >= 0
                     };
-
                     latestDataRef.current[symbol] = item;
-                    return item;
-                } catch (e) {
-                    return null;
+                    newIndicators.push(item);
+                } else if (latestDataRef.current[symbol]) {
+                    newIndicators.push(latestDataRef.current[symbol]);
                 }
             });
 
-            await Promise.all(fetchPromises);
-
-            const baseRate: MarketData = {
-                symbol: 'BASE',
-                name: NAMES['BASE'],
-                price: '3.50%',
-                change: '0.00',
-                changePercent: '0.00',
-                isPositive: true
-            };
-            latestDataRef.current['BASE'] = baseRate;
-
-            const orderedOrder = ['BASE', ...SYMBOLS];
-            const finalResults: MarketData[] = [];
-            orderedOrder.forEach(sym => {
-                if (latestDataRef.current[sym]) {
-                    finalResults.push(latestDataRef.current[sym]);
-                }
-            });
-
-            if (finalResults.length > 0) {
-                setIndicators(finalResults);
-
-                // Save to cache
+            if (newIndicators.length > 0) {
+                setIndicators(newIndicators);
                 localStorage.setItem(CACHE_KEY, JSON.stringify({
-                    data: finalResults,
+                    data: newIndicators,
                     timestamp: Date.now()
                 }));
             }
@@ -98,12 +68,11 @@ export default function TickerBar() {
     };
 
     useEffect(() => {
-        // Load from cache first
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             try {
                 const parsed = JSON.parse(cached);
-                if (parsed.data && Array.from(parsed.data).length > 0) {
+                if (parsed.data && parsed.data.length > 0) {
                     setIndicators(parsed.data);
                     parsed.data.forEach((item: MarketData) => {
                         latestDataRef.current[item.symbol] = item;
@@ -113,7 +82,7 @@ export default function TickerBar() {
         }
 
         fetchMarketData();
-        const interval = setInterval(fetchMarketData, 300000); // 5분마다 갱신
+        const interval = setInterval(fetchMarketData, 300000);
         return () => clearInterval(interval);
     }, []);
 
@@ -121,7 +90,7 @@ export default function TickerBar() {
         return (
             <div className="ticker-wrapper" style={{ height: '40px', background: '#0a0f1e' }}>
                 <div className="ticker-track">
-                    <span className="ticker-item" style={{ opacity: 0.6 }}>시장 지수 연동 중...</span>
+                    {[1, 2, 3, 4, 5].map(i => <span key={i} className="ticker-item" style={{ opacity: 0.3 }}>● ● ● ●</span>)}
                 </div>
             </div>
         );

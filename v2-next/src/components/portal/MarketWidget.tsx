@@ -11,7 +11,7 @@ interface MarketData {
     isPositive: boolean;
 }
 
-const SYMBOLS = ['^KS11', '^KQ11', 'KRW=X', 'GC=F'];
+const SYMBOLS_ORDER = ['BASE', '^KS11', '^KQ11', 'KRW=X', 'GC=F'];
 const NAMES: Record<string, string> = {
     '^KS11': 'KOSPI 지수',
     '^KQ11': 'KOSDAQ 지수',
@@ -20,112 +20,83 @@ const NAMES: Record<string, string> = {
     'BASE': '한국은행 기준금리'
 };
 
-const CACHE_KEY = 'richcalc_market_data_v2';
+const CACHE_KEY = 'richcalc_market_data_v3';
 
 export default function MarketWidget() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
     const [loading, setLoading] = useState(true);
     const [updateTime, setUpdateTime] = useState("");
-
-    // Use a ref to keep track of the latest data for merging
     const latestDataRef = useRef<Record<string, MarketData>>({});
 
     const fetchMarketData = async () => {
         try {
-            const fetchPromises = SYMBOLS.map(async (symbol) => {
-                try {
-                    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`;
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
+            // Fetch from internal high-speed API
+            const res = await fetch('/api/market');
+            if (!res.ok) throw new Error('API fetch failed');
 
-                    const res = await fetch(proxyUrl);
-                    if (!res.ok) return null;
+            const json = await res.json();
+            if (!json.success) throw new Error('API reported failure');
 
-                    const rawData = await res.json();
-                    const data = JSON.parse(rawData.contents);
+            const newIndicators: MarketData[] = [];
 
-                    if (!data.chart || !data.chart.result) return null;
-
-                    const meta = data.chart.result[0].meta;
-                    const currentPrice = meta.regularMarketPrice;
-                    const prevClose = meta.previousClose;
-                    const change = currentPrice - prevClose;
+            SYMBOLS_ORDER.forEach(symbol => {
+                const raw = json.data[symbol];
+                if (raw) {
+                    const priceNum = raw.price;
+                    const prevClose = raw.prevClose;
+                    const change = priceNum - prevClose;
                     const changePercent = (change / prevClose) * 100;
 
                     const item = {
                         symbol,
                         name: NAMES[symbol] || symbol,
-                        price: currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                        change: change.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                        changePercent: changePercent.toFixed(2),
+                        price: priceNum.toLocaleString(undefined, {
+                            minimumFractionDigits: symbol === 'BASE' ? 2 : 2,
+                            maximumFractionDigits: 2
+                        }) + (symbol === 'BASE' ? '%' : ''),
+                        change: Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                        changePercent: Math.abs(changePercent).toFixed(2),
                         isPositive: change >= 0
                     };
 
-                    // Update ref with fresh data
                     latestDataRef.current[symbol] = item;
-                    return item;
-                } catch (e) {
-                    return null;
+                    newIndicators.push(item);
+                } else if (latestDataRef.current[symbol]) {
+                    // Use ref if API missing specific symbol but we have it from cache/prev
+                    newIndicators.push(latestDataRef.current[symbol]);
                 }
             });
 
-            await Promise.all(fetchPromises);
-
-            // Always include Base Rate
-            const baseRate: MarketData = {
-                symbol: 'BASE',
-                name: NAMES['BASE'],
-                price: '3.50%',
-                change: '0.00',
-                changePercent: '0.00',
-                isPositive: true
-            };
-            latestDataRef.current['BASE'] = baseRate;
-
-            // Sort by predefined SYMBOLS order
-            const orderedOrder = ['BASE', ...SYMBOLS];
-            const finalResults: MarketData[] = [];
-
-            orderedOrder.forEach(sym => {
-                if (latestDataRef.current[sym]) {
-                    finalResults.push(latestDataRef.current[sym]);
-                }
-            });
-
-            if (finalResults.length > 0) {
-                setIndicators(finalResults);
+            if (newIndicators.length > 0) {
+                setIndicators(newIndicators);
                 const now = new Date();
                 const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
                 setUpdateTime(timeStr);
 
-                // Save to cache
                 localStorage.setItem(CACHE_KEY, JSON.stringify({
-                    data: finalResults,
+                    data: newIndicators,
                     time: timeStr,
                     timestamp: Date.now()
                 }));
             }
-
             setLoading(false);
         } catch (error) {
+            console.error("Market high-speed fetch error:", error);
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        // Load from cache first
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             try {
                 const parsed = JSON.parse(cached);
-                if (parsed.data && Array.from(parsed.data).length > 0) {
+                if (parsed.data && parsed.data.length > 0) {
                     setIndicators(parsed.data);
                     setUpdateTime(parsed.time);
-
-                    // Populate ref with cached data to prevent data loss on first failed fetch
                     parsed.data.forEach((item: MarketData) => {
                         latestDataRef.current[item.symbol] = item;
                     });
-
                     setLoading(false);
                 }
             } catch (e) { }
@@ -136,7 +107,6 @@ export default function MarketWidget() {
         return () => clearInterval(interval);
     }, []);
 
-    // Skeleton UI while loading if no indicators at all
     if (loading && indicators.length === 0) {
         return (
             <div className="market-widget widget-panel" style={{ minHeight: '420px' }}>
@@ -146,13 +116,6 @@ export default function MarketWidget() {
                         <div key={i} style={{ height: '60px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
                     ))}
                 </div>
-                <style jsx>{`
-                    @keyframes pulse {
-                        0% { opacity: 0.5; }
-                        50% { opacity: 0.8; }
-                        100% { opacity: 0.5; }
-                    }
-                `}</style>
             </div>
         );
     }
@@ -180,19 +143,16 @@ export default function MarketWidget() {
                                 {item.isPositive ? '▲' : '▼'}{item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
                             </span>
                         </div>
-                        {item.symbol === 'BASE' && <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>동결 (금융통화위원회 코멘트 기준)</div>}
+                        {item.symbol === 'BASE' && <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>동결 (지난 금통위 기준)</div>}
                     </div>
                 ))}
             </div>
-            <div className="market-footer" style={{ marginTop: '18px', fontSize: '0.72rem', opacity: 0.5, textAlign: 'right', fontStyle: 'italic' }}>
-                제공: Yahoo Finance 실시간 데이터
+            <div className="market-footer" style={{ marginTop: '18px', fontSize: '0.72rem', opacity: 0.5, textAlign: 'right' }}>
+                Yahoo Finance 실시간 연동 (고속 서버 모드)
             </div>
             <style jsx>{`
-                @keyframes blink {
-                    0% { opacity: 1; }
-                    50% { opacity: 0.3; }
-                    100% { opacity: 1; }
-                }
+                @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+                @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 0.8; } 100% { opacity: 0.5; } }
             `}</style>
         </div>
     );
