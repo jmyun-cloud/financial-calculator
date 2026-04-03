@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function fetchYahooData(symbol, name) {
         try {
             const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d&_=${Date.now()}`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}&_=${Date.now()}`;
             const res = await fetch(proxyUrl);
             const data = await res.json();
             const result = JSON.parse(data.contents).chart.result[0];

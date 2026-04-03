@@ -31,13 +31,15 @@ export default function MarketWidget() {
                 try {
                     // Using Allorigins proxy to bypass CORS
                     const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`;
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
 
                     const res = await fetch(proxyUrl);
                     if (!res.ok) return null;
 
                     const rawData = await res.json();
                     const data = JSON.parse(rawData.contents);
+
+                    console.log(`[MarketWidget] ${symbol} data:`, data);
 
                     if (!data.chart || !data.chart.result) return null;
 
