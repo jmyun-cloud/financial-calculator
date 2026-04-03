@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface MarketData {
     symbol: string;
@@ -20,10 +20,13 @@ const NAMES: Record<string, string> = {
     'BASE': '금리'
 };
 
-const CACHE_KEY = 'richcalc_ticker_data';
+const CACHE_KEY = 'richcalc_ticker_data_v2';
 
 export default function TickerBar() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
+
+    // Use a ref to keep track of the latest data for merging
+    const latestDataRef = useRef<Record<string, MarketData>>({});
 
     const fetchMarketData = async () => {
         try {
@@ -46,7 +49,7 @@ export default function TickerBar() {
                     const change = currentPrice - prevClose;
                     const changePercent = (change / prevClose) * 100;
 
-                    return {
+                    const item = {
                         symbol,
                         name: NAMES[symbol] || symbol,
                         price: currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -54,13 +57,15 @@ export default function TickerBar() {
                         changePercent: changePercent.toFixed(2),
                         isPositive: change >= 0
                     };
+
+                    latestDataRef.current[symbol] = item;
+                    return item;
                 } catch (e) {
                     return null;
                 }
             });
 
-            const results = await Promise.all(fetchPromises);
-            const validResults = results.filter((item): item is MarketData => item !== null);
+            await Promise.all(fetchPromises);
 
             const baseRate: MarketData = {
                 symbol: 'BASE',
@@ -70,15 +75,25 @@ export default function TickerBar() {
                 changePercent: '0.00',
                 isPositive: true
             };
+            latestDataRef.current['BASE'] = baseRate;
 
-            const newIndicators = [baseRate, ...validResults];
-            setIndicators(newIndicators);
+            const orderedOrder = ['BASE', ...SYMBOLS];
+            const finalResults: MarketData[] = [];
+            orderedOrder.forEach(sym => {
+                if (latestDataRef.current[sym]) {
+                    finalResults.push(latestDataRef.current[sym]);
+                }
+            });
 
-            // Save to cache
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-                data: newIndicators,
-                timestamp: Date.now()
-            }));
+            if (finalResults.length > 0) {
+                setIndicators(finalResults);
+
+                // Save to cache
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data: finalResults,
+                    timestamp: Date.now()
+                }));
+            }
         } catch (error) { }
     };
 
@@ -88,8 +103,11 @@ export default function TickerBar() {
         if (cached) {
             try {
                 const parsed = JSON.parse(cached);
-                if (Date.now() - parsed.timestamp < 3600000) {
+                if (parsed.data && Array.from(parsed.data).length > 0) {
                     setIndicators(parsed.data);
+                    parsed.data.forEach((item: MarketData) => {
+                        latestDataRef.current[item.symbol] = item;
+                    });
                 }
             } catch (e) { }
         }
@@ -103,7 +121,7 @@ export default function TickerBar() {
         return (
             <div className="ticker-wrapper" style={{ height: '40px', background: '#0a0f1e' }}>
                 <div className="ticker-track">
-                    <span className="ticker-item" style={{ opacity: 0.6 }}>실시간 지수 연동 중...</span>
+                    <span className="ticker-item" style={{ opacity: 0.6 }}>시장 지수 연동 중...</span>
                 </div>
             </div>
         );
