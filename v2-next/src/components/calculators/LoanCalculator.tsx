@@ -30,7 +30,15 @@ export default function LoanCalculator() {
   };
 
   const onCalculate = () => {
-    try { calculate(parseAmt(principalStr), parseFloat(rate), parseInt(period), parseInt(grace) || 0, type); } catch (e: any) { alert(e.message); }
+    try {
+      calculate(
+        parseAmt(principalStr),
+        parseFloat(rate),
+        parseInt(period),
+        parseInt(grace) || 0,
+        type as 'equal-installment' | 'equal-principal' | 'bullet'
+      );
+    } catch (e: any) { alert(e.message); }
   };
 
   useEffect(() => {
