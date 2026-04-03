@@ -267,9 +267,17 @@
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
         crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../css/ticker.css?v=7" />
 </head>
 
 <body>
+  <!-- ===== TICKER BAR ===== -->
+  <div id="ticker-bar" class="ticker-wrapper">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+    </div>
+  </div>
+
     <header class="site-header">
         <div class="header-inner">
             <a href="../index.html" class="logo"><span class="logo-icon">💰</span><span>금융계산기<span
@@ -353,6 +361,7 @@
             <p class="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
         </div>
     </footer>
+  <script src="../js/market-api.js?v=7"></script>
 </body>
 
 </html>

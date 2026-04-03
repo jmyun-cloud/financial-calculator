@@ -317,9 +317,17 @@
       });
     }
   </script>
+  <link rel="stylesheet" href="../css/ticker.css?v=7" />
 </head>
 
 <body>
+  <!-- ===== TICKER BAR ===== -->
+  <div id="ticker-bar" class="ticker-wrapper">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="header-inner">
       <a href="../index.html" class="logo"><span style="font-size: 1.4rem">💰</span><span>금융계산기<span
@@ -588,6 +596,7 @@
   <script src="../reset_form.js?v=7"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=7"></script>
   <script src="../export_image.js?v=7"></script>
+  <script src="../js/market-api.js?v=7"></script>
 </body>
 
 </html>

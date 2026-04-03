@@ -29,9 +29,7 @@ export async function getMarketIndicators(): Promise<MarketData[]> {
 
     const fetchPromises = symbols.map(async (symbol) => {
       try {
-        const res = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`, {
-          cache: 'no-store'
-        });
+        const res = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`);
         if (!res.ok) {
           console.error(`Fetch failed for ${symbol}: Status ${res.status}`);
           return null;

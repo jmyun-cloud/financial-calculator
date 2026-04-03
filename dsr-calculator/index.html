@@ -209,9 +209,17 @@
             });
         }
     </script>
+  <link rel="stylesheet" href="../css/ticker.css?v=7" />
 </head>
 
 <body>
+  <!-- ===== TICKER BAR ===== -->
+  <div id="ticker-bar" class="ticker-wrapper">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+    </div>
+  </div>
+
     <!-- ===== HEADER ===== -->
     <header class="site-header">
         <div class="container header-inner">
@@ -421,6 +429,7 @@
         });
     </script>
 
+  <script src="../js/market-api.js?v=7"></script>
 </body>
 
 </html>

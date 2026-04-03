@@ -101,9 +101,17 @@
       });
     }
   </script>
+  <link rel="stylesheet" href="../css/ticker.css?v=7" />
 </head>
 
 <body>
+  <!-- ===== TICKER BAR ===== -->
+  <div id="ticker-bar" class="ticker-wrapper">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+    </div>
+  </div>
+
   <!-- ===== HEADER ===== -->
   <header class="site-header">
     <div class="container header-inner">
@@ -364,6 +372,33 @@
 
       <!-- ===== SIDEBAR ===== -->
       <aside class="sidebar">
+        <!-- Market Indicators -->
+        <div class="sidebar-widget" style="margin-bottom: 24px;">
+          <h2 class="widget-title" style="font-size: 1.05rem;">📊 오늘의 주요 지표 <span id="market-status" style="font-size: 0.75rem; font-weight: 500; color: rgba(0,0,0,0.4); margin-left: auto;">...</span></h2>
+          <div class="market-grid">
+            <div class="market-item">
+              <div class="market-label">한국은행 기준금리</div>
+              <div class="market-value" id="val-rate">...</div>
+              <div class="market-change" id="change-rate">-</div>
+            </div>
+            <div class="market-item">
+              <div class="market-label">원/달러 환율</div>
+              <div class="market-value" id="val-usd">...</div>
+              <div class="market-change" id="change-usd">-</div>
+            </div>
+            <div class="market-item">
+              <div class="market-label">KOSPI 지수</div>
+              <div class="market-value" id="val-kospi">...</div>
+              <div class="market-change" id="change-kospi">-</div>
+            </div>
+            <div class="market-item">
+              <div class="market-label">KOSDAQ 지수</div>
+              <div class="market-value" id="val-kosdaq">...</div>
+              <div class="market-change" id="change-kosdaq">-</div>
+            </div>
+          </div>
+        </div>
+
         <!-- 최근 계산 기록 -->
         <section id="calc-history" class="history-section" style="display: none;">
           <div class="history-header">
@@ -494,18 +529,7 @@
         </div>
 
         <!-- Rate info widget -->
-        <div class="sidebar-widget info-widget">
-          <h2 class="widget-title">📰 기준금리 정보</h2>
-          <div class="rate-info-box">
-            <div class="rate-item">
-              <span class="rate-label">한국은행 기준금리</span>
-              <span class="rate-value">연 2.50%</span>
-            </div>
-            <div class="rate-item">
-              <span class="rate-label">최종 변경일</span>
-              <span class="rate-value small">2026.02.26</span>
-            </div>
-          </div>
+        
           <p class="widget-note">
             ※ 실제 예적금 금리는 금융기관별로 상이합니다.
           </p>
@@ -583,6 +607,7 @@
   <script src="../js/data/tips.js?v=7"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js?v=7"></script>
   <script src="../export_image.js?v=7"></script>
+  <script src="../js/market-api.js?v=7"></script>
 </body>
 
 </html>

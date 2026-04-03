@@ -1,0 +1,135 @@
+/* css/ticker.css */
+.ticker-wrapper {
+    width: 100%;
+    background: #0f172a;
+    color: white;
+    height: 44px;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: "Pretendard", sans-serif;
+}
+
+.ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 60s linear infinite;
+    gap: 40px;
+    padding-left: 100%;
+}
+
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.ticker-label {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ticker-value {
+    font-weight: 700;
+    color: white;
+}
+
+.ticker-change.up {
+    color: #ef4444 !important;
+    /* Korea Standard Red for Up */
+}
+
+.ticker-change.down {
+    color: #3b82f6 !important;
+    /* Korea Standard Blue for Down */
+}
+
+/* Adjust site-header if ticker is present */
+.site-header {
+    top: 44px !important;
+}
+
+/* For dark mode consistency */
+html[data-theme="dark"] .ticker-wrapper {
+    background: #020617;
+}
+
+/* Sidebar Market Widget Styles */
+.market-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.market-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Light Mode Override */
+body:not([data-theme="dark"]) .market-item {
+    background: #f8faff;
+    border: 1px solid #e2e8f4;
+}
+
+.market-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+}
+
+body:not([data-theme="dark"]) .market-label {
+    color: #64748b;
+}
+
+.market-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: white;
+}
+
+body:not([data-theme="dark"]) .market-value {
+    color: #0f172a;
+}
+
+.market-change {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+#market-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+body:not([data-theme="dark"]) #market-status {
+    color: #94a3b8;
+}
