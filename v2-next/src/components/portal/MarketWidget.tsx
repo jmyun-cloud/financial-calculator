@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { MARKET_CONFIG } from '@/lib/market-config';
 
 interface MarketData {
     symbol: string;
@@ -11,16 +12,7 @@ interface MarketData {
     isPositive: boolean;
 }
 
-const SYMBOLS_ORDER = ['BASE', '^KS11', '^KQ11', 'KRW=X', 'GC=F'];
-const NAMES: Record<string, string> = {
-    '^KS11': 'KOSPI 지수',
-    '^KQ11': 'KOSDAQ 지수',
-    'KRW=X': '원/달러 환율',
-    'GC=F': '국제 금 시세',
-    'BASE': '한국은행 기준금리'
-};
-
-const CACHE_KEY = 'richcalc_market_data_v3';
+const CACHE_KEY = 'richcalc_market_data_v4';
 
 export default function MarketWidget() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
@@ -30,7 +22,6 @@ export default function MarketWidget() {
 
     const fetchMarketData = async () => {
         try {
-            // Fetch from internal high-speed API
             const res = await fetch('/api/market');
             if (!res.ok) throw new Error('API fetch failed');
 
@@ -39,8 +30,13 @@ export default function MarketWidget() {
 
             const newIndicators: MarketData[] = [];
 
-            SYMBOLS_ORDER.forEach(symbol => {
+            // Use order and names from MARKET_CONFIG
+            const displaySymbols = ['BASE', ...MARKET_CONFIG.symbols];
+
+            displaySymbols.forEach(symbol => {
                 const raw = json.data[symbol];
+                const displayName = MARKET_CONFIG.widgetNames[symbol] || MARKET_CONFIG.names[symbol] || symbol;
+
                 if (raw) {
                     const priceNum = raw.price;
                     const prevClose = raw.prevClose;
@@ -49,9 +45,9 @@ export default function MarketWidget() {
 
                     const item = {
                         symbol,
-                        name: NAMES[symbol] || symbol,
+                        name: displayName,
                         price: priceNum.toLocaleString(undefined, {
-                            minimumFractionDigits: symbol === 'BASE' ? 2 : 2,
+                            minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         }) + (symbol === 'BASE' ? '%' : ''),
                         change: Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -62,7 +58,6 @@ export default function MarketWidget() {
                     latestDataRef.current[symbol] = item;
                     newIndicators.push(item);
                 } else if (latestDataRef.current[symbol]) {
-                    // Use ref if API missing specific symbol but we have it from cache/prev
                     newIndicators.push(latestDataRef.current[symbol]);
                 }
             });
@@ -70,18 +65,16 @@ export default function MarketWidget() {
             if (newIndicators.length > 0) {
                 setIndicators(newIndicators);
                 const now = new Date();
-                const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-                setUpdateTime(timeStr);
+                setUpdateTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
 
                 localStorage.setItem(CACHE_KEY, JSON.stringify({
                     data: newIndicators,
-                    time: timeStr,
+                    time: updateTime,
                     timestamp: Date.now()
                 }));
             }
             setLoading(false);
         } catch (error) {
-            console.error("Market high-speed fetch error:", error);
             setLoading(false);
         }
     };
@@ -93,7 +86,7 @@ export default function MarketWidget() {
                 const parsed = JSON.parse(cached);
                 if (parsed.data && parsed.data.length > 0) {
                     setIndicators(parsed.data);
-                    setUpdateTime(parsed.time);
+                    setUpdateTime(parsed.time || "");
                     parsed.data.forEach((item: MarketData) => {
                         latestDataRef.current[item.symbol] = item;
                     });

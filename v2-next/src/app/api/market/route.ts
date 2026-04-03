@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
-
-const SYMBOLS = ['^KS11', '^KQ11', 'KRW=X', 'GC=F'];
+import { MARKET_CONFIG } from '@/lib/market-config';
 
 export async function GET() {
     try {
-        const fetchPromises = SYMBOLS.map(async (symbol) => {
+        const fetchPromises = MARKET_CONFIG.symbols.map(async (symbol) => {
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
             try {
-                // Fetch with a 60-second revalidation period to ensure speed and bypass static build issues
                 const res = await fetch(url, { next: { revalidate: 60 } });
                 if (!res.ok) return null;
                 const data = await res.json();

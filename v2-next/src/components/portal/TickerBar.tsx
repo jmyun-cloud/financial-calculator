@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { MARKET_CONFIG } from '@/lib/market-config';
 
 interface MarketData {
     symbol: string;
@@ -11,16 +12,7 @@ interface MarketData {
     isPositive: boolean;
 }
 
-const SYMBOLS_ORDER = ['BASE', '^KS11', '^KQ11', 'KRW=X', 'GC=F'];
-const NAMES: Record<string, string> = {
-    '^KS11': 'KOSPI',
-    '^KQ11': 'KOSDAQ',
-    'KRW=X': 'USD/KRW',
-    'GC=F': 'Gold',
-    'BASE': '금리'
-};
-
-const CACHE_KEY = 'richcalc_ticker_data_v3';
+const CACHE_KEY = 'richcalc_ticker_data_v4';
 
 export default function TickerBar() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
@@ -34,8 +26,12 @@ export default function TickerBar() {
             if (!json.success) throw new Error('Ticker API failure');
 
             const newIndicators: MarketData[] = [];
-            SYMBOLS_ORDER.forEach(symbol => {
+            const displaySymbols = ['BASE', ...MARKET_CONFIG.symbols];
+
+            displaySymbols.forEach(symbol => {
                 const raw = json.data[symbol];
+                const displayName = MARKET_CONFIG.tickerNames[symbol] || MARKET_CONFIG.names[symbol] || symbol;
+
                 if (raw) {
                     const priceNum = raw.price;
                     const prevClose = raw.prevClose;
@@ -44,7 +40,7 @@ export default function TickerBar() {
 
                     const item = {
                         symbol,
-                        name: NAMES[symbol] || symbol,
+                        name: displayName,
                         price: priceNum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (symbol === 'BASE' ? '%' : ''),
                         change: Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                         changePercent: Math.abs(changePercent).toFixed(2),
