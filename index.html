@@ -844,7 +844,10 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Ticker Bar CSS moved to css/ticker.css */
   </style>
+  <link rel="stylesheet" href="css/ticker.css?v=7" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4050732935545035"
     crossorigin="anonymous"></script>
 
@@ -881,6 +884,13 @@
 </head>
 
 <body>
+  <!-- ===== TICKER BAR ===== -->
+  <div id="ticker-bar" class="ticker-wrapper">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+    </div>
+  </div>
+
   <!-- ===== HEADER ===== -->
   <header class="site-header">
     <div class="header-inner">
@@ -1003,6 +1013,16 @@
             <div class="market-label">KOSPI 지수</div>
             <div class="market-value" id="val-kospi">...</div>
             <div class="market-change" id="change-kospi">-</div>
+          </div>
+          <div class="market-item">
+            <div class="market-label">KOSDAQ 지수</div>
+            <div class="market-value" id="val-kosdaq">...</div>
+            <div class="market-change" id="change-kosdaq">-</div>
+          </div>
+          <div class="market-item">
+            <div class="market-label">국제 금 시세 (Gold)</div>
+            <div class="market-value" id="val-gold">...</div>
+            <div class="market-change" id="change-gold">-</div>
           </div>
         </div>
       </div>

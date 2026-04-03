@@ -1,9 +1,7 @@
-import Link from "next/link";
-import MarketWidget from "@/components/MarketWidget";
-import TickerBar from "@/components/portal/TickerBar";
 import MagazineFeed from "@/components/portal/MagazineFeed";
 import MiniToolbox from "@/components/portal/MiniToolbox";
 import UserDashboard from "@/components/portal/UserDashboard";
+import MarketWidget from "@/components/portal/MarketWidget";
 
 export default function Home() {
   return (

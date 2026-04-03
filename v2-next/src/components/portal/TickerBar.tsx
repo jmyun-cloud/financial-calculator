@@ -1,57 +1,35 @@
-"use client";
 import React from 'react';
+import { getMarketIndicators } from '@/lib/market-service';
 
-export default function TickerBar() {
-    // 실제 API 연동 전 UI 프로토타입
+export default async function TickerBar() {
+    const indicators = await getMarketIndicators();
+
+    // If API fails, show a placeholder
+    if (indicators.length === 0) {
+        return (
+            <div className="ticker-wrapper">
+                <div className="ticker-track">
+                    <span className="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // Duplicate for infinite animation
+    const displayItems = [...indicators, ...indicators, ...indicators];
+
     return (
         <div className="ticker-wrapper">
             <div className="ticker-track">
-                <div className="ticker-item">
-                    <span className="ticker-label">KOSPI</span>
-                    <span className="ticker-value">2,750.20</span>
-                    <span className="ticker-change positive">▲ 15.30 (+0.56%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">KOSDAQ</span>
-                    <span className="ticker-value">910.45</span>
-                    <span className="ticker-change positive">▲ 8.21 (+0.91%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">USD/KRW</span>
-                    <span className="ticker-value">1,310.50</span>
-                    <span className="ticker-change negative">▼ 2.50 (-0.19%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">한국은행 기준금리</span>
-                    <span className="ticker-value">3.50%</span>
-                    <span className="ticker-change neutral">- 동결</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">비트코인(BTC)</span>
-                    <span className="ticker-value">98,500,000</span>
-                    <span className="ticker-change positive">▲ 1,200,000 (+1.23%)</span>
-                </div>
-                {/* 무한 애니메이션을 위해 똑같은 데이터 반복 */}
-                <div className="ticker-item">
-                    <span className="ticker-label">KOSPI</span>
-                    <span className="ticker-value">2,750.20</span>
-                    <span className="ticker-change positive">▲ 15.30 (+0.56%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">KOSDAQ</span>
-                    <span className="ticker-value">910.45</span>
-                    <span className="ticker-change positive">▲ 8.21 (+0.91%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">USD/KRW</span>
-                    <span className="ticker-value">1,310.50</span>
-                    <span className="ticker-change negative">▼ 2.50 (-0.19%)</span>
-                </div>
-                <div className="ticker-item">
-                    <span className="ticker-label">한국은행 기준금리</span>
-                    <span className="ticker-value">3.50%</span>
-                    <span className="ticker-change neutral">- 동결</span>
-                </div>
+                {displayItems.map((item, idx) => (
+                    <div key={`${item.symbol}-${idx}`} className="ticker-item">
+                        <span className="ticker-label text-white">{item.name}</span>
+                        <span className="ticker-value text-white">{item.price}</span>
+                        <span className={`ticker-change ${item.isPositive ? 'positive' : 'negative'}`}>
+                            {item.isPositive ? '▲' : '▼'} {item.change} ({item.changePercent}%)
+                        </span>
+                    </div>
+                ))}
             </div>
         </div>
     );
