@@ -20,6 +20,8 @@ const NAMES: Record<string, string> = {
     'BASE': '금리'
 };
 
+const CACHE_KEY = 'richcalc_ticker_data';
+
 export default function TickerBar() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
 
@@ -60,7 +62,6 @@ export default function TickerBar() {
             const results = await Promise.all(fetchPromises);
             const validResults = results.filter((item): item is MarketData => item !== null);
 
-            // Add Base Rate
             const baseRate: MarketData = {
                 symbol: 'BASE',
                 name: NAMES['BASE'],
@@ -70,30 +71,44 @@ export default function TickerBar() {
                 isPositive: true
             };
 
-            setIndicators([baseRate, ...validResults]);
-        } catch (error) {
-            console.error("Ticker fetch error:", error);
-        }
+            const newIndicators = [baseRate, ...validResults];
+            setIndicators(newIndicators);
+
+            // Save to cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                data: newIndicators,
+                timestamp: Date.now()
+            }));
+        } catch (error) { }
     };
 
     useEffect(() => {
+        // Load from cache first
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            try {
+                const parsed = JSON.parse(cached);
+                if (Date.now() - parsed.timestamp < 3600000) {
+                    setIndicators(parsed.data);
+                }
+            } catch (e) { }
+        }
+
         fetchMarketData();
         const interval = setInterval(fetchMarketData, 300000); // 5분마다 갱신
         return () => clearInterval(interval);
     }, []);
 
-    // If API fails or loading, show a placeholder
     if (indicators.length === 0) {
         return (
-            <div className="ticker-wrapper">
+            <div className="ticker-wrapper" style={{ height: '40px', background: '#0a0f1e' }}>
                 <div className="ticker-track">
-                    <span className="ticker-item">실시간 시장 데이터를 불러오는 중입니다...</span>
+                    <span className="ticker-item" style={{ opacity: 0.6 }}>실시간 지수 연동 중...</span>
                 </div>
             </div>
         );
     }
 
-    // Duplicate for infinite animation
     const displayItems = [...indicators, ...indicators, ...indicators];
 
     return (
@@ -104,7 +119,7 @@ export default function TickerBar() {
                         <span className="ticker-label text-white">{item.name}</span>
                         <span className="ticker-value text-white">{item.price}</span>
                         <span className={`ticker-change ${item.isPositive ? 'positive' : 'negative'}`}>
-                            {item.isPositive ? '▲' : '▼'} {item.change} ({item.changePercent}%)
+                            {item.isPositive ? '▲' : '▼'}{item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
                         </span>
                     </div>
                 ))}

@@ -20,6 +20,8 @@ const NAMES: Record<string, string> = {
     'BASE': '한국은행 기준금리'
 };
 
+const CACHE_KEY = 'richcalc_market_data';
+
 export default function MarketWidget() {
     const [indicators, setIndicators] = useState<MarketData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -29,7 +31,6 @@ export default function MarketWidget() {
         try {
             const fetchPromises = SYMBOLS.map(async (symbol) => {
                 try {
-                    // Using Allorigins proxy to bypass CORS
                     const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d&_=${Date.now()}`;
                     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&_=${Date.now()}`;
 
@@ -38,8 +39,6 @@ export default function MarketWidget() {
 
                     const rawData = await res.json();
                     const data = JSON.parse(rawData.contents);
-
-                    console.log(`[MarketWidget] ${symbol} data:`, data);
 
                     if (!data.chart || !data.chart.result) return null;
 
@@ -58,7 +57,6 @@ export default function MarketWidget() {
                         isPositive: change >= 0
                     };
                 } catch (e) {
-                    console.error(`Failed to fetch ${symbol}:`, e);
                     return null;
                 }
             });
@@ -66,7 +64,6 @@ export default function MarketWidget() {
             const results = await Promise.all(fetchPromises);
             const validResults = results.filter((item): item is MarketData => item !== null);
 
-            // Add Base Rate
             const baseRate: MarketData = {
                 symbol: 'BASE',
                 name: NAMES['BASE'],
@@ -76,62 +73,103 @@ export default function MarketWidget() {
                 isPositive: true
             };
 
-            setIndicators([baseRate, ...validResults]);
+            const newIndicators = [baseRate, ...validResults];
+            setIndicators(newIndicators);
 
             const now = new Date();
-            setUpdateTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            setUpdateTime(timeStr);
             setLoading(false);
+
+            // Save to cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                data: newIndicators,
+                time: timeStr,
+                timestamp: Date.now()
+            }));
         } catch (error) {
-            console.error("Market data fetch error:", error);
             setLoading(false);
         }
     };
 
     useEffect(() => {
+        // Load from cache first
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            try {
+                const parsed = JSON.parse(cached);
+                // Only use cache if it's less than 1 hour old for initial display
+                if (Date.now() - parsed.timestamp < 3600000) {
+                    setIndicators(parsed.data);
+                    setUpdateTime(parsed.time);
+                    setLoading(false);
+                }
+            } catch (e) { }
+        }
+
         fetchMarketData();
-        const interval = setInterval(fetchMarketData, 60000); // 1분마다 갱신
+        const interval = setInterval(fetchMarketData, 60000);
         return () => clearInterval(interval);
     }, []);
 
+    // Skeleton UI while loading if no cache
     if (loading && indicators.length === 0) {
         return (
-            <div className="market-widget widget-panel">
-                <h2 className="widget-title">📈 시장 지수</h2>
-                <p className="loading-text">실시간 데이터를 불러오는 중...</p>
+            <div className="market-widget widget-panel" style={{ minHeight: '400px' }}>
+                <h2 className="widget-title">📊 주요 지표</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginTop: '20px' }}>
+                    {[1, 2, 3, 4, 5].map(i => (
+                        <div key={i} style={{ height: '60px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', animation: 'pulse 1.5s infinite ease-in-out' }}></div>
+                    ))}
+                </div>
+                <style jsx>{`
+                    @keyframes pulse {
+                        0% { opacity: 0.5; }
+                        50% { opacity: 0.8; }
+                        100% { opacity: 0.5; }
+                    }
+                `}</style>
             </div>
         );
     }
 
     return (
-        <div className="market-widget widget-panel">
+        <div className="market-widget widget-panel" style={{ minHeight: '400px' }}>
             <h2 className="widget-title" style={{ display: 'flex', alignItems: 'center' }}>
                 📊 오늘의 주요 지표
-                <span className="live-dot" style={{ color: '#10b981', margin: '0 8px' }}>●</span>
+                <span className="live-dot" style={{ color: '#10b981', margin: '0 8px', animation: 'blink 2s infinite' }}>●</span>
                 <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-secondary)', marginLeft: 'auto' }}>
-                    오늘 {updateTime} 업데이트
+                    {updateTime ? `${updateTime} 업데이트` : '연동 중...'}
                 </span>
             </h2>
             <div className="market-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '15px' }}>
                 {indicators.map((item) => (
-                    <div key={item.symbol} className="market-item" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
-                        <div className="market-label" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
+                    <div key={item.symbol} className="market-item" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
+                        <div className="market-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
                             {item.name}
                         </div>
-                        <div className="market-main-info" style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                            <span className="market-price" style={{ fontSize: '1.25rem', fontWeight: 700 }}>
+                        <div className="market-main-info" style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                            <span className="market-price" style={{ fontSize: '1.4rem', fontWeight: 800 }}>
                                 {item.price}
                             </span>
-                        </div>
-                        <div className={`market-change ${item.isPositive ? 'up' : 'down'}`} style={{ fontSize: '0.9rem', fontWeight: 600, color: item.isPositive ? '#ef4444' : '#3b82f6' }}>
-                            {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
-                            {item.symbol === 'BASE' && <span style={{ marginLeft: '4px', color: 'var(--text-secondary)', fontWeight: 400 }}>동결 (최근 코멘트 기준)</span>}
+                            <span className={`market-change ${item.isPositive ? 'up' : 'down'}`} style={{ fontSize: '0.85rem', fontWeight: 600, color: item.isPositive ? '#ef4444' : '#3b82f6' }}>
+                                {item.isPositive ? '▲' : '▼'}{item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
+                                {item.symbol === 'BASE' && <span style={{ marginLeft: '6px', color: 'var(--text-secondary)', fontWeight: 400, fontSize: '0.75rem' }}>동결</span>}
+                            </span>
                         </div>
                     </div>
                 ))}
             </div>
-            <div className="market-footer" style={{ marginTop: '15px', fontSize: '0.75rem', opacity: 0.6 }}>
-                제공: Yahoo Finance (실시간 연동됨)
+            <div className="market-footer" style={{ marginTop: '15px', fontSize: '0.72rem', opacity: 0.5, textAlign: 'right' }}>
+                제공: Yahoo Finance
             </div>
+            <style jsx>{`
+                @keyframes blink {
+                    0% { opacity: 1; }
+                    50% { opacity: 0.3; }
+                    100% { opacity: 1; }
+                }
+            `}</style>
         </div>
     );
 }
