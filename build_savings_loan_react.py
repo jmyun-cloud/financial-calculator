@@ -11,61 +11,31 @@ os.makedirs('v2-next/src/app/loan-calculator', exist_ok=True)
 
 hooks_savings = """
 import { useState } from 'react';
+import { calculateDeposit, calculateInstallment, SavingsResult } from '@/lib/calculators/savings-engine';
 
 export function useSavingsCalculator() {
-  const [depositResult, setDepositResult] = useState<any>(null);
-  const [installmentResult, setInstallmentResult] = useState<any>(null);
+  const [depositResult, setDepositResult] = useState<SavingsResult | null>(null);
+  const [installmentResult, setInstallmentResult] = useState<SavingsResult | null>(null);
 
-  const getTaxRate = (taxType: string) => {
-    if (taxType === 'preferred') return 0.099;
-    if (taxType === 'exempt') return 0;
-    return 0.154;
-  };
-
-  const calculateDeposit = (principal: number, rate: number, period: number, interestType: string, taxType: string) => {
-    if (principal <= 0 || rate <= 0 || period <= 0) throw new Error("입력값을 확인해주세요.");
-    const annualRate = rate / 100;
-    const monthlyRate = annualRate / 12;
-    const years = period / 12;
-
-    let maturity = 0;
-    if (interestType === 'simple') {
-      maturity = principal * (1 + annualRate * years);
-    } else {
-      maturity = principal * Math.pow(1 + monthlyRate, period);
+  const onCalculateDeposit = (principal: number, rate: number, period: number, interestType: 'simple' | 'compound', taxType: 'normal' | 'preferred' | 'exempt') => {
+    try {
+      const res = calculateDeposit(principal, rate, period, interestType, taxType);
+      setDepositResult(res);
+    } catch (e: any) {
+      throw e;
     }
-    
-    const grossInterest = Math.floor(maturity - principal);
-    const taxAmount = Math.floor((grossInterest * getTaxRate(taxType)) / 10) * 10;
-    const netInterest = grossInterest - taxAmount;
-    const netMaturity = principal + netInterest;
-
-    setDepositResult({ principal, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType });
   };
 
-  const calculateInstallment = (monthly: number, rate: number, period: number, interestType: string, taxType: string) => {
-    if (monthly <= 0 || rate <= 0 || period <= 0) throw new Error("입력값을 확인해주세요.");
-    const monthlyRate = rate / 100 / 12;
-    const totalPrincipal = monthly * period;
-    let grossInterest = 0;
-
-    if (interestType === 'simple') {
-      grossInterest = monthly * monthlyRate * period * (period + 1) / 2;
-    } else {
-      for (let i = 1; i <= period; i++) {
-        grossInterest += monthly * Math.pow(1 + monthlyRate, period - i + 1) - monthly;
-      }
+  const onCalculateInstallment = (monthly: number, rate: number, period: number, interestType: 'simple' | 'compound', taxType: 'normal' | 'preferred' | 'exempt') => {
+    try {
+      const res = calculateInstallment(monthly, rate, period, interestType, taxType);
+      setInstallmentResult(res);
+    } catch (e: any) {
+      throw e;
     }
-
-    grossInterest = Math.floor(grossInterest);
-    const taxAmount = Math.floor((grossInterest * getTaxRate(taxType)) / 10) * 10;
-    const netInterest = grossInterest - taxAmount;
-    const netMaturity = totalPrincipal + netInterest;
-
-    setInstallmentResult({ totalPrincipal, monthly, grossInterest, taxAmount, netInterest, netMaturity, rate, period, interestType, taxType });
   };
 
-  return { depositResult, installmentResult, calculateDeposit, calculateInstallment };
+  return { depositResult, installmentResult, calculateDeposit: onCalculateDeposit, calculateInstallment: onCalculateInstallment };
 }
 """
 
@@ -110,17 +80,17 @@ export default function SavingsCalculator() {
   };
 
   const onDeposit = () => {
-    try { calculateDeposit(parseAmt(dPrincipal), parseFloat(dRate), parseInt(dPeriod), dInterest, dTax); } catch(e:any) { alert(e.message); }
+    try { calculateDeposit(parseAmt(dPrincipal), parseFloat(dRate), parseInt(dPeriod), dInterest as any, dTax as any); } catch(e:any) { alert(e.message); }
   };
 
   const onInstallment = () => {
-    try { calculateInstallment(parseAmt(iMonthly), parseFloat(iRate), parseInt(iPeriod), iInterest, iTax); } catch(e:any) { alert(e.message); }
+    try { calculateInstallment(parseAmt(iMonthly), parseFloat(iRate), parseInt(iPeriod), iInterest as any, iTax as any); } catch(e:any) { alert(e.message); }
   };
 
   const renderChart = (ref: any, inst: any, p: number, inter: number, tax: number) => {
     if (ref.current) {
       if (inst.current) inst.current.destroy();
-      inst.current = new Chart(ref.current.getContext("2d"), {
+      inst.current = new Chart(ref.current.getContext("2d")!, {
         type: "doughnut",
         data: { labels: ['원금', '세후이자', '이자소득세'], datasets: [{ data: [p, Math.max(0, inter-tax), tax], backgroundColor: ['#1a56e8', '#00c9a7', '#ef4444'], borderWidth: 0, hoverOffset: 8 }] },
         options: { cutout: '62%', plugins: { legend: { display: false } } }
@@ -255,67 +225,18 @@ with open('v2-next/src/app/savings-calculator/page.tsx', 'w', encoding='utf-8') 
 
 hooks_loan = """
 import { useState } from 'react';
+import { calculateLoan, LoanResult } from '@/lib/calculators/loan-engine';
 
 export function useLoanCalculator() {
-  const [loanResult, setLoanResult] = useState<any>(null);
+  const [loanResult, setLoanResult] = useState<LoanResult | null>(null);
 
-  const calculate = (principal: number, rate: number, period: number, grace: number, type: string) => {
-    if (principal <= 0 || rate <= 0 || period <= 0) throw new Error("입력값을 확인해주세요.");
-    if (grace >= period) throw new Error("거치기간은 대출기간보다 작아야합니다.");
-
-    const monthlyRate = rate / 100 / 12;
-    const schedule: any[] = [];
-    
-    // Grace period
-    for (let i = 1; i <= grace; i++) {
-      const interest = Math.floor(principal * monthlyRate);
-      schedule.push({ month: i, principal: 0, interest, payment: interest, balance: principal });
+  const calculate = (principal: number, rate: number, period: number, grace: number, type: 'equal-installment' | 'equal-principal' | 'bullet') => {
+    try {
+        const res = calculateLoan(principal, rate, period, grace, type);
+        setLoanResult(res);
+    } catch (e: any) {
+        throw e;
     }
-
-    const repayN = period - grace;
-    let balance = principal;
-
-    if (type === 'equal-installment') {
-      const payment = Math.floor(principal * monthlyRate * Math.pow(1 + monthlyRate, repayN) / (Math.pow(1 + monthlyRate, repayN) - 1));
-      for (let i = 1; i <= repayN; i++) {
-        const isLast = i === repayN;
-        const interest = Math.floor(balance * monthlyRate);
-        let currPrincipal = payment - interest;
-        
-        if (isLast) {
-          currPrincipal = balance;
-          balance = 0;
-        } else {
-          balance -= currPrincipal;
-        }
-        schedule.push({ month: grace + i, principal: currPrincipal, interest, payment: currPrincipal + interest, balance: Math.max(0, balance) });
-      }
-    } else if (type === 'equal-principal') {
-      const cpp = Math.floor(principal / repayN);
-      for (let i = 1; i <= repayN; i++) {
-        const isLast = i === repayN;
-        const currPrincipal = isLast ? balance : cpp;
-        const interest = Math.floor(balance * monthlyRate);
-        balance -= currPrincipal;
-        schedule.push({ month: grace + i, principal: currPrincipal, interest, payment: currPrincipal + interest, balance: Math.max(0, balance) });
-      }
-    } else {
-      for (let i = 1; i <= repayN; i++) {
-        const isLast = i === repayN;
-        const interest = Math.floor(principal * monthlyRate);
-        const currP = isLast ? principal : 0;
-        schedule.push({ month: grace + i, principal: currP, interest, payment: currP + interest, balance: isLast ? 0 : principal });
-      }
-    }
-
-    const totalPayment = schedule.reduce((sum, r) => sum + r.payment, 0);
-    const totalInterest = totalPayment - principal;
-
-    setLoanResult({
-      principal, rate, period, grace, type,
-      totalPayment, totalInterest, firstPayment: schedule[grace]?.payment || schedule[0].payment,
-      schedule
-    });
   };
 
   return { loanResult, calculate };
