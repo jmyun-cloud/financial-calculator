@@ -30,12 +30,22 @@ const Icons = {
     )
 };
 
+/**
+ * 아이콘 매핑 시스템 (확장성 고려)
+ * 새로운 지표 심볼이 추가될 때, 이 맵에 아이콘만 연결하면 위젯에 즉시 반영됩니다.
+ */
+const SYMBOL_TO_ICON: Record<string, keyof typeof Icons> = {
+    'BASE': 'Bank',
+    '^KS11': 'Chart',
+    '^KQ11': 'Chart',
+    'KRW=X': 'Globe',
+    'GC=F': 'Gold',
+};
+
 const getIcon = (symbol: string) => {
-    if (symbol === 'BASE') return <Icons.Bank />;
-    if (symbol.startsWith('^K')) return <Icons.Chart />;
-    if (symbol.includes('KRW')) return <Icons.Globe />;
-    if (symbol.includes('GC')) return <Icons.Gold />;
-    return <Icons.Chart />;
+    const iconName = SYMBOL_TO_ICON[symbol] || 'Chart'; // 기본값은 Chart
+    const IconComponent = Icons[iconName];
+    return <IconComponent />;
 };
 
 export default function MarketWidget() {
