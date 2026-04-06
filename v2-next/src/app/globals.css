@@ -10,36 +10,37 @@
 
 /* ===== CSS VARIABLES ===== */
 :root {
-  --primary: #1a56e8;
-  --primary-dark: #1340b8;
-  --primary-light: #e8f0fe;
+  --primary: #0064FF;
+  /* Toss Blue */
+  --primary-dark: #0056DB;
+  --primary-light: #E8F3FF;
   --accent: var(--primary);
   --accent-light: var(--primary-light);
 
-  --bg: #f4f6fb;
+  --bg: #F2F4F7;
+  /* Cleaner gray-white */
   --surface: #ffffff;
-  --surface-2: #f8faff;
-  --border: #e2e8f4;
+  --surface-2: #F9FAFB;
+  --border: #E5E8EB;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-primary: #191F28;
+  /* Modern dark gray */
+  --text-secondary: #4E5968;
+  --text-muted: #8B95A1;
 
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --success: #00D5AB;
+  --warning: #FF9100;
+  --danger: #F04452;
 
-  --shadow-sm:
-    0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md:
-    0 4px 16px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.06);
-  --shadow-lg:
-    0 10px 40px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+  /* Soft premium shadow */
+  --shadow-lg: 0 20px 50px -12px rgba(0, 0, 0, 0.12);
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 *,
@@ -96,9 +97,10 @@ ul {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   position: sticky;
-  top: 44px; /* TickerBar height */
+  top: 40px;
+  /* Updated height */
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .header-search {
@@ -1680,52 +1682,46 @@ select.form-input {
 /* 1. Ticker Bar */
 .ticker-wrapper {
   width: 100%;
-  background: var(--text-primary);
-  color: white;
-  height: 44px;
+  background: var(--surface);
+  color: var(--text-primary);
+  height: 40px;
   overflow: hidden;
   position: sticky;
   top: 0;
-  z-index: 101;
+  z-index: 105;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .ticker-track {
   display: flex;
   white-space: nowrap;
-  animation: ticker 40s linear infinite;
-  gap: 40px;
-  padding-left: 100%;
-}
-
-.ticker-wrapper:hover .ticker-track {
-  animation-play-state: paused;
-}
-
-@keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
+  animation: ticker 60s linear infinite;
+  gap: 60px;
+  padding-left: 20px;
 }
 
 .ticker-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: default;
 }
 
 .ticker-label {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
+}
+
+.ticker-change.positive {
+  color: var(--danger);
+}
+
+.ticker-change.negative {
+  color: var(--primary);
 }
 
 .ticker-value {
@@ -2079,86 +2075,91 @@ select.form-input {
 
 /* Market Widget Style */
 .market-widget {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .widget-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .market-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .market-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .market-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .market-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .market-name {
-    font-size: 0.95rem;
-    font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .market-symbol {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .market-price-info {
-    text-align: right;
-    display: flex;
-    flex-direction: column;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .market-price {
-    font-weight: 700;
-    font-size: 1rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .market-change {
-    font-size: 0.8rem;
-    font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.market-change.positive { color: #f43f5e; }
-.market-change.negative { color: #3b82f6; }
+.market-change.positive {
+  color: #f43f5e;
+}
+
+.market-change.negative {
+  color: #3b82f6;
+}
 
 .market-footer {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    text-align: right;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: right;
 }
 
 .loading-text {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 20px 0;
-}
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 20px 0;
+}

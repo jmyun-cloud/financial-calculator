@@ -9,19 +9,20 @@ export default function Home() {
       {/* ===== PORTAL DASHBOARD ===== */}
       <div className="main-content portal-main">
         <div className="container portal-grid">
-          
-          {/* LEFT COLUMN: Content Feed (Toss Feed Style) */}
-          <div className="portal-content">
-            <MagazineFeed />
-          </div>
 
-          {/* RIGHT COLUMN: User Dashboard & Tools (BankSalad Style) */}
-          <aside className="portal-sidebar">
+          {/* LEFT COLUMN: Main Content Feed */}
+          <div className="portal-content">
             <UserDashboard />
             <MiniToolbox />
+            <MagazineFeed />
+            {/* Q&A section will be added here in Phase 4 */}
+          </div>
+
+          {/* RIGHT COLUMN: Sidebar Widgets */}
+          <aside className="portal-sidebar">
             <MarketWidget />
           </aside>
-          
+
         </div>
       </div>
     </div>
