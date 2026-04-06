@@ -1,4 +1,5 @@
-import MagazineFeed from "@/components/portal/MagazineFeed";
+import NewsFeed from "@/components/portal/NewsFeed";
+import CommunityPreview from "@/components/portal/CommunityPreview";
 import MiniToolbox from "@/components/portal/MiniToolbox";
 import UserDashboard from "@/components/portal/UserDashboard";
 import MarketWidget from "@/components/portal/MarketWidget";
@@ -14,8 +15,8 @@ export default function Home() {
           <div className="portal-content">
             <UserDashboard />
             <MiniToolbox />
-            <MagazineFeed />
-            {/* Q&A section will be added here in Phase 4 */}
+            <NewsFeed />
+            <CommunityPreview />
           </div>
 
           {/* RIGHT COLUMN: Sidebar Widgets */}
