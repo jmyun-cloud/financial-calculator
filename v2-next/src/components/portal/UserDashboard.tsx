@@ -44,20 +44,22 @@ export default function UserDashboard() {
                                 isPositive: true
                             };
 
+                            const hasData = item.price !== "---";
+
                             // Dynamic Sparkline Path based on direction
                             const pathData = item.isPositive
                                 ? "M0 25 Q 20 25, 40 15 T 70 18 T 100 5"  // Upswing
                                 : "M0 5 Q 20 5, 40 15 T 70 12 T 100 25"; // Downswing
 
-                            const strokeColor = item.isPositive ? '#FF4D4D' : '#0064FF';
+                            const strokeColor = !hasData ? '#E5E8EB' : (item.isPositive ? '#FF4D4D' : '#0064FF');
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
                                     <span className="card-label">{idx.name}</span>
                                     <div className="card-value">{item.price}</div>
-                                    <div className={`card-change ${item.isPositive ? 'positive' : 'negative'}`}>
-                                        {item.isPositive ? '▲' : '▼'}
-                                        {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
+                                    <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
+                                        {hasData && (item.isPositive ? '▲' : '▼')}
+                                        {hasData ? `${item.change} (${item.isPositive ? '+' : ''}${item.changePercent}%)` : '데이터 수집 중'}
                                     </div>
                                     <div className="sparkline">
                                         <svg viewBox="0 0 100 30" width="100%" height="30">

@@ -4,26 +4,11 @@ import React from 'react';
 import { MARKET_CONFIG } from '@/lib/market-config';
 import { useMarketData, MarketItem } from '@/hooks/useMarketData';
 
-// --- Category Icons (Mockup style) ---
-const CategoryIcons = {
-    domestic: "🇰🇷",
-    global: "🌍",
-    crypto: "🪙",
-    commodity: "🏗️"
-};
-
-const SectionTitleMap = {
-    domestic: "국내 시장",
-    global: "해외 시장",
-    crypto: "암호화폐",
-    commodity: "원자재"
-};
-
 export default function MarketWidget() {
     const { data: indicators, loading } = useMarketData();
 
     if (loading && indicators.length === 0) {
-        return <div className="market-sidebar-skeleton" />;
+        return <div className="v3-sidebar-skeleton" />;
     }
 
     const renderSection = (id: string, title: string, symbols: string[], icon: string) => {
@@ -31,100 +16,118 @@ export default function MarketWidget() {
         if (filtered.length === 0) return null;
 
         return (
-            <div key={id} className="market-section">
-                <div className="section-header">
-                    <span className="section-icon">{icon}</span>
-                    <h3 className="section-title">{title}</h3>
-                </div>
-                <div className="section-list">
+            <section key={id} className="v3-sidebar-section">
+                <header className="v3-section-header">
+                    <span className="v3-section-icon">{icon}</span>
+                    <h3 className="v3-section-title">{title}</h3>
+                </header>
+                <div className="v3-section-list">
                     {filtered.map(item => (
-                        <div key={item.symbol} className="market-row">
-                            <div className="row-left">
-                                <div className="symbol-bullet">
+                        <div key={item.symbol} className="v3-market-row">
+                            <div className="v3-row-left">
+                                <div className="v3-symbol-bullet">
                                     {getFlagIcon(item.symbol)}
                                 </div>
-                                <span className="item-name">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
+                                <span className="v3-item-name">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
                             </div>
-                            <div className="row-right">
-                                <span className={`item-change ${item.isPositive ? 'positive' : 'negative'}`}>
+                            <div className="v3-row-right">
+                                <span className={`v3-item-change ${item.isPositive ? 'v3-positive' : 'v3-negative'}`}>
                                     {item.isPositive ? '+' : '-'}{item.changePercent}%
                                 </span>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
         );
     };
 
+    const CategoryIcons = {
+        domestic: "🇰🇷",
+        global: "🌍",
+        crypto: "🪙",
+        commodity: "🏗️"
+    };
+
+    const SectionTitleMap = {
+        domestic: "국내 시장",
+        global: "해외 시장",
+        crypto: "암호화폐",
+        commodity: "원자재"
+    };
+
     return (
-        <div className="market-sidebar-v3 shadow-sm">
+        <div className="v3-sidebar-container shadow-sm">
             {Object.entries(MARKET_CONFIG.categories).map(([id, symbols]) =>
                 renderSection(id, SectionTitleMap[id as keyof typeof SectionTitleMap], symbols, CategoryIcons[id as keyof typeof CategoryIcons])
             )}
 
             <style jsx>{`
-                .market-sidebar-v3 {
+                .v3-sidebar-container {
                     background: var(--surface);
                     border-radius: 24px;
                     padding: 24px;
                     border: 1px solid var(--border);
-                    display: flex;
-                    flex-direction: column;
-                    gap: 24px;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 28px !important;
                     width: 100%;
                     box-sizing: border-box;
                 }
-                .market-section {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 12px;
+                .v3-sidebar-section {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 12px !important;
                 }
-                .section-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 4px;
+                .v3-section-header {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    margin-bottom: 2px;
                 }
-                .section-icon { font-size: 1rem; }
-                .section-title {
+                .v3-section-icon { font-size: 1rem; flex-shrink: 0; }
+                .v3-section-title {
                     font-size: 0.95rem;
                     font-weight: 800;
                     color: var(--text-primary);
-                    margin: 0;
+                    margin: 0 !important;
                     letter-spacing: -0.01em;
                 }
-                .section-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
+                .v3-section-list {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 10px !important;
                 }
-                .market-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 100%;
+                .v3-market-row {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    justify-content: space-between !important;
+                    align-items: center !important;
+                    width: 100% !important;
+                    min-height: 32px;
                 }
-                .row-left {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
+                .v3-row-left {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    gap: 12px !important;
                     flex: 1;
                     min-width: 0;
                 }
-                .symbol-bullet {
+                .v3-symbol-bullet {
                     width: 28px;
                     height: 28px;
                     min-width: 28px;
                     border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
                     font-size: 0.9rem;
                     background: var(--surface-2);
                     border: 1px solid var(--border);
                 }
-                .item-name {
+                .v3-item-name {
                     font-size: 0.85rem;
                     font-weight: 600;
                     color: var(--text-primary);
@@ -132,32 +135,33 @@ export default function MarketWidget() {
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
-                .row-right {
-                    display: flex;
-                    align-items: center;
+                .v3-row-right {
+                    display: flex !important;
+                    align-items: center !important;
                     margin-left: 8px;
+                    flex-shrink: 0;
                 }
-                .item-change {
+                .v3-item-change {
                     font-size: 0.85rem;
                     font-weight: 700;
                     white-space: nowrap;
+                    font-variant-numeric: tabular-nums;
                 }
-                .item-change.positive { color: var(--danger); }
-                .item-change.negative { color: var(--primary); }
+                .v3-positive { color: var(--danger) !important; }
+                .v3-negative { color: var(--primary) !important; }
 
-                .market-sidebar-skeleton {
+                .v3-sidebar-skeleton {
                     height: 500px;
                     background: var(--surface-2);
                     border-radius: 24px;
-                    animation: pulse 1.5s infinite;
+                    animation: v3-pulse 1.5s infinite;
                 }
-                @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 0.3; } 100% { opacity: 0.6; } }
+                @keyframes v3-pulse { 0% { opacity: 0.6; } 50% { opacity: 0.3; } 100% { opacity: 0.6; } }
             `}</style>
         </div>
     );
 }
 
-// --- Helper for Mockup Style Icons ---
 function getFlagIcon(symbol: string) {
     if (symbol === '^IXIC' || symbol === '^DJI' || symbol === '^GSPC') return "🇺🇸";
     if (symbol === '^N225') return "🇯🇵";
