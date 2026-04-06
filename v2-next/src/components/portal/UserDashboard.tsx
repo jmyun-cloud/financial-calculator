@@ -17,10 +17,10 @@ export default function UserDashboard() {
     if (!isLoggedIn) {
         // 비로그인 상태: 오늘의 시장 요약
         const summaryIndices = [
-            { symbol: "KOSPI", name: "KOSPI", color: "#FF4D4D" },
-            { symbol: "USD/KRW", name: "원/달러 환율", color: "#FF4D4D" },
-            { symbol: "BASE_RATE", name: "기준금리", color: "#666" },
-            { symbol: "S&P 500", name: "S&P 500", color: "#0064FF" }
+            { symbol: "^KS11", name: "KOSPI", color: "#FF4D4D" },
+            { symbol: "KRW=X", name: "원/달러 환율", color: "#FF4D4D" },
+            { symbol: "BASE", name: "기준금리", color: "#666" },
+            { symbol: "^GSPC", name: "S&P 500", color: "#0064FF" }
         ];
 
         return (
@@ -38,12 +38,12 @@ export default function UserDashboard() {
                     <div className="summary-grid">
                         {summaryIndices.map(idx => {
                             const item = marketData.find(m => m.symbol === idx.symbol) || {
-                                price: idx.symbol === "BASE_RATE" ? "2.75%" : "---",
+                                price: idx.symbol === "BASE" ? "2.75%" : "---",
                                 change: "0.00",
                                 changePercent: "0.00",
                                 isPositive: true
                             };
-                            const isRate = idx.symbol === "BASE_RATE";
+                            const isRate = idx.symbol === "BASE";
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
