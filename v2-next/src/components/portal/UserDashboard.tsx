@@ -18,8 +18,8 @@ export default function UserDashboard() {
         // 비로그인 상태: 오늘의 시장 요약
         const summaryIndices = [
             { symbol: "^KS11", name: "KOSPI", color: "#FF4D4D" },
-            { symbol: "KRW=X", name: "원/달러 환율", color: "#FF4D4D" },
-            { symbol: "BASE", name: "기준금리", color: "#666" },
+            { symbol: "KRW=X", name: "원/달러 환율", color: "#0064FF" },
+            { symbol: "GC=F", name: "국제 금 시세", color: "#FFB000" },
             { symbol: "^GSPC", name: "S&P 500", color: "#0064FF" }
         ];
 
@@ -30,7 +30,7 @@ export default function UserDashboard() {
                     <div className="summary-header">
                         <div className="header-left">
                             <h2 className="summary-title">오늘의 시장 요약</h2>
-                            <span className="summary-date">2026년 4월 6일 월요일</span>
+                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
                         </div>
                         <div className="live-badge">● 실시간</div>
                     </div>
@@ -38,28 +38,35 @@ export default function UserDashboard() {
                     <div className="summary-grid">
                         {summaryIndices.map(idx => {
                             const item = marketData.find(m => m.symbol === idx.symbol) || {
-                                price: idx.symbol === "BASE" ? "2.75%" : "---",
+                                price: "---",
                                 change: "0.00",
                                 changePercent: "0.00",
                                 isPositive: true
                             };
-                            const isRate = idx.symbol === "BASE";
+
+                            // Dynamic Sparkline Path based on direction
+                            const pathData = item.isPositive
+                                ? "M0 25 Q 20 25, 40 15 T 70 18 T 100 5"  // Upswing
+                                : "M0 5 Q 20 5, 40 15 T 70 12 T 100 25"; // Downswing
+
+                            const strokeColor = item.isPositive ? '#FF4D4D' : '#0064FF';
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
                                     <span className="card-label">{idx.name}</span>
                                     <div className="card-value">{item.price}</div>
                                     <div className={`card-change ${item.isPositive ? 'positive' : 'negative'}`}>
-                                        {!isRate && (item.isPositive ? '▲' : '▼')}
+                                        {item.isPositive ? '▲' : '▼'}
                                         {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
                                     </div>
                                     <div className="sparkline">
                                         <svg viewBox="0 0 100 30" width="100%" height="30">
                                             <path
-                                                d={isRate ? "M0 15 L 100 15" : "M0 25 Q 15 20, 30 22 T 50 15 T 70 18 T 100 5"}
+                                                d={pathData}
                                                 fill="none"
-                                                stroke={isRate ? '#999' : (item.isPositive ? '#FF4D4D' : '#0064FF')}
-                                                strokeWidth="2"
+                                                stroke={strokeColor}
+                                                strokeWidth="2.5"
+                                                strokeLinecap="round"
                                             />
                                         </svg>
                                     </div>

@@ -9,15 +9,15 @@ export const MARKET_CONFIG = {
     // 야후 파이낸스 심볼 목록
     symbols: [
         '^KS11', '^KQ11', 'KRW=X',
-        '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
+        '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
         'BTC-USD', 'ETH-USD', 'XRP-USD', // 암호화폐
         'GC=F', 'SI=F', 'CL=F' // 원자재
     ],
 
     // 카테고리 분류 (신규)
     categories: {
-        domestic: ['^KS11', '^KQ11', 'KRW=X', 'BASE'],
-        global: ['^IXIC', '^DJI', '^N225', '^HSI', '^FTSE'],
+        domestic: ['^KS11', '^KQ11', 'KRW=X'],
+        global: ['^GSPC', '^IXIC', '^DJI', '^N225', '^HSI'],
         crypto: ['BTC-USD', 'ETH-USD', 'XRP-USD'],
         commodity: ['GC=F', 'SI=F', 'CL=F']
     } as Record<string, string[]>,

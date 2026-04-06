@@ -40,7 +40,7 @@ export default function MarketWidget() {
                     {filtered.map(item => (
                         <div key={item.symbol} className="market-row">
                             <div className="row-left">
-                                <div className={`symbol-bullet ${item.isPositive ? 'up' : 'down'}`}>
+                                <div className="symbol-bullet">
                                     {getFlagIcon(item.symbol)}
                                 </div>
                                 <span className="item-name">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
@@ -71,12 +71,14 @@ export default function MarketWidget() {
                     border: 1px solid var(--border);
                     display: flex;
                     flex-direction: column;
-                    gap: 32px;
+                    gap: 24px;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
                 .market-section {
                     display: flex;
                     flex-direction: column;
-                    gap: 16px;
+                    gap: 12px;
                 }
                 .section-header {
                     display: flex;
@@ -84,37 +86,41 @@ export default function MarketWidget() {
                     gap: 8px;
                     margin-bottom: 4px;
                 }
-                .section-icon { font-size: 1.1rem; }
+                .section-icon { font-size: 1rem; }
                 .section-title {
                     font-size: 0.95rem;
                     font-weight: 800;
                     color: var(--text-primary);
                     margin: 0;
+                    letter-spacing: -0.01em;
                 }
                 .section-list {
                     display: flex;
                     flex-direction: column;
-                    gap: 12px;
+                    gap: 8px;
                 }
                 .market-row {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 2px 0;
+                    width: 100%;
                 }
                 .row-left {
                     display: flex;
                     align-items: center;
-                    gap: 12px;
+                    gap: 10px;
+                    flex: 1;
+                    min-width: 0;
                 }
                 .symbol-bullet {
-                    width: 32px;
-                    height: 32px;
+                    width: 28px;
+                    height: 28px;
+                    min-width: 28px;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 1rem;
+                    font-size: 0.9rem;
                     background: var(--surface-2);
                     border: 1px solid var(--border);
                 }
@@ -122,10 +128,19 @@ export default function MarketWidget() {
                     font-size: 0.85rem;
                     font-weight: 600;
                     color: var(--text-primary);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .row-right {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 8px;
                 }
                 .item-change {
-                    font-size: 0.8rem;
+                    font-size: 0.85rem;
                     font-weight: 700;
+                    white-space: nowrap;
                 }
                 .item-change.positive { color: var(--danger); }
                 .item-change.negative { color: var(--primary); }
@@ -144,7 +159,7 @@ export default function MarketWidget() {
 
 // --- Helper for Mockup Style Icons ---
 function getFlagIcon(symbol: string) {
-    if (symbol === '^IXIC' || symbol === '^DJI') return "🇺🇸";
+    if (symbol === '^IXIC' || symbol === '^DJI' || symbol === '^GSPC') return "🇺🇸";
     if (symbol === '^N225') return "🇯🇵";
     if (symbol === '^HSI') return "🇭🇰";
     if (symbol === '^FTSE') return "🇬🇧";
