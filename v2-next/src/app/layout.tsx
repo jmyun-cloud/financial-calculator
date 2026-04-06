@@ -46,8 +46,8 @@ export default function RootLayout({
         <meta name="theme-color" content="#1a56e8" />
       </head>
       <body>
-        <TickerBar />
         <Header />
+        <TickerBar />
         <main>{children}</main>
         <Footer />
         <Script
