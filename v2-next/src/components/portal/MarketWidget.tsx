@@ -1,178 +1,160 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MARKET_CONFIG } from '@/lib/market-config';
-import { useMarketData } from '@/hooks/useMarketData';
+import { useMarketData, MarketItem } from '@/hooks/useMarketData';
 
-// --- Premium Icons (Inline SVGs) ---
-const Icons = {
-    Bank: () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18" /><path d="M3 7v1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7H3l2-4h14l2 4" /><path d="M5 21V10.85" /><path d="M19 21V10.85" /><path d="M9 21v-4a2 2 0 0 1 4 0v4" /></svg>
-    ),
-    Chart: () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>
-    ),
-    Globe: () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
-    ),
-    Gold: () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3h12l4 6-10 12L2 9z" /><path d="M11 3 8 9l4 12 4-12-3-6" /><path d="M2 9h20" /></svg>
-    )
+// --- Category Icons (Mockup style) ---
+const CategoryIcons = {
+    domestic: "🇰🇷",
+    global: "🌍",
+    crypto: "🪙",
+    commodity: "🏗️"
 };
 
-const SYMBOL_TO_ICON: Record<string, keyof typeof Icons> = {
-    'BASE': 'Bank',
-    '^KS11': 'Chart',
-    '^KQ11': 'Chart',
-    'KRW=X': 'Globe',
-    'GC=F': 'Gold',
-};
-
-const getIcon = (symbol: string) => {
-    const iconName = SYMBOL_TO_ICON[symbol] || 'Chart';
-    const IconComponent = Icons[iconName];
-    return <IconComponent />;
+const SectionTitleMap = {
+    domestic: "국내 시장",
+    global: "해외 시장",
+    crypto: "암호화폐",
+    commodity: "원자재"
 };
 
 export default function MarketWidget() {
     const { data: indicators, loading } = useMarketData();
-    const [updateTime, setUpdateTime] = useState("");
-
-    useEffect(() => {
-        if (indicators.length > 0) {
-            const now = new Date();
-            setUpdateTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
-        }
-    }, [indicators]);
 
     if (loading && indicators.length === 0) {
-        return (
-            <div className="market-widget dashboard-card shadow-premium skeleton-container" style={{ minHeight: '440px' }}>
-                <div className="skeleton-header"></div>
-                {[1, 2, 3, 4, 5].map(i => <div key={i} className="skeleton-row"></div>)}
-                <style jsx>{`
-                    .skeleton-container { padding: 24px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border); }
-                    .skeleton-header { width: 140px; height: 28px; background: rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 24px; }
-                    .skeleton-row { height: 72px; background: rgba(0,0,0,0.03); border-radius: 16px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
-                    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 0.8; } 100% { opacity: 0.5; } }
-                `}</style>
-            </div>
-        );
+        return <div className="market-sidebar-skeleton" />;
     }
 
-    return (
-        <div className="market-widget dashboard-card shadow-premium">
-            <header className="market-header">
-                <div className="title-group">
-                    <span className="live-badge">
-                        <span className="dot"></span> LIVE
-                    </span>
-                    <h2 className="market-title">오늘의 주요 지표</h2>
+    const renderSection = (id: string, title: string, symbols: string[], icon: string) => {
+        const filtered = indicators.filter(item => symbols.includes(item.symbol));
+        if (filtered.length === 0) return null;
+
+        return (
+            <div key={id} className="market-section">
+                <div className="section-header">
+                    <span className="section-icon">{icon}</span>
+                    <h3 className="section-title">{title}</h3>
                 </div>
-                <div className="update-meta">{updateTime} 업데이트</div>
-            </header>
-
-            <div className="market-grid">
-                {indicators.map((item) => (
-                    <div key={item.symbol} className="market-row-item">
-                        <div className="icon-box" style={{
-                            color: item.isPositive ? 'var(--danger)' : 'var(--primary)',
-                            background: item.isPositive ? 'rgba(255, 77, 77, 0.08)' : 'rgba(0, 100, 255, 0.08)'
-                        }}>
-                            {getIcon(item.symbol)}
-                        </div>
-
-                        <div className="info-box">
-                            <div className="label-row">
-                                <span className="item-name">{item.name}</span>
-                                {item.symbol === 'BASE_RATE' && <span className="tag-fixed">동결</span>}
-                            </div>
-
-                            <div className="value-row">
-                                <div className="current-price">{item.price}</div>
-                                <div className={`percent-badge ${item.isPositive ? 'up' : 'down'}`}>
-                                    {item.isPositive ? '▲' : '▼'} {item.changePercent}%
+                <div className="section-list">
+                    {filtered.map(item => (
+                        <div key={item.symbol} className="market-row">
+                            <div className="row-left">
+                                <div className={`symbol-bullet ${item.isPositive ? 'up' : 'down'}`}>
+                                    {getFlagIcon(item.symbol)}
                                 </div>
+                                <span className="item-name">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
                             </div>
-
-                            <div className={`change-raw ${item.isPositive ? 'up' : 'down'}`}>
-                                {item.isPositive ? '+' : '-'}{item.change}
+                            <div className="row-right">
+                                <span className={`item-change ${item.isPositive ? 'positive' : 'negative'}`}>
+                                    {item.isPositive ? '+' : '-'}{item.changePercent}%
+                                </span>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-
-            <footer className="market-status-footer">
-                <div className="server-status">
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" /></svg>
-                    <span>Yahoo Finance 실시간 연동 (KR-Speed Mode)</span>
+                    ))}
                 </div>
-            </footer>
+            </div>
+        );
+    };
+
+    return (
+        <div className="market-sidebar-v3 shadow-sm">
+            {Object.entries(MARKET_CONFIG.categories).map(([id, symbols]) =>
+                renderSection(id, SectionTitleMap[id as keyof typeof SectionTitleMap], symbols, CategoryIcons[id as keyof typeof CategoryIcons])
+            )}
 
             <style jsx>{`
-                .market-widget {
+                .market-sidebar-v3 {
                     background: var(--surface);
-                    border-radius: 20px;
+                    border-radius: 24px;
                     padding: 24px;
                     border: 1px solid var(--border);
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 32px;
                 }
-                .market-header {
+                .market-section {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+                .section-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 4px;
+                }
+                .section-icon { font-size: 1.1rem; }
+                .section-title {
+                    font-size: 0.95rem;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    margin: 0;
+                }
+                .section-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                .market-row {
                     display: flex;
                     justify-content: space-between;
-                    align-items: flex-start;
-                    margin-bottom: 24px;
-                }
-                .title-group { display: flex; flex-direction: column; gap: 6px; }
-                .live-badge {
-                    display: inline-flex;
                     align-items: center;
-                    gap: 6px;
-                    font-size: 0.65rem;
-                    font-weight: 800;
-                    color: #00D166;
-                    background: rgba(0, 209, 102, 0.1);
-                    padding: 2px 8px;
-                    border-radius: 100px;
+                    padding: 2px 0;
                 }
-                .dot { width: 6px; height: 6px; background: #00D166; border-radius: 50%; animation: blink 1.5s infinite; }
-                .market-title { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0; }
-                .update-meta { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7; }
-                .market-grid { display: flex; flex-direction: column; gap: 12px; }
-                .market-row-item {
+                .row-left {
                     display: flex;
                     align-items: center;
-                    gap: 16px;
-                    padding: 14px;
-                    border-radius: 16px;
+                    gap: 12px;
+                }
+                .symbol-bullet {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1rem;
                     background: var(--surface-2);
-                    transition: all 0.2s ease;
-                    border: 1px solid transparent;
+                    border: 1px solid var(--border);
                 }
-                .market-row-item:hover {
-                    background: var(--surface);
-                    border-color: var(--border);
-                    transform: translateX(4px);
-                    box-shadow: var(--shadow-sm);
+                .item-name {
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--text-primary);
                 }
-                .icon-box { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-                .info-box { flex: 1; display: flex; flex-direction: column; }
-                .label-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-                .item-name { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
-                .tag-fixed { font-size: 0.65rem; background: var(--surface); color: var(--text-muted); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); }
-                .value-row { display: flex; justify-content: space-between; align-items: center; }
-                .current-price { font-size: 1.3rem; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
-                .percent-badge { font-size: 0.8rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
-                .percent-badge.up { color: var(--danger); background: rgba(255, 77, 77, 0.08); }
-                .percent-badge.down { color: var(--primary); background: rgba(0, 100, 255, 0.08); }
-                .change-raw { font-size: 0.75rem; font-weight: 600; margin-top: -2px; }
-                .change-raw.up { color: var(--danger); }
-                .change-raw.down { color: var(--primary); }
-                .market-status-footer { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--border); }
-                .server-status { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.68rem; color: var(--text-muted); opacity: 0.6; }
-                @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+                .item-change {
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                }
+                .item-change.positive { color: var(--danger); }
+                .item-change.negative { color: var(--primary); }
+
+                .market-sidebar-skeleton {
+                    height: 500px;
+                    background: var(--surface-2);
+                    border-radius: 24px;
+                    animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 0.3; } 100% { opacity: 0.6; } }
             `}</style>
         </div>
     );
+}
+
+// --- Helper for Mockup Style Icons ---
+function getFlagIcon(symbol: string) {
+    if (symbol === '^IXIC' || symbol === '^DJI') return "🇺🇸";
+    if (symbol === '^N225') return "🇯🇵";
+    if (symbol === '^HSI') return "🇭🇰";
+    if (symbol === '^FTSE') return "🇬🇧";
+    if (symbol === 'BTC-USD') return "₿";
+    if (symbol === 'ETH-USD') return "Ξ";
+    if (symbol === 'XRP-USD') return "✕";
+    if (symbol === 'GC=F') return "🥇";
+    if (symbol === 'SI=F') return "🥈";
+    if (symbol === 'CL=F') return "🛢️";
+    if (symbol.startsWith('^K')) return "🇰🇷";
+    if (symbol === 'KRW=X') return "💵";
+    return "📈";
 }
