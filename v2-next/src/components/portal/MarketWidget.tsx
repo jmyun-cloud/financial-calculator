@@ -1,18 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MARKET_CONFIG } from '@/lib/market-config';
-
-interface MarketData {
-    symbol: string;
-    name: string;
-    price: string;
-    change: string;
-    changePercent: string;
-    isPositive: boolean;
-}
-
-const CACHE_KEY = 'richcalc_market_data_v4';
+import { useMarketData } from '@/hooks/useMarketData';
 
 // --- Premium Icons (Inline SVGs) ---
 const Icons = {
@@ -30,10 +20,6 @@ const Icons = {
     )
 };
 
-/**
- * 아이콘 매핑 시스템 (확장성 고려)
- * 새로운 지표 심볼이 추가될 때, 이 맵에 아이콘만 연결하면 위젯에 즉시 반영됩니다.
- */
 const SYMBOL_TO_ICON: Record<string, keyof typeof Icons> = {
     'BASE': 'Bank',
     '^KS11': 'Chart',
@@ -43,106 +29,29 @@ const SYMBOL_TO_ICON: Record<string, keyof typeof Icons> = {
 };
 
 const getIcon = (symbol: string) => {
-    const iconName = SYMBOL_TO_ICON[symbol] || 'Chart'; // 기본값은 Chart
+    const iconName = SYMBOL_TO_ICON[symbol] || 'Chart';
     const IconComponent = Icons[iconName];
     return <IconComponent />;
 };
 
 export default function MarketWidget() {
-    const [indicators, setIndicators] = useState<MarketData[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data: indicators, loading } = useMarketData();
     const [updateTime, setUpdateTime] = useState("");
-    const latestDataRef = useRef<Record<string, MarketData>>({});
-
-    const fetchMarketData = async () => {
-        try {
-            const res = await fetch('/api/market');
-            if (!res.ok) throw new Error('API fetch failed');
-
-            const json = await res.json();
-            if (!json.success) throw new Error('API reported failure');
-
-            const newIndicators: MarketData[] = [];
-            const displaySymbols = ['BASE', ...MARKET_CONFIG.symbols];
-
-            displaySymbols.forEach(symbol => {
-                const raw = json.data[symbol];
-                const displayName = MARKET_CONFIG.widgetNames[symbol] || MARKET_CONFIG.names[symbol] || symbol;
-
-                if (raw) {
-                    const priceNum = raw.price;
-                    const prevClose = raw.prevClose;
-                    const change = priceNum - prevClose;
-                    const changePercent = (prevClose !== 0) ? (change / prevClose) * 100 : 0;
-
-                    const item = {
-                        symbol,
-                        name: displayName,
-                        price: priceNum.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }) + (symbol === 'BASE' ? '%' : ''),
-                        change: Math.abs(change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                        changePercent: Math.abs(changePercent).toFixed(2),
-                        isPositive: change >= 0
-                    };
-
-                    latestDataRef.current[symbol] = item;
-                    newIndicators.push(item);
-                } else if (latestDataRef.current[symbol]) {
-                    newIndicators.push(latestDataRef.current[symbol]);
-                }
-            });
-
-            if (newIndicators.length > 0) {
-                setIndicators(newIndicators);
-                const now = new Date();
-                const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-                setUpdateTime(timeStr);
-
-                localStorage.setItem(CACHE_KEY, JSON.stringify({
-                    data: newIndicators,
-                    time: timeStr,
-                    timestamp: Date.now()
-                }));
-            }
-        } catch (error) {
-            console.error('Market fetch error:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     useEffect(() => {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (cached) {
-            try {
-                const parsed = JSON.parse(cached);
-                if (parsed.data && parsed.data.length > 0) {
-                    setIndicators(parsed.data);
-                    setUpdateTime(parsed.time || "");
-                    parsed.data.forEach((item: MarketData) => {
-                        latestDataRef.current[item.symbol] = item;
-                    });
-                    setLoading(false);
-                }
-            } catch (e) { }
+        if (indicators.length > 0) {
+            const now = new Date();
+            setUpdateTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
         }
-
-        fetchMarketData();
-        const interval = setInterval(fetchMarketData, 60000);
-        return () => clearInterval(interval);
-    }, []);
+    }, [indicators]);
 
     if (loading && indicators.length === 0) {
         return (
             <div className="market-widget dashboard-card shadow-premium skeleton-container" style={{ minHeight: '440px' }}>
                 <div className="skeleton-header"></div>
-                <div className="skeleton-grid">
-                    {[1, 2, 3, 4, 5].map(i => <div key={i} className="skeleton-row"></div>)}
-                </div>
+                {[1, 2, 3, 4, 5].map(i => <div key={i} className="skeleton-row"></div>)}
                 <style jsx>{`
-                    .skeleton-container { padding: 24px; background: var(--surface-1); border-radius: 20px; }
+                    .skeleton-container { padding: 24px; background: var(--surface); border-radius: 20px; border: 1px solid var(--border); }
                     .skeleton-header { width: 140px; height: 28px; background: rgba(0,0,0,0.05); border-radius: 8px; margin-bottom: 24px; }
                     .skeleton-row { height: 72px; background: rgba(0,0,0,0.03); border-radius: 16px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
                     @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 0.8; } 100% { opacity: 0.5; } }
@@ -167,8 +76,8 @@ export default function MarketWidget() {
                 {indicators.map((item) => (
                     <div key={item.symbol} className="market-row-item">
                         <div className="icon-box" style={{
-                            color: item.isPositive ? 'var(--up-color, #ef4444)' : 'var(--down-color, #3b82f6)',
-                            background: item.isPositive ? 'rgba(239, 68, 68, 0.08)' : 'rgba(59, 130, 246, 0.08)'
+                            color: item.isPositive ? 'var(--danger)' : 'var(--primary)',
+                            background: item.isPositive ? 'rgba(255, 77, 77, 0.08)' : 'rgba(0, 100, 255, 0.08)'
                         }}>
                             {getIcon(item.symbol)}
                         </div>
@@ -176,7 +85,7 @@ export default function MarketWidget() {
                         <div className="info-box">
                             <div className="label-row">
                                 <span className="item-name">{item.name}</span>
-                                {item.symbol === 'BASE' && <span className="tag-fixed">동결</span>}
+                                {item.symbol === 'BASE_RATE' && <span className="tag-fixed">동결</span>}
                             </div>
 
                             <div className="value-row">
@@ -203,183 +112,65 @@ export default function MarketWidget() {
 
             <style jsx>{`
                 .market-widget {
-                    background: var(--surface-1, #ffffff);
+                    background: var(--surface);
                     border-radius: 20px;
                     padding: 24px;
-                    border: 1px solid rgba(0,0,0,0.04);
+                    border: 1px solid var(--border);
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 }
-                :global(.dark) .market-widget {
-                    background: var(--surface-1, #1e293b);
-                    border-color: rgba(255,255,255,0.06);
-                }
-                .shadow-premium {
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-                }
-                
                 .market-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-start;
                     margin-bottom: 24px;
                 }
-                .title-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 6px;
-                }
+                .title-group { display: flex; flex-direction: column; gap: 6px; }
                 .live-badge {
                     display: inline-flex;
                     align-items: center;
                     gap: 6px;
                     font-size: 0.65rem;
                     font-weight: 800;
-                    color: #10b981;
-                    background: rgba(16, 185, 129, 0.1);
+                    color: #00D166;
+                    background: rgba(0, 209, 102, 0.1);
                     padding: 2px 8px;
                     border-radius: 100px;
-                    letter-spacing: 0.05em;
                 }
-                .dot {
-                    width: 6px;
-                    height: 6px;
-                    background: #10b981;
-                    border-radius: 50%;
-                    animation: blink 1.5s infinite;
-                }
-                .market-title {
-                    font-size: 1.15rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                    margin: 0;
-                }
-                .update-meta {
-                    font-size: 0.75rem;
-                    color: var(--text-secondary);
-                    opacity: 0.7;
-                }
-
-                .market-grid {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 12px;
-                }
+                .dot { width: 6px; height: 6px; background: #00D166; border-radius: 50%; animation: blink 1.5s infinite; }
+                .market-title { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0; }
+                .update-meta { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7; }
+                .market-grid { display: flex; flex-direction: column; gap: 12px; }
                 .market-row-item {
                     display: flex;
                     align-items: center;
                     gap: 16px;
                     padding: 14px;
                     border-radius: 16px;
-                    background: rgba(0,0,0,0.01);
+                    background: var(--surface-2);
                     transition: all 0.2s ease;
                     border: 1px solid transparent;
-                    cursor: default;
                 }
                 .market-row-item:hover {
-                    background: rgba(0,0,0,0.025);
-                    border-color: rgba(0,0,0,0.04);
+                    background: var(--surface);
+                    border-color: var(--border);
                     transform: translateX(4px);
+                    box-shadow: var(--shadow-sm);
                 }
-                :global(.dark) .market-row-item {
-                    background: rgba(255,255,255,0.02);
-                }
-                :global(.dark) .market-row-item:hover {
-                    background: rgba(255,255,255,0.04);
-                    border-color: rgba(255,255,255,0.08);
-                }
-
-                .icon-box {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-shrink: 0;
-                }
-                .info-box {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                }
-                .label-row {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 2px;
-                }
-                .item-name {
-                    font-size: 0.8rem;
-                    font-weight: 600;
-                    color: var(--text-secondary);
-                }
-                .tag-fixed {
-                    font-size: 0.65rem;
-                    background: var(--surface-2, #f1f5f9);
-                    color: var(--text-muted, #64748b);
-                    padding: 1px 6px;
-                    border-radius: 4px;
-                }
-                
-                .value-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-                .current-price {
-                    font-size: 1.3rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                    font-variant-numeric: tabular-nums;
-                }
-                .percent-badge {
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                    padding: 2px 8px;
-                    border-radius: 8px;
-                }
-                .percent-badge.up {
-                    color: #e11d48;
-                    background: rgba(225, 29, 72, 0.08);
-                }
-                .percent-badge.down {
-                    color: #2563eb;
-                    background: rgba(37, 99, 235, 0.08);
-                }
-                
-                .change-raw {
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    margin-top: -2px;
-                }
-                .change-raw.up { color: #f43f5e; }
-                .change-raw.down { color: #3b82f6; }
-
-                .market-status-footer {
-                    margin-top: 24px;
-                    padding-top: 16px;
-                    border-top: 1px dashed var(--border, rgba(0,0,0,0.06));
-                }
-                .server-status {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 6px;
-                    font-size: 0.68rem;
-                    color: var(--text-muted);
-                    opacity: 0.6;
-                }
-
-                /* Skeleton */
-                .skeleton-item {
-                    height: 72px;
-                    background: linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.03) 75%);
-                    background-size: 200% 100%;
-                    animation: shimmy 2s infinite linear;
-                    border-radius: 16px;
-                    margin-bottom: 12px;
-                }
-                @keyframes shimmy { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+                .icon-box { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+                .info-box { flex: 1; display: flex; flex-direction: column; }
+                .label-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+                .item-name { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+                .tag-fixed { font-size: 0.65rem; background: var(--surface); color: var(--text-muted); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); }
+                .value-row { display: flex; justify-content: space-between; align-items: center; }
+                .current-price { font-size: 1.3rem; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+                .percent-badge { font-size: 0.8rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+                .percent-badge.up { color: var(--danger); background: rgba(255, 77, 77, 0.08); }
+                .percent-badge.down { color: var(--primary); background: rgba(0, 100, 255, 0.08); }
+                .change-raw { font-size: 0.75rem; font-weight: 600; margin-top: -2px; }
+                .change-raw.up { color: var(--danger); }
+                .change-raw.down { color: var(--primary); }
+                .market-status-footer { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--border); }
+                .server-status { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.68rem; color: var(--text-muted); opacity: 0.6; }
                 @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
             `}</style>
         </div>
