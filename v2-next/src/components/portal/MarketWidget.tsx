@@ -55,12 +55,17 @@ export default function MarketWidget() {
                                     {MARKET_CONFIG.names[item.symbol] || item.symbol}
                                 </span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '8px', flexShrink: 0 }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '8px', flexShrink: 0 }}>
                                 <span style={{
-                                    fontSize: '0.85rem', fontWeight: 700, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums',
+                                    fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '2px', fontVariantNumeric: 'tabular-nums'
+                                }}>
+                                    {item.price}
+                                </span>
+                                <span style={{
+                                    fontSize: '0.75rem', fontWeight: 600, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums',
                                     color: item.isPositive ? 'var(--danger)' : 'var(--primary)'
                                 }}>
-                                    {item.isPositive ? '+' : '-'}{item.changePercent}%
+                                    {item.isPositive ? '+' : ''}{item.changePercent}%
                                 </span>
                             </div>
                         </div>
