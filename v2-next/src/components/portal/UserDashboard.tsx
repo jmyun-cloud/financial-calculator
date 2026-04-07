@@ -51,7 +51,7 @@ function MarketDetailBar({ symbol, name }: { symbol: string, name: string }) {
                     <span className="d-label">52주 최저</span>
                     <span className="d-val">{formatNumber(data.fiftyTwoWeekLow)}</span>
                 </div>
-                {data.regularMarketVolume && (
+                {data.regularMarketVolume > 0 && (
                     <div className="detail-col">
                         <span className="d-label">거래량</span>
                         <span className="d-val">{formatVolume(data.regularMarketVolume)}{!symbol.includes("KRW") && !symbol.includes("=F") ? "주" : ""}</span>
