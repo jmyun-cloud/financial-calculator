@@ -172,25 +172,30 @@ export default function UserDashboard() {
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
-                                    <span className="card-label" style={{ display: 'flex', alignItems: 'center' }}>
-                                        {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
-                                        {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "4px" }}>USD/oz</span>}
+                                    <div className="card-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginBottom: '8px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
+                                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
+                                            </span>
+                                            {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", whiteSpace: "nowrap", flexShrink: 0 }}>USD/oz</span>}
+                                        </div>
                                         {badge && badge.type === "realtime" ? (
-                                            <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "6px" }}>{badge.text}</span>
+                                            <span style={{ fontSize: "10px", color: "#8B95A1", whiteSpace: "nowrap", flexShrink: 0 }}>{badge.text}</span>
                                         ) : badge ? (
                                             <span style={{
                                                 fontSize: "10px",
                                                 fontWeight: 700,
                                                 padding: "2px 6px",
                                                 borderRadius: "4px",
-                                                marginLeft: "6px",
+                                                whiteSpace: "nowrap",
+                                                flexShrink: 0,
                                                 background: badge.type === "open" ? "#FFF0F0" : badge.type === "closed" ? "#F2F4F6" : "#E8F9F0",
                                                 color: badge.type === "open" ? "#F04251" : badge.type === "closed" ? "#8B95A1" : "#1B8947"
                                             }}>
                                                 {badge.text}
                                             </span>
                                         ) : null}
-                                    </span>
+                                    </div>
                                     <div className="card-value">{item.price}</div>
                                     <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
                                         {hasData && (item.isPositive ? '▲' : '▼')}
