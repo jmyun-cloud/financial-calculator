@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 
@@ -284,135 +285,133 @@ export default function UserDashboard() {
                         </Link>
                     </div>
                 </div>
-            </div>
+                    <style jsx>{`
+                        .market-summary-container {
+                            margin-bottom: 32px;
+                        }
+                        .market-summary-card {
+                            background: var(--surface);
+                            border-radius: 28px;
+                            padding: 32px;
+                            border: 1px solid var(--border);
+                        }
+                        .summary-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            margin-bottom: 24px;
+                        }
+                        .summary-title {
+                            font-size: 1.25rem;
+                            font-weight: 800;
+                            color: var(--text-primary);
+                            margin: 0;
+                        }
+                        .summary-date {
+                            font-size: 0.85rem;
+                            color: var(--text-secondary);
+                        }
+                        .live-badge {
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                            color: #00D166;
+                            background: rgba(0, 209, 102, 0.1);
+                            padding: 4px 12px;
+                            border-radius: 100px;
+                        }
+                        .summary-grid {
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 12px;
+                            margin-bottom: 24px;
+                        }
+                        .summary-card {
+                            background: var(--surface-2);
+                            padding: 20px;
+                            border-radius: 20px;
+                            border: 1px solid var(--border);
+                        }
+                        .card-label {
+                            font-size: 0.75rem;
+                            font-weight: 600;
+                            color: var(--text-secondary);
+                            display: block;
+                            margin-bottom: 8px;
+                        }
+                        .card-value {
+                            font-size: 1.3rem;
+                            font-weight: 800;
+                            color: var(--text-primary);
+                            margin-bottom: 4px;
+                            letter-spacing: -0.02em;
+                        }
+                        .card-change {
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                            margin-bottom: 12px;
+                        }
+                        .card-change.positive { color: #F04251; }
+                        .card-change.negative { color: #0064FF; }
+                        .card-change.neutral { color: #8B95A1; }
+                        .sparkline { height: 30px; margin-top: 8px; }
 
-                <style jsx>{`
-                    .market-summary-container {
-                        margin-bottom: 32px;
-                    }
-                    .market-summary-card {
-                        background: var(--surface);
-                        border-radius: 28px;
-                        padding: 32px;
-                        border: 1px solid var(--border);
-                    }
-                    .summary-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        margin-bottom: 24px;
-                    }
-                    .summary-title {
-                        font-size: 1.25rem;
-                        font-weight: 800;
-                        color: var(--text-primary);
-                        margin: 0;
-                    }
-                    .summary-date {
-                        font-size: 0.85rem;
-                        color: var(--text-secondary);
-                    }
-                    .live-badge {
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        color: #00D166;
-                        background: rgba(0, 209, 102, 0.1);
-                        padding: 4px 12px;
-                        border-radius: 100px;
-                    }
-                    .summary-grid {
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        gap: 12px;
-                        margin-bottom: 24px;
-                    }
-                    .summary-card {
-                        background: var(--surface-2);
-                        padding: 20px;
-                        border-radius: 20px;
-                        border: 1px solid var(--border);
-                    }
-                    .card-label {
-                        font-size: 0.75rem;
-                        font-weight: 600;
-                        color: var(--text-secondary);
-                        display: block;
-                        margin-bottom: 8px;
-                    }
-                    .card-value {
-                        font-size: 1.3rem;
-                        font-weight: 800;
-                        color: var(--text-primary);
-                        margin-bottom: 4px;
-                        letter-spacing: -0.02em;
-                    }
-                    .card-change {
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        margin-bottom: 12px;
-                    }
-                     .card-change.positive { color: #F04251; }
-                    .card-change.negative { color: #0064FF; }
-                    .card-change.neutral { color: #8B95A1; }
-                    .sparkline { height: 30px; margin-top: 8px; }
+                        .login-cta-banner {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            background: #F4F8FF;
+                            padding: 20px 24px;
+                            border-radius: 20px;
+                            border: 1px solid rgba(0, 100, 255, 0.1);
+                        }
+                        .cta-content {
+                            display: flex;
+                            align-items: center;
+                            gap: 16px;
+                        }
+                        .cta-icon {
+                            width: 44px;
+                            height: 44px;
+                            background: white;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.5rem;
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                        }
+                        .cta-text { display: flex; flex-direction: column; gap: 2px; }
+                        .cta-title {
+                            font-size: 0.95rem;
+                            font-weight: 700;
+                            color: var(--text-primary);
+                        }
+                        .cta-desc {
+                            font-size: 0.8rem;
+                            color: var(--text-secondary);
+                        }
+                        .cta-btn {
+                            background: white;
+                            color: var(--text-primary);
+                            border: 1px solid var(--border);
+                            padding: 10px 20px;
+                            border-radius: 14px;
+                            font-size: 0.9rem;
+                            font-weight: 700;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                            box-shadow: var(--shadow-sm);
+                        }
+                        .cta-btn:hover { background: var(--surface-2); transform: translateY(-1px); }
 
-                    .login-cta-banner {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        background: #F4F8FF;
-                        padding: 20px 24px;
-                        border-radius: 20px;
-                        border: 1px solid rgba(0, 100, 255, 0.1);
-                    }
-                    .cta-content {
-                        display: flex;
-                        align-items: center;
-                        gap: 16px;
-                    }
-                    .cta-icon {
-                        width: 44px;
-                        height: 44px;
-                        background: white;
-                        border-radius: 12px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1.5rem;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-                    }
-                    .cta-text { display: flex; flex-direction: column; gap: 2px; }
-                    .cta-title {
-                        font-size: 0.95rem;
-                        font-weight: 700;
-                        color: var(--text-primary);
-                    }
-                    .cta-desc {
-                        font-size: 0.8rem;
-                        color: var(--text-secondary);
-                    }
-                    .cta-btn {
-                        background: white;
-                        color: var(--text-primary);
-                        border: 1px solid var(--border);
-                        padding: 10px 20px;
-                        border-radius: 14px;
-                        font-size: 0.9rem;
-                        font-weight: 700;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        box-shadow: var(--shadow-sm);
-                    }
-                    .cta-btn:hover { background: var(--surface-2); transform: translateY(-1px); }
-
-                    .section-title {
-                        font-size: 1.1rem;
-                        font-weight: 800;
-                        margin-bottom: 16px;
-                        color: var(--text-primary);
-                    }
-                `}</style>
-            </div>
+                        .section-title {
+                            font-size: 1.1rem;
+                            font-weight: 800;
+                            margin-bottom: 16px;
+                            color: var(--text-primary);
+                        }
+                    `}</style>
+                </div>
         );
     }
 

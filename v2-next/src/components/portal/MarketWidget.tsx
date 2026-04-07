@@ -1,34 +1,48 @@
 "use client";
 
+/**
+ * [RESTORED VERSION] 
+ * This file has been restored to the original compact sidebar design.
+ */
+
 import React from 'react';
-import { MARKET_CONFIG } from '@/lib/market-config';
-import { useMarketData, MarketItem } from '@/hooks/useMarketData';
-import { Gem, Circle, Droplet, Zap } from 'lucide-react';
+import { useMarketData } from '@/hooks/useMarketData';
 
-export default function MarketWidget() {
-    const { data: indicators, loading } = useMarketData();
-
-    if (loading && indicators.length === 0) {
-        return <div className="h-[600px] bg-[#F9FAFB] rounded-[32px] animate-pulse mx-1 shadow-inner" />;
+const MARKET_GROUPS = [
+    {
+        title: "국내 시장",
+        indices: [
+            { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷" },
+            { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷" },
+            { symbol: "KRW=X", name: "USD/KRW", flag: "💵" }
+        ]
+    },
+    {
+        title: "해외 시장",
+        indices: [
+            { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸" },
+            { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸" },
+            { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸" },
+            { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵" },
+            { symbol: "HSI", name: "Hang Seng", flag: "🇭🇰" }
+        ]
+    },
+    {
+        title: "암호화폐",
+        indices: [
+            { symbol: "BTC-USD", name: "BitCoin", flag: "₿" },
+            { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ" },
+            { symbol: "XRP-USD", name: "Ripple", flag: "✕" }
+        ]
+    },
+    {
+        title: "원자재",
+        indices: [
+            { symbol: "GC=F", name: "Gold", flag: "🥇" },
+            { symbol: "SI=F", name: "Silver", flag: "🥈" },
+            { symbol: "CL=F", name: "Crude Oil", flag: "🛢️" }
+        ]
     }
-
-    const SectionTitleMap = {
-        domestic: "국내 지수",
-        global: "글로벌 지수",
-        crypto: "가상자산",
-        commodity: "원자재 및 에너지"
-    };
-
-    const getUnit = (symbol: string) => {
-        if (['GC=F', 'SI=F'].includes(symbol)) return "USD/oz";
-        if (symbol === 'CL=F') return "USD/bbl";
-        if (symbol === 'HG=F') return "USD/lb";
-        if (['BTC-USD', 'ETH-USD', 'XRP-USD'].includes(symbol)) return "USD";
-        if (symbol === 'KRW=X') return "KRW";
-        return "pt";
-    };
-
-    const getTrendStyle = (item: MarketItem) => {
 ];
 
 export default function MarketWidget() {
@@ -40,7 +54,6 @@ export default function MarketWidget() {
                 {MARKET_GROUPS.map((group) => (
                     <div key={group.title} className="flex flex-col">
                         <header className="flex items-center gap-2 mb-5">
-                            <span className="text-[14px]">{group.flag || "🌐"}</span>
                             <h3 className="text-[14px] font-bold text-[#191F28]">{group.title}</h3>
                         </header>
                         <ul className="flex flex-col gap-4 m-0 p-0 list-none">

@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * [RESTORED VERSION] 
+ * This file has been restored to the original "soft" aesthetic.
+ * Each tool is a free-standing icon on a light background.
+ */
+
 import React from 'react';
 import Link from 'next/link';
 import { 
@@ -49,6 +55,7 @@ export default function MiniToolbox() {
         <div className="flex flex-col gap-14 mt-10">
             {GROUPS.map((group) => (
                 <div key={group.title} className="flex flex-col">
+                    {/* Blue bar removed, using clean bold header as per Image 1 */}
                     <h3 className="text-[17px] font-bold text-[#191F28] mb-8 px-1">
                         {group.title}
                     </h3>

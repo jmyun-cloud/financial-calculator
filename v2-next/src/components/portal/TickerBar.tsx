@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * [RESTORED VERSION] 
+ * This file has been restored to the original slim ticker bar design (38px).
+ */
+
 import React from 'react';
 import { useMarketData } from '@/hooks/useMarketData';
 
