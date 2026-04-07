@@ -91,15 +91,52 @@ export default function GoalTracker() {
                             </div>
 
                             <div style={{ width: "100%", height: "8px", background: "rgba(0,0,0,0.05)", borderRadius: "100px", overflow: "hidden" }}>
-                                <div style={{ width: `${percent}%`, height: "100%", background: "var(--primary)", transition: "width 0.5s ease" }}></div>
+                                <div style={{ width: `${percent}%`, height: "100%", background: "linear-gradient(90deg, #0064FF 0%, #00C6FF 100%)", transition: "width 0.5s ease" }}></div>
                             </div>
-                            <div style={{ textAlign: "right", fontSize: "0.75rem", color: "var(--primary)", marginTop: "4px", fontWeight: 700 }}>
+                            <div style={{ textAlign: "right", fontSize: "0.75rem", color: "var(--primary)", marginTop: "6px", fontWeight: 700 }}>
                                 {percent.toFixed(1)}% 달성
                             </div>
                         </Link>
                     </div>
                 );
             })}
+
+            {/* CTA Banner for Anonymous Users */}
+            <div className="sync-cta-banner" style={{
+                marginTop: "8px",
+                padding: "20px 16px",
+                background: "linear-gradient(135deg, #F4F8FF 0%, #E8F0FF 100%)",
+                borderRadius: "16px",
+                border: "1px solid rgba(0, 100, 255, 0.15)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "14px",
+                alignItems: "center",
+                textAlign: "center"
+            }}>
+                <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.4 }}>
+                    <strong style={{ color: "var(--primary)", fontSize: "0.95rem" }}>이 데이터는 임시 보관 중이에요!</strong><br />
+                    동기화하고 내 전체 자산과 연동해보세요.
+                </div>
+                <button style={{
+                    width: "100%",
+                    padding: "12px 0",
+                    background: "var(--primary)",
+                    color: "white",
+                    fontWeight: 700,
+                    borderRadius: "12px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.95rem",
+                    boxShadow: "0 4px 12px rgba(0, 100, 255, 0.2)",
+                    transition: "all 0.2s"
+                }} onClick={() => {
+                    alert("가상 로그인 기능이 작동되었습니다! 전체 자산 화면으로 전환됩니다.");
+                    window.dispatchEvent(new Event("fc_mock_login"));
+                }}>
+                    3초만에 가입/로그인하기 🚀
+                </button>
+            </div>
         </div>
     );
 }

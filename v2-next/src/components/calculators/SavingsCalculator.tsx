@@ -70,6 +70,23 @@ export default function SavingsCalculator() {
     }
   };
 
+  const saveGoal = (type: string, title: string, current: number, target: number) => {
+    const goals = JSON.parse(localStorage.getItem('fc_goals') || '[]');
+    const newGoal = {
+      id: Date.now().toString(),
+      calcType: type,
+      title: title,
+      targetAmt: target,
+      currentAmt: current,
+      dateStr: new Date().toLocaleDateString('ko-KR'),
+      isCompleted: false,
+      link: '/savings-calculator'
+    };
+    localStorage.setItem('fc_goals', JSON.stringify([newGoal, ...goals].slice(0, 5))); // Keep max 5
+    window.dispatchEvent(new Event('fc_goal_updated'));
+    alert('내 재무 목표에 저장되었습니다! 홈 화면에서 확인해보세요.');
+  };
+
   useEffect(() => {
     if (tab === 'deposit' && depositResult) renderChart(chartRefD, chartInstD, depositResult.principal, depositResult.grossInterest, depositResult.taxAmount);
     if (tab === 'installment' && installmentResult) renderChart(chartRefI, chartInstI, installmentResult.totalPrincipal, installmentResult.grossInterest, installmentResult.taxAmount);
@@ -125,6 +142,7 @@ export default function SavingsCalculator() {
               <div className="result-item"><div className="result-item-label">세후 이자</div><div className="result-item-value" style={{ color: '#1a56e8' }}>+{formatKRW(depositResult.netInterest)}원</div></div>
             </div>
             <div className="chart-wrap" style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}><div style={{ width: '240px', height: '240px' }}><canvas ref={chartRefD}></canvas></div></div>
+            <button onClick={() => saveGoal('예금', `목돈 ${formatKRW(depositResult.principal)}원 불리기`, depositResult.principal, depositResult.netMaturity)} style={{ marginTop: '20px', width: '100%', padding: '12px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', color: 'var(--text-primary)' }}>⭐ 내 재무 목표로 저장하기</button>
           </div>
         )}
 
@@ -142,6 +160,7 @@ export default function SavingsCalculator() {
               <div className="result-item"><div className="result-item-label">세후 이자</div><div className="result-item-value" style={{ color: '#1a56e8' }}>+{formatKRW(installmentResult.netInterest)}원</div></div>
             </div>
             <div className="chart-wrap" style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}><div style={{ width: '240px', height: '240px' }}><canvas ref={chartRefI}></canvas></div></div>
+            <button onClick={() => saveGoal('적금', `월 ${formatKRW(installmentResult.monthly || 0)}원 모으기`, installmentResult.totalPrincipal, installmentResult.netMaturity)} style={{ marginTop: '20px', width: '100%', padding: '12px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '12px', fontWeight: 700, cursor: 'pointer', color: 'var(--text-primary)' }}>⭐ 내 재무 목표로 저장하기</button>
           </div>
         )}
       </div>

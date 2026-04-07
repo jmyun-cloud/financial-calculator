@@ -10,6 +10,10 @@ export default function UserDashboard() {
 
     useEffect(() => {
         setIsClient(true);
+
+        const handleLogin = () => setIsLoggedIn(true);
+        window.addEventListener("fc_mock_login", handleLogin);
+        return () => window.removeEventListener("fc_mock_login", handleLogin);
     }, []);
 
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px' }} />;
