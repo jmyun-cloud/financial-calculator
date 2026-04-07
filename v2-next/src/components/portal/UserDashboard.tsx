@@ -3,10 +3,58 @@ import React, { useEffect, useState } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 
+function MarketDetailBar({ symbol }: { symbol: string }) {
+    const [data, setData] = useState<any>(null);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        let isMounted = true;
+        fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}`)
+            .then(res => res.json())
+            .then(d => {
+                if (!isMounted) return;
+                if (d.error) setError(true);
+                else setData(d);
+            })
+            .catch(() => {
+                if (isMounted) setError(true);
+            });
+        return () => { isMounted = false; };
+    }, [symbol]);
+
+    if (error) return <div style={{ fontSize: "12px", color: "var(--danger)", marginTop: "12px", textAlign: "center" }}>데이터를 불러올 수 없습니다</div>;
+    if (!data) return <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginTop: "12px", textAlign: "center" }}>불러오는 중...</div>;
+
+    const formatNumber = (n: number | null | undefined) => {
+        if (n === null || n === undefined) return "-";
+        return new Intl.NumberFormat('en-US').format(n);
+    };
+
+    return (
+        <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed var(--border)", display: "flex", justifyContent: "space-between", gap: "8px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>52주 최고</span>
+                <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.fiftyTwoWeekHigh)}</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>52주 최저</span>
+                <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.fiftyTwoWeekLow)}</span>
+            </div>
+            {data.regularMarketVolume && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>거래량</span>
+                    <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.regularMarketVolume)}</span>
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // default to false
     const [activeMarketTab, setActiveMarketTab] = useState("국내");
+    const [expandedCard, setExpandedCard] = useState<string | null>(null);
     const { data: marketData, loading } = useMarketData();
 
     useEffect(() => {
@@ -171,7 +219,7 @@ export default function UserDashboard() {
                             const fillPath = `${pathData} V 30 H 0 Z`;
 
                             return (
-                                <div key={idx.symbol} className="summary-card">
+                                <div key={idx.symbol} className="summary-card" onClick={() => setExpandedCard(expandedCard === idx.symbol ? null : idx.symbol)} style={{ cursor: "pointer", transition: "all 0.2s" }}>
                                     <div className="card-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginBottom: '8px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
                                             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -225,6 +273,7 @@ export default function UserDashboard() {
                                             />
                                         </svg>
                                     </div>
+                                    {expandedCard === idx.symbol && <MarketDetailBar symbol={idx.symbol} />}
                                 </div>
                             );
                         })}
