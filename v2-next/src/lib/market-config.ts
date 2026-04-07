@@ -8,10 +8,10 @@
 export const MARKET_CONFIG = {
     // 야후 파이낸스 심볼 목록
     symbols: [
-        '^KS11', '^KQ11', 'KRW=X',
+        '^KS11', '^KQ11', 'KRW=X', 'JPYKRW=X', 'EURKRW=X', 'CNYKRW=X',
         '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
         'BTC-USD', 'ETH-USD', 'XRP-USD', // 암호화폐
-        'GC=F', 'SI=F', 'CL=F' // 원자재
+        'GC=F', 'SI=F', 'CL=F', 'HG=F' // 원자재
     ],
 
     // 카테고리 분류 (신규)
@@ -19,7 +19,7 @@ export const MARKET_CONFIG = {
         domestic: ['^KS11', '^KQ11', 'KRW=X'],
         global: ['^GSPC', '^IXIC', '^DJI', '^N225', '^HSI'],
         crypto: ['BTC-USD', 'ETH-USD', 'XRP-USD'],
-        commodity: ['GC=F', 'SI=F', 'CL=F']
+        commodity: ['GC=F', 'SI=F', 'CL=F', 'HG=F']
     } as Record<string, string[]>,
 
     // 화면에 표시할 이름 매핑
@@ -27,6 +27,9 @@ export const MARKET_CONFIG = {
         '^KS11': 'KOSPI',
         '^KQ11': 'KOSDAQ',
         'KRW=X': 'USD/KRW',
+        'JPYKRW=X': 'JPY/KRW',
+        'EURKRW=X': 'EUR/KRW',
+        'CNYKRW=X': 'CNY/KRW',
         '^GSPC': 'S&P 500',
         '^IXIC': 'Nasdaq',
         '^DJI': 'Dow Jones',
@@ -39,6 +42,7 @@ export const MARKET_CONFIG = {
         'GC=F': 'Gold',
         'SI=F': 'Silver',
         'CL=F': 'Crude Oil',
+        'HG=F': 'Copper',
         'BASE': '금리'
     } as Record<string, string>,
 
@@ -59,6 +63,9 @@ export const MARKET_CONFIG = {
         '^KS11': 'KOSPI 지수',
         '^KQ11': 'KOSDAQ 지수',
         'KRW=X': '원/달러 환율',
+        'JPYKRW=X': '엔/원 환율',
+        'EURKRW=X': '유로/원 환율',
+        'CNYKRW=X': '위안/원 환율',
         '^GSPC': 'S&P 500',
         '^IXIC': '나스닥 종합',
         '^DJI': '다우 존스',
@@ -71,6 +78,7 @@ export const MARKET_CONFIG = {
         'GC=F': '국제 금 시세',
         'SI=F': '국제 은 시세',
         'CL=F': 'WTI 원유',
+        'HG=F': '구리 선물',
         'BASE': '한국은행 기준금리'
     } as Record<string, string>
 };

@@ -6,6 +6,7 @@ import { useMarketData } from "@/hooks/useMarketData";
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // default to false
+    const [activeMarketTab, setActiveMarketTab] = useState("국내");
     const { data: marketData, loading } = useMarketData();
 
     useEffect(() => {
@@ -20,12 +21,46 @@ export default function UserDashboard() {
 
     if (!isLoggedIn) {
         // 비로그인 상태: 오늘의 시장 요약
-        const summaryIndices = [
-            { symbol: "^KS11", name: "KOSPI", color: "#FF4D4D" },
-            { symbol: "KRW=X", name: "원/달러 환율", color: "#0064FF" },
-            { symbol: "GC=F", name: "국제 금 시세", color: "#FFB000" },
-            { symbol: "^GSPC", name: "S&P 500", color: "#0064FF" }
+        const marketTabs = [
+            {
+                id: "국내",
+                indices: [
+                    { symbol: "^KS11", name: "KOSPI" },
+                    { symbol: "^KQ11", name: "KOSDAQ" },
+                    { symbol: "KRW=X", name: "원/달러 환율" },
+                    { symbol: "GC=F", name: "국제 금 시세" }
+                ]
+            },
+            {
+                id: "해외",
+                indices: [
+                    { symbol: "^GSPC", name: "S&P 500" },
+                    { symbol: "^IXIC", name: "Nasdaq" },
+                    { symbol: "^DJI", name: "Dow Jones" },
+                    { symbol: "^N225", name: "Nikkei 225" }
+                ]
+            },
+            {
+                id: "환율",
+                indices: [
+                    { symbol: "KRW=X", name: "USD/KRW" },
+                    { symbol: "JPYKRW=X", name: "JPY/KRW" },
+                    { symbol: "EURKRW=X", name: "EUR/KRW" },
+                    { symbol: "CNYKRW=X", name: "CNY/KRW" }
+                ]
+            },
+            {
+                id: "원자재",
+                indices: [
+                    { symbol: "GC=F", name: "Gold" },
+                    { symbol: "SI=F", name: "Silver" },
+                    { symbol: "CL=F", name: "WTI" },
+                    { symbol: "HG=F", name: "Copper" }
+                ]
+            }
         ];
+
+        const summaryIndices = marketTabs.find(t => t.id === activeMarketTab)?.indices || marketTabs[0].indices;
 
         return (
             <div className="market-summary-container">
@@ -39,7 +74,32 @@ export default function UserDashboard() {
                         <div className="live-badge">● 실시간</div>
                     </div>
 
-                    <div className="summary-grid">
+                    <div className="market-tabs-wrapper" style={{ marginBottom: "20px" }}>
+                        <div style={{ background: "#F2F4F6", borderRadius: "8px", padding: "3px", display: "inline-flex", gap: "2px" }}>
+                            {marketTabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveMarketTab(tab.id)}
+                                    style={{
+                                        border: "none",
+                                        padding: "6px 16px",
+                                        fontSize: "12px",
+                                        fontWeight: 600,
+                                        cursor: "pointer",
+                                        transition: "all 0.2s",
+                                        background: activeMarketTab === tab.id ? "#fff" : "transparent",
+                                        color: activeMarketTab === tab.id ? "#0064FF" : "#8B95A1",
+                                        borderRadius: activeMarketTab === tab.id ? "6px" : "0",
+                                        boxShadow: activeMarketTab === tab.id ? "0 2px 4px rgba(0,0,0,0.05)" : "none"
+                                    }}
+                                >
+                                    {tab.id}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="summary-grid" style={{ transition: "opacity 0.2s" }}>
                         {summaryIndices.map(idx => {
                             const item = marketData.find(m => m.symbol === idx.symbol) || {
                                 price: "---",
