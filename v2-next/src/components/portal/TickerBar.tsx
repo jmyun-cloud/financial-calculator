@@ -29,7 +29,7 @@ export default function TickerBar() {
                         <span className="ticker-label">{item.name}</span>
                         <span className="ticker-value">{item.price}</span>
                         <span className={`ticker-chip ${item.isPositive ? 'positive' : 'negative'}`}>
-                            {item.isPositive ? '▲' : '▼'}{item.changePercent}%
+                            {item.isPositive ? '+' : '-'}{item.changePercent}%
                         </span>
                     </div>
                 ))}
@@ -78,12 +78,12 @@ export default function TickerBar() {
                     border-radius: 4px;
                 }
                 .ticker-chip.positive {
-                    color: #F04452;
-                    background: rgba(240, 68, 82, 0.08);
+                    color: #F04251;
+                    background: rgba(240, 66, 81, 0.08);
                 }
                 .ticker-chip.negative {
-                    color: #3182F6;
-                    background: rgba(49, 130, 246, 0.08);
+                    color: #0064FF;
+                    background: rgba(0, 100, 255, 0.08);
                 }
 
                 @keyframes ticker-scroll {

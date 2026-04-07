@@ -1,118 +1,143 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { 
+    DollarSign, Laptop, Briefcase, Receipt, 
+    Home, Scale, Key, 
+    PiggyBank, TrendingUp, ArrowLeftRight, UserCheck, BarChart2 
+} from "lucide-react";
 
 const toolGroups = [
     {
         title: "소득 및 세금",
+        themeName: "income",
+        iconColor: "#0064FF",
+        bgColor: "#EBF3FF",
         tools: [
-            { id: "salary", icon: "💰", title: "연봉 계산", url: "/salary-calculator", color: "#E8F3FF" },
-            { id: "freelancer", icon: "👨‍💻", title: "프리랜서", url: "/freelancer-calculator", color: "#F0F0F0" },
-            { id: "severance", icon: "💼", title: "퇴직금", url: "/severance-calculator", color: "#FFE8E8" },
-            { id: "tax-interest", icon: "🧾", title: "이자/세금", url: "/tax-interest-calculator", color: "#E8E8FF" },
+            { id: "salary", icon: DollarSign, title: "연봉 계산", url: "/salary-calculator" },
+            { id: "freelancer", icon: Laptop, title: "프리랜서", url: "/freelancer-calculator" },
+            { id: "severance", icon: Briefcase, title: "퇴직금", url: "/severance-calculator" },
+            { id: "tax-interest", icon: Receipt, title: "이자/세금", url: "/tax-interest-calculator" },
         ]
     },
     {
         title: "부동산 및 대출",
+        themeName: "realestate",
+        iconColor: "#F04251",
+        bgColor: "#FFF0F0",
         tools: [
-            { id: "loan", icon: "🏠", title: "대출 계산", url: "/loan-calculator", color: "#FFF4E8" },
-            { id: "dsr", icon: "⚖️", title: "DSR 한도", url: "/dsr-calculator", color: "#E8FBFF" },
-            { id: "jeonse", icon: "🔑", title: "전월세 계산", url: "/jeonse-calculator", color: "#FFFBE8" },
+            { id: "loan", icon: Home, title: "대출 계산", url: "/loan-calculator" },
+            { id: "dsr", icon: Scale, title: "DSR 한도", url: "/dsr-calculator" },
+            { id: "jeonse", icon: Key, title: "전월세 계산", url: "/jeonse-calculator" },
         ]
     },
     {
         title: "저축 및 노후",
+        themeName: "savings",
+        iconColor: "#1B8947",
+        bgColor: "#E8F9F0",
         tools: [
-            { id: "savings", icon: "🏦", title: "적금 계산", url: "/savings-calculator", color: "#E8FFF3" },
-            { id: "compound", icon: "📈", title: "복리 수익", url: "/compound-calculator", color: "#F3E8FF" },
-            { id: "exchange", icon: "💱", title: "환율 계산", url: "/exchange-calculator", color: "#FFFCE8" },
-            { id: "pension", icon: "💎", title: "연금 계산", url: "/pension-calculator", color: "#E8F3FF" },
-            { id: "inflation", icon: "📉", title: "물가/가치", url: "/inflation-calculator", color: "#FFE8F4" }
+            { id: "savings", icon: PiggyBank, title: "적금 계산", url: "/savings-calculator" },
+            { id: "compound", icon: TrendingUp, title: "복리 수익", url: "/compound-calculator" },
+            { id: "exchange", icon: ArrowLeftRight, title: "환율 계산", url: "/exchange-calculator" },
+            { id: "pension", icon: UserCheck, title: "연금 계산", url: "/pension-calculator" },
+            { id: "inflation", icon: BarChart2, title: "물가/가치", url: "/inflation-calculator" }
         ]
     }
 ];
 
 export default function MiniToolbox() {
     return (
-        <div className="mini-toolbox-v3">
+        <div className="mini-toolbox-v4">
             {toolGroups.map((group, gIdx) => (
                 <div key={gIdx} className="toolbox-group">
-                    <h4 className="group-title">{group.title}</h4>
+                    <h4 className="group-title">
+                        <span className="group-dot" style={{ backgroundColor: group.iconColor }}></span>
+                        {group.title}
+                    </h4>
                     <div className="toolbox-grid">
-                        {group.tools.map(tool => (
-                            <Link href={tool.url} key={tool.id} className="tool-chip-item">
-                                <div className="tool-icon-chip" style={{ background: tool.color }}>
-                                    {tool.icon}
-                                </div>
-                                <span className="tool-chip-name">{tool.title}</span>
-                            </Link>
-                        ))}
+                        {group.tools.map(tool => {
+                            const Icon = tool.icon;
+                            return (
+                                <Link href={tool.url} key={tool.id} className="tool-chip-item">
+                                    <div className="tool-icon-chip" style={{ backgroundColor: group.bgColor }}>
+                                        <Icon size={22} color={group.iconColor} strokeWidth={2.5} />
+                                    </div>
+                                    <span className="tool-chip-name">{tool.title}</span>
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             ))}
 
             <style jsx>{`
-                .mini-toolbox-v3 {
-                    background: var(--surface);
-                    border-radius: var(--radius-lg);
-                    padding: 24px;
-                    margin-bottom: 32px;
-                    border: 1px solid var(--border);
+                .mini-toolbox-v4 {
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
+                    gap: 0;
                 }
                 .toolbox-group {
                     display: flex;
                     flex-direction: column;
-                    border-bottom: 1px solid rgba(0,0,0,0.03);
-                    padding-bottom: 16px;
-                }
-                .toolbox-group:last-child {
-                    border-bottom: none;
-                    padding-bottom: 0;
+                    margin-bottom: 20px;
                 }
                 .group-title {
-                    font-size: 0.9rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 0.95rem;
                     font-weight: 700;
                     color: var(--text-primary);
                     margin-bottom: 12px;
-                    opacity: 0.8;
+                }
+                .group-dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    display: inline-block;
                 }
                 .toolbox-grid {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 24px 32px;
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 10px;
                 }
                 .tool-chip-item {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 10px;
-                    width: 76px;
-                    padding: 8px 0;
-                    border-radius: 16px;
-                    transition: all 0.2s ease;
+                    background: #fff;
+                    border: 1px solid #ECEEF2;
+                    border-radius: 14px;
+                    padding: 16px 12px;
+                    transition: all 0.15s ease;
+                    text-decoration: none;
                 }
                 .tool-chip-item:hover {
-                    background: var(--surface-2);
-                    transform: translateY(-2px);
+                    border-color: #0064FF;
+                    background: #F8FBFF;
                 }
                 .tool-icon-chip {
-                    width: 56px;
-                    height: 56px;
-                    border-radius: 18px;
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 12px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 1.6rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    margin-bottom: 10px;
                 }
                 .tool-chip-name {
-                    font-size: 0.8rem;
+                    font-size: 13px;
                     font-weight: 600;
-                    color: var(--text-secondary);
+                    color: #191F28;
                     letter-spacing: -0.01em;
+                    text-align: center;
+                }
+                
+                @media (max-width: 600px) {
+                    .toolbox-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
                 }
             `}</style>
         </div>
