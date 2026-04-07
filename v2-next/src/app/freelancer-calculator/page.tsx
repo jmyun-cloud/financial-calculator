@@ -1,5 +1,5 @@
-
 import { Metadata } from "next";
+import Link from "next/link";
 import FreelancerCalculator from "@/components/calculators/FreelancerCalculator";
 
 export const metadata: Metadata = {
@@ -33,9 +33,9 @@ export default function FreelancerPage() {
             <div className="sidebar-widget guide-link-widget" style={{ marginBottom: '20px' }}>
               <h2 className="widget-title">📖 계산기 가이드</h2>
               <p style={{fontSize: '0.9rem', marginBottom: '15px', color: 'var(--text-secondary)'}}>정확한 계산 원리와 필수 상식을 확인하세요!</p>
-              <a href="/guide/freelancer" className="calc-btn" style={{padding: '12px', fontSize: '0.95rem', background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)'}}>가이드 읽어보기 ▸</a>
+              <Link href="/guide/freelancer" className="calc-btn" style={{padding: '12px', fontSize: '0.95rem', background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)'}}>가이드 읽어보기 ▸</Link>
             </div>
-                        <div className="sidebar-widget info-widget">
+            <div className="sidebar-widget info-widget">
               <h2 className="widget-title">📋 3.3% 원천징수란?</h2>
               <p style={{fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '15px'}}>
                 고용 관계 없이 독립된 자격으로 용역을 제공하고 대가를 받는 경우, 지급하는 자가 금액의 3.3%를 미리 떼어 국가에 납부하는 제도입니다.

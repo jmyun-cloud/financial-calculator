@@ -1,5 +1,5 @@
-
 import { Metadata } from "next";
+import Link from "next/link";
 import SalaryCalculator from "@/components/calculators/SalaryCalculator";
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ export default function SalaryPage() {
             <div className="sidebar-widget guide-link-widget" style={{ marginBottom: '20px' }}>
               <h2 className="widget-title">📖 계산기 가이드</h2>
               <p style={{fontSize: '0.9rem', marginBottom: '15px', color: 'var(--text-secondary)'}}>정확한 계산 원리와 필수 상식을 확인하세요!</p>
-              <a href="/guide/salary" className="calc-btn" style={{padding: '12px', fontSize: '0.95rem', background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)'}}>가이드 읽어보기 ▸</a>
+              <Link href="/guide/salary" className="calc-btn" style={{padding: '12px', fontSize: '0.95rem', background: 'var(--surface-2)', color: 'var(--text-primary)', border: '1px solid var(--border)'}}>가이드 읽어보기 ▸</Link>
             </div>
                         <div className="sidebar-widget info-widget">
               <h2 className="widget-title">📋 2026년 4대보험 요율</h2>

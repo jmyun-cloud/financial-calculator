@@ -80,16 +80,17 @@ export default function MiniToolbox() {
                     opacity: 0.8;
                 }
                 .toolbox-grid {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 12px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 24px 32px;
                 }
                 .tool-chip-item {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     gap: 10px;
-                    padding: 12px 0;
+                    width: 76px;
+                    padding: 8px 0;
                     border-radius: 16px;
                     transition: all 0.2s ease;
                 }
@@ -100,7 +101,7 @@ export default function MiniToolbox() {
                 .tool-icon-chip {
                     width: 56px;
                     height: 56px;
-                    border-radius: 20px;
+                    border-radius: 18px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
