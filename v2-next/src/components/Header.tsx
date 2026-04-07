@@ -49,10 +49,17 @@ export default function Header() {
                     font-weight: 600;
                     color: #4E5968;
                     text-decoration: none;
-                    transition: color 0.2s;
+                    transition: all 0.2s;
+                    padding: 8px 16px;
+                    border-radius: 12px;
                 }
-                .nav-link:hover, .nav-link.active {
+                .nav-link:hover {
                     color: var(--primary);
+                    background: var(--surface-2);
+                }
+                .nav-link.active {
+                    color: var(--primary);
+                    background: #E8F3FF; /* Light blue chip from reference 2301 */
                 }
                 .header-right {
                     display: flex;
