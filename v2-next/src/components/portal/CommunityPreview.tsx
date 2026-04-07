@@ -34,39 +34,39 @@ export default function CommunityPreview() {
     }, []);
 
     return (
-        <div className="bg-white rounded-[28px] p-8 border border-[#E5E8EB] mb-8">
-            <header className="flex justify-between items-center mb-6">
-                <h2 className="text-[1.25rem] font-extrabold text-[#191F28] m-0">커뮤니티 인기글</h2>
-                <Link href="/community" className="text-[0.85rem] font-bold text-[#0064FF] no-underline hover:underline">더보기 →</Link>
+        <div className="bg-white rounded-[32px] p-8 border border-[#F2F4F7] shadow-[0_4px_20px_rgba(0,0,0,0.02)] mb-10">
+            <header className="flex justify-between items-center mb-7">
+                <h2 className="text-[20px] font-extrabold text-[#191F28] tracking-tight">실시간 인기 토론</h2>
+                <Link href="/community" className="text-[14px] font-bold text-[#0064FF] no-underline hover:underline px-3 py-1 bg-[#F0F6FF] rounded-full">더보기</Link>
             </header>
 
             <div className="flex flex-col">
                 {isLoading ? (
-                    <div className="py-10 text-center text-[#8B95A1] text-[0.9rem]">게시글을 불러오는 중입니다...</div>
+                    <div className="py-16 text-center text-[#8B95A1] text-[15px] font-medium">게시글을 불러오는 중입니다...</div>
                 ) : (
                     posts.map((post, idx) => (
                         <Link 
                             key={post.id} 
                             href={`/community/post/${post.id}`}
-                            className={`py-5 no-underline block hover:bg-[#F8F9FB] -mx-8 px-8 transition-colors ${idx !== posts.length - 1 ? 'border-b border-[#F2F4F7]' : ''}`}
+                            className={`group py-6 no-underline block hover:bg-[#F9FAFB] -mx-8 px-8 transition-all ${idx !== posts.length - 1 ? 'border-b border-[#F2F4F7]' : ''}`}
                         >
-                            <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-2 mb-1">
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center gap-2">
                                     {post.isHot && (
-                                        <span className="bg-[#FFF0F0] text-[#F04251] text-[10px] font-extrabold px-1.5 py-0.5 rounded-[4px]">HOT</span>
+                                        <span className="bg-[#FFF0F0] text-[#F04251] text-[10px] font-extrabold px-1.5 py-0.5 rounded-[4px] uppercase tracking-tighter">HOT</span>
                                     )}
-                                    <h3 className="text-[1.05rem] font-bold text-[#191F28] leading-[1.4] m-0 line-clamp-1 flex-1">
+                                    <h3 className="text-[17px] font-extrabold text-[#191F28] leading-[1.5] m-0 group-hover:text-[#0064FF] transition-colors line-clamp-1 flex-1 tracking-tight">
                                         {post.title}
                                     </h3>
                                 </div>
-                                <div className="flex items-center gap-3 text-[0.8rem] text-[#8B95A1] font-medium">
-                                    <span className="text-[#4E5968] font-semibold">{post.author}</span>
+                                <div className="flex items-center gap-3 text-[13px] text-[#8B95A1] font-bold">
+                                    <span className="text-[#4E5968] font-extrabold">{post.author}</span>
                                     <span className="text-[#E5E8EB]">|</span>
                                     <span>{post.timeAgo}</span>
                                     <div className="ml-auto flex items-center gap-3 text-[#adb5bd]">
-                                        <span className="flex items-center gap-1"><Eye size={14} /> {post.viewCount}</span>
-                                        <span className="flex items-center gap-1"><ThumbsUp size={13} /> {post.likeCount}</span>
-                                        <span className="flex items-center gap-1 text-[#0064FF] font-bold"><MessageSquare size={13} /> {post.commentCount}</span>
+                                        <span className="flex items-center gap-1"><Eye size={16} /> {post.viewCount.toLocaleString()}</span>
+                                        <span className="flex items-center gap-1"><ThumbsUp size={15} /> {post.likeCount}</span>
+                                        <span className="flex items-center gap-1 text-[#0064FF] font-black"><MessageSquare size={15} /> {post.commentCount}</span>
                                     </div>
                                 </div>
                             </div>

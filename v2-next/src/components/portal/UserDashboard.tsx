@@ -108,6 +108,31 @@ function MarketDetailBar({ symbol, name }: { symbol: string, name: string }) {
     );
 }
 
+function MarketSparkline({ data, color }: { data: string, color: string }) {
+    const fillId = `spark-fill-${color.replace('#', '')}`;
+    const fillPath = `${data} V 30 H 0 Z`;
+    return (
+        <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none" style={{ display: 'block' }}>
+            <defs>
+                <linearGradient id={fillId} x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+                    <stop offset="100%" stopColor={color} stopOpacity="0" />
+                </linearGradient>
+            </defs>
+            <path d={fillPath} fill={`url(#${fillId})`} />
+            <path
+                d={data}
+                fill="none"
+                stroke={color}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+            />
+        </svg>
+    );
+}
+
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // default to false
@@ -171,41 +196,35 @@ export default function UserDashboard() {
         return (
             <div className="market-summary-container">
                 {/* 오늘의 시장 요약 */}
-                <div className="market-summary-card shadow-sm">
-                    <div className="summary-header">
-                        <div className="header-left">
-                            <h2 className="summary-title">오늘의 시장 요약</h2>
-                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
+                <div className="bg-white rounded-[32px] p-8 border border-[#F2F4F7] shadow-[0_4px_24px_rgba(0,0,0,0.03)] mb-8">
+                    <div className="flex justify-between items-start mb-8">
+                        <div className="flex flex-col gap-1">
+                            <h2 className="text-[20px] font-extrabold text-[#191F28] tracking-tight">오늘의 시장 요약</h2>
+                            <span className="text-[13px] text-[#8B95A1] font-bold">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
                         </div>
-                        <div className="live-badge">● 실시간</div>
-                    </div>
-
-                    <div className="market-tabs-wrapper" style={{ marginBottom: "20px" }}>
-                        <div style={{ background: "#F2F4F6", borderRadius: "8px", padding: "3px", display: "inline-flex", gap: "2px" }}>
-                            {marketTabs.map(tab => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveMarketTab(tab.id)}
-                                    style={{
-                                        border: "none",
-                                        padding: "6px 16px",
-                                        fontSize: "12px",
-                                        fontWeight: 600,
-                                        cursor: "pointer",
-                                        transition: "all 0.2s",
-                                        background: activeMarketTab === tab.id ? "#fff" : "transparent",
-                                        color: activeMarketTab === tab.id ? "#0064FF" : "#8B95A1",
-                                        borderRadius: activeMarketTab === tab.id ? "6px" : "0",
-                                        boxShadow: activeMarketTab === tab.id ? "0 2px 4px rgba(0,0,0,0.05)" : "none"
-                                    }}
-                                >
-                                    {tab.id}
-                                </button>
-                            ))}
+                        <div className="bg-[#E8F9F0] text-[#1B8947] text-[12px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                            <span className="w-1.5 h-1.5 bg-[#1B8947] rounded-full animate-pulse"></span>
+                            ● 실시간
                         </div>
                     </div>
 
-                    <div className="summary-grid" style={{ transition: "opacity 0.2s" }}>
+                    <div className="flex gap-2 bg-[#F9FAFB] p-1 rounded-[14px] self-start inline-flex mb-8">
+                        {marketTabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveMarketTab(tab.id)}
+                                className={`px-4 py-2 text-[13px] font-bold rounded-[10px] transition-all duration-300 ${
+                                    activeMarketTab === tab.id 
+                                    ? 'bg-white text-[#0064FF] shadow-[0_2px_8px_rgba(0,0,0,0.05)]' 
+                                    : 'bg-transparent text-[#8B95A1] hover:text-[#4E5968]'
+                                }`}
+                            >
+                                {tab.id}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                         {summaryIndices.map(idx => {
                             const item = marketData.find(m => m.symbol === idx.symbol) || {
                                 price: "---",
@@ -215,124 +234,33 @@ export default function UserDashboard() {
                             };
 
                             const hasData = item.price !== "---";
-
-                            // UTC market badge computation
-                            const getMarketBadge = (sym: string) => {
-                                const now = new Date();
-                                const utcHour = now.getUTCHours();
-                                const utcMin = now.getUTCMinutes();
-                                const utcDay = now.getUTCDay();
-                                const isWeekend = utcDay === 0 || utcDay === 6;
-                                const minutes = utcHour * 60 + utcMin;
-
-                                if (["^KS11", "^KQ11"].includes(sym)) {
-                                    // UTC 00:00~06:30 (KST 09:00~15:30), 평일만
-                                    if (!isWeekend && minutes >= 0 && minutes <= 390) return { type: "open", text: "장중" };
-                                    return { type: "closed", text: "장마감" };
-                                }
-
-                                if (["^GSPC", "^IXIC", "^DJI"].includes(sym)) {
-                                    const month = now.getUTCMonth() + 1;
-                                    const date = now.getUTCDate();
-
-                                    let isDst = false;
-                                    if (month > 3 && month < 11) isDst = true;
-                                    else if (month === 3) {
-                                        const secondSunday = 1 + (7 - new Date(Date.UTC(now.getUTCFullYear(), 2, 1)).getUTCDay()) % 7 + 7;
-                                        if (date >= secondSunday) isDst = true;
-                                    } else if (month === 11) {
-                                        const firstSunday = 1 + (7 - new Date(Date.UTC(now.getUTCFullYear(), 10, 1)).getUTCDay()) % 7;
-                                        if (date < firstSunday) isDst = true;
-                                    }
-
-                                    if (isDst) {
-                                        if (minutes >= 810 && minutes <= 1200) return { type: "open", text: "장중" };
-                                    } else {
-                                        if (minutes >= 870 && minutes <= 1260) return { type: "open", text: "장중" };
-                                    }
-                                    return { type: "closed", text: "장마감" };
-                                }
-
-                                if (["GC=F", "SI=F", "CL=F", "HG=F"].includes(sym)) {
-                                    return { type: "24h", text: "24H" };
-                                }
-
-                                if (["KRW=X", "JPYKRW=X", "EURKRW=X", "CNYKRW=X"].includes(sym)) {
-                                    return { type: "realtime", text: "실시간" };
-                                }
-
-                                return null;
-                            };
-
-                            const badge = getMarketBadge(idx.symbol);
-
-                            // Dynamic Sparkline Path based on direction
+                            const trendColor = item.isPositive ? '#F04251' : '#0064FF';
+                            
                             const pathData = item.isPositive
-                                ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"  // Upswing, straight sharp lines
-                                : "M0 5 L 15 8 L 30 5 L 45 15 L 60 12 L 75 22 L 100 25"; // Downswing, straight sharp lines
-
-                            const strokeColor = !hasData ? '#E5E8EB' : (item.isPositive ? '#FF4D4D' : '#0064FF');
-                            const fillId = item.isPositive ? 'spark-up' : 'spark-down';
-                            const fillColor = !hasData ? 'transparent' : `url(#${fillId})`;
-                            const fillPath = `${pathData} V 30 H 0 Z`;
+                                ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"
+                                : "M0 5 L 15 8 L 30 5 L 45 15 L 60 12 L 75 22 L 100 25";
 
                             return (
-                                <div key={idx.symbol} className="summary-card" onClick={() => setExpandedCard(expandedCard === idx.symbol ? null : idx.symbol)} style={{ cursor: "pointer", transition: "all 0.2s" }}>
-                                    <div className="card-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginBottom: '8px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflow: 'hidden' }}>
-                                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
-                                            </span>
-                                            {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", whiteSpace: "nowrap", flexShrink: 0 }}>USD/oz</span>}
+                                <div 
+                                    key={idx.symbol} 
+                                    className={`group flex flex-col bg-white border border-[#F2F4F7] rounded-[24px] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 cursor-pointer hover:shadow-[0_12px_24px_rgba(0,100,255,0.06)] hover:-translate-y-1 ${expandedCard === idx.symbol ? 'border-[#0064FF] bg-[#F8FBFF]' : ''}`}
+                                    onClick={() => setExpandedCard(expandedCard === idx.symbol ? null : idx.symbol)}
+                                >
+                                    <div className="flex flex-col gap-1 mb-6">
+                                        <span className="text-[11px] font-extrabold text-[#8B95A1] uppercase tracking-wider">{idx.name}</span>
+                                        <h3 className="text-[20px] font-black text-[#191F28] tabular-nums tracking-tighter">{item.price}</h3>
+                                        <div className={`text-[12px] font-extrabold tabular-nums flex items-center gap-1 ${item.isPositive ? 'text-[#F04251]' : 'text-[#0064FF]'}`}>
+                                            {hasData ? (
+                                                <>
+                                                    <span>{item.isPositive ? '▲' : '▼'}</span>
+                                                    <span>{item.change}</span>
+                                                    <span className="opacity-80">({item.isPositive ? '+' : '-'}{item.changePercent}%)</span>
+                                                </>
+                                            ) : '수집중'}
                                         </div>
-                                        {badge && badge.type === "realtime" ? (
-                                            <span style={{ fontSize: "10px", color: "#8B95A1", whiteSpace: "nowrap", flexShrink: 0 }}>{badge.text}</span>
-                                        ) : badge ? (
-                                            <span style={{
-                                                fontSize: "10px",
-                                                fontWeight: 700,
-                                                padding: "2px 6px",
-                                                borderRadius: "4px",
-                                                whiteSpace: "nowrap",
-                                                flexShrink: 0,
-                                                background: badge.type === "open" ? "#FFF0F0" : badge.type === "closed" ? "#F2F4F6" : "#E8F9F0",
-                                                color: badge.type === "open" ? "#F04251" : badge.type === "closed" ? "#8B95A1" : "#1B8947"
-                                            }}>
-                                                {badge.text}
-                                            </span>
-                                        ) : null}
                                     </div>
-                                    <div className="card-value">{item.price}</div>
-                                    <div className={`card-change ${!hasData ? '' : (parseFloat(item.changePercent) === 0 ? 'neutral' : (item.isPositive ? 'positive' : 'negative'))}`}>
-                                        {hasData ? (
-                                            parseFloat(item.changePercent) === 0 
-                                                ? `0.00 (0.00%)` 
-                                                : `${item.isPositive ? '+' : '-'}${item.change} (${item.isPositive ? '+' : '-'}${item.changePercent}%)`
-                                        ) : '데이터 수집 중'}
-                                    </div>
-                                    <div className="sparkline">
-                                        <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none">
-                                            <defs>
-                                                <linearGradient id="spark-up" x1="0" x2="0" y1="0" y2="1">
-                                                    <stop offset="0%" stopColor="#F04251" stopOpacity="0.2" />
-                                                    <stop offset="100%" stopColor="#F04251" stopOpacity="0" />
-                                                </linearGradient>
-                                                <linearGradient id="spark-down" x1="0" x2="0" y1="0" y2="1">
-                                                    <stop offset="0%" stopColor="#0064FF" stopOpacity="0.2" />
-                                                    <stop offset="100%" stopColor="#0064FF" stopOpacity="0" />
-                                                </linearGradient>
-                                            </defs>
-                                            <path d={fillPath} fill={fillColor} />
-                                            <path
-                                                d={pathData}
-                                                fill="none"
-                                                stroke={strokeColor}
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                vectorEffect="non-scaling-stroke"
-                                            />
-                                        </svg>
+                                    <div className="h-12 w-full mt-auto opacity-80 group-hover:opacity-100 transition-opacity">
+                                        <MarketSparkline data={pathData} color={hasData ? trendColor : '#E5E8EB'} />
                                     </div>
                                 </div>
                             );
@@ -340,11 +268,14 @@ export default function UserDashboard() {
                     </div>
 
                     {expandedCard && (
-                        <MarketDetailBar
-                            symbol={expandedCard}
-                            name={summaryIndices.find(idx => idx.symbol === expandedCard)?.name || ""}
-                        />
+                        <div className="animate-[slide-up_0.3s_ease-out]">
+                            <MarketDetailBar
+                                symbol={expandedCard}
+                                name={summaryIndices.find(idx => idx.symbol === expandedCard)?.name || ""}
+                            />
+                        </div>
                     )}
+
 
                     {/* 로그인 유도 배너 */}
                     <div className="login-cta-banner">

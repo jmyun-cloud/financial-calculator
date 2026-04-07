@@ -44,20 +44,20 @@ export default function NewsFeed() {
         });
 
     return (
-        <div className="bg-white rounded-[28px] p-8 border border-[#E5E8EB] mb-8">
-            <header className="flex justify-between items-center mb-6">
-                <h2 className="text-[1.25rem] font-extrabold text-[#191F28] m-0">오늘의 금융 뉴스</h2>
-                <Link href="/news" className="text-[0.85rem] font-bold text-[#0064FF] no-underline hover:underline">전체보기 →</Link>
+        <div className="bg-white rounded-[32px] p-8 border border-[#F2F4F7] shadow-[0_4px_20px_rgba(0,0,0,0.02)] mb-10">
+            <header className="flex justify-between items-center mb-7">
+                <h2 className="text-[20px] font-extrabold text-[#191F28] tracking-tight">오늘의 핵심 뉴스</h2>
+                <Link href="/news" className="text-[14px] font-bold text-[#0064FF] no-underline hover:underline px-3 py-1 bg-[#F0F6FF] rounded-full">전체보기</Link>
             </header>
 
-            <nav className="flex gap-2 bg-[#F9FAFB] p-[6px] rounded-[14px] mb-6">
+            <nav className="flex gap-2 bg-[#F9FAFB] p-1.5 rounded-[18px] mb-8">
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat}
-                        className={`flex-1 py-2.5 px-2 border-none rounded-[10px] text-[0.9rem] font-bold cursor-pointer transition-all duration-200 ${
+                        className={`flex-1 py-2.5 px-3 border-none rounded-[14px] text-[15px] font-bold cursor-pointer transition-all duration-300 ${
                             activeTab === cat 
-                            ? 'bg-white text-[#191F28] shadow-[0_1px_3px_rgba(0,0,0,0.04)]' 
-                            : 'bg-transparent text-[#4E5968] hover:text-[#191F28]'
+                            ? 'bg-white text-[#191F28] shadow-[0_2px_10px_rgba(0,0,0,0.06)]' 
+                            : 'bg-transparent text-[#8B95A1] hover:text-[#4E5968]'
                         }`}
                         onClick={() => setActiveTab(cat)}
                     >
@@ -68,9 +68,9 @@ export default function NewsFeed() {
 
             <div className="flex flex-col">
                 {isLoading ? (
-                    <div className="py-10 text-center text-[#8B95A1] text-[0.9rem]">뉴스를 불러오는 중입니다...</div>
+                    <div className="py-16 text-center text-[#8B95A1] text-[15px] font-medium">뉴스를 불러오는 중입니다...</div>
                 ) : filteredNews.length === 0 ? (
-                    <div className="py-10 text-center text-[#8B95A1] text-[0.9rem]">관련 뉴스가 없습니다.</div>
+                    <div className="py-16 text-center text-[#8B95A1] text-[15px] font-medium">관련 뉴스가 없습니다.</div>
                 ) : (
                     filteredNews.map((item, idx) => (
                         <a 
@@ -78,21 +78,21 @@ export default function NewsFeed() {
                             href={item.link} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className={`py-5 no-underline block hover:opacity-70 transition-opacity ${idx !== filteredNews.length - 1 ? 'border-b border-[#E5E8EB]' : ''}`}
+                            className={`group py-6 no-underline block hover:opacity-80 transition-all ${idx !== filteredNews.length - 1 ? 'border-b border-[#F2F4F7]' : ''}`}
                         >
-                            <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-2">
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center gap-2.5">
                                     <span 
-                                        className="text-[0.7rem] font-extrabold px-2 py-0.5 rounded-[6px]"
-                                        style={{ backgroundColor: `${item.categoryColor}15`, color: item.categoryColor }}
+                                        className="text-[10px] font-extrabold px-2 py-0.5 rounded-[6px] uppercase tracking-wider"
+                                        style={{ backgroundColor: `${item.categoryColor}12`, color: item.categoryColor }}
                                     >
                                         {item.category}
                                     </span>
-                                    <span className="text-[0.8rem] text-[#8B95A1] font-medium">{item.source || '뉴스'}</span>
+                                    <span className="text-[13px] text-[#8B95A1] font-bold">{item.source || '뉴스'}</span>
                                     <span className="text-[#E5E8EB]">·</span>
-                                    <span className="text-[0.8rem] text-[#8B95A1] font-medium">{item.timeAgo}</span>
+                                    <span className="text-[13px] text-[#8B95A1] font-bold">{item.timeAgo}</span>
                                 </div>
-                                <h3 className="text-[1.05rem] font-bold text-[#191F28] leading-[1.4] m-0 line-clamp-2">
+                                <h3 className="text-[17px] font-extrabold text-[#191F28] leading-[1.5] m-0 group-hover:text-[#0064FF] transition-colors line-clamp-2 tracking-tight">
                                     {item.title}
                                 </h3>
                             </div>
@@ -103,3 +103,4 @@ export default function NewsFeed() {
         </div>
     );
 }
+
