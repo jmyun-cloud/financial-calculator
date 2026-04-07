@@ -8,91 +8,36 @@ export default function TickerBar() {
 
     if (loading && indicators.length === 0) {
         return (
-            <div className="ticker-wrapper" style={{ height: '44px', background: 'white', borderBottom: '1px solid #eee' }}>
-                <div className="ticker-track">
+            <div className="w-full bg-white border-b border-[#eee] overflow-hidden h-[44px] flex items-center sticky top-[64px] z-[999]">
+                <div className="flex whitespace-nowrap px-[20px]">
                     {[1, 2, 3, 4, 5, 6].map(i => (
-                        <div key={i} className="ticker-item" style={{ opacity: 0.1 }}>● ● ●</div>
+                        <div key={i} className="inline-flex items-center mr-[48px] opacity-10">● ● ●</div>
                     ))}
                 </div>
             </div>
         );
     }
 
-    // Triple the items for smooth infinite scroll
     const displayItems = [...indicators, ...indicators, ...indicators];
 
     return (
-        <div className="ticker-wrapper">
-            <div className="ticker-track">
+        <div className="w-full bg-white border-b border-[#f2f2f2] overflow-hidden h-[44px] flex items-center sticky top-[64px] z-[999] group">
+            <div className="flex whitespace-nowrap animate-[ticker-scroll_60s_linear_infinite] px-[20px] group-hover:[animation-play-state:paused]">
                 {displayItems.map((item, idx) => (
-                    <div key={`${item.symbol}-${idx}`} className="ticker-item">
-                        <span className="ticker-label">{item.name}</span>
-                        <span className="ticker-value">{item.price}</span>
-                        <span className={`ticker-chip ${item.isPositive ? 'positive' : 'negative'}`}>
+                    <div key={`${item.symbol}-${idx}`} className="inline-flex items-center mr-[48px] gap-2">
+                        <span className="text-[0.85rem] font-semibold text-[#adb5bd] uppercase">{item.name}</span>
+                        <span className="text-[0.95rem] font-extrabold text-[#191F28]">{item.price}</span>
+                        <span className={`text-[0.75rem] font-bold px-2 py-[2px] rounded-sm ${item.isPositive ? 'text-[#F04251] bg-[#F04251]/[0.08]' : 'text-[#0064FF] bg-[#0064FF]/[0.08]'}`}>
                             {item.isPositive ? '+' : '-'}{item.changePercent}%
                         </span>
                     </div>
                 ))}
             </div>
 
-            <style jsx>{`
-                .ticker-wrapper {
-                    width: 100%;
-                    background: white;
-                    border-bottom: 1px solid #f2f2f2;
-                    overflow: hidden;
-                    height: 44px;
-                    display: flex;
-                    align-items: center;
-                    position: sticky;
-                    top: 64px; /* Exactly below Header */
-                    z-index: 999;
-                }
-                .ticker-track {
-                    display: flex;
-                    white-space: nowrap;
-                    animation: ticker-scroll 60s linear infinite;
-                    padding-left: 20px;
-                }
-                .ticker-item {
-                    display: inline-flex;
-                    align-items: center;
-                    margin-right: 48px;
-                    gap: 8px;
-                }
-                .ticker-label {
-                    font-size: 0.85rem;
-                    font-weight: 600;
-                    color: #adb5bd; /* Light grey for labels */
-                    text-transform: uppercase;
-                }
-                .ticker-value {
-                    font-size: 0.95rem;
-                    font-weight: 800;
-                    color: #191F28;
-                }
-                .ticker-chip {
-                    font-size: 0.75rem;
-                    font-weight: 700;
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                }
-                .ticker-chip.positive {
-                    color: #F04251;
-                    background: rgba(240, 66, 81, 0.08);
-                }
-                .ticker-chip.negative {
-                    color: #0064FF;
-                    background: rgba(0, 100, 255, 0.08);
-                }
-
+            <style jsx global>{`
                 @keyframes ticker-scroll {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(-50%); }
-                }
-
-                .ticker-wrapper:hover .ticker-track {
-                    animation-play-state: paused;
                 }
             `}</style>
         </div>

@@ -303,16 +303,19 @@ export default function UserDashboard() {
                                         ) : null}
                                     </div>
                                     <div className="card-value">{item.price}</div>
-                                    <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
-                                        {hasData && (item.isPositive ? '▲' : '▼')}
-                                        {hasData ? `${item.change} (${item.isPositive ? '+' : ''}${item.changePercent}%)` : '데이터 수집 중'}
+                                    <div className={`card-change ${!hasData ? '' : (parseFloat(item.changePercent) === 0 ? 'neutral' : (item.isPositive ? 'positive' : 'negative'))}`}>
+                                        {hasData ? (
+                                            parseFloat(item.changePercent) === 0 
+                                                ? `0.00 (0.00%)` 
+                                                : `${item.isPositive ? '+' : '-'}${item.change} (${item.isPositive ? '+' : '-'}${item.changePercent}%)`
+                                        ) : '데이터 수집 중'}
                                     </div>
                                     <div className="sparkline">
                                         <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none">
                                             <defs>
                                                 <linearGradient id="spark-up" x1="0" x2="0" y1="0" y2="1">
-                                                    <stop offset="0%" stopColor="#FF4D4D" stopOpacity="0.2" />
-                                                    <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0" />
+                                                    <stop offset="0%" stopColor="#F04251" stopOpacity="0.2" />
+                                                    <stop offset="100%" stopColor="#F04251" stopOpacity="0" />
                                                 </linearGradient>
                                                 <linearGradient id="spark-down" x1="0" x2="0" y1="0" y2="1">
                                                     <stop offset="0%" stopColor="#0064FF" stopOpacity="0.2" />
@@ -429,8 +432,9 @@ export default function UserDashboard() {
                         font-weight: 700;
                         margin-bottom: 12px;
                     }
-                    .card-change.positive { color: var(--danger); }
-                    .card-change.negative { color: var(--primary); }
+                     .card-change.positive { color: #F04251; }
+                    .card-change.negative { color: #0064FF; }
+                    .card-change.neutral { color: #8B95A1; }
                     .sparkline { height: 30px; margin-top: 8px; }
 
                     .login-cta-banner {

@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TickerBar from "@/components/portal/TickerBar";
+import StyledJsxRegistry from "@/lib/registry";
 
 const GA_ID = "G-B1TE1JHHE3";
 
@@ -46,10 +47,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#1a56e8" />
       </head>
       <body>
-        <Header />
-        <TickerBar />
-        <main>{children}</main>
-        <Footer />
+        <StyledJsxRegistry>
+          <Header />
+          <TickerBar />
+          <main>{children}</main>
+          <Footer />
+        </StyledJsxRegistry>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"

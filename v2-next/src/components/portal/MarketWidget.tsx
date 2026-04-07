@@ -3,13 +3,13 @@
 import React from 'react';
 import { MARKET_CONFIG } from '@/lib/market-config';
 import { useMarketData, MarketItem } from '@/hooks/useMarketData';
-import { Gem, Circle, Droplets, Zap } from 'lucide-react';
+import { Gem, Circle, Droplet, Zap } from 'lucide-react';
 
 export default function MarketWidget() {
     const { data: indicators, loading } = useMarketData();
 
     if (loading && indicators.length === 0) {
-        return <div className="v3-sidebar-skeleton" />;
+        return <div className="h-[500px] bg-[#F9FAFB] rounded-[24px] animate-pulse" />;
     }
 
     const SectionTitleMap = {
@@ -37,32 +37,31 @@ export default function MarketWidget() {
 
     const renderIcon = (symbol: string) => {
         if (symbol === 'BTC-USD') return (
-            <div className="icon-badge" style={{ background: '#FFF3E0', color: '#F7931A' }}>BTC</div>
+            <div className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold bg-[#FFF3E0] text-[#F7931A]">BTC</div>
         );
         if (symbol === 'ETH-USD') return (
-            <div className="icon-badge" style={{ background: '#EDE7F6', color: '#627EEA' }}>ETH</div>
+            <div className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold bg-[#EDE7F6] text-[#627EEA]">ETH</div>
         );
         if (symbol === 'XRP-USD') return (
-            <div className="icon-badge" style={{ background: '#E3F2FD', color: '#0064FF' }}>XRP</div>
+            <div className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold bg-[#E3F2FD] text-[#0064FF]">XRP</div>
         );
 
         if (symbol === 'GC=F') return (
-            <div className="icon-rect" style={{ background: '#FFF8E6' }}><Gem size={16} color="#F59E0B" /></div>
+            <div className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center bg-[#FFF8E6]"><Gem size={16} color="#F59E0B" /></div>
         );
         if (symbol === 'SI=F') return (
-            <div className="icon-rect" style={{ background: '#F1F5F9' }}><Circle size={14} color="#94A3B8" fill="#94A3B8" /></div>
+            <div className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center bg-[#F1F5F9]"><Circle size={14} color="#94A3B8" fill="#94A3B8" /></div>
         );
         if (symbol === 'CL=F') return (
-            <div className="icon-rect" style={{ background: '#F1F5F9' }}><Droplets size={16} color="#64748B" /></div>
+            <div className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center bg-[#F1F5F9]"><Droplet size={16} color="#64748B" /></div>
         );
         if (symbol === 'HG=F') return (
-            <div className="icon-rect" style={{ background: '#FFF8E6' }}><Zap size={16} color="#B45309" /></div>
+            <div className="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center bg-[#FFF8E6]"><Zap size={16} color="#B45309" /></div>
         );
 
-        // Fallback for others
         const flag = symbol === '^N225' ? "🇯🇵" : symbol === '^HSI' ? "🇭🇰" : (symbol.startsWith('^G') || symbol.startsWith('^I') || symbol.startsWith('^D')) ? "🇺🇸" : symbol.startsWith('^K') ? "🇰🇷" : "📈";
         return (
-            <div className="icon-placeholder">{flag}</div>
+            <div className="w-7 h-7 shrink-0 rounded-full bg-[#F9FAFB] flex items-center justify-center text-[14px] border border-[#E5E8EB]">{flag}</div>
         );
     };
 
@@ -71,25 +70,25 @@ export default function MarketWidget() {
         if (filtered.length === 0) return null;
 
         return (
-            <section key={id} className="market-section">
-                <header className="market-header">
-                    <h3 className="section-title">{title}</h3>
+            <section key={id} className="mb-7 last:mb-0">
+                <header className="mb-3">
+                    <h3 className="text-[15px] font-extrabold text-[#191F28] tracking-tight">{title}</h3>
                 </header>
-                <div className="market-list">
+                <div className="flex flex-col gap-1">
                     {filtered.map(item => {
                         const trend = getTrendStyle(item);
                         return (
-                            <div key={item.symbol} className="market-row">
-                                <div className="market-row-left">
+                            <div key={item.symbol} className="flex justify-between items-center p-2 -mx-2 cursor-pointer hover:bg-[#F8F9FB] rounded-lg transition-colors duration-150">
+                                <div className="flex items-center gap-3 min-width-0">
                                     {renderIcon(item.symbol)}
-                                    <div className="name-box">
-                                        <span className="market-name">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
-                                        <span className="market-unit">{getUnit(item.symbol)}</span>
+                                    <div className="flex flex-col leading-tight">
+                                        <span className="text-[13px] font-bold text-[#191F28]">{MARKET_CONFIG.names[item.symbol] || item.symbol}</span>
+                                        <span className="text-[10px] text-[#8B95A1] font-medium tracking-tight whitespace-nowrap">{getUnit(item.symbol)}</span>
                                     </div>
                                 </div>
-                                <div className="market-row-right">
-                                    <span className="market-price">{item.price}</span>
-                                    <span className="market-change" style={{ color: trend.color }}>
+                                <div className="flex flex-col items-end leading-tight shrink-0">
+                                    <span className="text-[14px] font-extrabold text-[#191F28] tabular-nums">{item.price}</span>
+                                    <span className="text-[11px] font-bold tabular-nums whitespace-nowrap" style={{ color: trend.color }}>
                                         {trend.sign}{item.change} ({trend.sign}{item.changePercent}%)
                                     </span>
                                 </div>
@@ -102,123 +101,10 @@ export default function MarketWidget() {
     };
 
     return (
-        <div className="market-widget-v4">
+        <div className="bg-white rounded-[24px] p-6 border border-[#E5E8EB] w-full">
             {Object.entries(MARKET_CONFIG.categories).map(([id, symbols]) =>
                 renderSection(id, SectionTitleMap[id as keyof typeof SectionTitleMap], symbols)
             )}
-
-            <style jsx>{`
-                .market-widget-v4 {
-                    background: var(--surface);
-                    border-radius: 24px;
-                    padding: 24px;
-                    border: 1px solid var(--border);
-                    width: 100%;
-                }
-                .market-section {
-                    margin-bottom: 28px;
-                }
-                .market-section:last-child {
-                    margin-bottom: 0;
-                }
-                .section-title {
-                    font-size: 0.95rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                    margin: 0 0 12px 0;
-                    letter-spacing: -0.01em;
-                }
-                .market-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 4px;
-                }
-                .market-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 8px 10px;
-                    margin: 0 -10px;
-                    cursor: pointer;
-                    transition: background 0.12s ease;
-                }
-                .market-row:hover {
-                    background: #F8F9FB;
-                    border-radius: 8px;
-                }
-                .market-row-left {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    min-width: 0;
-                }
-                .name-box {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .market-name {
-                    font-size: 0.85rem;
-                    font-weight: 700;
-                    color: var(--text-primary);
-                }
-                .market-unit {
-                    font-size: 10px;
-                    color: #8B95A1;
-                    margin-top: 1px;
-                }
-                .icon-badge {
-                    width: 28px;
-                    height: 28px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 9px;
-                    font-weight: 700;
-                }
-                .icon-rect {
-                    width: 28px;
-                    height: 28px;
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .icon-placeholder {
-                    width: 28px;
-                    height: 28px;
-                    border-radius: 50%;
-                    background: var(--surface-2);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 0.9rem;
-                    border: 1px solid var(--border);
-                }
-                .market-row-right {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                    flex-shrink: 0;
-                }
-                .market-price {
-                    font-size: 0.9rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                    font-variant-numeric: tabular-nums;
-                }
-                .market-change {
-                    font-size: 11px;
-                    font-weight: 600;
-                    white-space: nowrap;
-                    font-variant-numeric: tabular-nums;
-                }
-                .v3-sidebar-skeleton {
-                    height: 500px;
-                    background: var(--surface-2);
-                    border-radius: 24px;
-                }
-            `}</style>
         </div>
     );
 }
