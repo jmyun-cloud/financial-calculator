@@ -38,8 +38,8 @@ export default function TickerBar() {
             <style jsx>{`
                 .ticker-wrapper {
                     width: 100%;
-                    background: pink !important;
-                    border-bottom: 2px solid red;
+                    background: white;
+                    border-bottom: 1px solid #f2f2f2;
                     overflow: hidden;
                     height: 44px;
                     display: flex;
