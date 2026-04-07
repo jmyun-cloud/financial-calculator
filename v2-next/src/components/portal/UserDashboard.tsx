@@ -48,10 +48,13 @@ export default function UserDashboard() {
 
                             // Dynamic Sparkline Path based on direction
                             const pathData = item.isPositive
-                                ? "M0 25 Q 20 25, 40 15 T 70 18 T 100 5"  // Upswing
-                                : "M0 5 Q 20 5, 40 15 T 70 12 T 100 25"; // Downswing
+                                ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"  // Upswing, straight sharp lines
+                                : "M0 5 L 15 8 L 30 5 L 45 15 L 60 12 L 75 22 L 100 25"; // Downswing, straight sharp lines
 
                             const strokeColor = !hasData ? '#E5E8EB' : (item.isPositive ? '#FF4D4D' : '#0064FF');
+                            const fillId = item.isPositive ? 'spark-up' : 'spark-down';
+                            const fillColor = !hasData ? 'transparent' : `url(#${fillId})`;
+                            const fillPath = `${pathData} V 30 H 0 Z`;
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
@@ -62,13 +65,26 @@ export default function UserDashboard() {
                                         {hasData ? `${item.change} (${item.isPositive ? '+' : ''}${item.changePercent}%)` : '데이터 수집 중'}
                                     </div>
                                     <div className="sparkline">
-                                        <svg viewBox="0 0 100 30" width="100%" height="30">
+                                        <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none">
+                                            <defs>
+                                                <linearGradient id="spark-up" x1="0" x2="0" y1="0" y2="1">
+                                                    <stop offset="0%" stopColor="#FF4D4D" stopOpacity="0.2" />
+                                                    <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0" />
+                                                </linearGradient>
+                                                <linearGradient id="spark-down" x1="0" x2="0" y1="0" y2="1">
+                                                    <stop offset="0%" stopColor="#0064FF" stopOpacity="0.2" />
+                                                    <stop offset="100%" stopColor="#0064FF" stopOpacity="0" />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d={fillPath} fill={fillColor} />
                                             <path
                                                 d={pathData}
                                                 fill="none"
                                                 stroke={strokeColor}
-                                                strokeWidth="2.5"
+                                                strokeWidth="2"
                                                 strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                vectorEffect="non-scaling-stroke"
                                             />
                                         </svg>
                                     </div>
