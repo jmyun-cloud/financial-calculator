@@ -1,42 +1,112 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // default to false
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { data: marketData, loading } = useMarketData();
+
+    // Guest view states (Premium upgrade)
+    const [activeMarketTab, setActiveMarketTab] = useState("국내");
+    const [selectedCard, setSelectedCard] = useState<string>("^KS11");
 
     useEffect(() => {
         setIsClient(true);
-
         const handleLogin = () => setIsLoggedIn(true);
         window.addEventListener("fc_mock_login", handleLogin);
         return () => window.removeEventListener("fc_mock_login", handleLogin);
     }, []);
 
-    if (!isClient) return <div className="skeleton-loader" style={{ height: '300px' }} />;
+    // Helper data for premium design
+    const marketTabs = useMemo(() => [
+        {
+            id: "국내",
+            indices: [
+                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷" },
+                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷" },
+                { symbol: "KRW=X", name: "USD/KRW", flag: "💱" },
+                { symbol: "GC=F", name: "금 시세", flag: "🥇" }
+            ]
+        },
+        {
+            id: "해외",
+            indices: [
+                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸" },
+                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸" },
+                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸" },
+                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵" }
+            ]
+        },
+        {
+            id: "환율",
+            indices: [
+                { symbol: "KRW=X", name: "USD/KRW", flag: "🇺🇸" },
+                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵" },
+                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺" },
+                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳" }
+            ]
+        },
+        {
+            id: "원자재",
+            indices: [
+                { symbol: "GC=F", name: "Gold", flag: "🥇" },
+                { symbol: "SI=F", name: "Silver", flag: "🥈" },
+                { symbol: "CL=F", name: "WTI", flag: "🛢️" },
+                { symbol: "HG=F", name: "Copper", flag: "🧱" }
+            ]
+        }
+    ], []);
+
+    const getMarketStatus = (sym: string) => {
+        const now = new Date();
+        const kstHour = (now.getUTCHours() + 9) % 24;
+        const kstMin = now.getUTCMinutes();
+        const kstDay = now.getUTCDay();
+        const isWeekend = kstDay === 0 || kstDay === 6;
+
+        if (["^KS11", "^KQ11"].includes(sym)) {
+            const minutes = kstHour * 60 + kstMin;
+            if (!isWeekend && minutes >= 540 && minutes <= 930) return { type: "open", text: "장중" };
+            return { type: "closed", text: "장마감" };
+        }
+        return { type: "realtime", text: "실시간" };
+    };
+
+    if (!isClient) return <div className="skeleton-loader" style={{ height: '300px', background: 'rgba(0,0,0,0.05)', borderRadius: '28px' }} />;
 
     if (!isLoggedIn) {
-        // 비로그인 상태: 오늘의 시장 요약
-        const summaryIndices = [
-            { symbol: "^KS11", name: "KOSPI", color: "#FF4D4D" },
-            { symbol: "KRW=X", name: "원/달러 환율", color: "#0064FF" },
-            { symbol: "GC=F", name: "국제 금 시세", color: "#FFB000" },
-            { symbol: "^GSPC", name: "S&P 500", color: "#0064FF" }
-        ];
+        const currentTab = marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0];
+        const summaryIndices = currentTab.indices;
 
         return (
             <div className="market-summary-container">
-                {/* 오늘의 시장 요약 */}
-                <div className="market-summary-card shadow-sm">
-                    <div className="summary-header">
+                <div className="market-summary-card shadow-premium-clean">
+                    <div className="summary-section-header">
                         <div className="header-left">
                             <h2 className="summary-title">오늘의 시장 요약</h2>
-                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
+                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' })}</span>
                         </div>
-                        <div className="live-badge">● 실시간</div>
+                        <div className="live-status-badge">
+                            <span className="dot"></span>
+                            실시간
+                        </div>
+                    </div>
+
+                    <div className="market-tabs-nav">
+                        {marketTabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                className={`tab-item ${activeMarketTab === tab.id ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveMarketTab(tab.id);
+                                    setSelectedCard(tab.indices[0].symbol);
+                                }}
+                            >
+                                {tab.id}
+                            </button>
+                        ))}
                     </div>
 
                     <div className="summary-grid">
@@ -47,96 +117,77 @@ export default function UserDashboard() {
                                 changePercent: "0.00",
                                 isPositive: true
                             };
-
-                            const hasData = item.price !== "---";
-
-                            // KST time logic for market open/close badge
-                            const kstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-                            const kstHour = kstDate.getHours();
-                            const kstMin = kstDate.getMinutes();
-                            const kstDay = kstDate.getDay();
-                            const isWeekend = kstDay === 0 || kstDay === 6;
-                            const isMarketOpen = !isWeekend && (kstHour * 60 + kstMin >= 540) && (kstHour * 60 + kstMin < 930);
-
-                            // Dynamic Sparkline Path based on direction
-                            const pathData = item.isPositive
-                                ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"  // Upswing, straight sharp lines
-                                : "M0 5 L 15 8 L 30 5 L 45 15 L 60 12 L 75 22 L 100 25"; // Downswing, straight sharp lines
-
-                            const strokeColor = !hasData ? '#E5E8EB' : (item.isPositive ? '#FF4D4D' : '#0064FF');
-                            const fillId = item.isPositive ? 'spark-up' : 'spark-down';
-                            const fillColor = !hasData ? 'transparent' : `url(#${fillId})`;
-                            const fillPath = `${pathData} V 30 H 0 Z`;
+                            const status = getMarketStatus(idx.symbol);
+                            const isSelected = selectedCard === idx.symbol;
 
                             return (
-                                <div key={idx.symbol} className="summary-card">
-                                    <span className="card-label" style={{ display: 'flex', alignItems: 'center' }}>
-                                        {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
-                                        {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "4px" }}>USD/oz</span>}
-                                        {(idx.symbol === "^KS11" || idx.symbol === "^KQ11") && (
-                                            <span style={{
-                                                fontSize: "10px",
-                                                fontWeight: 700,
-                                                padding: "2px 6px",
-                                                borderRadius: "4px",
-                                                marginLeft: "6px",
-                                                ...(isMarketOpen
-                                                    ? { background: "#FFF0F0", color: "#F04251" }
-                                                    : { background: "#F2F4F6", color: "#8B95A1" })
-                                            }}>
-                                                {isMarketOpen ? "장중" : "장마감"}
-                                            </span>
-                                        )}
-                                    </span>
-                                    <div className="card-value">{item.price}</div>
-                                    <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
-                                        {hasData && (item.isPositive ? '▲' : '▼')}
-                                        {hasData ? `${item.change} (${item.isPositive ? '+' : ''}${item.changePercent}%)` : '데이터 수집 중'}
+                                <div
+                                    key={idx.symbol}
+                                    className={`summary-card-v2 ${isSelected ? 'selected' : ''}`}
+                                    onClick={() => setSelectedCard(idx.symbol)}
+                                >
+                                    <div className="card-top">
+                                        <div className="card-name-group">
+                                            <span className="symbol-name">{idx.name}</span>
+                                            <span className="symbol-flag">{idx.flag}</span>
+                                        </div>
+                                        <span className={`status-badge ${status.type}`}>
+                                            {status.text}
+                                        </span>
                                     </div>
-                                    <div className="sparkline">
-                                        <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none">
-                                            <defs>
-                                                <linearGradient id="spark-up" x1="0" x2="0" y1="0" y2="1">
-                                                    <stop offset="0%" stopColor="#FF4D4D" stopOpacity="0.2" />
-                                                    <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0" />
-                                                </linearGradient>
-                                                <linearGradient id="spark-down" x1="0" x2="0" y1="0" y2="1">
-                                                    <stop offset="0%" stopColor="#0064FF" stopOpacity="0.2" />
-                                                    <stop offset="100%" stopColor="#0064FF" stopOpacity="0" />
-                                                </linearGradient>
-                                            </defs>
-                                            <path d={fillPath} fill={fillColor} />
-                                            <path
-                                                d={pathData}
-                                                fill="none"
-                                                stroke={strokeColor}
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                vectorEffect="non-scaling-stroke"
-                                            />
-                                        </svg>
+                                    <div className="card-main">
+                                        <div className="price-val">{item.price}</div>
+                                        <div className={`change-val ${item.isPositive ? 'positive' : 'negative'}`}>
+                                            {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
+                                        </div>
+                                    </div>
+                                    <div className="card-bottom-line">
+                                        <div className={`line-fill ${item.isPositive ? 'up' : 'down'}`}></div>
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
 
-                    {/* 로그인 유도 배너 */}
-                    <div className="login-cta-banner">
-                        <div className="cta-content">
-                            <span className="cta-icon">📉</span>
-                            <div className="cta-text">
-                                <span className="cta-title">내 자산을 한눈에 관리하고 싶다면?</span>
-                                <span className="cta-desc">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</span>
+                    {selectedCard && (
+                        <div className="market-detail-preview">
+                            <div className="detail-header">
+                                <span className="detail-name">{currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세</span>
+                            </div>
+                            <div className="detail-stats-grid">
+                                <div className="stat-item">
+                                    <span className="stat-label">52주 최고</span>
+                                    <span className="stat-value">5,882</span>
+                                </div>
+                                <div className="stat-item">
+                                    <span className="stat-label">52주 최저</span>
+                                    <span className="stat-value">2,169</span>
+                                </div>
+                                <div className="stat-item">
+                                    <span className="stat-label">거래량</span>
+                                    <span className="stat-value">4.2억주</span>
+                                </div>
                             </div>
                         </div>
-                        <button className="cta-btn" onClick={() => setIsLoggedIn(true)}>무료 시작하기</button>
+                    )}
+
+                    <div className="premium-blue-banner">
+                        <div className="banner-content">
+                            <div className="banner-icon-box">
+                                <span className="icon-emoji">📊</span>
+                            </div>
+                            <div className="banner-text">
+                                <h3 className="banner-title">내 자산을 한눈에 관리하고 싶다면?</h3>
+                                <p className="banner-desc">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</p>
+                            </div>
+                        </div>
+                        <button className="banner-cta-btn" onClick={() => setIsLoggedIn(true)}>
+                            무료 시작하기
+                        </button>
                     </div>
                 </div>
 
-                {/* SIDEBAR GOALS (Integrated for Layout consistency) */}
-                <div className="dashboard-sidebar-widgets" style={{ marginTop: '24px' }}>
+                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px' }}>
                     <div className="widget-section">
                         <h3 className="section-title">내 재무 목표</h3>
                         <GoalTracker />
@@ -144,129 +195,83 @@ export default function UserDashboard() {
                 </div>
 
                 <style jsx>{`
-                    .market-summary-container {
+                    .market-summary-container { margin-bottom: 40px; }
+                    .market-summary-card {
+                        background: white;
+                        border-radius: 32px;
+                        padding: 32px;
+                        border: 1px solid #F2F4F7;
+                    }
+                    .shadow-premium-clean { box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
+                    .summary-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+                    .summary-title { font-size: 20px; font-weight: 800; color: #191F28; margin: 0; }
+                    .summary-date { font-size: 14px; color: #8B95A1; font-weight: 500; margin-left: 12px; }
+                    .live-status-badge { background: #E8F9F0; color: #1B8947; padding: 6px 12px; border-radius: 100px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+                    .live-status-badge .dot { width: 6px; height: 6px; background: #1B8947; border-radius: 50%; animation: pulse 1.5s infinite; }
+                    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+                    .market-tabs-nav {
+                        display: flex;
+                        background: #F2F4F6;
+                        padding: 4px;
+                        border-radius: 12px;
+                        gap: 4px;
                         margin-bottom: 32px;
                     }
-                    .market-summary-card {
-                        background: var(--surface);
-                        border-radius: 28px;
-                        padding: 32px;
-                        border: 1px solid var(--border);
-                    }
-                    .summary-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        margin-bottom: 24px;
-                    }
-                    .summary-title {
-                        font-size: 1.25rem;
-                        font-weight: 800;
-                        color: var(--text-primary);
-                        margin: 0;
-                    }
-                    .summary-date {
-                        font-size: 0.85rem;
-                        color: var(--text-secondary);
-                    }
-                    .live-badge {
-                        font-size: 0.75rem;
+                    .tab-item {
+                        flex: 1;
+                        border: none;
+                        background: transparent;
+                        padding: 10px;
+                        font-size: 14px;
                         font-weight: 700;
-                        color: #00D166;
-                        background: rgba(0, 209, 102, 0.1);
-                        padding: 4px 12px;
-                        border-radius: 100px;
-                    }
-                    .summary-grid {
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        gap: 12px;
-                        margin-bottom: 24px;
-                    }
-                    .summary-card {
-                        background: var(--surface-2);
-                        padding: 20px;
-                        border-radius: 20px;
-                        border: 1px solid var(--border);
-                    }
-                    .card-label {
-                        font-size: 0.75rem;
-                        font-weight: 600;
-                        color: var(--text-secondary);
-                        display: block;
-                        margin-bottom: 8px;
-                    }
-                    .card-value {
-                        font-size: 1.3rem;
-                        font-weight: 800;
-                        color: var(--text-primary);
-                        margin-bottom: 4px;
-                        letter-spacing: -0.02em;
-                    }
-                    .card-change {
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        margin-bottom: 12px;
-                    }
-                    .card-change.positive { color: var(--danger); }
-                    .card-change.negative { color: var(--primary); }
-                    .sparkline { height: 30px; margin-top: 8px; }
-
-                    .login-cta-banner {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        background: #F4F8FF;
-                        padding: 20px 24px;
-                        border-radius: 20px;
-                        border: 1px solid rgba(0, 100, 255, 0.1);
-                    }
-                    .cta-content {
-                        display: flex;
-                        align-items: center;
-                        gap: 16px;
-                    }
-                    .cta-icon {
-                        width: 44px;
-                        height: 44px;
-                        background: white;
-                        border-radius: 12px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1.5rem;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-                    }
-                    .cta-text { display: flex; flex-direction: column; gap: 2px; }
-                    .cta-title {
-                        font-size: 0.95rem;
-                        font-weight: 700;
-                        color: var(--text-primary);
-                    }
-                    .cta-desc {
-                        font-size: 0.8rem;
-                        color: var(--text-secondary);
-                    }
-                    .cta-btn {
-                        background: white;
-                        color: var(--text-primary);
-                        border: 1px solid var(--border);
-                        padding: 10px 20px;
-                        border-radius: 14px;
-                        font-size: 0.9rem;
-                        font-weight: 700;
+                        color: #8B95A1;
                         cursor: pointer;
+                        border-radius: 8px;
                         transition: all 0.2s;
-                        box-shadow: var(--shadow-sm);
                     }
-                    .cta-btn:hover { background: var(--surface-2); transform: translateY(-1px); }
+                    .tab-item.active { background: white; color: #0055FB; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-                    .section-title {
-                        font-size: 1.1rem;
-                        font-weight: 800;
-                        margin-bottom: 16px;
-                        color: var(--text-primary);
-                    }
+                    .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+                    .summary-card-v2 { background: #F9FAFB; border: 1.5px solid transparent; border-radius: 20px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
+                    .summary-card-v2:hover { background: #F2F4F6; }
+                    .summary-card-v2.selected { background: white; border-color: #0055FB; box-shadow: 0 4px 12px rgba(0, 85, 251, 0.08); }
+
+                    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+                    .card-name-group { display: flex; align-items: center; gap: 4px; }
+                    .symbol-name { font-size: 13px; font-weight: 700; color: #8B95A1; }
+                    .symbol-flag { font-size: 14px; }
+                    .status-badge { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+                    .status-badge.open { background: #FFF0F0; color: #F04251; }
+                    .status-badge.closed { background: #F2F4F6; color: #8B95A1; }
+                    .status-badge.realtime { background: #EBF3FF; color: #0064FF; }
+
+                    .card-main { margin-bottom: 16px; }
+                    .price-val { font-size: 24px; font-weight: 800; color: #191F28; margin-bottom: 4px; }
+                    .change-val { font-size: 14px; font-weight: 700; }
+                    .change-val.positive { color: #F04251; }
+                    .change-val.negative { color: #0064FF; }
+
+                    .card-bottom-line { height: 2px; background: #E5E8EB; border-radius: 2px; overflow: hidden; }
+                    .line-fill { height: 100%; width: 60%; border-radius: 2px; }
+                    .line-fill.up { background: #F04251; }
+                    .line-fill.down { background: #0064FF; }
+
+                    .market-detail-preview { background: #F4F8FF; border-radius: 16px; padding: 16px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+                    .detail-name { font-size: 14px; font-weight: 800; color: #0055FB; }
+                    .detail-stats-grid { display: flex; gap: 32px; }
+                    .stat-item { display: flex; align-items: center; gap: 8px; }
+                    .stat-label { font-size: 12px; color: #8B95A1; font-weight: 600; }
+                    .stat-value { font-size: 14px; font-weight: 800; color: #191F28; }
+
+                    .premium-blue-banner { background: #0055FB; border-radius: 20px; padding: 24px; display: flex; justify-content: space-between; align-items: center; color: white; }
+                    .banner-content { display: flex; align-items: center; gap: 20px; }
+                    .banner-icon-box { width: 48px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+                    .banner-title { font-size: 16px; font-weight: 800; margin: 0 0 4px 0; }
+                    .banner-desc { font-size: 13px; color: rgba(255,255,255,0.8); margin: 0; font-weight: 500; }
+                    .banner-cta-btn { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+                    .banner-cta-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
+                    .section-title { font-size: 18px; font-weight: 800; color: #191F28; margin-bottom: 16px; }
                 `}</style>
             </div>
         );
@@ -274,7 +279,6 @@ export default function UserDashboard() {
 
     return (
         <div className="user-dashboard-v3">
-            {/* HER0 ASSET CARD */}
             <div className="hero-asset-card shadow-premium">
                 <div className="asset-label">내 총 자산</div>
                 <div className="asset-amount">₩ 48,320,000</div>
@@ -295,7 +299,6 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            {/* SIDEBAR GOALS */}
             <div className="dashboard-sidebar-widgets">
                 <div className="widget-section">
                     <h3 className="section-title">내 재무 목표</h3>
@@ -304,12 +307,7 @@ export default function UserDashboard() {
             </div>
 
             <style jsx>{`
-                .user-dashboard-v3 {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 24px;
-                    margin-bottom: 32px;
-                }
+                .user-dashboard-v3 { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; }
                 .hero-asset-card {
                     background: linear-gradient(135deg, #0064FF 0%, #0046B3 100%);
                     border-radius: 28px;
@@ -329,24 +327,9 @@ export default function UserDashboard() {
                     background: rgba(255,255,255,0.1);
                     border-radius: 50%;
                 }
-                .asset-label {
-                    font-size: 1rem;
-                    opacity: 0.8;
-                    margin-bottom: 8px;
-                    font-weight: 600;
-                    color: rgba(255, 255, 255, 0.9);
-                }
-                .asset-amount {
-                    font-size: 2.8rem;
-                    font-weight: 800;
-                    margin-bottom: 40px;
-                    letter-spacing: -0.02em;
-                }
-                .asset-sub-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 16px;
-                }
+                .asset-label { font-size: 1rem; opacity: 0.8; margin-bottom: 8px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+                .asset-amount { font-size: 2.8rem; font-weight: 800; margin-bottom: 40px; letter-spacing: -0.02em; }
+                .asset-sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
                 .asset-sub-item {
                     background: rgba(255,255,255,0.12);
                     padding: 18px 16px;
@@ -357,32 +340,10 @@ export default function UserDashboard() {
                     backdrop-filter: blur(10px);
                     border: 1px solid rgba(255,255,255,0.1);
                 }
-                .sub-label {
-                    font-size: 0.8rem;
-                    opacity: 0.75;
-                    font-weight: 500;
-                    color: rgba(255, 255, 255, 0.8);
-                }
-                .sub-value {
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                }
-                .sub-value.highlight {
-                    color: #FFD363;
-                }
-                .section-title {
-                    font-size: 1.1rem;
-                    font-weight: 800;
-                    margin-bottom: 16px;
-                    color: var(--text-primary);
-                }
-                .skeleton-loader {
-                    height: 300px;
-                    background: rgba(0,0,0,0.05);
-                    border-radius: 28px;
-                    animation: pulse 1.5s infinite;
-                }
-                @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 0.3; } 100% { opacity: 0.6; } }
+                .sub-label { font-size: 0.8rem; opacity: 0.75; font-weight: 500; color: rgba(255, 255, 255, 0.8); }
+                .sub-value { font-size: 1.1rem; font-weight: 700; }
+                .sub-value.highlight { color: #FFD363; }
+                .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; color: var(--text-primary); }
             `}</style>
         </div>
     );
