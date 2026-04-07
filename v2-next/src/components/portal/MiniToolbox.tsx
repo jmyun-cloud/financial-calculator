@@ -9,6 +9,7 @@ const toolGroups = [
             { id: "salary", icon: "💰", title: "연봉 계산", url: "/salary-calculator", color: "#E8F3FF" },
             { id: "freelancer", icon: "👨‍💻", title: "프리랜서", url: "/freelancer-calculator", color: "#F0F0F0" },
             { id: "severance", icon: "💼", title: "퇴직금", url: "/severance-calculator", color: "#FFE8E8" },
+            { id: "tax-interest", icon: "🧾", title: "이자/세금", url: "/tax-interest-calculator", color: "#E8E8FF" },
         ]
     },
     {
@@ -16,14 +17,17 @@ const toolGroups = [
         tools: [
             { id: "loan", icon: "🏠", title: "대출 계산", url: "/loan-calculator", color: "#FFF4E8" },
             { id: "dsr", icon: "⚖️", title: "DSR 한도", url: "/dsr-calculator", color: "#E8FBFF" },
+            { id: "jeonse", icon: "🔑", title: "전월세 계산", url: "/jeonse-calculator", color: "#FFFBE8" },
         ]
     },
     {
-        title: "저축 및 투자",
+        title: "저축 및 노후",
         tools: [
             { id: "savings", icon: "🏦", title: "적금 계산", url: "/savings-calculator", color: "#E8FFF3" },
             { id: "compound", icon: "📈", title: "복리 수익", url: "/compound-calculator", color: "#F3E8FF" },
-            { id: "exchange", icon: "💱", title: "환율 계산", url: "/exchange-calculator", color: "#FFFCE8" }
+            { id: "exchange", icon: "💱", title: "환율 계산", url: "/exchange-calculator", color: "#FFFCE8" },
+            { id: "pension", icon: "💎", title: "연금 계산", url: "/pension-calculator", color: "#E8F3FF" },
+            { id: "inflation", icon: "📉", title: "물가/가치", url: "/inflation-calculator", color: "#FFE8F4" }
         ]
     }
 ];

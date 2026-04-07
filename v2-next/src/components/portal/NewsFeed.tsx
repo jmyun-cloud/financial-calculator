@@ -5,56 +5,38 @@ import Link from "next/link";
 
 interface NewsItem {
     id: string;
-    category: "증시" | "부동산" | "금리" | "재테크";
+    category: "증시" | "부동산" | "금리" | "재테크" | string;
     categoryColor: string;
     title: string;
     source: string;
     timeAgo: string;
+    link: string;
 }
-
-const MOCK_NEWS: NewsItem[] = [
-    {
-        id: "1",
-        category: "증시",
-        categoryColor: "#FF4D4D",
-        title: "미국 관세 충격에 코스피 2,500선 위협...외국인 3,200억 순매도",
-        source: "연합뉴스",
-        timeAgo: "14분 전"
-    },
-    {
-        id: "2",
-        category: "금리",
-        categoryColor: "#0064FF",
-        title: "한국은행 기준금리 2.75% 동결, 5월 인하 가능성 시사",
-        source: "한국경제",
-        timeAgo: "1시간 전"
-    },
-    {
-        id: "3",
-        category: "부동산",
-        categoryColor: "#00D166",
-        title: "서울 아파트 거래량 3개월 연속 증가...강남 3구 중심 회복세",
-        source: "조선비즈",
-        timeAgo: "2시간 전"
-    },
-    {
-        id: "4",
-        category: "재테크",
-        categoryColor: "#9B51E0",
-        title: "2026 ISA 개편, 비과세 한도 500만→1000만 상향 확정",
-        source: "매일경제",
-        timeAgo: "3시간 전"
-    }
-];
 
 const CATEGORIES = ["전체", "증시", "부동산", "금리/환율"];
 
 export default function NewsFeed() {
     const [activeTab, setActiveTab] = useState("전체");
+    const [news, setNews] = useState<NewsItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        fetch('/api/news')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setNews(data);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch news", err);
+                setIsLoading(false);
+            });
+    }, []);
 
     const filteredNews = activeTab === "전체"
-        ? MOCK_NEWS
-        : MOCK_NEWS.filter(item => {
+        ? news
+        : news.filter(item => {
             if (activeTab === "증시") return item.category === "증시";
             if (activeTab === "부동산") return item.category === "부동산";
             if (activeTab === "금리/환율") return item.category === "금리";
@@ -81,21 +63,31 @@ export default function NewsFeed() {
             </nav>
 
             <div className="news-list">
-                {filteredNews.map(item => (
-                    <div key={item.id} className="news-item">
-                        <div className="news-content">
-                            <div className="news-meta">
-                                <span className="cat-badge" style={{ backgroundColor: `${item.categoryColor}15`, color: item.categoryColor }}>
-                                    {item.category}
-                                </span>
-                                <span className="news-source">{item.source}</span>
-                                <span className="meta-divider">·</span>
-                                <span className="time-ago">{item.timeAgo}</span>
-                            </div>
-                            <h3 className="news-title">{item.title}</h3>
-                        </div>
+                {isLoading ? (
+                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                        뉴스를 불러오는 중입니다...
                     </div>
-                ))}
+                ) : filteredNews.length === 0 ? (
+                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                        관련 뉴스가 없습니다.
+                    </div>
+                ) : (
+                    filteredNews.map(item => (
+                        <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="news-item" style={{ textDecoration: 'none', display: 'block' }}>
+                            <div className="news-content">
+                                <div className="news-meta">
+                                    <span className="cat-badge" style={{ backgroundColor: `${item.categoryColor}15`, color: item.categoryColor }}>
+                                        {item.category}
+                                    </span>
+                                    <span className="news-source">{item.source || '뉴스'}</span>
+                                    <span className="meta-divider">·</span>
+                                    <span className="time-ago">{item.timeAgo}</span>
+                                </div>
+                                <h3 className="news-title">{item.title}</h3>
+                            </div>
+                        </a>
+                    ))
+                )}
             </div>
 
             <style jsx>{`
