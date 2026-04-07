@@ -10,7 +10,7 @@ export default function UserDashboard() {
 
     // Guest view states (Premium upgrade)
     const [activeMarketTab, setActiveMarketTab] = useState("국내");
-    const [selectedCard, setSelectedCard] = useState<string>("^KS11");
+    const [selectedCard, setSelectedCard] = useState<string>("");
 
     useEffect(() => {
         setIsClient(true);
@@ -152,20 +152,28 @@ export default function UserDashboard() {
                     {selectedCard && (
                         <div className="market-detail-preview">
                             <div className="detail-header">
-                                <span className="detail-name">{currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세</span>
+                                <span className="detail-name">
+                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세
+                                </span>
                             </div>
                             <div className="detail-stats-grid">
                                 <div className="stat-item">
                                     <span className="stat-label">52주 최고</span>
-                                    <span className="stat-value">5,882</span>
+                                    <span className="stat-value">
+                                        {marketData.find(m => m.symbol === selectedCard)?.fiftyTwoWeekHigh || '---'}
+                                    </span>
                                 </div>
                                 <div className="stat-item">
                                     <span className="stat-label">52주 최저</span>
-                                    <span className="stat-value">2,169</span>
+                                    <span className="stat-value">
+                                        {marketData.find(m => m.symbol === selectedCard)?.fiftyTwoWeekLow || '---'}
+                                    </span>
                                 </div>
                                 <div className="stat-item">
                                     <span className="stat-label">거래량</span>
-                                    <span className="stat-value">4.2억주</span>
+                                    <span className="stat-value">
+                                        {marketData.find(m => m.symbol === selectedCard)?.volume || '---'}
+                                    </span>
                                 </div>
                             </div>
                         </div>

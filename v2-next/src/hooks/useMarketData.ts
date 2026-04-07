@@ -9,7 +9,19 @@ export interface MarketItem {
     change: string;
     changePercent: string;
     isPositive: boolean;
+    high?: string;
+    low?: string;
+    volume?: string;
+    fiftyTwoWeekHigh?: string;
+    fiftyTwoWeekLow?: string;
 }
+
+const formatVolume = (vol: number) => {
+    if (!vol) return "---";
+    if (vol >= 100000000) return (vol / 100000000).toFixed(1) + "억주";
+    if (vol >= 10000) return (vol / 10000).toFixed(0) + "만주";
+    return vol.toLocaleString() + "주";
+};
 
 export function useMarketData() {
     const [data, setData] = useState<MarketItem[]>([]);
@@ -26,7 +38,6 @@ export function useMarketData() {
                 const rawData = result.data;
                 const formatted: MarketItem[] = [];
 
-                // Standardize all symbols from CONFIG + BASE
                 const allSymbols = ['BASE', ...MARKET_CONFIG.symbols];
 
                 allSymbols.forEach(symbol => {
@@ -46,7 +57,12 @@ export function useMarketData() {
                             }) + (symbol === 'BASE' ? '%' : ''),
                             change: Math.abs(change).toLocaleString(undefined, { maximumFractionDigits: 2 }),
                             changePercent: Math.abs(changePercent).toFixed(2),
-                            isPositive: change >= 0
+                            isPositive: change >= 0,
+                            high: raw.high?.toLocaleString(),
+                            low: raw.low?.toLocaleString(),
+                            volume: formatVolume(raw.volume),
+                            fiftyTwoWeekHigh: raw.fiftyTwoWeekHigh?.toLocaleString(),
+                            fiftyTwoWeekLow: raw.fiftyTwoWeekLow?.toLocaleString()
                         });
                     }
                 });

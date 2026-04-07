@@ -16,7 +16,12 @@ export async function GET() {
                 return {
                     symbol,
                     price: meta.regularMarketPrice,
-                    prevClose: meta.previousClose
+                    prevClose: meta.previousClose || meta.chartPreviousClose,
+                    high: meta.regularMarketDayHigh,
+                    low: meta.regularMarketDayLow,
+                    volume: meta.regularMarketVolume,
+                    fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh,
+                    fiftyTwoWeekLow: meta.fiftyTwoWeekLow
                 };
             } catch (e) {
                 return null;
