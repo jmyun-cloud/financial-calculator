@@ -195,36 +195,20 @@ export default function UserDashboard() {
 
         return (
             <div className="market-summary-container">
-                {/* 오늘의 시장 요약 */}
+                {/* 오늘의 시장 요약 - 통합 컨테이너 */}
                 <div className="bg-white rounded-[32px] p-8 border border-[#F2F4F7] shadow-[0_4px_24px_rgba(0,0,0,0.03)] mb-8">
-                    <div className="flex justify-between items-start mb-8">
+                    <div className="flex justify-between items-start mb-6">
                         <div className="flex flex-col gap-1">
-                            <h2 className="text-[20px] font-extrabold text-[#191F28] tracking-tight">오늘의 시장 요약</h2>
-                            <span className="text-[13px] text-[#8B95A1] font-bold">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
+                            <h2 className="text-[19px] font-bold text-[#191F28] tracking-tight">오늘의 시장 요약</h2>
+                            <span className="text-[13px] text-[#8B95A1] font-medium">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
                         </div>
-                        <div className="bg-[#E8F9F0] text-[#1B8947] text-[12px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                        <div className="bg-[#E8F9F0] text-[#1B8947] text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 bg-[#1B8947] rounded-full animate-pulse"></span>
-                            ● 실시간
+                            실시간
                         </div>
                     </div>
 
-                    <div className="flex gap-2 bg-[#F9FAFB] p-1 rounded-[14px] self-start inline-flex mb-8">
-                        {marketTabs.map(tab => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveMarketTab(tab.id)}
-                                className={`px-4 py-2 text-[13px] font-bold rounded-[10px] transition-all duration-300 ${
-                                    activeMarketTab === tab.id 
-                                    ? 'bg-white text-[#0064FF] shadow-[0_2px_8px_rgba(0,0,0,0.05)]' 
-                                    : 'bg-transparent text-[#8B95A1] hover:text-[#4E5968]'
-                                }`}
-                            >
-                                {tab.id}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div className="grid grid-cols-4 gap-3 mb-6">
                         {summaryIndices.map(idx => {
                             const item = marketData.find(m => m.symbol === idx.symbol) || {
                                 price: "---",
@@ -243,23 +227,19 @@ export default function UserDashboard() {
                             return (
                                 <div 
                                     key={idx.symbol} 
-                                    className={`group flex flex-col bg-white border border-[#F2F4F7] rounded-[24px] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 cursor-pointer hover:shadow-[0_12px_24px_rgba(0,100,255,0.06)] hover:-translate-y-1 ${expandedCard === idx.symbol ? 'border-[#0064FF] bg-[#F8FBFF]' : ''}`}
+                                    className={`relative flex flex-col bg-[#F9FAFB] rounded-[20px] p-5 border border-transparent transition-all duration-300 cursor-pointer hover:bg-white hover:border-[#E5E8EB] hover:shadow-sm ${expandedCard === idx.symbol ? 'bg-white border-[#0064FF] shadow-sm' : ''}`}
                                     onClick={() => setExpandedCard(expandedCard === idx.symbol ? null : idx.symbol)}
                                 >
-                                    <div className="flex flex-col gap-1 mb-6">
-                                        <span className="text-[11px] font-extrabold text-[#8B95A1] uppercase tracking-wider">{idx.name}</span>
-                                        <h3 className="text-[20px] font-black text-[#191F28] tabular-nums tracking-tighter">{item.price}</h3>
-                                        <div className={`text-[12px] font-extrabold tabular-nums flex items-center gap-1 ${item.isPositive ? 'text-[#F04251]' : 'text-[#0064FF]'}`}>
-                                            {hasData ? (
-                                                <>
-                                                    <span>{item.isPositive ? '▲' : '▼'}</span>
-                                                    <span>{item.change}</span>
-                                                    <span className="opacity-80">({item.isPositive ? '+' : '-'}{item.changePercent}%)</span>
-                                                </>
-                                            ) : '수집중'}
-                                        </div>
+                                    <span className="text-[11px] font-bold text-[#8B95A1] uppercase mb-2">{idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}</span>
+                                    <h3 className="text-[20px] font-bold text-[#191F28] mb-1 tabular-nums">{item.price}</h3>
+                                    <div className={`text-[12px] font-bold tabular-nums ${item.isPositive ? 'text-[#F04251]' : 'text-[#0064FF]'}`}>
+                                        {hasData ? (
+                                            <>
+                                                {item.isPositive ? '▲' : '▼'}{item.change} ({item.isPositive ? '+' : '-'}{item.changePercent}%)
+                                            </>
+                                        ) : '---'}
                                     </div>
-                                    <div className="h-12 w-full mt-auto opacity-80 group-hover:opacity-100 transition-opacity">
+                                    <div className="h-10 w-full mt-2 opacity-50">
                                         <MarketSparkline data={pathData} color={hasData ? trendColor : '#E5E8EB'} />
                                     </div>
                                 </div>
@@ -268,7 +248,7 @@ export default function UserDashboard() {
                     </div>
 
                     {expandedCard && (
-                        <div className="animate-[slide-up_0.3s_ease-out]">
+                        <div className="mb-6 animate-[slide-up_0.3s_ease-out]">
                             <MarketDetailBar
                                 symbol={expandedCard}
                                 name={summaryIndices.find(idx => idx.symbol === expandedCard)?.name || ""}
@@ -276,27 +256,35 @@ export default function UserDashboard() {
                         </div>
                     )}
 
-
-                    {/* 로그인 유도 배너 */}
-                    <div className="login-cta-banner">
-                        <div className="cta-content">
-                            <span className="cta-icon">📉</span>
-                            <div className="cta-text">
-                                <span className="cta-title">내 자산을 한눈에 관리하고 싶다면?</span>
-                                <span className="cta-desc">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</span>
+                    {/* 로그인 유도 배너 - 통합 컨테이너 안으로 */}
+                    <div className="flex justify-between items-center bg-[#F9FAFB] p-5 rounded-[20px] border border-[#F2F4F7]">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">📉</div>
+                            <div className="flex flex-col">
+                                <span className="text-[15px] font-bold text-[#191F28]">내 자산을 한눈에 관리하고 싶다면?</span>
+                                <span className="text-[13px] text-[#4E5968] font-medium">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</span>
                             </div>
                         </div>
-                        <button className="cta-btn" onClick={() => setIsLoggedIn(true)}>무료 시작하기</button>
+                        <button 
+                            className="bg-white border border-[#E5E8EB] text-[#191F28] px-5 py-2.5 rounded-[14px] text-[14px] font-bold shadow-sm hover:bg-[#F2F4F6] transition-all"
+                            onClick={() => setIsLoggedIn(true)}
+                        >
+                            무료 시작하기
+                        </button>
                     </div>
                 </div>
 
-                {/* SIDEBAR GOALS (Integrated for Layout consistency) */}
-                <div className="dashboard-sidebar-widgets" style={{ marginTop: '24px' }}>
-                    <div className="widget-section">
-                        <h3 className="section-title">내 재무 목표</h3>
-                        <GoalTracker />
+                {/* 내 재무 목표 - 원본 스타일 */}
+                <div className="mb-12">
+                    <h2 className="text-[19px] font-bold text-[#191F28] mb-6 tracking-tight">내 재무 목표</h2>
+                    <div className="flex flex-col items-center justify-center py-12 bg-white rounded-[32px] border border-[#F2F4F7] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                        <span className="text-[14px] text-[#8B95A1] mb-2 font-medium">아직 저장된 목표가 없습니다.</span>
+                        <Link href="/calculators" className="text-[14px] font-bold text-[#0064FF] no-underline hover:underline flex items-center gap-1">
+                            계산기에서 목표를 설정해보세요 👇
+                        </Link>
                     </div>
                 </div>
+            </div>
 
                 <style jsx>{`
                     .market-summary-container {
