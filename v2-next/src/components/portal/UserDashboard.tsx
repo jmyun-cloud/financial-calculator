@@ -110,13 +110,55 @@ export default function UserDashboard() {
 
                             const hasData = item.price !== "---";
 
-                            // KST time logic for market open/close badge
-                            const kstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-                            const kstHour = kstDate.getHours();
-                            const kstMin = kstDate.getMinutes();
-                            const kstDay = kstDate.getDay();
-                            const isWeekend = kstDay === 0 || kstDay === 6;
-                            const isMarketOpen = !isWeekend && (kstHour * 60 + kstMin >= 540) && (kstHour * 60 + kstMin < 930);
+                            // UTC market badge computation
+                            const getMarketBadge = (sym: string) => {
+                                const now = new Date();
+                                const utcHour = now.getUTCHours();
+                                const utcMin = now.getUTCMinutes();
+                                const utcDay = now.getUTCDay();
+                                const isWeekend = utcDay === 0 || utcDay === 6;
+                                const minutes = utcHour * 60 + utcMin;
+
+                                if (["^KS11", "^KQ11"].includes(sym)) {
+                                    // UTC 00:00~06:30 (KST 09:00~15:30), 평일만
+                                    if (!isWeekend && minutes >= 0 && minutes <= 390) return { type: "open", text: "장중" };
+                                    return { type: "closed", text: "장마감" };
+                                }
+
+                                if (["^GSPC", "^IXIC", "^DJI"].includes(sym)) {
+                                    const month = now.getUTCMonth() + 1;
+                                    const date = now.getUTCDate();
+
+                                    let isDst = false;
+                                    if (month > 3 && month < 11) isDst = true;
+                                    else if (month === 3) {
+                                        const secondSunday = 1 + (7 - new Date(Date.UTC(now.getUTCFullYear(), 2, 1)).getUTCDay()) % 7 + 7;
+                                        if (date >= secondSunday) isDst = true;
+                                    } else if (month === 11) {
+                                        const firstSunday = 1 + (7 - new Date(Date.UTC(now.getUTCFullYear(), 10, 1)).getUTCDay()) % 7;
+                                        if (date < firstSunday) isDst = true;
+                                    }
+
+                                    if (isDst) {
+                                        if (minutes >= 810 && minutes <= 1200) return { type: "open", text: "장중" };
+                                    } else {
+                                        if (minutes >= 870 && minutes <= 1260) return { type: "open", text: "장중" };
+                                    }
+                                    return { type: "closed", text: "장마감" };
+                                }
+
+                                if (["GC=F", "SI=F", "CL=F", "HG=F"].includes(sym)) {
+                                    return { type: "24h", text: "24H" };
+                                }
+
+                                if (["KRW=X", "JPYKRW=X", "EURKRW=X", "CNYKRW=X"].includes(sym)) {
+                                    return { type: "realtime", text: "실시간" };
+                                }
+
+                                return null;
+                            };
+
+                            const badge = getMarketBadge(idx.symbol);
 
                             // Dynamic Sparkline Path based on direction
                             const pathData = item.isPositive
@@ -133,20 +175,21 @@ export default function UserDashboard() {
                                     <span className="card-label" style={{ display: 'flex', alignItems: 'center' }}>
                                         {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
                                         {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "4px" }}>USD/oz</span>}
-                                        {(idx.symbol === "^KS11" || idx.symbol === "^KQ11") && (
+                                        {badge && badge.type === "realtime" ? (
+                                            <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "6px" }}>{badge.text}</span>
+                                        ) : badge ? (
                                             <span style={{
                                                 fontSize: "10px",
                                                 fontWeight: 700,
                                                 padding: "2px 6px",
                                                 borderRadius: "4px",
                                                 marginLeft: "6px",
-                                                ...(isMarketOpen
-                                                    ? { background: "#FFF0F0", color: "#F04251" }
-                                                    : { background: "#F2F4F6", color: "#8B95A1" })
+                                                background: badge.type === "open" ? "#FFF0F0" : badge.type === "closed" ? "#F2F4F6" : "#E8F9F0",
+                                                color: badge.type === "open" ? "#F04251" : badge.type === "closed" ? "#8B95A1" : "#1B8947"
                                             }}>
-                                                {isMarketOpen ? "장중" : "장마감"}
+                                                {badge.text}
                                             </span>
-                                        )}
+                                        ) : null}
                                     </span>
                                     <div className="card-value">{item.price}</div>
                                     <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
