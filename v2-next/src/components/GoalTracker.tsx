@@ -50,10 +50,38 @@ export default function GoalTracker() {
 
     if (goals.length === 0) {
         return (
-            <div className="goal-empty" style={{ padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "8px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>
-                아직 저장된 목표가 없습니다.<br />
-                <Link href="#toolbox" style={{ color: "var(--primary)", fontWeight: 600, marginTop: "8px", display: "inline-block" }}>
-                    계산기에서 목표를 설정해보세요 👇
+            <div className="goal-empty" style={{
+                padding: "32px 20px",
+                background: "linear-gradient(135deg, rgba(0,100,255,0.02) 0%, rgba(0,100,255,0.05) 100%)",
+                borderRadius: "20px",
+                border: "1px dashed rgba(0, 100, 255, 0.2)",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "12px"
+            }}>
+                <div style={{ fontSize: "2.2rem", marginBottom: "4px" }}>🎯</div>
+                <div style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5 }}>
+                    <strong style={{ color: "var(--text-primary)" }}>아직 저장된 목표가 없습니다.</strong><br />
+                    계산기를 활용해 나만의 재무 목표를 세워보세요!
+                </div>
+                <Link href="/savings-calculator" style={{
+                    background: "var(--primary)",
+                    color: "white",
+                    fontWeight: 700,
+                    padding: "12px 24px",
+                    borderRadius: "100px",
+                    fontSize: "0.9rem",
+                    marginTop: "8px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    boxShadow: "0 4px 12px rgba(0, 100, 255, 0.2)",
+                    textDecoration: "none"
+                }}>
+                    <span>예적금 계산해보기</span>
+                    <span>→</span>
                 </Link>
             </div>
         );
