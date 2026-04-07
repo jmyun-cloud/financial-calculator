@@ -50,6 +50,14 @@ export default function UserDashboard() {
 
                             const hasData = item.price !== "---";
 
+                            // KST time logic for market open/close badge
+                            const kstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                            const kstHour = kstDate.getHours();
+                            const kstMin = kstDate.getMinutes();
+                            const kstDay = kstDate.getDay();
+                            const isWeekend = kstDay === 0 || kstDay === 6;
+                            const isMarketOpen = !isWeekend && (kstHour * 60 + kstMin >= 540) && (kstHour * 60 + kstMin < 930);
+
                             // Dynamic Sparkline Path based on direction
                             const pathData = item.isPositive
                                 ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"  // Upswing, straight sharp lines
@@ -62,7 +70,24 @@ export default function UserDashboard() {
 
                             return (
                                 <div key={idx.symbol} className="summary-card">
-                                    <span className="card-label">{idx.name}</span>
+                                    <span className="card-label" style={{ display: 'flex', alignItems: 'center' }}>
+                                        {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
+                                        {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "4px" }}>USD/oz</span>}
+                                        {(idx.symbol === "^KS11" || idx.symbol === "^KQ11") && (
+                                            <span style={{
+                                                fontSize: "10px",
+                                                fontWeight: 700,
+                                                padding: "2px 6px",
+                                                borderRadius: "4px",
+                                                marginLeft: "6px",
+                                                ...(isMarketOpen
+                                                    ? { background: "#FFF0F0", color: "#F04251" }
+                                                    : { background: "#F2F4F6", color: "#8B95A1" })
+                                            }}>
+                                                {isMarketOpen ? "장중" : "장마감"}
+                                            </span>
+                                        )}
+                                    </span>
                                     <div className="card-value">{item.price}</div>
                                     <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
                                         {hasData && (item.isPositive ? '▲' : '▼')}
