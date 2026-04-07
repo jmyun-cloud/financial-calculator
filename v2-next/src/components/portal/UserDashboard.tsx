@@ -3,123 +3,278 @@ import React, { useEffect, useState } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 
-function MarketDetailBar({ symbol, name }: { symbol: string, name: string }) {
-    const [data, setData] = useState<any>(null);
-    const [error, setError] = useState(false);
-
-    useEffect(() => {
-        let isMounted = true;
-        setData(null);
-        setError(false);
-        fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}`)
-            .then(res => res.json())
-            .then(d => {
-                if (!isMounted) return;
-                if (d.error) setError(true);
-                else setData(d);
-            })
-            .catch(() => {
-                if (isMounted) setError(true);
-            });
-        return () => { isMounted = false; };
-    }, [symbol]);
-
-    if (error) return <div className="detail-card error">데이터를 불러올 수 없습니다</div>;
-    if (!data) return <div className="detail-card loading">상세 정보를 불러오는 중입니다...</div>;
-
-    const formatNumber = (n: number | null | undefined) => {
-        if (n === null || n === undefined) return "-";
-        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n);
-    };
-
-    const formatVolume = (vol: number | null | undefined) => {
-        if (!vol) return "-";
-        if (vol >= 100000000) return (vol / 100000000).toFixed(1) + "억";
-        if (vol >= 10000) return (vol / 10000).toFixed(1) + "만";
-        return new Intl.NumberFormat('en-US').format(vol);
-    };
-
-    return (
-        <div className="detail-card fade-in">
-            <div className="detail-title">{name} 상세</div>
-            <div className="detail-stats">
-                <div className="detail-col">
-                    <span className="d-label">52주 최고</span>
-                    <span className="d-val">{formatNumber(data.fiftyTwoWeekHigh)}</span>
-                </div>
-                <div className="detail-col">
-                    <span className="d-label">52주 최저</span>
-                    <span className="d-val">{formatNumber(data.fiftyTwoWeekLow)}</span>
-                </div>
-                {data.regularMarketVolume > 0 && (
-                    <div className="detail-col">
-                        <span className="d-label">거래량</span>
-                        <span className="d-val">{formatVolume(data.regularMarketVolume)}{!symbol.includes("KRW") && !symbol.includes("=F") ? "주" : ""}</span>
-                    </div>
-                )}
-            </div>
-            <style jsx>{`
-                .detail-card {
-                    background: #F4F8FF;
-                    border-radius: 12px;
-                    padding: 16px 24px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 24px;
-                    border: 1px solid rgba(0, 100, 255, 0.05);
-                }
-                .detail-card.error { color: var(--danger); justify-content: center; }
-                .detail-card.loading { color: var(--text-secondary); justify-content: center; }
-                .detail-title {
-                    font-weight: 800;
-                    color: #0064FF;
-                    font-size: 14px;
-                }
-                .detail-stats {
-                    display: flex;
-                    gap: 32px;
-                }
-                .detail-col {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                    gap: 4px;
-                }
-                .d-label {
-                    font-size: 11px;
-                    color: var(--text-secondary);
-                    font-weight: 500;
-                }
-                .d-val {
-                    font-size: 14px;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                }
-                .fade-in {
-                    animation: fadeIn 0.3s ease-out;
-                }
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(-4px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
-        </div>
-    );
-}
-
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
-    
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // default to false
+    const { data: marketData, loading } = useMarketData();
+
     useEffect(() => {
         setIsClient(true);
+
+        const handleLogin = () => setIsLoggedIn(true);
+        window.addEventListener("fc_mock_login", handleLogin);
+        return () => window.removeEventListener("fc_mock_login", handleLogin);
     }, []);
 
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px' }} />;
 
+    if (!isLoggedIn) {
+        // 비로그인 상태: 오늘의 시장 요약
+        const summaryIndices = [
+            { symbol: "^KS11", name: "KOSPI", color: "#FF4D4D" },
+            { symbol: "KRW=X", name: "원/달러 환율", color: "#0064FF" },
+            { symbol: "GC=F", name: "국제 금 시세", color: "#FFB000" },
+            { symbol: "^GSPC", name: "S&P 500", color: "#0064FF" }
+        ];
+
+        return (
+            <div className="market-summary-container">
+                {/* 오늘의 시장 요약 */}
+                <div className="market-summary-card shadow-sm">
+                    <div className="summary-header">
+                        <div className="header-left">
+                            <h2 className="summary-title">오늘의 시장 요약</h2>
+                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</span>
+                        </div>
+                        <div className="live-badge">● 실시간</div>
+                    </div>
+
+                    <div className="summary-grid">
+                        {summaryIndices.map(idx => {
+                            const item = marketData.find(m => m.symbol === idx.symbol) || {
+                                price: "---",
+                                change: "0.00",
+                                changePercent: "0.00",
+                                isPositive: true
+                            };
+
+                            const hasData = item.price !== "---";
+
+                            // KST time logic for market open/close badge
+                            const kstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+                            const kstHour = kstDate.getHours();
+                            const kstMin = kstDate.getMinutes();
+                            const kstDay = kstDate.getDay();
+                            const isWeekend = kstDay === 0 || kstDay === 6;
+                            const isMarketOpen = !isWeekend && (kstHour * 60 + kstMin >= 540) && (kstHour * 60 + kstMin < 930);
+
+                            // Dynamic Sparkline Path based on direction
+                            const pathData = item.isPositive
+                                ? "M0 25 L 15 22 L 30 26 L 45 15 L 60 18 L 75 8 L 100 5"  // Upswing, straight sharp lines
+                                : "M0 5 L 15 8 L 30 5 L 45 15 L 60 12 L 75 22 L 100 25"; // Downswing, straight sharp lines
+
+                            const strokeColor = !hasData ? '#E5E8EB' : (item.isPositive ? '#FF4D4D' : '#0064FF');
+                            const fillId = item.isPositive ? 'spark-up' : 'spark-down';
+                            const fillColor = !hasData ? 'transparent' : `url(#${fillId})`;
+                            const fillPath = `${pathData} V 30 H 0 Z`;
+
+                            return (
+                                <div key={idx.symbol} className="summary-card">
+                                    <span className="card-label" style={{ display: 'flex', alignItems: 'center' }}>
+                                        {idx.name === "원/달러 환율" ? "USD/KRW" : idx.name}
+                                        {idx.symbol === "GC=F" && <span style={{ fontSize: "10px", color: "#8B95A1", marginLeft: "4px" }}>USD/oz</span>}
+                                        {(idx.symbol === "^KS11" || idx.symbol === "^KQ11") && (
+                                            <span style={{
+                                                fontSize: "10px",
+                                                fontWeight: 700,
+                                                padding: "2px 6px",
+                                                borderRadius: "4px",
+                                                marginLeft: "6px",
+                                                ...(isMarketOpen
+                                                    ? { background: "#FFF0F0", color: "#F04251" }
+                                                    : { background: "#F2F4F6", color: "#8B95A1" })
+                                            }}>
+                                                {isMarketOpen ? "장중" : "장마감"}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <div className="card-value">{item.price}</div>
+                                    <div className={`card-change ${!hasData ? '' : (item.isPositive ? 'positive' : 'negative')}`}>
+                                        {hasData && (item.isPositive ? '▲' : '▼')}
+                                        {hasData ? `${item.change} (${item.isPositive ? '+' : ''}${item.changePercent}%)` : '데이터 수집 중'}
+                                    </div>
+                                    <div className="sparkline">
+                                        <svg viewBox="0 0 100 30" width="100%" height="30" preserveAspectRatio="none">
+                                            <defs>
+                                                <linearGradient id="spark-up" x1="0" x2="0" y1="0" y2="1">
+                                                    <stop offset="0%" stopColor="#FF4D4D" stopOpacity="0.2" />
+                                                    <stop offset="100%" stopColor="#FF4D4D" stopOpacity="0" />
+                                                </linearGradient>
+                                                <linearGradient id="spark-down" x1="0" x2="0" y1="0" y2="1">
+                                                    <stop offset="0%" stopColor="#0064FF" stopOpacity="0.2" />
+                                                    <stop offset="100%" stopColor="#0064FF" stopOpacity="0" />
+                                                </linearGradient>
+                                            </defs>
+                                            <path d={fillPath} fill={fillColor} />
+                                            <path
+                                                d={pathData}
+                                                fill="none"
+                                                stroke={strokeColor}
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                vectorEffect="non-scaling-stroke"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* 로그인 유도 배너 */}
+                    <div className="login-cta-banner">
+                        <div className="cta-content">
+                            <span className="cta-icon">📉</span>
+                            <div className="cta-text">
+                                <span className="cta-title">내 자산을 한눈에 관리하고 싶다면?</span>
+                                <span className="cta-desc">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</span>
+                            </div>
+                        </div>
+                        <button className="cta-btn" onClick={() => setIsLoggedIn(true)}>무료 시작하기</button>
+                    </div>
+                </div>
+
+                {/* SIDEBAR GOALS (Integrated for Layout consistency) */}
+                <div className="dashboard-sidebar-widgets" style={{ marginTop: '24px' }}>
+                    <div className="widget-section">
+                        <h3 className="section-title">내 재무 목표</h3>
+                        <GoalTracker />
+                    </div>
+                </div>
+
+                <style jsx>{`
+                    .market-summary-container {
+                        margin-bottom: 32px;
+                    }
+                    .market-summary-card {
+                        background: var(--surface);
+                        border-radius: 28px;
+                        padding: 32px;
+                        border: 1px solid var(--border);
+                    }
+                    .summary-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        margin-bottom: 24px;
+                    }
+                    .summary-title {
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        color: var(--text-primary);
+                        margin: 0;
+                    }
+                    .summary-date {
+                        font-size: 0.85rem;
+                        color: var(--text-secondary);
+                    }
+                    .live-badge {
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        color: #00D166;
+                        background: rgba(0, 209, 102, 0.1);
+                        padding: 4px 12px;
+                        border-radius: 100px;
+                    }
+                    .summary-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 12px;
+                        margin-bottom: 24px;
+                    }
+                    .summary-card {
+                        background: var(--surface-2);
+                        padding: 20px;
+                        border-radius: 20px;
+                        border: 1px solid var(--border);
+                    }
+                    .card-label {
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                        display: block;
+                        margin-bottom: 8px;
+                    }
+                    .card-value {
+                        font-size: 1.3rem;
+                        font-weight: 800;
+                        color: var(--text-primary);
+                        margin-bottom: 4px;
+                        letter-spacing: -0.02em;
+                    }
+                    .card-change {
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        margin-bottom: 12px;
+                    }
+                    .card-change.positive { color: var(--danger); }
+                    .card-change.negative { color: var(--primary); }
+                    .sparkline { height: 30px; margin-top: 8px; }
+
+                    .login-cta-banner {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #F4F8FF;
+                        padding: 20px 24px;
+                        border-radius: 20px;
+                        border: 1px solid rgba(0, 100, 255, 0.1);
+                    }
+                    .cta-content {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                    }
+                    .cta-icon {
+                        width: 44px;
+                        height: 44px;
+                        background: white;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.5rem;
+                        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                    }
+                    .cta-text { display: flex; flex-direction: column; gap: 2px; }
+                    .cta-title {
+                        font-size: 0.95rem;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                    }
+                    .cta-desc {
+                        font-size: 0.8rem;
+                        color: var(--text-secondary);
+                    }
+                    .cta-btn {
+                        background: white;
+                        color: var(--text-primary);
+                        border: 1px solid var(--border);
+                        padding: 10px 20px;
+                        border-radius: 14px;
+                        font-size: 0.9rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        box-shadow: var(--shadow-sm);
+                    }
+                    .cta-btn:hover { background: var(--surface-2); transform: translateY(-1px); }
+
+                    .section-title {
+                        font-size: 1.1rem;
+                        font-weight: 800;
+                        margin-bottom: 16px;
+                        color: var(--text-primary);
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
     return (
         <div className="user-dashboard-v3">
-            {/* HERO ASSET CARD */}
+            {/* HER0 ASSET CARD */}
             <div className="hero-asset-card shadow-premium">
                 <div className="asset-label">내 총 자산</div>
                 <div className="asset-amount">₩ 48,320,000</div>
