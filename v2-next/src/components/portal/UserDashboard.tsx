@@ -124,7 +124,7 @@ export default function UserDashboard() {
                                 <div
                                     key={idx.symbol}
                                     className={`summary-card-v2 ${isSelected ? 'selected' : ''}`}
-                                    onClick={() => setSelectedCard(idx.symbol)}
+                                    onClick={() => setSelectedCard(selectedCard === idx.symbol ? "" : idx.symbol)}
                                 >
                                     <div className="card-top">
                                         <div className="card-name-group">
