@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 
-function MarketDetailBar({ symbol }: { symbol: string }) {
+function MarketDetailBar({ symbol, name }: { symbol: string, name: string }) {
     const [data, setData] = useState<any>(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
+        setData(null);
+        setError(false);
         fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}`)
             .then(res => res.json())
             .then(d => {
@@ -22,30 +24,86 @@ function MarketDetailBar({ symbol }: { symbol: string }) {
         return () => { isMounted = false; };
     }, [symbol]);
 
-    if (error) return <div style={{ fontSize: "12px", color: "var(--danger)", marginTop: "12px", textAlign: "center" }}>데이터를 불러올 수 없습니다</div>;
-    if (!data) return <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginTop: "12px", textAlign: "center" }}>불러오는 중...</div>;
+    if (error) return <div className="detail-card error">데이터를 불러올 수 없습니다</div>;
+    if (!data) return <div className="detail-card loading">상세 정보를 불러오는 중입니다...</div>;
 
     const formatNumber = (n: number | null | undefined) => {
         if (n === null || n === undefined) return "-";
-        return new Intl.NumberFormat('en-US').format(n);
+        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n);
+    };
+
+    const formatVolume = (vol: number | null | undefined) => {
+        if (!vol) return "-";
+        if (vol >= 100000000) return (vol / 100000000).toFixed(1) + "억";
+        if (vol >= 10000) return (vol / 10000).toFixed(1) + "만";
+        return new Intl.NumberFormat('en-US').format(vol);
     };
 
     return (
-        <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed var(--border)", display: "flex", justifyContent: "space-between", gap: "8px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>52주 최고</span>
-                <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.fiftyTwoWeekHigh)}</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>52주 최저</span>
-                <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.fiftyTwoWeekLow)}</span>
-            </div>
-            {data.regularMarketVolume && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>거래량</span>
-                    <span style={{ fontSize: "11px", fontWeight: 700 }}>{formatNumber(data.regularMarketVolume)}</span>
+        <div className="detail-card fade-in">
+            <div className="detail-title">{name} 상세</div>
+            <div className="detail-stats">
+                <div className="detail-col">
+                    <span className="d-label">52주 최고</span>
+                    <span className="d-val">{formatNumber(data.fiftyTwoWeekHigh)}</span>
                 </div>
-            )}
+                <div className="detail-col">
+                    <span className="d-label">52주 최저</span>
+                    <span className="d-val">{formatNumber(data.fiftyTwoWeekLow)}</span>
+                </div>
+                {data.regularMarketVolume && (
+                    <div className="detail-col">
+                        <span className="d-label">거래량</span>
+                        <span className="d-val">{formatVolume(data.regularMarketVolume)}{!symbol.includes("KRW") && !symbol.includes("=F") ? "주" : ""}</span>
+                    </div>
+                )}
+            </div>
+            <style jsx>{`
+                .detail-card {
+                    background: #F4F8FF;
+                    border-radius: 12px;
+                    padding: 16px 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 24px;
+                    border: 1px solid rgba(0, 100, 255, 0.05);
+                }
+                .detail-card.error { color: var(--danger); justify-content: center; }
+                .detail-card.loading { color: var(--text-secondary); justify-content: center; }
+                .detail-title {
+                    font-weight: 800;
+                    color: #0064FF;
+                    font-size: 14px;
+                }
+                .detail-stats {
+                    display: flex;
+                    gap: 32px;
+                }
+                .detail-col {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 4px;
+                }
+                .d-label {
+                    font-size: 11px;
+                    color: var(--text-secondary);
+                    font-weight: 500;
+                }
+                .d-val {
+                    font-size: 14px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                }
+                .fade-in {
+                    animation: fadeIn 0.3s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-4px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </div>
     );
 }
@@ -273,11 +331,17 @@ export default function UserDashboard() {
                                             />
                                         </svg>
                                     </div>
-                                    {expandedCard === idx.symbol && <MarketDetailBar symbol={idx.symbol} />}
                                 </div>
                             );
                         })}
                     </div>
+
+                    {expandedCard && (
+                        <MarketDetailBar
+                            symbol={expandedCard}
+                            name={summaryIndices.find(idx => idx.symbol === expandedCard)?.name || ""}
+                        />
+                    )}
 
                     {/* 로그인 유도 배너 */}
                     <div className="login-cta-banner">
