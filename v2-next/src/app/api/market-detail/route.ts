@@ -15,10 +15,10 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Fetch 1 year of daily data to calculate true 52-week high/low
+        // Fetch 1 year of daily data to calculate true 52-week high/low and extract latest volume
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y`;
         const res = await fetch(url, {
-            next: { revalidate: 3600 }, // Cache detail for 1 hour
+            next: { revalidate: 3600 },
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
@@ -33,19 +33,30 @@ export async function GET(request: Request) {
         const meta = result.meta;
         const indicators = result.indicators.quote[0];
 
-        // Manually calculate 52-week High/Low from historical data
-        // This is much more reliable than the 'meta' fields for indices
+        // 1. Manually calculate 52-week High/Low
         const highs = (indicators.high || []).filter((v: any) => v !== null && v !== 0);
         const lows = (indicators.low || []).filter((v: any) => v !== null && v !== 0);
-
         const calculatedHigh = highs.length > 0 ? Math.max(...highs) : meta.fiftyTwoWeekHigh;
         const calculatedLow = lows.length > 0 ? Math.min(...lows) : meta.fiftyTwoWeekLow;
+
+        // 2. Extract Volume (Special handling for indices)
+        let volume = meta.regularMarketVolume;
+        if (!volume || volume === 0) {
+            const volumes = (indicators.volume || []).filter((v: any) => v !== null && v !== 0);
+            if (volumes.length > 0) {
+                volume = volumes[volumes.length - 1];
+                // Yahoo reports KOSPI/KOSDAQ volume in thousands
+                if (symbol === '^KS11' || symbol === '^KQ11') {
+                    volume = volume * 1000;
+                }
+            }
+        }
 
         return NextResponse.json({
             price: meta.regularMarketPrice,
             fiftyTwoWeekHigh: calculatedHigh,
             fiftyTwoWeekLow: calculatedLow === 0 ? null : calculatedLow,
-            regularMarketVolume: meta.regularMarketVolume
+            regularMarketVolume: volume
         });
 
     } catch (error: any) {
