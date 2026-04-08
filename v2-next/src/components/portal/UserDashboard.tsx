@@ -11,6 +11,40 @@ export default function UserDashboard() {
     // Guest view states (Premium upgrade)
     const [activeMarketTab, setActiveMarketTab] = useState("국내");
     const [selectedCard, setSelectedCard] = useState<string>("");
+    const [detailData, setDetailData] = useState<any>(null);
+    const [isDetailLoading, setIsDetailLoading] = useState(false);
+
+    // Fetch detailed data when a card is selected
+    useEffect(() => {
+        if (!selectedCard) {
+            setDetailData(null);
+            return;
+        }
+
+        const fetchDetail = async () => {
+            setIsDetailLoading(true);
+            try {
+                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(selectedCard)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setDetailData(data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch detail:", err);
+            } finally {
+                setIsDetailLoading(false);
+            }
+        };
+
+        fetchDetail();
+    }, [selectedCard]);
+
+    const formatVolume = (vol: number | null) => {
+        if (!vol || vol === 0) return "---";
+        if (vol >= 100000000) return (vol / 100000000).toFixed(1) + "억주";
+        if (vol >= 10000) return (vol / 10000).toFixed(0) + "만주";
+        return vol.toLocaleString() + "주";
+    };
 
     useEffect(() => {
         setIsClient(true);
@@ -150,29 +184,31 @@ export default function UserDashboard() {
                     </div>
 
                     {selectedCard && (
-                        <div className="market-detail-preview">
+                        <div className="detail-preview-section">
                             <div className="detail-header">
-                                <span className="detail-name">
+                                <span className="detail-title">
                                     {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세
                                 </span>
+                                {isDetailLoading && <span className="loading-spinner">데이터 로드 중...</span>}
                             </div>
-                            <div className="detail-stats-grid">
-                                <div className="stat-item">
-                                    <span className="stat-label">52주 최고</span>
-                                    <span className="stat-value">
-                                        {marketData.find(m => m.symbol === selectedCard)?.fiftyTwoWeekHigh || '---'}
+
+                            <div className="detail-metrics-grid">
+                                <div className="metric-item">
+                                    <span className="metric-label">52주 최고</span>
+                                    <span className="metric-value">
+                                        {detailData?.fiftyTwoWeekHigh?.toLocaleString() || '---'}
                                     </span>
                                 </div>
-                                <div className="stat-item">
-                                    <span className="stat-label">52주 최저</span>
-                                    <span className="stat-value">
-                                        {marketData.find(m => m.symbol === selectedCard)?.fiftyTwoWeekLow || '---'}
+                                <div className="metric-item">
+                                    <span className="metric-label">52주 최저</span>
+                                    <span className="metric-value">
+                                        {detailData?.fiftyTwoWeekLow?.toLocaleString() || '---'}
                                     </span>
                                 </div>
-                                <div className="stat-item">
-                                    <span className="stat-label">거래량</span>
-                                    <span className="stat-value">
-                                        {marketData.find(m => m.symbol === selectedCard)?.volume || '---'}
+                                <div className="metric-item">
+                                    <span className="metric-label">거래량</span>
+                                    <span className="metric-value">
+                                        {formatVolume(detailData?.regularMarketVolume)}
                                     </span>
                                 </div>
                             </div>
@@ -265,12 +301,14 @@ export default function UserDashboard() {
                     .line-fill.up { background: #F04251; }
                     .line-fill.down { background: #0064FF; }
 
-                    .market-detail-preview { background: #F4F8FF; border-radius: 16px; padding: 16px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-                    .detail-name { font-size: 14px; font-weight: 800; color: #0055FB; }
-                    .detail-stats-grid { display: flex; gap: 32px; }
-                    .stat-item { display: flex; align-items: center; gap: 8px; }
-                    .stat-label { font-size: 12px; color: #8B95A1; font-weight: 600; }
-                    .stat-value { font-size: 14px; font-weight: 800; color: #191F28; }
+                    .detail-preview-section { background: #F4F8FF; border-radius: 16px; padding: 16px 24px; margin-bottom: 24px; }
+                    .detail-header { display: flex; align-items: center; margin-bottom: 12px; }
+                    .detail-title { font-size: 14px; font-weight: 800; color: #0055FB; }
+                    .loading-spinner { font-size: 11px; color: #0055FB; margin-left: 10px; font-weight: 500; opacity: 0.8; animation: pulse 1.5s infinite; }
+                    .detail-metrics-grid { display: flex; gap: 32px; }
+                    .metric-item { display: flex; align-items: center; gap: 8px; }
+                    .metric-label { font-size: 12px; color: #8B95A1; font-weight: 600; }
+                    .metric-value { font-size: 14px; font-weight: 800; color: #191F28; }
 
                     .premium-blue-banner { background: #0055FB; border-radius: 20px; padding: 24px; display: flex; justify-content: space-between; align-items: center; color: white; }
                     .banner-content { display: flex; align-items: center; gap: 20px; }
