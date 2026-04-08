@@ -5,6 +5,8 @@ export async function GET(request: Request) {
     const symbol = searchParams.get('symbol');
 
     if (!symbol) return NextResponse.json({ error: 'Missing symbol' }, { status: 400 });
+
+    // Standardize Base Rate
     if (symbol === 'BASE') {
         return NextResponse.json({
             price: 3.5,
@@ -15,10 +17,12 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Fetch 1 year of daily data to calculate true 52-week high/low and extract latest volume
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y`;
+        // Use a cache-busting parameter to ensure we get fresh data during updates
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y&_=${Date.now()}`;
+
         const res = await fetch(url, {
-            next: { revalidate: 3600 },
+            // Lower revalidate to 1 minute for detailed market data
+            next: { revalidate: 60 },
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
@@ -33,19 +37,24 @@ export async function GET(request: Request) {
         const meta = result.meta;
         const indicators = result.indicators.quote[0];
 
-        // 1. Manually calculate 52-week High/Low
+        // 1. Manually calculate 52-week High/Low (Historical analysis)
         const highs = (indicators.high || []).filter((v: any) => v !== null && v !== 0);
         const lows = (indicators.low || []).filter((v: any) => v !== null && v !== 0);
+
         const calculatedHigh = highs.length > 0 ? Math.max(...highs) : meta.fiftyTwoWeekHigh;
         const calculatedLow = lows.length > 0 ? Math.min(...lows) : meta.fiftyTwoWeekLow;
 
         // 2. Extract Volume (Special handling for indices)
         let volume = meta.regularMarketVolume;
+
+        // If meta volume is 0/null, fallback to the latest valid indicator volume
         if (!volume || volume === 0) {
             const volumes = (indicators.volume || []).filter((v: any) => v !== null && v !== 0);
             if (volumes.length > 0) {
                 volume = volumes[volumes.length - 1];
-                // Yahoo reports KOSPI/KOSDAQ volume in thousands
+
+                // CRITICAL: Yahoo Finance reports KOSPI (^KS11) and KOSDAQ (^KQ11) volume in '1,000 shares' units.
+                // We must multiply by 1000 to match the standard stock unit.
                 if (symbol === '^KS11' || symbol === '^KQ11') {
                     volume = volume * 1000;
                 }
@@ -55,8 +64,12 @@ export async function GET(request: Request) {
         return NextResponse.json({
             price: meta.regularMarketPrice,
             fiftyTwoWeekHigh: calculatedHigh,
-            fiftyTwoWeekLow: calculatedLow === 0 ? null : calculatedLow,
+            fiftyTwoWeekLow: calculatedLow <= 0 ? null : calculatedLow,
             regularMarketVolume: volume
+        }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120'
+            }
         });
 
     } catch (error: any) {
