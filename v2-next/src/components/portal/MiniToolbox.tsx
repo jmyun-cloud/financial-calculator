@@ -53,65 +53,63 @@ export default function MiniToolbox() {
 
             <style jsx>{`
                 .mini-toolbox-v3 {
-                    background: var(--surface);
-                    border-radius: var(--radius-lg);
-                    padding: 24px;
+                    background: white;
+                    border-radius: 24px;
+                    padding: 32px;
                     margin-bottom: 32px;
-                    border: 1px solid var(--border);
+                    border: 1px solid #F2F4F7;
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
+                    gap: 32px;
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.02);
                 }
                 .toolbox-group {
                     display: flex;
                     flex-direction: column;
-                    border-bottom: 1px solid rgba(0,0,0,0.03);
-                    padding-bottom: 16px;
-                }
-                .toolbox-group:last-child {
-                    border-bottom: none;
-                    padding-bottom: 0;
                 }
                 .group-title {
-                    font-size: 0.9rem;
-                    font-weight: 700;
-                    color: var(--text-primary);
-                    margin-bottom: 12px;
-                    opacity: 0.8;
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: #191F28;
+                    margin-bottom: 20px;
+                    padding-left: 4px;
                 }
                 .toolbox-grid {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 12px;
+                    row-gap: 24px;
+                    column-gap: 12px;
                 }
                 .tool-chip-item {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 10px;
-                    padding: 12px 0;
-                    border-radius: 16px;
-                    transition: all 0.2s ease;
+                    text-decoration: none;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 }
                 .tool-chip-item:hover {
-                    background: var(--surface-2);
-                    transform: translateY(-2px);
+                    transform: translateY(-4px);
                 }
                 .tool-icon-chip {
-                    width: 56px;
-                    height: 56px;
-                    border-radius: 20px;
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 22px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 1.6rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    font-size: 28px;
+                    margin-bottom: 12px;
+                    transition: all 0.2s;
+                }
+                .tool-chip-item:hover .tool-icon-chip {
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
                 }
                 .tool-chip-name {
-                    font-size: 0.8rem;
-                    font-weight: 600;
-                    color: var(--text-secondary);
-                    letter-spacing: -0.01em;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #4E5968;
+                    text-align: center;
+                    white-space: nowrap;
                 }
             `}</style>
         </div>
