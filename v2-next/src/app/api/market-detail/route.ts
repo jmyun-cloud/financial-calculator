@@ -52,13 +52,13 @@ export async function GET(request: Request) {
             const volumes = (indicators.volume || []).filter((v: any) => v !== null && v !== 0);
             if (volumes.length > 0) {
                 volume = volumes[volumes.length - 1];
-
-                // CRITICAL: Yahoo Finance reports KOSPI (^KS11) and KOSDAQ (^KQ11) volume in '1,000 shares' units.
-                // We must multiply by 1000 to match the standard stock unit.
-                if (symbol === '^KS11' || symbol === '^KQ11') {
-                    volume = volume * 1000;
-                }
             }
+        }
+
+        // CRITICAL: Yahoo Finance reports KOSPI (^KS11) and KOSDAQ (^KQ11) volume in '1,000 shares' units.
+        // We must multiply by 1000 to match the standard stock unit.
+        if (volume && (symbol === '^KS11' || symbol === '^KQ11')) {
+            volume = volume * 1000;
         }
 
         return NextResponse.json({
