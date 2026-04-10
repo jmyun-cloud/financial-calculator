@@ -84,6 +84,7 @@ export default function MiniToolbox() {
                     display: grid;
                     row-gap: 20px;
                     column-gap: 8px;
+                    justify-items: center;
                 }
                 .tool-chip-item {
                     display: flex;
@@ -91,6 +92,7 @@ export default function MiniToolbox() {
                     align-items: center;
                     justify-content: flex-start;
                     text-decoration: none;
+                    width: fit-content;
                     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
                 }
                 .tool-chip-item:hover {
