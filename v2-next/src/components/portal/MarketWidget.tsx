@@ -11,28 +11,28 @@ const WIDGET_SECTIONS = [
         title: "주요 지수",
         icon: "📊",
         symbols: ["^GSPC", "^IXIC", "^DJI", "^N225", "^HSI"],
-        names: { "^GSPC": "S&P 500", "^IXIC": "나스닥", "^DJI": "다우존스", "^N225": "닛케이", "^HSI": "항셍" }
+        names: { "^GSPC": "S&P 500", "^IXIC": "나스닥", "^DJI": "다우존스", "^N225": "닛케이", "^HSI": "항셍" } as Record<string, string>
     },
     {
         id: "fx",
         title: "환율",
         icon: "💱",
         symbols: ["KRW=X", "JPYKRW=X", "EURKRW=X", "CNYKRW=X"],
-        names: { "KRW=X": "달러/원", "JPYKRW=X": "엔/원", "EURKRW=X": "유로/원", "CNYKRW=X": "위안/원" }
+        names: { "KRW=X": "달러/원", "JPYKRW=X": "엔/원", "EURKRW=X": "유로/원", "CNYKRW=X": "위안/원" } as Record<string, string>
     },
     {
         id: "commodity",
         title: "원자재",
         icon: "🛢️",
         symbols: ["GC=F", "SI=F", "CL=F", "HG=F"],
-        names: { "GC=F": "금", "SI=F": "은", "CL=F": "WTI유", "HG=F": "구리" }
+        names: { "GC=F": "금", "SI=F": "은", "CL=F": "WTI유", "HG=F": "구리" } as Record<string, string>
     },
     {
         id: "crypto",
         title: "암호화폐",
         icon: "₿",
         symbols: ["BTC-USD", "ETH-USD", "XRP-USD"],
-        names: { "BTC-USD": "비트코인", "ETH-USD": "이더리움", "XRP-USD": "리플" }
+        names: { "BTC-USD": "비트코인", "ETH-USD": "이더리움", "XRP-USD": "리플" } as Record<string, string>
     }
 ];
 
