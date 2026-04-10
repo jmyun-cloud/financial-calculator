@@ -7,9 +7,11 @@ interface NewsItem {
     category: string;
     categoryColor: string;
     title: string;
+    description?: string;
     source: string;
     timeAgo: string;
     link: string;
+    imageUrl?: string | null;
 }
 
 // Category-based visual themes (since RSS has no images)
@@ -49,8 +51,21 @@ export default function NewsFeed() {
     const hero = filtered[0];
     const cards = filtered.slice(1, 5); // 4 cards in the grid
 
-    const Thumbnail = ({ cat, large }: { cat: string; large?: boolean }) => {
+    const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
+        const size = { width: large ? "220px" : "100%", height: large ? "160px" : "120px" };
+        if (imageUrl) {
+            return (
+                <div style={{
+                    ...size, minWidth: large ? "220px" : undefined,
+                    borderRadius: large ? "12px" : "10px",
+                    overflow: "hidden", flexShrink: 0, background: "#eee"
+                }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={imageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+            );
+        }
         return (
             <div style={{
                 width: large ? "220px" : "100%",
@@ -58,9 +73,7 @@ export default function NewsFeed() {
                 height: large ? "160px" : "120px",
                 borderRadius: large ? "12px" : "10px",
                 background: theme.gradient,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: large ? "48px" : "36px",
                 flexShrink: 0,
             }}>
@@ -134,7 +147,7 @@ export default function NewsFeed() {
                                 cursor: "pointer",
                             }}
                         >
-                            <Thumbnail cat={hero.category} large />
+                            <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
                                     <span style={{

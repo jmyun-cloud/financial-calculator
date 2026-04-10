@@ -1,63 +1,115 @@
 import { NextResponse } from 'next/server';
-import Parser from 'rss-parser';
 
-const parser = new Parser();
+const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID!;
+const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET!;
 
-export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const category = searchParams.get('category') || '경제';
+// Strip HTML tags from Naver description
+function stripHtml(html: string) {
+    return html.replace(/<[^>]*>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'");
+}
 
+function timeAgo(dateStr: string) {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const diffMins = Math.max(0, Math.round(diffMs / 60000));
+    if (diffMins < 60) return `${diffMins}분 전`;
+    const diffHrs = Math.round(diffMins / 60);
+    if (diffHrs < 24) return `${diffHrs}시간 전`;
+    return `${Math.round(diffHrs / 24)}일 전`;
+}
+
+function classifyCategory(title: string): { catName: string; color: string } {
+    if (title.includes('주식') || title.includes('증시') || title.includes('코스피') || title.includes('코스닥') || title.includes('나스닥') || title.includes('S&P')) {
+        return { catName: '증시', color: '#FF4D4D' };
+    }
+    if (title.includes('부동산') || title.includes('주택') || title.includes('청약') || title.includes('아파트') || title.includes('전세')) {
+        return { catName: '부동산', color: '#00D166' };
+    }
+    if (title.includes('금리') || title.includes('환율') || title.includes('대출') || title.includes('한국은행') || title.includes('달러') || title.includes('기준금리')) {
+        return { catName: '금리', color: '#0064FF' };
+    }
+    return { catName: '재테크', color: '#9B51E0' };
+}
+
+// Fetch OG image from article URL (only for hero article, 2s timeout)
+async function fetchOgImage(url: string): Promise<string | null> {
     try {
-        const feedUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(category + ' (주식 OR 증시 OR 아파트 OR 부동산 OR 금리 OR 환율)')}&hl=ko&gl=KR&ceid=KR:ko`;
-        const feed = await parser.parseURL(feedUrl);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2000);
+        const res = await fetch(url, {
+            signal: controller.signal,
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)' }
+        });
+        clearTimeout(timeout);
+        if (!res.ok) return null;
+        const html = await res.text();
+        // Try og:image first, then twitter:image
+        const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+            || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)
+            || html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
+        return ogMatch ? ogMatch[1] : null;
+    } catch {
+        return null;
+    }
+}
 
-        const timeAgo = (dateStr: string) => {
-            const diffMs = Date.now() - new Date(dateStr).getTime();
-            const diffMins = Math.max(0, Math.round(diffMs / 60000));
-            if (diffMins < 60) return `${diffMins}분 전`;
-            const diffHrs = Math.round(diffMins / 60);
-            if (diffHrs < 24) return `${diffHrs}시간 전`;
-            return `${Math.round(diffHrs / 24)}일 전`;
-        };
+export async function GET() {
+    try {
+        // Fetch multiple financial keyword results and merge
+        const queries = ['금융 경제', '주식 증시', '부동산 금리'];
+        const allItems: any[] = [];
 
-        const newsItems = feed.items
-            .sort((a, b) => {
-                const timeA = a.pubDate ? new Date(a.pubDate).getTime() : 0;
-                const timeB = b.pubDate ? new Date(b.pubDate).getTime() : 0;
-                return timeB - timeA;
-            })
-            .slice(0, 20).map((item, index) => {
-                const t = item.title || '';
-                let catName = '재테크';
-                let color = '#9B51E0'; // Purple
-
-                if (t.includes('주식') || t.includes('증시') || t.includes('코스피') || t.includes('코스닥')) {
-                    catName = '증시'; color = '#FF4D4D';
-                } else if (t.includes('부동산') || t.includes('주택') || t.includes('청약') || t.includes('아파트')) {
-                    catName = '부동산'; color = '#00D166';
-                } else if (t.includes('금리') || t.includes('환율') || t.includes('대출') || t.includes('한국은행') || t.includes('달러')) {
-                    catName = '금리'; color = '#0064FF';
-                }
-
-                // Google News titles end with " - Source"
-                const parts = t.split(' - ');
-                const source = parts.length > 1 ? parts.pop() : '뉴스';
-                const cleanTitle = parts.join(' - ');
-
-                return {
-                    id: String(Date.now() + index),
-                    category: catName,
-                    categoryColor: color,
-                    title: cleanTitle,
-                    source: source?.trim(),
-                    timeAgo: item.pubDate ? timeAgo(item.pubDate) : '방금 전',
-                    link: item.link
-                };
+        await Promise.all(queries.map(async (q) => {
+            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=10&start=1&sort=date`;
+            const res = await fetch(url, {
+                headers: {
+                    'X-Naver-Client-Id': NAVER_CLIENT_ID,
+                    'X-Naver-Client-Secret': NAVER_CLIENT_SECRET,
+                },
+                next: { revalidate: 300 } // cache 5 minutes
             });
+            if (!res.ok) return;
+            const data = await res.json();
+            allItems.push(...(data.items || []));
+        }));
+
+        // Deduplicate by title and sort by pubDate desc
+        const seen = new Set<string>();
+        const sorted = allItems
+            .filter(item => {
+                const key = item.title;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            })
+            .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+            .slice(0, 20);
+
+        // For hero article, try to fetch OG image
+        const heroItem = sorted[0];
+        let heroImage: string | null = null;
+        if (heroItem?.originallink) {
+            heroImage = await fetchOgImage(heroItem.originallink);
+        }
+
+        const newsItems = sorted.map((item, index) => {
+            const title = stripHtml(item.title || '');
+            const { catName, color } = classifyCategory(title);
+            return {
+                id: `${index}-${Date.now()}`,
+                category: catName,
+                categoryColor: color,
+                title,
+                description: stripHtml(item.description || ''),
+                source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
+                timeAgo: timeAgo(item.pubDate),
+                link: item.originallink || item.link,
+                imageUrl: index === 0 ? heroImage : null,
+            };
+        });
 
         return NextResponse.json(newsItems);
     } catch (error) {
-        console.error('Error fetching news:', error);
+        console.error('Error fetching Naver news:', error);
         return NextResponse.json({ error: 'Failed to fetch news' }, { status: 500 });
     }
 }
