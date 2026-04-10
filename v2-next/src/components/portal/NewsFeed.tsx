@@ -63,17 +63,17 @@ export default function NewsFeed() {
         );
 
     const hero = filtered[0];
-    const cards = filtered.slice(1, 5); // 4 cards in the grid
+    const cards = filtered.slice(1, 13); // Show up to 12 cards in the slider
 
     const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
-        const size = { width: large ? "220px" : "100%", height: large ? "160px" : "120px" };
+        const size = { width: large ? "100%" : "100%", height: large ? "160px" : "120px" };
         if (imageUrl) {
             return (
                 <div style={{
-                    ...size, minWidth: large ? "220px" : undefined,
-                    borderRadius: large ? "12px" : "10px",
-                    overflow: "hidden", flexShrink: 0, background: "#eee"
+                    ...size,
+                    borderRadius: "12px",
+                    overflow: "hidden", flexShrink: 0, background: "var(--surface-2)"
                 }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={imageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -82,10 +82,8 @@ export default function NewsFeed() {
         }
         return (
             <div style={{
-                width: large ? "220px" : "100%",
-                minWidth: large ? "220px" : undefined,
-                height: large ? "160px" : "120px",
-                borderRadius: large ? "12px" : "10px",
+                ...size,
+                borderRadius: "12px",
                 background: theme.gradient,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: large ? "48px" : "36px",
@@ -102,7 +100,8 @@ export default function NewsFeed() {
             borderRadius: "28px",
             padding: "28px 32px 24px",
             border: "1px solid var(--border)",
-            marginBottom: "32px"
+            marginBottom: "32px",
+            position: "relative"
         }}>
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
@@ -151,6 +150,25 @@ export default function NewsFeed() {
                 </div>
             ) : (
                 <>
+                    <style jsx global>{`
+                        .news-slider-group .slider-nav-btn {
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+                        .news-slider-group:hover .slider-nav-btn {
+                            opacity: 1;
+                            visibility: visible;
+                        }
+                        .slider-nav-btn:hover {
+                            background: white !important;
+                            transform: translateY(-50%) scale(1.1) !important;
+                            color: var(--primary);
+                        }
+                        #news-slider-viewport::-webkit-scrollbar {
+                            display: none;
+                        }
+                    `}</style>
+
                     {/* HERO ARTICLE */}
                     {hero && (
                         <a
@@ -167,7 +185,9 @@ export default function NewsFeed() {
                                 cursor: "pointer",
                             }}
                         >
-                            <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
+                            <div style={{ width: "240px", flexShrink: 0 }}>
+                                <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
+                            </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
                                     <span style={{
@@ -190,56 +210,114 @@ export default function NewsFeed() {
                                 }}>
                                     {hero.title}
                                 </h3>
+                                <p style={{
+                                    fontSize: "13px", color: "var(--text-secondary)",
+                                    lineHeight: 1.6, margin: 0,
+                                    display: "-webkit-box", WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                }}>
+                                    {hero.description}
+                                </p>
                             </div>
                         </a>
                     )}
 
-                    {/* CARD GRID */}
+                    {/* CARD SLIDER */}
                     {cards.length > 0 && (
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: `repeat(${Math.min(cards.length, 4)}, 1fr)`,
-                            gap: "16px",
-                            marginBottom: "20px"
-                        }}>
-                            {cards.map(item => (
-                                <a
-                                    key={item.id}
-                                    href={item.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                        display: "flex", flexDirection: "column", gap: "10px",
-                                        textDecoration: "none", cursor: "pointer",
-                                    }}
-                                >
-                                    <div style={{ marginBottom: "12px" }}>
-                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
-                                    </div>
-                                    <div>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-                                            <span style={{
-                                                fontSize: "10px", fontWeight: 800,
-                                                padding: "1px 6px", borderRadius: "4px",
-                                                background: `${item.categoryColor}18`,
-                                                color: item.categoryColor
-                                            }}>
-                                                {item.category}
-                                            </span>
-                                            <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
+                        <div style={{ position: "relative", marginBottom: "20px" }} className="news-slider-group">
+                            <div
+                                id="news-slider-viewport"
+                                style={{
+                                    display: "flex",
+                                    gap: "16px",
+                                    overflowX: "auto",
+                                    scrollBehavior: "smooth",
+                                    scrollSnapType: "x mandatory",
+                                    msOverflowStyle: "none",
+                                    scrollbarWidth: "none",
+                                    paddingBottom: "4px"
+                                }}
+                            >
+                                {cards.map((item) => (
+                                    <a
+                                        key={item.id}
+                                        href={item.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            flex: "0 0 calc(25% - 12px)",
+                                            minWidth: "200px",
+                                            scrollSnapAlign: "start",
+                                            display: "flex", flexDirection: "column", gap: "10px",
+                                            textDecoration: "none", cursor: "pointer",
+                                        }}
+                                    >
+                                        <div style={{ marginBottom: "12px" }}>
+                                            <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
                                         </div>
-                                        <p style={{
-                                            fontSize: "13px", fontWeight: 700,
-                                            color: "var(--text-primary)", margin: 0,
-                                            lineHeight: 1.45, letterSpacing: "-0.01em",
-                                            display: "-webkit-box", WebkitLineClamp: 3,
-                                            WebkitBoxOrient: "vertical" as const, overflow: "hidden"
-                                        }}>
-                                            {item.title}
-                                        </p>
-                                    </div>
-                                </a>
-                            ))}
+                                        <div>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                                                <span style={{
+                                                    fontSize: "10px", fontWeight: 800,
+                                                    padding: "1px 6px", borderRadius: "4px",
+                                                    background: `${item.categoryColor}18`,
+                                                    color: item.categoryColor
+                                                }}>
+                                                    {item.category}
+                                                </span>
+                                                <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
+                                            </div>
+                                            <p style={{
+                                                fontSize: "13px", fontWeight: 700,
+                                                color: "var(--text-primary)", margin: 0,
+                                                lineHeight: 1.45, letterSpacing: "-0.01em",
+                                                display: "-webkit-box", WebkitLineClamp: 3,
+                                                WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                            }}>
+                                                {item.title}
+                                            </p>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+
+                            {/* Slider Navigation Buttons */}
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: -400, behavior: 'smooth' });
+                                }}
+                                className="slider-nav-btn"
+                                style={{
+                                    position: "absolute", left: "-16px", top: "50%", transform: "translateY(-50%)",
+                                    width: "32px", height: "32px", borderRadius: "50%",
+                                    background: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(8px)",
+                                    border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    cursor: "pointer", zIndex: 10, transition: "all 0.2s",
+                                    fontSize: "20px", fontWeight: "bold"
+                                }}
+                            >
+                                ‹
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: 400, behavior: 'smooth' });
+                                }}
+                                className="slider-nav-btn"
+                                style={{
+                                    position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)",
+                                    width: "32px", height: "32px", borderRadius: "50%",
+                                    background: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(8px)",
+                                    border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    cursor: "pointer", zIndex: 10, transition: "all 0.2s",
+                                    fontSize: "20px", fontWeight: "bold"
+                                }}
+                            >
+                                ›
+                            </button>
                         </div>
                     )}
 
