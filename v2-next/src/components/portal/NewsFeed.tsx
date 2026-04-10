@@ -68,7 +68,9 @@ export default function NewsFeed() {
     const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
         const size = { width: "100%", height: large ? "130px" : "100px" };
-        if (imageUrl) {
+        const [imgError, setImgError] = useState(false);
+
+        if (imageUrl && !imgError) {
             return (
                 <div style={{
                     ...size,
@@ -76,7 +78,12 @@ export default function NewsFeed() {
                     overflow: "hidden", flexShrink: 0, background: "var(--surface-2)"
                 }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={imageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img
+                        src={imageUrl}
+                        alt=""
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        onError={() => setImgError(true)}
+                    />
                 </div>
             );
         }
