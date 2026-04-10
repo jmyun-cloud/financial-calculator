@@ -67,12 +67,12 @@ export default function NewsFeed() {
 
     const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
-        const size = { width: large ? "100%" : "100%", height: large ? "160px" : "120px" };
+        const size = { width: "100%", height: large ? "150px" : "110px" };
         if (imageUrl) {
             return (
                 <div style={{
                     ...size,
-                    borderRadius: "12px",
+                    borderRadius: "10px",
                     overflow: "hidden", flexShrink: 0, background: "var(--surface-2)"
                 }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -83,10 +83,10 @@ export default function NewsFeed() {
         return (
             <div style={{
                 ...size,
-                borderRadius: "12px",
+                borderRadius: "10px",
                 background: theme.gradient,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: large ? "48px" : "36px",
+                fontSize: large ? "42px" : "32px",
                 flexShrink: 0,
             }}>
                 {theme.icon}
@@ -97,15 +97,15 @@ export default function NewsFeed() {
     return (
         <div style={{
             background: "var(--surface)",
-            borderRadius: "28px",
-            padding: "28px 32px 24px",
+            borderRadius: "24px",
+            padding: "24px 28px",
             border: "1px solid var(--border)",
             marginBottom: "32px",
             position: "relative"
         }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
+                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
                     오늘의 금융 뉴스
                 </h2>
                 {/* Category Tabs */}
@@ -116,7 +116,7 @@ export default function NewsFeed() {
                             onClick={() => setActiveTab(cat)}
                             style={{
                                 border: "none",
-                                padding: "5px 14px",
+                                padding: "4px 12px",
                                 borderRadius: "20px",
                                 fontSize: "12px",
                                 fontWeight: 700,
@@ -178,41 +178,41 @@ export default function NewsFeed() {
                             style={{
                                 display: "flex",
                                 gap: "20px",
-                                marginBottom: "24px",
-                                paddingBottom: "24px",
+                                marginBottom: "20px",
+                                paddingBottom: "20px",
                                 borderBottom: "1px solid var(--border)",
                                 textDecoration: "none",
                                 cursor: "pointer",
                             }}
                         >
-                            <div style={{ width: "240px", flexShrink: 0 }}>
+                            <div style={{ width: "220px", flexShrink: 0 }}>
                                 <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
                                     <span style={{
-                                        fontSize: "11px", fontWeight: 800,
-                                        padding: "2px 8px", borderRadius: "6px",
+                                        fontSize: "10px", fontWeight: 800,
+                                        padding: "1px 6px", borderRadius: "5px",
                                         background: `${hero.categoryColor}18`,
                                         color: hero.categoryColor
                                     }}>
                                         {hero.category}
                                     </span>
-                                    <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>{hero.source}</span>
-                                    <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>·</span>
-                                    <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>{hero.timeAgo}</span>
+                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.source}</span>
+                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>·</span>
+                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.timeAgo}</span>
                                 </div>
                                 <h3 style={{
-                                    fontSize: "1.15rem", fontWeight: 800, color: "var(--text-primary)",
-                                    lineHeight: 1.45, margin: "0 0 8px", letterSpacing: "-0.01em",
+                                    fontSize: "1.05rem", fontWeight: 800, color: "var(--text-primary)",
+                                    lineHeight: 1.4, margin: "0 0 6px", letterSpacing: "-0.01em",
                                     display: "-webkit-box", WebkitLineClamp: 2,
                                     WebkitBoxOrient: "vertical" as const, overflow: "hidden"
                                 }}>
                                     {hero.title}
                                 </h3>
                                 <p style={{
-                                    fontSize: "13px", color: "var(--text-secondary)",
-                                    lineHeight: 1.6, margin: 0,
+                                    fontSize: "12px", color: "var(--text-secondary)",
+                                    lineHeight: 1.5, margin: 0,
                                     display: "-webkit-box", WebkitLineClamp: 2,
                                     WebkitBoxOrient: "vertical" as const, overflow: "hidden"
                                 }}>
@@ -224,12 +224,12 @@ export default function NewsFeed() {
 
                     {/* CARD SLIDER */}
                     {cards.length > 0 && (
-                        <div style={{ position: "relative", marginBottom: "20px" }} className="news-slider-group">
+                        <div style={{ position: "relative", marginBottom: "16px" }} className="news-slider-group">
                             <div
                                 id="news-slider-viewport"
                                 style={{
                                     display: "flex",
-                                    gap: "16px",
+                                    gap: "14px",
                                     overflowX: "auto",
                                     scrollBehavior: "smooth",
                                     scrollSnapType: "x mandatory",
@@ -245,14 +245,14 @@ export default function NewsFeed() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         style={{
-                                            flex: "0 0 calc(25% - 12px)",
-                                            minWidth: "200px",
+                                            flex: "0 0 210px",
+                                            width: "210px",
                                             scrollSnapAlign: "start",
-                                            display: "flex", flexDirection: "column", gap: "10px",
+                                            display: "flex", flexDirection: "column", gap: "8px",
                                             textDecoration: "none", cursor: "pointer",
                                         }}
                                     >
-                                        <div style={{ marginBottom: "12px" }}>
+                                        <div style={{ marginBottom: "8px" }}>
                                             <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
                                         </div>
                                         <div>
