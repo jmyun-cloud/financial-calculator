@@ -48,32 +48,56 @@ function classifyCategory(title: string): { catName: string; color: string } {
     return { catName: '재테크', color: '#9B51E0' };
 }
 
-// Fetch OG image from article URL with 1.5s timeout
-async function fetchOgImage(url: string): Promise<string | null> {
+// Enhanced fetch OG image with fallbacks and more robust headers
+async function fetchOgImage(url: string, fallbackUrl?: string): Promise<string | null> {
     if (!url) return null;
-    try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 1500);
-        const res = await fetch(url, {
-            signal: controller.signal,
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-            }
-        });
-        clearTimeout(timeout);
-        if (!res.ok) return null;
-        const html = await res.text();
-        const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
-            || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)
-            || html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
-            || html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i);
 
-        let img = ogMatch ? ogMatch[1] : null;
-        if (img && img.startsWith('//')) img = 'https:' + img;
-        return img;
-    } catch {
-        return null;
+    const scrape = async (targetUrl: string): Promise<string | null> => {
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 2500); // Increased to 2.5s
+
+            const res = await fetch(targetUrl, {
+                signal: controller.signal,
+                headers: {
+                    // Googlebot User-Agent often gets better access to meta tags
+                    'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+                }
+            });
+            clearTimeout(timeout);
+            if (!res.ok) return null;
+
+            const html = await res.text();
+
+            // Robust regex for various image meta tags
+            const imgMatch =
+                html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+                html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+                html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
+                html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i) ||
+                html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i);
+
+            let img = imgMatch ? imgMatch[1] : null;
+            if (img && img.startsWith('//')) img = 'https:' + img;
+
+            // Basic validation: ignore tiny icons or obviously wrong images
+            if (img && (img.includes('pixel.gif') || img.includes('icon'))) return null;
+
+            return img;
+        } catch {
+            return null;
+        }
+    };
+
+    // Try primary link first
+    let result = await scrape(url);
+
+    // Fallback to secondary link (Naver news link is often more scrapeable)
+    if (!result && fallbackUrl && fallbackUrl !== url) {
+        result = await scrape(fallbackUrl);
     }
+
+    return result;
 }
 
 export async function GET() {
@@ -120,7 +144,9 @@ export async function GET() {
 
         // Fetch OG images for the top 10 articles in parallel to fill the slider
         const top10Items = sorted.slice(0, 10);
-        const images = await Promise.all(top10Items.map(item => fetchOgImage(item.originallink || item.link)));
+        const images = await Promise.all(top10Items.map(item =>
+            fetchOgImage(item.originallink || item.link, item.link)
+        ));
 
         const newsItems = sorted.map((item, index) => {
             const rawTitle = stripHtml(item.title || '');
