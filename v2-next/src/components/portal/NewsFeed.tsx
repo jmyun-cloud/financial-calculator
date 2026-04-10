@@ -101,7 +101,13 @@ export default function NewsFeed() {
             padding: "24px",
             border: "1px solid var(--border)",
             marginBottom: "32px",
-            position: "relative"
+            position: "relative",
+            maxWidth: "100%",
+            width: "100%",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            minWidth: 0
         }}>
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
@@ -219,7 +225,13 @@ export default function NewsFeed() {
 
                     {/* CARD SLIDER */}
                     {cards.length > 0 && (
-                        <div style={{ position: "relative", marginBottom: "12px" }} className="news-slider-group">
+                        <div style={{
+                            position: "relative",
+                            marginBottom: "12px",
+                            width: "100%",
+                            maxWidth: "100%",
+                            overflow: "hidden"
+                        }} className="news-slider-group">
                             <div
                                 id="news-slider-viewport"
                                 style={{
@@ -230,7 +242,8 @@ export default function NewsFeed() {
                                     scrollSnapType: "x mandatory",
                                     msOverflowStyle: "none",
                                     scrollbarWidth: "none",
-                                    paddingBottom: "4px"
+                                    paddingBottom: "4px",
+                                    width: "100%"
                                 }}
                             >
                                 {cards.map((item) => (
