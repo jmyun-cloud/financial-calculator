@@ -58,37 +58,37 @@ export default function UserDashboard() {
         {
             id: "국내",
             indices: [
-                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷" },
-                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷" },
-                { symbol: "KRW=X", name: "USD/KRW", flag: "💱" },
-                { symbol: "GC=F", name: "금 시세", flag: "🥇" }
+                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt" },
+                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt" },
+                { symbol: "KRW=X", name: "USD/KRW", flag: "💱", unit: "원" },
+                { symbol: "GC=F", name: "금 시세", flag: "🥇", unit: "USD/oz" }
             ]
         },
         {
             id: "해외",
             indices: [
-                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸" },
-                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸" },
-                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸" },
-                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵" }
+                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt" },
+                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt" },
+                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt" },
+                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt" }
             ]
         },
         {
             id: "환율",
             indices: [
-                { symbol: "KRW=X", name: "USD/KRW", flag: "🇺🇸" },
-                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵" },
-                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺" },
-                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳" }
+                { symbol: "KRW=X", name: "USD/KRW", flag: "🇺🇸", unit: "원" },
+                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
+                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
+                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" }
             ]
         },
         {
             id: "원자재",
             indices: [
-                { symbol: "GC=F", name: "Gold", flag: "🥇" },
-                { symbol: "SI=F", name: "Silver", flag: "🥈" },
-                { symbol: "CL=F", name: "WTI", flag: "🛢️" },
-                { symbol: "HG=F", name: "Copper", flag: "🧱" }
+                { symbol: "GC=F", name: "Gold", flag: "🥇", unit: "USD/oz" },
+                { symbol: "SI=F", name: "Silver", flag: "🥈", unit: "USD/oz" },
+                { symbol: "CL=F", name: "WTI", flag: "🛢️", unit: "USD/배럴" },
+                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb" }
             ]
         }
     ], []);
@@ -135,7 +135,7 @@ export default function UserDashboard() {
                                 className={`tab-item ${activeMarketTab === tab.id ? 'active' : ''}`}
                                 onClick={() => {
                                     setActiveMarketTab(tab.id);
-                                    setSelectedCard(tab.indices[0].symbol);
+                                    setSelectedCard(""); // clear on tab switch
                                 }}
                             >
                                 {tab.id}
@@ -175,8 +175,8 @@ export default function UserDashboard() {
                                             {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
                                         </div>
                                     </div>
-                                    <div className="card-bottom-line">
-                                        <div className={`line-fill ${item.isPositive ? 'up' : 'down'}`}></div>
+                                    <div className="card-unit-row">
+                                        <span className="unit-label">{idx.unit}</span>
                                     </div>
                                 </div>
                             );
@@ -215,18 +215,10 @@ export default function UserDashboard() {
                         </div>
                     )}
 
-                    <div className="premium-blue-banner">
-                        <div className="banner-content">
-                            <div className="banner-icon-box">
-                                <span className="icon-emoji">📊</span>
-                            </div>
-                            <div className="banner-text">
-                                <h3 className="banner-title">내 자산을 한눈에 관리하고 싶다면?</h3>
-                                <p className="banner-desc">로그인하면 자산 현황 · DSR · 재무 목표를 바로 볼 수 있어요</p>
-                            </div>
-                        </div>
-                        <button className="banner-cta-btn" onClick={() => setIsLoggedIn(true)}>
-                            무료 시작하기
+                    <div className="slim-login-cta">
+                        <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
+                        <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
+                            무료 시작하기 →
                         </button>
                     </div>
                 </div>
@@ -296,10 +288,8 @@ export default function UserDashboard() {
                     .change-val.positive { color: #F04251; }
                     .change-val.negative { color: #0064FF; }
 
-                    .card-bottom-line { height: 2px; background: #E5E8EB; border-radius: 2px; overflow: hidden; }
-                    .line-fill { height: 100%; width: 60%; border-radius: 2px; }
-                    .line-fill.up { background: #F04251; }
-                    .line-fill.down { background: #0064FF; }
+                    .card-unit-row { display: flex; align-items: center; margin-top: 8px; }
+                    .unit-label { font-size: 11px; font-weight: 600; color: #B0B8C1; letter-spacing: 0.02em; }
 
                     .detail-preview-section { background: #F4F8FF; border-radius: 16px; padding: 16px 24px; margin-bottom: 24px; }
                     .detail-header { display: flex; align-items: center; margin-bottom: 12px; }
@@ -310,13 +300,10 @@ export default function UserDashboard() {
                     .metric-label { font-size: 12px; color: #8B95A1; font-weight: 600; }
                     .metric-value { font-size: 14px; font-weight: 800; color: #191F28; }
 
-                    .premium-blue-banner { background: #0055FB; border-radius: 20px; padding: 24px; display: flex; justify-content: space-between; align-items: center; color: white; }
-                    .banner-content { display: flex; align-items: center; gap: 20px; }
-                    .banner-icon-box { width: 48px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-                    .banner-title { font-size: 16px; font-weight: 800; margin: 0 0 4px 0; }
-                    .banner-desc { font-size: 13px; color: rgba(255,255,255,0.8); margin: 0; font-weight: 500; }
-                    .banner-cta-btn { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
-                    .banner-cta-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
+                    .slim-login-cta { display: flex; align-items: center; justify-content: space-between; background: #F4F8FF; border: 1px solid #DDEEFF; border-radius: 14px; padding: 12px 20px; gap: 12px; }
+                    .slim-cta-text { font-size: 13px; color: #4E5968; font-weight: 500; }
+                    .slim-cta-btn { background: #0055FB; color: white; border: none; padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+                    .slim-cta-btn:hover { background: #0046D9; }
                     .section-title { font-size: 18px; font-weight: 800; color: #191F28; margin-bottom: 16px; }
                 `}</style>
             </div>
