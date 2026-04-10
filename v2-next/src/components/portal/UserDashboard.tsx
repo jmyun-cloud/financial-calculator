@@ -183,37 +183,46 @@ export default function UserDashboard() {
                         })}
                     </div>
 
-                    {selectedCard && (
-                        <div className="detail-preview-section">
-                            <div className="detail-header">
-                                <span className="detail-title">
-                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세
-                                </span>
-                                {isDetailLoading && <span className="loading-spinner">데이터 로드 중...</span>}
-                            </div>
+                    {/* Always in DOM – animated by max-height/opacity */}
+                    <div
+                        className="detail-preview-section"
+                        style={{
+                            maxHeight: selectedCard ? '200px' : '0',
+                            opacity: selectedCard ? 1 : 0,
+                            overflow: 'hidden',
+                            transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease, margin 0.3s ease',
+                            marginBottom: selectedCard ? '24px' : '0',
+                            padding: selectedCard ? '16px 24px' : '0 24px'
+                        }}
+                    >
+                        <div className="detail-header">
+                            <span className="detail-title">
+                                {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세
+                            </span>
+                            {isDetailLoading && <span className="loading-spinner">로드 중...</span>}
+                        </div>
 
-                            <div className="detail-metrics-grid">
-                                <div className="metric-item">
-                                    <span className="metric-label">52주 최고</span>
-                                    <span className="metric-value">
-                                        {detailData?.fiftyTwoWeekHigh?.toLocaleString() || '---'}
-                                    </span>
-                                </div>
-                                <div className="metric-item">
-                                    <span className="metric-label">52주 최저</span>
-                                    <span className="metric-value">
-                                        {detailData?.fiftyTwoWeekLow?.toLocaleString() || '---'}
-                                    </span>
-                                </div>
-                                <div className="metric-item">
-                                    <span className="metric-label">거래량</span>
-                                    <span className="metric-value">
-                                        {formatVolume(detailData?.regularMarketVolume)}
-                                    </span>
-                                </div>
+                        <div className="detail-metrics-grid">
+                            <div className="metric-item">
+                                <span className="metric-label">52주 최고</span>
+                                <span className="metric-value">
+                                    {detailData?.fiftyTwoWeekHigh?.toLocaleString() || '---'}
+                                </span>
+                            </div>
+                            <div className="metric-item">
+                                <span className="metric-label">52주 최저</span>
+                                <span className="metric-value">
+                                    {detailData?.fiftyTwoWeekLow?.toLocaleString() || '---'}
+                                </span>
+                            </div>
+                            <div className="metric-item">
+                                <span className="metric-label">거래량</span>
+                                <span className="metric-value">
+                                    {formatVolume(detailData?.regularMarketVolume)}
+                                </span>
                             </div>
                         </div>
-                    )}
+                    </div>
 
                     <div className="slim-login-cta">
                         <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
@@ -291,7 +300,7 @@ export default function UserDashboard() {
                     .card-unit-row { display: flex; align-items: center; margin-top: 8px; }
                     .unit-label { font-size: 11px; font-weight: 600; color: #B0B8C1; letter-spacing: 0.02em; }
 
-                    .detail-preview-section { background: #F4F8FF; border-radius: 16px; padding: 16px 24px; margin-bottom: 24px; }
+                    .detail-preview-section { background: #F4F8FF; border-radius: 16px; }
                     .detail-header { display: flex; align-items: center; margin-bottom: 12px; }
                     .detail-title { font-size: 14px; font-weight: 800; color: #0055FB; }
                     .loading-spinner { font-size: 11px; color: #0055FB; margin-left: 10px; font-weight: 500; opacity: 0.8; animation: pulse 1.5s infinite; }
