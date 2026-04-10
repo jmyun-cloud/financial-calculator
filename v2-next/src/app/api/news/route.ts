@@ -55,13 +55,15 @@ async function fetchOgImage(url: string, fallbackUrl?: string): Promise<string |
     const scrape = async (targetUrl: string): Promise<string | null> => {
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 2500); // Increased to 2.5s
+            const timeout = setTimeout(() => controller.abort(), 3500); // Increased to 3.5s
 
             const res = await fetch(targetUrl, {
                 signal: controller.signal,
                 headers: {
-                    // Googlebot User-Agent often gets better access to meta tags
-                    'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+                    // Modern Desktop UA
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                    'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
                 }
             });
             clearTimeout(timeout);
@@ -69,19 +71,31 @@ async function fetchOgImage(url: string, fallbackUrl?: string): Promise<string |
 
             const html = await res.text();
 
-            // Robust regex for various image meta tags
+            // Expanded regex for various image meta tags
             const imgMatch =
                 html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
                 html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
                 html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
-                html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i) ||
+                html.match(/<meta[^>]+name=["']twitter:image:src["'][^>]+content=["']([^"']+)["']/i) ||
+                html.match(/<meta[^>]+name=["']thumbnail["'][^>]+content=["']([^"']+)["']/i) ||
                 html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i);
 
             let img = imgMatch ? imgMatch[1] : null;
-            if (img && img.startsWith('//')) img = 'https:' + img;
 
-            // Basic validation: ignore tiny icons or obviously wrong images
-            if (img && (img.includes('pixel.gif') || img.includes('icon'))) return null;
+            // Handle URL normalization
+            if (img) {
+                if (img.startsWith('//')) {
+                    img = 'https:' + img;
+                } else if (img.startsWith('/')) {
+                    try {
+                        const urlObj = new URL(targetUrl);
+                        img = `${urlObj.protocol}//${urlObj.host}${img}`;
+                    } catch { /* ignore */ }
+                }
+            }
+
+            // Basic validation
+            if (img && (img.includes('pixel.gif') || img.includes('icon') || img.length < 10)) return null;
 
             return img;
         } catch {
