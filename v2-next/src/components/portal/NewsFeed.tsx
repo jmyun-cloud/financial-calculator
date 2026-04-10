@@ -67,12 +67,12 @@ export default function NewsFeed() {
 
     const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
-        const size = { width: "100%", height: large ? "150px" : "110px" };
+        const size = { width: "100%", height: large ? "130px" : "100px" };
         if (imageUrl) {
             return (
                 <div style={{
                     ...size,
-                    borderRadius: "10px",
+                    borderRadius: "8px",
                     overflow: "hidden", flexShrink: 0, background: "var(--surface-2)"
                 }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -83,10 +83,10 @@ export default function NewsFeed() {
         return (
             <div style={{
                 ...size,
-                borderRadius: "10px",
+                borderRadius: "8px",
                 background: theme.gradient,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: large ? "42px" : "32px",
+                fontSize: large ? "36px" : "28px",
                 flexShrink: 0,
             }}>
                 {theme.icon}
@@ -98,14 +98,14 @@ export default function NewsFeed() {
         <div style={{
             background: "var(--surface)",
             borderRadius: "24px",
-            padding: "24px 28px",
+            padding: "24px",
             border: "1px solid var(--border)",
             marginBottom: "32px",
             position: "relative"
         }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#333D4B", margin: 0, letterSpacing: "-0.01em" }}>
                     오늘의 금융 뉴스
                 </h2>
                 {/* Category Tabs */}
@@ -116,9 +116,9 @@ export default function NewsFeed() {
                             onClick={() => setActiveTab(cat)}
                             style={{
                                 border: "none",
-                                padding: "4px 12px",
+                                padding: "4px 10px",
                                 borderRadius: "20px",
-                                fontSize: "12px",
+                                fontSize: "11px",
                                 fontWeight: 700,
                                 cursor: "pointer",
                                 transition: "all 0.15s",
@@ -133,20 +133,15 @@ export default function NewsFeed() {
             </div>
 
             {isLoading ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {[...Array(3)].map((_, i) => (
-                        <div key={i} style={{ height: "80px", borderRadius: "12px", background: "var(--surface-2)", opacity: 0.5 }} />
+                        <div key={i} style={{ height: "60px", borderRadius: "10px", background: "var(--surface-2)", opacity: 0.5 }} />
                     ))}
                 </div>
             ) : !isLoading && (news.length === 0 || filtered.length === 0) ? (
-                <div className="news-feed-container" style={{ padding: "60px 20px", textAlign: "center", color: "#666" }}>
-                    <div style={{ fontSize: "24px", marginBottom: "16px" }}>📡</div>
-                    <div>{errorMsg || "관련 뉴스가 없습니다."}</div>
-                    {errorMsg && (
-                        <div style={{ fontSize: "12px", color: "#999", marginTop: "12px" }}>
-                            Vercel에서 환경변수 설정 후 Redeploy 하셨는지 확인해 주세요.
-                        </div>
-                    )}
+                <div className="news-feed-container" style={{ padding: "40px 20px", textAlign: "center", color: "#666" }}>
+                    <div style={{ fontSize: "20px", marginBottom: "12px" }}>📡</div>
+                    <div style={{ fontSize: "13px" }}>{errorMsg || "관련 뉴스가 없습니다."}</div>
                 </div>
             ) : (
                 <>
@@ -177,22 +172,22 @@ export default function NewsFeed() {
                             rel="noopener noreferrer"
                             style={{
                                 display: "flex",
-                                gap: "20px",
-                                marginBottom: "20px",
-                                paddingBottom: "20px",
+                                gap: "16px",
+                                marginBottom: "16px",
+                                paddingBottom: "16px",
                                 borderBottom: "1px solid var(--border)",
                                 textDecoration: "none",
                                 cursor: "pointer",
                             }}
                         >
-                            <div style={{ width: "220px", flexShrink: 0 }}>
+                            <div style={{ width: "180px", flexShrink: 0 }}>
                                 <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
                                     <span style={{
-                                        fontSize: "10px", fontWeight: 800,
-                                        padding: "1px 6px", borderRadius: "5px",
+                                        fontSize: "9px", fontWeight: 800,
+                                        padding: "1px 5px", borderRadius: "4px",
                                         background: `${hero.categoryColor}18`,
                                         color: hero.categoryColor
                                     }}>
@@ -203,8 +198,8 @@ export default function NewsFeed() {
                                     <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.timeAgo}</span>
                                 </div>
                                 <h3 style={{
-                                    fontSize: "1.05rem", fontWeight: 800, color: "var(--text-primary)",
-                                    lineHeight: 1.4, margin: "0 0 6px", letterSpacing: "-0.01em",
+                                    fontSize: "16px", fontWeight: 700, color: "var(--text-primary)",
+                                    lineHeight: 1.4, margin: "0 0 4px", letterSpacing: "-0.01em",
                                     display: "-webkit-box", WebkitLineClamp: 2,
                                     WebkitBoxOrient: "vertical" as const, overflow: "hidden"
                                 }}>
@@ -224,12 +219,12 @@ export default function NewsFeed() {
 
                     {/* CARD SLIDER */}
                     {cards.length > 0 && (
-                        <div style={{ position: "relative", marginBottom: "16px" }} className="news-slider-group">
+                        <div style={{ position: "relative", marginBottom: "12px" }} className="news-slider-group">
                             <div
                                 id="news-slider-viewport"
                                 style={{
                                     display: "flex",
-                                    gap: "14px",
+                                    gap: "12px",
                                     overflowX: "auto",
                                     scrollBehavior: "smooth",
                                     scrollSnapType: "x mandatory",
@@ -245,33 +240,33 @@ export default function NewsFeed() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         style={{
-                                            flex: "0 0 210px",
-                                            width: "210px",
+                                            flex: "0 0 170px",
+                                            width: "170px",
                                             scrollSnapAlign: "start",
-                                            display: "flex", flexDirection: "column", gap: "8px",
+                                            display: "flex", flexDirection: "column", gap: "6px",
                                             textDecoration: "none", cursor: "pointer",
                                         }}
                                     >
-                                        <div style={{ marginBottom: "8px" }}>
+                                        <div style={{ marginBottom: "6px" }}>
                                             <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
                                         </div>
                                         <div>
-                                            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px" }}>
                                                 <span style={{
-                                                    fontSize: "10px", fontWeight: 800,
-                                                    padding: "1px 6px", borderRadius: "4px",
+                                                    fontSize: "9px", fontWeight: 800,
+                                                    padding: "1px 4px", borderRadius: "3px",
                                                     background: `${item.categoryColor}18`,
                                                     color: item.categoryColor
                                                 }}>
                                                     {item.category}
                                                 </span>
-                                                <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
+                                                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
                                             </div>
                                             <p style={{
-                                                fontSize: "13px", fontWeight: 700,
+                                                fontSize: "12px", fontWeight: 700,
                                                 color: "var(--text-primary)", margin: 0,
                                                 lineHeight: 1.45, letterSpacing: "-0.01em",
-                                                display: "-webkit-box", WebkitLineClamp: 3,
+                                                display: "-webkit-box", WebkitLineClamp: 2,
                                                 WebkitBoxOrient: "vertical" as const, overflow: "hidden"
                                             }}>
                                                 {item.title}
@@ -285,17 +280,17 @@ export default function NewsFeed() {
                             <button
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: -400, behavior: 'smooth' });
+                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: -300, behavior: 'smooth' });
                                 }}
                                 className="slider-nav-btn"
                                 style={{
-                                    position: "absolute", left: "-16px", top: "50%", transform: "translateY(-50%)",
-                                    width: "32px", height: "32px", borderRadius: "50%",
-                                    background: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(8px)",
-                                    border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                    position: "absolute", left: "-12px", top: "50%", transform: "translateY(-50%)",
+                                    width: "28px", height: "28px", borderRadius: "50%",
+                                    background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
+                                    border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
                                     display: "flex", alignItems: "center", justifyContent: "center",
                                     cursor: "pointer", zIndex: 10, transition: "all 0.2s",
-                                    fontSize: "20px", fontWeight: "bold"
+                                    fontSize: "18px", fontWeight: "bold"
                                 }}
                             >
                                 ‹
@@ -303,17 +298,17 @@ export default function NewsFeed() {
                             <button
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: 400, behavior: 'smooth' });
+                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: 300, behavior: 'smooth' });
                                 }}
                                 className="slider-nav-btn"
                                 style={{
-                                    position: "absolute", right: "-16px", top: "50%", transform: "translateY(-50%)",
-                                    width: "32px", height: "32px", borderRadius: "50%",
-                                    background: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(8px)",
-                                    border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                    position: "absolute", right: "-12px", top: "50%", transform: "translateY(-50%)",
+                                    width: "28px", height: "28px", borderRadius: "50%",
+                                    background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
+                                    border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
                                     display: "flex", alignItems: "center", justifyContent: "center",
                                     cursor: "pointer", zIndex: 10, transition: "all 0.2s",
-                                    fontSize: "20px", fontWeight: "bold"
+                                    fontSize: "18px", fontWeight: "bold"
                                 }}
                             >
                                 ›
@@ -327,7 +322,7 @@ export default function NewsFeed() {
                             href={hero?.link || "#"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ fontSize: "13px", fontWeight: 700, color: "var(--primary)", textDecoration: "none" }}
+                            style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)", textDecoration: "none" }}
                         >
                             뉴스 더 보기 →
                         </a>
