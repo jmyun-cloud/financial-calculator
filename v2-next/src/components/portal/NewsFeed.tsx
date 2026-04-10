@@ -213,7 +213,9 @@ export default function NewsFeed() {
                                         textDecoration: "none", cursor: "pointer",
                                     }}
                                 >
-                                    <Thumbnail cat={item.category} />
+                                    <div style={{ marginBottom: "12px" }}>
+                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
+                                    </div>
                                     <div>
                                         <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
                                             <span style={{

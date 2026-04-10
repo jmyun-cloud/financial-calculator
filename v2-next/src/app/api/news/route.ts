@@ -3,9 +3,22 @@ import { NextResponse } from 'next/server';
 const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID!;
 const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET!;
 
-// Strip HTML tags from Naver description
+// Strip HTML and normalize for comparison
+function cleanTitleForDedup(title: string) {
+    return title
+        .replace(/<[^>]*>/g, '') // Remove HTML
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "") // Remove punctuation
+        .replace(/\s/g, "") // Remove whitespace
+        .trim();
+}
+
 function stripHtml(html: string) {
-    return html.replace(/<[^>]*>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'");
+    return html.replace(/<[^>]*>/g, '')
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, '&')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
 }
 
 function timeAgo(dateStr: string) {
@@ -30,11 +43,12 @@ function classifyCategory(title: string): { catName: string; color: string } {
     return { catName: '재테크', color: '#9B51E0' };
 }
 
-// Fetch OG image from article URL (only for hero article, 2s timeout)
+// Fetch OG image from article URL with 1.5s timeout
 async function fetchOgImage(url: string): Promise<string | null> {
+    if (!url) return null;
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 2000);
+        const timeout = setTimeout(() => controller.abort(), 1500);
         const res = await fetch(url, {
             signal: controller.signal,
             headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)' }
@@ -42,7 +56,6 @@ async function fetchOgImage(url: string): Promise<string | null> {
         clearTimeout(timeout);
         if (!res.ok) return null;
         const html = await res.text();
-        // Try og:image first, then twitter:image
         const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
             || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)
             || html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
@@ -54,7 +67,6 @@ async function fetchOgImage(url: string): Promise<string | null> {
 
 export async function GET() {
     if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
-        console.error('Naver API keys are missing in environment variables');
         return NextResponse.json({
             error: 'API Keys Missing',
             details: 'Please set NAVER_CLIENT_ID and NAVER_CLIENT_SECRET in Vercel settings and redeploy.'
@@ -62,11 +74,11 @@ export async function GET() {
     }
 
     try {
-        const queries = ['금융 경제', '주식 증시', '부동산 금리'];
+        const queries = ['금융 경제', '주식 증시', '부동산 금리', '재테크'];
         const allItems: any[] = [];
 
         await Promise.all(queries.map(async (q) => {
-            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=15&start=1&sort=date`;
+            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=20&start=1&sort=date`;
             try {
                 const res = await fetch(url, {
                     headers: {
@@ -75,13 +87,7 @@ export async function GET() {
                     },
                     next: { revalidate: 300 }
                 });
-
-                if (!res.ok) {
-                    const errorText = await res.text();
-                    console.error(`Naver API error (${q}):`, res.status, errorText);
-                    return;
-                }
-
+                if (!res.ok) return;
                 const data = await res.json();
                 allItems.push(...(data.items || []));
             } catch (err) {
@@ -89,18 +95,11 @@ export async function GET() {
             }
         }));
 
-        if (allItems.length === 0) {
-            return NextResponse.json({
-                error: 'No items returned from Naver',
-                details: 'Queries executed but returned 0 results.'
-            }, { status: 404 });
-        }
-
-        // Deduplicate by title and sort by pubDate desc
+        // Deduplicate using normalized title
         const seen = new Set<string>();
         const sorted = allItems
             .filter(item => {
-                const key = item.title;
+                const key = cleanTitleForDedup(item.title || "");
                 if (seen.has(key)) return false;
                 seen.add(key);
                 return true;
@@ -108,12 +107,9 @@ export async function GET() {
             .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
             .slice(0, 20);
 
-        // For hero article, try to fetch OG image
-        const heroItem = sorted[0];
-        let heroImage: string | null = null;
-        if (heroItem?.originallink) {
-            heroImage = await fetchOgImage(heroItem.originallink);
-        }
+        // Fetch OG images for the top 5 articles in parallel
+        const top5Items = sorted.slice(0, 5);
+        const images = await Promise.all(top5Items.map(item => fetchOgImage(item.originallink || item.link)));
 
         const newsItems = sorted.map((item, index) => {
             const title = stripHtml(item.title || '');
@@ -127,7 +123,7 @@ export async function GET() {
                 source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
                 timeAgo: timeAgo(item.pubDate),
                 link: item.originallink || item.link,
-                imageUrl: index === 0 ? heroImage : null,
+                imageUrl: index < 5 ? images[index] : null,
             };
         });
 
