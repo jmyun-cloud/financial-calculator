@@ -37,14 +37,26 @@ function timeAgo(dateStr: string) {
 function classifyCategory(title: string): { catName: string; color: string } {
     const t = title.toLowerCase();
     // Prioritize specific categories first
+    if (t.includes('비트코인') || t.includes('가상화폐') || t.includes('암호화폐') || t.includes('이더리움') || t.includes('코인') || t.includes('거래소') || t.includes('디지털자산')) {
+        return { catName: '가상화폐', color: '#F7931A' };
+    }
     if (t.includes('부동산') || t.includes('주택') || t.includes('청약') || t.includes('아파트') || t.includes('전세') || t.includes('월세') || t.includes('국토부') || t.includes('건설') || t.includes('분양') || t.includes('매매') || t.includes('lh') || t.includes('재건축') || t.includes('재개발') || t.includes('오피스텔') || t.includes('공공주택') || t.includes('리츠')) {
         return { catName: '부동산', color: '#00D166' };
     }
-    if (t.includes('주식') || t.includes('증시') || t.includes('코스피') || t.includes('코스닥') || t.includes('나스닥') || t.includes('다우') || t.includes('s&p') || t.includes('종목') || t.includes('상장') || t.includes('개미') || t.includes('상한가') || t.includes('공시') || t.includes('etf') || t.includes('뉴욕증시') || t.includes('반도체') || t.includes('엔비디아')) {
+    if (t.includes('주식') || t.includes('증시') || t.includes('코스피') || t.includes('코스닥') || t.includes('나스닥') || t.includes('다우') || t.includes('s&p') || t.includes('종목') || t.includes('상장') || t.includes('개미') || t.includes('상한가') || t.includes('etf') || t.includes('뉴욕증시') || t.includes('반도체') || t.includes('엔비디아')) {
         return { catName: '증시', color: '#FF4D4D' };
     }
-    if (t.includes('금리') || t.includes('환율') || t.includes('대출') || t.includes('한국은행') || t.includes('달러') || t.includes('기준금리') || t.includes('채권') || t.includes('fomc') || t.includes('연준') || t.includes('예금') || t.includes('적금')) {
-        return { catName: '금리', color: '#0064FF' };
+    if (t.includes('환율') || t.includes('달러') || t.includes('원달러') || t.includes('엔화') || t.includes('유로') || t.includes('외환') || t.includes('외환시장')) {
+        return { catName: '외환/달러', color: '#10B981' };
+    }
+    if (t.includes('공시') || t.includes('ipo') || t.includes('공모주') || t.includes('청약') || t.includes('심사') || t.includes('공시사항')) {
+        return { catName: 'IPO/공시', color: '#6366F1' };
+    }
+    if (t.includes('금리') || t.includes('기준금리') || t.includes('한국은행') || t.includes('채권') || t.includes('국채') || t.includes('연준') || t.includes('fomc') || t.includes('대출')) {
+        return { catName: '금리/채권', color: '#0064FF' };
+    }
+    if (t.includes('경제') || t.includes('거시') || t.includes('지표') || t.includes('성장') || t.includes('수출') || t.includes('무역') || t.includes('물가')) {
+        return { catName: '경제', color: '#F59E0B' };
     }
     return { catName: '재테크', color: '#9B51E0' };
 }
@@ -124,11 +136,20 @@ export async function GET() {
     }
 
     try {
-        const queries = ['금융 경제 뉴스', '코스피 코스닥 증시', '뉴욕증시 나스닥', '부동산 매매 전세 분양', '기준금리 환율 대출', '재테크 절세 예적금'];
+        const queries = [
+            '금융 경제 뉴스',
+            '코스피 코스닥 증시',
+            '뉴욕증시 나스닥 반도체',
+            '부동산 매매 전세 분양',
+            '기준금리 채권 환율 달러',
+            '비트코인 가상화폐 암호화폐',
+            'IPO 공모주 주식 상장 공시',
+            '재테크 절세 예적금'
+        ];
         const allItems: any[] = [];
 
         await Promise.all(queries.map(async (q) => {
-            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=50&start=1&sort=date`;
+            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=40&start=1&sort=date`;
             try {
                 const res = await fetch(url, {
                     headers: {

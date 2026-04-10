@@ -18,13 +18,17 @@ interface NewsItem {
 const CATEGORY_THEMES: Record<string, { gradient: string; icon: string }> = {
     "증시": { gradient: "linear-gradient(135deg, #FF4D4D 0%, #FF8C42 100%)", icon: "📈" },
     "부동산": { gradient: "linear-gradient(135deg, #00B09B 0%, #00D166 100%)", icon: "🏠" },
-    "금리": { gradient: "linear-gradient(135deg, #0064FF 0%, #5B9BFF 100%)", icon: "💹" },
+    "금리/채권": { gradient: "linear-gradient(135deg, #0064FF 0%, #5B9BFF 100%)", icon: "💹" },
+    "경제": { gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)", icon: "🏛️" },
+    "가상화폐": { gradient: "linear-gradient(135deg, #F7931A 0%, #FFAB40 100%)", icon: "₿" },
+    "외환/달러": { gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)", icon: "💵" },
+    "IPO/공시": { gradient: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)", icon: "🔖" },
     "재테크": { gradient: "linear-gradient(135deg, #9B51E0 0%, #C48AF7 100%)", icon: "💰" },
 };
 
 const getTheme = (cat: string) => CATEGORY_THEMES[cat] || CATEGORY_THEMES["재테크"];
 
-const CATEGORIES = ["전체", "증시", "부동산", "금리"];
+const CATEGORIES = ["전체", "증시", "경제", "부동산", "금리/채권", "가상화폐", "외환/달러", "IPO/공시"];
 
 export default function NewsFeed() {
     const [activeTab, setActiveTab] = useState("전체");
@@ -60,7 +64,7 @@ export default function NewsFeed() {
     const filtered = activeTab === "전체"
         ? news
         : news.filter(item =>
-            activeTab === "금리" ? item.category === "금리" : item.category === activeTab
+            item.category === activeTab
         );
 
     const hero = filtered[0];
@@ -119,8 +123,8 @@ export default function NewsFeed() {
             transition: "all 0.3s ease"
         }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                     {isListView && (
                         <button
                             onClick={() => setIsListView(false)}
@@ -132,19 +136,19 @@ export default function NewsFeed() {
                             ←
                         </button>
                     )}
-                    <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#333D4B", margin: 0, letterSpacing: "-0.01em" }}>
+                    <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#333D4B", margin: 0, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
                         {isListView ? "최신 금융 뉴스" : "오늘의 금융 뉴스"}
                     </h2>
-                    {isListView && (
-                        <span style={{
-                            width: "16px", height: "16px", borderRadius: "50%", border: "1px solid #ccc",
-                            display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px",
-                            color: "#999", cursor: "help"
-                        }}>i</span>
-                    )}
                 </div>
-                {/* Category Tabs */}
-                <div style={{ display: "flex", gap: "4px" }}>
+                {/* Category Tabs (Scrollable) */}
+                <div style={{
+                    display: "flex", gap: "4px", overflowX: "auto",
+                    paddingBottom: "2px", msOverflowStyle: "none", scrollbarWidth: "none",
+                    flex: 1, justifyContent: "flex-end"
+                }} className="category-tabs-container">
+                    <style jsx>{`
+                        .category-tabs-container::-webkit-scrollbar { display: none; }
+                    `}</style>
                     {CATEGORIES.map(cat => (
                         <button
                             key={cat}
@@ -159,6 +163,8 @@ export default function NewsFeed() {
                                 transition: "all 0.15s",
                                 background: activeTab === cat ? "var(--text-primary)" : "var(--surface-2)",
                                 color: activeTab === cat ? "var(--surface)" : "var(--text-secondary)",
+                                whiteSpace: "nowrap",
+                                flexShrink: 0
                             }}
                         >
                             {cat}
