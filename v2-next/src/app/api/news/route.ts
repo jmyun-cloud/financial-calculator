@@ -36,13 +36,14 @@ function timeAgo(dateStr: string) {
 
 function classifyCategory(title: string): { catName: string; color: string } {
     const t = title.toLowerCase();
-    if (t.includes('주식') || t.includes('증시') || t.includes('코스피') || t.includes('코스닥') || t.includes('나스닥') || t.includes('s&p') || t.includes('종목') || t.includes('상장')) {
-        return { catName: '증시', color: '#FF4D4D' };
-    }
-    if (t.includes('부동산') || t.includes('주택') || t.includes('청약') || t.includes('아파트') || t.includes('전세') || t.includes('국토부') || t.includes('건설')) {
+    // Prioritize specific categories first
+    if (t.includes('부동산') || t.includes('주택') || t.includes('청약') || t.includes('아파트') || t.includes('전세') || t.includes('월세') || t.includes('국토부') || t.includes('건설') || t.includes('분양') || t.includes('매매') || t.includes('lh') || t.includes('재건축') || t.includes('재개발') || t.includes('오피스텔')) {
         return { catName: '부동산', color: '#00D166' };
     }
-    if (t.includes('금리') || t.includes('환율') || t.includes('대출') || t.includes('한국은행') || t.includes('달러') || t.includes('기준금리') || t.includes('채권')) {
+    if (t.includes('주식') || t.includes('증시') || t.includes('코스피') || t.includes('코스닥') || t.includes('나스닥') || t.includes('s&p') || t.includes('종목') || t.includes('상장') || t.includes('개미') || t.includes('상한가') || t.includes('공시')) {
+        return { catName: '증시', color: '#FF4D4D' };
+    }
+    if (t.includes('금리') || t.includes('환율') || t.includes('대출') || t.includes('한국은행') || t.includes('달러') || t.includes('기준금리') || t.includes('채권') || t.includes('fomc') || t.includes('연준')) {
         return { catName: '금리', color: '#0064FF' };
     }
     return { catName: '재테크', color: '#9B51E0' };
@@ -127,7 +128,7 @@ export async function GET() {
         const allItems: any[] = [];
 
         await Promise.all(queries.map(async (q) => {
-            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=25&start=1&sort=date`;
+            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=50&start=1&sort=date`;
             try {
                 const res = await fetch(url, {
                     headers: {
