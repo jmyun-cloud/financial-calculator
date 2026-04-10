@@ -55,7 +55,7 @@ async function fetchOgImage(url: string, fallbackUrl?: string): Promise<string |
     const scrape = async (targetUrl: string): Promise<string | null> => {
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 3500); // Increased to 3.5s
+            const timeout = setTimeout(() => controller.abort(), 2000); // Optimized to 2.0s for speed
 
             const res = await fetch(targetUrl, {
                 signal: controller.signal,
@@ -156,9 +156,9 @@ export async function GET() {
             .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
             .slice(0, 30);
 
-        // Fetch OG images for the top 10 articles in parallel to fill the slider
-        const top10Items = sorted.slice(0, 10);
-        const images = await Promise.all(top10Items.map(item =>
+        // Fetch OG images for the top 6 articles in parallel to fill the initial view quickly
+        const top6Items = sorted.slice(0, 6);
+        const images = await Promise.all(top6Items.map(item =>
             fetchOgImage(item.originallink || item.link, item.link)
         ));
 
@@ -174,7 +174,7 @@ export async function GET() {
                 source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
                 timeAgo: timeAgo(item.pubDate),
                 link: item.originallink || item.link,
-                imageUrl: index < 10 ? images[index] : null,
+                imageUrl: index < 6 ? images[index] : null,
             };
         });
 
