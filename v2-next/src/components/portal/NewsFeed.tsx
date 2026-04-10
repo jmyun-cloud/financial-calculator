@@ -31,6 +31,7 @@ export default function NewsFeed() {
     const [news, setNews] = useState<NewsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [isListView, setIsListView] = useState(false);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -114,13 +115,34 @@ export default function NewsFeed() {
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
-            minWidth: 0
+            minWidth: 0,
+            transition: "all 0.3s ease"
         }}>
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#333D4B", margin: 0, letterSpacing: "-0.01em" }}>
-                    오늘의 금융 뉴스
-                </h2>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    {isListView && (
+                        <button
+                            onClick={() => setIsListView(false)}
+                            style={{
+                                background: "none", border: "none", cursor: "pointer",
+                                fontSize: "18px", color: "var(--text-secondary)", padding: "4px"
+                            }}
+                        >
+                            ←
+                        </button>
+                    )}
+                    <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#333D4B", margin: 0, letterSpacing: "-0.01em" }}>
+                        {isListView ? "최신 금융 뉴스" : "오늘의 금융 뉴스"}
+                    </h2>
+                    {isListView && (
+                        <span style={{
+                            width: "16px", height: "16px", borderRadius: "50%", border: "1px solid #ccc",
+                            display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px",
+                            color: "#999", cursor: "help"
+                        }}>i</span>
+                    )}
+                </div>
                 {/* Category Tabs */}
                 <div style={{ display: "flex", gap: "4px" }}>
                     {CATEGORIES.map(cat => (
@@ -147,8 +169,8 @@ export default function NewsFeed() {
 
             {isLoading ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                    {[...Array(3)].map((_, i) => (
-                        <div key={i} style={{ height: "60px", borderRadius: "10px", background: "var(--surface-2)", opacity: 0.5 }} />
+                    {[...Array(5)].map((_, i) => (
+                        <div key={i} style={{ height: "80px", borderRadius: "10px", background: "var(--surface-2)", opacity: 0.5 }} />
                     ))}
                 </div>
             ) : !isLoading && (news.length === 0 || filtered.length === 0) ? (
@@ -175,178 +197,232 @@ export default function NewsFeed() {
                         #news-slider-viewport::-webkit-scrollbar {
                             display: none;
                         }
+                        .news-list-container::-webkit-scrollbar {
+                            width: 6px;
+                        }
+                        .news-list-container::-webkit-scrollbar-thumb {
+                            background: #eee;
+                            border-radius: 10px;
+                        }
                     `}</style>
 
-                    {/* HERO ARTICLE */}
-                    {hero && (
-                        <a
-                            href={hero.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                display: "flex",
-                                gap: "16px",
-                                marginBottom: "16px",
-                                paddingBottom: "16px",
-                                borderBottom: "1px solid var(--border)",
-                                textDecoration: "none",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <div style={{ width: "180px", flexShrink: 0 }}>
-                                <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
-                            </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-                                    <span style={{
-                                        fontSize: "9px", fontWeight: 800,
-                                        padding: "1px 5px", borderRadius: "4px",
-                                        background: `${hero.categoryColor}18`,
-                                        color: hero.categoryColor
-                                    }}>
-                                        {hero.category}
-                                    </span>
-                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.source}</span>
-                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>·</span>
-                                    <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.timeAgo}</span>
-                                </div>
-                                <h3 style={{
-                                    fontSize: "16px", fontWeight: 700, color: "var(--text-primary)",
-                                    lineHeight: 1.4, margin: "0 0 4px", letterSpacing: "-0.01em",
-                                    display: "-webkit-box", WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical" as const, overflow: "hidden"
-                                }}>
-                                    {hero.title}
-                                </h3>
-                                <p style={{
-                                    fontSize: "12px", color: "var(--text-secondary)",
-                                    lineHeight: 1.5, margin: 0,
-                                    display: "-webkit-box", WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical" as const, overflow: "hidden"
-                                }}>
-                                    {hero.description}
-                                </p>
-                            </div>
-                        </a>
-                    )}
+                    {isListView ? (
+                        /* DETAILED LIST VIEW (User requested design) */
+                        <div className="news-list-container" style={{
+                            display: "flex", flexDirection: "column", gap: "20px",
+                            maxHeight: "600px", overflowY: "auto", paddingRight: "8px"
+                        }}>
+                            {filtered.map((item) => (
+                                <a
+                                    key={item.id}
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: "flex", gap: "20px", paddingBottom: "20px",
+                                        borderBottom: "1px solid #f1f3f5", textDecoration: "none"
+                                    }}
+                                >
+                                    <div style={{ width: "140px", flexShrink: 0 }}>
+                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
+                                    </div>
+                                    <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                        <h3 style={{
+                                            fontSize: "16px", fontWeight: 700, color: "#333",
+                                            margin: "0 0 8px", lineHeight: 1.4, letterSpacing: "-0.01em"
+                                        }}>
+                                            {item.title}
+                                        </h3>
+                                        <p style={{
+                                            fontSize: "13px", color: "#666", margin: "0 0 12px",
+                                            lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                        }}>
+                                            {item.description}
+                                        </p>
+                                        <div style={{ fontSize: "11px", color: "#888", fontWeight: 500 }}>
+                                            By {item.source} · {item.timeAgo}
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    ) : (
+                        /* DASHBOARD VIEW (Original Carousel) */
+                        <>
+                            {/* HERO ARTICLE */}
+                            {hero && (
+                                <a
+                                    href={hero.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: "flex",
+                                        gap: "16px",
+                                        marginBottom: "16px",
+                                        paddingBottom: "16px",
+                                        borderBottom: "1px solid var(--border)",
+                                        textDecoration: "none",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <div style={{ width: "180px", flexShrink: 0 }}>
+                                        <Thumbnail cat={hero.category} large imageUrl={hero.imageUrl} />
+                                    </div>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                                            <span style={{
+                                                fontSize: "9px", fontWeight: 800,
+                                                padding: "1px 5px", borderRadius: "4px",
+                                                background: `${hero.categoryColor}18`,
+                                                color: hero.categoryColor
+                                            }}>
+                                                {hero.category}
+                                            </span>
+                                            <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.source}</span>
+                                            <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>·</span>
+                                            <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>{hero.timeAgo}</span>
+                                        </div>
+                                        <h3 style={{
+                                            fontSize: "16px", fontWeight: 700, color: "var(--text-primary)",
+                                            lineHeight: 1.4, margin: "0 0 4px", letterSpacing: "-0.01em",
+                                            display: "-webkit-box", WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                        }}>
+                                            {hero.title}
+                                        </h3>
+                                        <p style={{
+                                            fontSize: "12px", color: "var(--text-secondary)",
+                                            lineHeight: 1.5, margin: 0,
+                                            display: "-webkit-box", WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                        }}>
+                                            {hero.description}
+                                        </p>
+                                    </div>
+                                </a>
+                            )}
 
-                    {/* CARD SLIDER */}
-                    {cards.length > 0 && (
-                        <div style={{
-                            position: "relative",
-                            marginBottom: "12px",
-                            width: "100%",
-                            maxWidth: "100%",
-                            overflow: "hidden"
-                        }} className="news-slider-group">
-                            <div
-                                id="news-slider-viewport"
-                                style={{
-                                    display: "flex",
-                                    gap: "12px",
-                                    overflowX: "auto",
-                                    scrollBehavior: "smooth",
-                                    scrollSnapType: "x mandatory",
-                                    msOverflowStyle: "none",
-                                    scrollbarWidth: "none",
-                                    paddingBottom: "4px",
-                                    width: "100%"
-                                }}
-                            >
-                                {cards.map((item) => (
-                                    <a
-                                        key={item.id}
-                                        href={item.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                            {/* CARD SLIDER */}
+                            {cards.length > 0 && (
+                                <div style={{
+                                    position: "relative",
+                                    marginBottom: "12px",
+                                    width: "100%",
+                                    maxWidth: "100%",
+                                    overflow: "hidden"
+                                }} className="news-slider-group">
+                                    <div
+                                        id="news-slider-viewport"
                                         style={{
-                                            flex: "0 0 170px",
-                                            width: "170px",
-                                            scrollSnapAlign: "start",
-                                            display: "flex", flexDirection: "column", gap: "6px",
-                                            textDecoration: "none", cursor: "pointer",
+                                            display: "flex",
+                                            gap: "12px",
+                                            overflowX: "auto",
+                                            scrollBehavior: "smooth",
+                                            scrollSnapType: "x mandatory",
+                                            msOverflowStyle: "none",
+                                            scrollbarWidth: "none",
+                                            paddingBottom: "4px",
+                                            width: "100%"
                                         }}
                                     >
-                                        <div style={{ marginBottom: "6px" }}>
-                                            <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
-                                        </div>
-                                        <div>
-                                            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px" }}>
-                                                <span style={{
-                                                    fontSize: "9px", fontWeight: 800,
-                                                    padding: "1px 4px", borderRadius: "3px",
-                                                    background: `${item.categoryColor}18`,
-                                                    color: item.categoryColor
-                                                }}>
-                                                    {item.category}
-                                                </span>
-                                                <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
-                                            </div>
-                                            <p style={{
-                                                fontSize: "12px", fontWeight: 700,
-                                                color: "var(--text-primary)", margin: 0,
-                                                lineHeight: 1.45, letterSpacing: "-0.01em",
-                                                display: "-webkit-box", WebkitLineClamp: 2,
-                                                WebkitBoxOrient: "vertical" as const, overflow: "hidden"
-                                            }}>
-                                                {item.title}
-                                            </p>
-                                        </div>
-                                    </a>
-                                ))}
+                                        {cards.map((item) => (
+                                            <a
+                                                key={item.id}
+                                                href={item.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    flex: "0 0 170px",
+                                                    width: "170px",
+                                                    scrollSnapAlign: "start",
+                                                    display: "flex", flexDirection: "column", gap: "6px",
+                                                    textDecoration: "none", cursor: "pointer",
+                                                }}
+                                            >
+                                                <div style={{ marginBottom: "6px" }}>
+                                                    <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
+                                                </div>
+                                                <div>
+                                                    <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "4px" }}>
+                                                        <span style={{
+                                                            fontSize: "9px", fontWeight: 800,
+                                                            padding: "1px 4px", borderRadius: "3px",
+                                                            background: `${item.categoryColor}18`,
+                                                            color: item.categoryColor
+                                                        }}>
+                                                            {item.category}
+                                                        </span>
+                                                        <span style={{ fontSize: "10px", color: "var(--text-secondary)" }}>{item.timeAgo}</span>
+                                                    </div>
+                                                    <p style={{
+                                                        fontSize: "12px", fontWeight: 700,
+                                                        color: "var(--text-primary)", margin: 0,
+                                                        lineHeight: 1.45, letterSpacing: "-0.01em",
+                                                        display: "-webkit-box", WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: "vertical" as const, overflow: "hidden"
+                                                    }}>
+                                                        {item.title}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        ))}
+                                    </div>
+
+                                    {/* Slider Navigation Buttons */}
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById('news-slider-viewport')?.scrollBy({ left: -300, behavior: 'smooth' });
+                                        }}
+                                        className="slider-nav-btn"
+                                        style={{
+                                            position: "absolute", left: "-12px", top: "50%", transform: "translateY(-50%)",
+                                            width: "28px", height: "28px", borderRadius: "50%",
+                                            background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
+                                            border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            cursor: "pointer", zIndex: 10, transition: "all 0.2s",
+                                            fontSize: "18px", fontWeight: "bold"
+                                        }}
+                                    >
+                                        ‹
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById('news-slider-viewport')?.scrollBy({ left: 300, behavior: 'smooth' });
+                                        }}
+                                        className="slider-nav-btn"
+                                        style={{
+                                            position: "absolute", right: "-12px", top: "50%", transform: "translateY(-50%)",
+                                            width: "28px", height: "28px", borderRadius: "50%",
+                                            background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
+                                            border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            cursor: "pointer", zIndex: 10, transition: "all 0.2s",
+                                            fontSize: "18px", fontWeight: "bold"
+                                        }}
+                                    >
+                                        ›
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Footer: 뉴스 더 보기 */}
+                            <div style={{ textAlign: "right" }}>
+                                <button
+                                    onClick={() => setIsListView(true)}
+                                    style={{
+                                        fontSize: "12px", fontWeight: 700, color: "var(--primary)",
+                                        textDecoration: "none", background: "none", border: "none", cursor: "pointer"
+                                    }}
+                                >
+                                    뉴스 더 보기 →
+                                </button>
                             </div>
-
-                            {/* Slider Navigation Buttons */}
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: -300, behavior: 'smooth' });
-                                }}
-                                className="slider-nav-btn"
-                                style={{
-                                    position: "absolute", left: "-12px", top: "50%", transform: "translateY(-50%)",
-                                    width: "28px", height: "28px", borderRadius: "50%",
-                                    background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
-                                    border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-                                    display: "flex", alignItems: "center", justifyContent: "center",
-                                    cursor: "pointer", zIndex: 10, transition: "all 0.2s",
-                                    fontSize: "18px", fontWeight: "bold"
-                                }}
-                            >
-                                ‹
-                            </button>
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    document.getElementById('news-slider-viewport')?.scrollBy({ left: 300, behavior: 'smooth' });
-                                }}
-                                className="slider-nav-btn"
-                                style={{
-                                    position: "absolute", right: "-12px", top: "50%", transform: "translateY(-50%)",
-                                    width: "28px", height: "28px", borderRadius: "50%",
-                                    background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(8px)",
-                                    border: "1px solid var(--border)", boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-                                    display: "flex", alignItems: "center", justifyContent: "center",
-                                    cursor: "pointer", zIndex: 10, transition: "all 0.2s",
-                                    fontSize: "18px", fontWeight: "bold"
-                                }}
-                            >
-                                ›
-                            </button>
-                        </div>
+                        </>
                     )}
-
-                    {/* Footer: 뉴스 더 보기 */}
-                    <div style={{ textAlign: "right" }}>
-                        <a
-                            href={hero?.link || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ fontSize: "12px", fontWeight: 700, color: "var(--primary)", textDecoration: "none" }}
-                        >
-                            뉴스 더 보기 →
-                        </a>
-                    </div>
                 </>
             )}
         </div>
