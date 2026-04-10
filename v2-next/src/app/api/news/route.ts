@@ -53,24 +53,48 @@ async function fetchOgImage(url: string): Promise<string | null> {
 }
 
 export async function GET() {
+    if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
+        console.error('Naver API keys are missing in environment variables');
+        return NextResponse.json({
+            error: 'API Keys Missing',
+            details: 'Please set NAVER_CLIENT_ID and NAVER_CLIENT_SECRET in Vercel settings and redeploy.'
+        }, { status: 500 });
+    }
+
     try {
-        // Fetch multiple financial keyword results and merge
         const queries = ['금융 경제', '주식 증시', '부동산 금리'];
         const allItems: any[] = [];
 
         await Promise.all(queries.map(async (q) => {
-            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=10&start=1&sort=date`;
-            const res = await fetch(url, {
-                headers: {
-                    'X-Naver-Client-Id': NAVER_CLIENT_ID,
-                    'X-Naver-Client-Secret': NAVER_CLIENT_SECRET,
-                },
-                next: { revalidate: 300 } // cache 5 minutes
-            });
-            if (!res.ok) return;
-            const data = await res.json();
-            allItems.push(...(data.items || []));
+            const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(q)}&display=15&start=1&sort=date`;
+            try {
+                const res = await fetch(url, {
+                    headers: {
+                        'X-Naver-Client-Id': NAVER_CLIENT_ID,
+                        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET,
+                    },
+                    next: { revalidate: 300 }
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error(`Naver API error (${q}):`, res.status, errorText);
+                    return;
+                }
+
+                const data = await res.json();
+                allItems.push(...(data.items || []));
+            } catch (err) {
+                console.error(`Fetch failed for query ${q}:`, err);
+            }
         }));
+
+        if (allItems.length === 0) {
+            return NextResponse.json({
+                error: 'No items returned from Naver',
+                details: 'Queries executed but returned 0 results.'
+            }, { status: 404 });
+        }
 
         // Deduplicate by title and sort by pubDate desc
         const seen = new Set<string>();

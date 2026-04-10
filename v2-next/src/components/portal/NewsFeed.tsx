@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface NewsItem {
     id: string;
@@ -30,16 +30,30 @@ export default function NewsFeed() {
     const [activeTab, setActiveTab] = useState("전체");
     const [news, setNews] = useState<NewsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    React.useEffect(() => {
-        setIsLoading(true);
-        fetch('/api/news')
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) setNews(data);
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                setIsLoading(true);
+                setErrorMsg(null);
+                const res = await fetch("/api/news");
+                const data = await res.json();
+
+                if (!res.ok) {
+                    setErrorMsg(data.details || data.error || "뉴스를 불러오지 못했습니다.");
+                    setNews([]);
+                } else {
+                    setNews(data);
+                }
+            } catch (error) {
+                console.error("Error fetching news:", error);
+                setErrorMsg("서버 연결에 실패했습니다.");
+            } finally {
                 setIsLoading(false);
-            })
-            .catch(() => setIsLoading(false));
+            }
+        };
+        fetchNews();
     }, []);
 
     const filtered = activeTab === "전체"
@@ -125,9 +139,15 @@ export default function NewsFeed() {
                         <div key={i} style={{ height: "80px", borderRadius: "12px", background: "var(--surface-2)", opacity: 0.5 }} />
                     ))}
                 </div>
-            ) : filtered.length === 0 ? (
-                <div style={{ padding: "32px", textAlign: "center", color: "var(--text-secondary)" }}>
-                    관련 뉴스가 없습니다.
+            ) : !isLoading && (news.length === 0 || filtered.length === 0) ? (
+                <div className="news-feed-container" style={{ padding: "60px 20px", textAlign: "center", color: "#666" }}>
+                    <div style={{ fontSize: "24px", marginBottom: "16px" }}>📡</div>
+                    <div>{errorMsg || "관련 뉴스가 없습니다."}</div>
+                    {errorMsg && (
+                        <div style={{ fontSize: "12px", color: "#999", marginTop: "12px" }}>
+                            Vercel에서 환경변수 설정 후 Redeploy 하셨는지 확인해 주세요.
+                        </div>
+                    )}
                 </div>
             ) : (
                 <>
