@@ -183,6 +183,18 @@ export default function ProfessionalChart({
                 }}
             />
 
+            {/* Cover TradingView watermark */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '80px',
+                height: '28px',
+                background: '#ffffff',
+                zIndex: 10,
+                pointerEvents: 'auto',
+            }} />
+
             {/* No-data overlay */}
             {!hasData && (
                 <div style={{
