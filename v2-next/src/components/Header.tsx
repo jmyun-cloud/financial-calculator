@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import NewsMegaMenu from './NewsMegaMenu';
 
 export default function Header() {
     return (
@@ -15,7 +16,12 @@ export default function Header() {
                     <Link href="/" className="nav-link active">홈</Link>
                     <Link href="#market" className="nav-link">시장</Link>
                     <Link href="#calculator" className="nav-link">계산기</Link>
-                    <Link href="/news" className="nav-link">뉴스</Link>
+
+                    <div className="nav-item-has-mega">
+                        <Link href="/news" className="nav-link">뉴스</Link>
+                        <NewsMegaMenu />
+                    </div>
+
                     <Link href="/community" className="nav-link">커뮤니티</Link>
                     <Link href="/guide" className="nav-link">가이드</Link>
                 </nav>
@@ -57,7 +63,15 @@ export default function Header() {
                 }
                 .nav-link:hover {
                     color: var(--primary);
-                    background: var(--surface-2);
+                }
+                .nav-item-has-mega {
+                    position: relative;
+                    height: 64px;
+                    display: flex;
+                    align-items: center;
+                }
+                .nav-item-has-mega:hover :global(.mega-menu) {
+                    display: block;
                 }
                 .nav-link.active {
                     color: var(--primary);
