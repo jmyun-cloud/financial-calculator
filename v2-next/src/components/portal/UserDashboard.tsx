@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
+import MarketChart from "./MarketChart";
 
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
@@ -183,43 +184,70 @@ export default function UserDashboard() {
                         })}
                     </div>
 
-                    {/* Always in DOM – animated by max-height/opacity */}
+                    {/* Market Detail Panel (Investing.com Style) */}
                     <div
                         className="detail-preview-section"
                         style={{
-                            maxHeight: selectedCard ? '200px' : '0',
+                            maxHeight: selectedCard ? '450px' : '0',
                             opacity: selectedCard ? 1 : 0,
                             overflow: 'hidden',
-                            transition: 'max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease, margin 0.3s ease',
+                            transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin 0.3s ease',
                             marginBottom: selectedCard ? '24px' : '0',
-                            padding: selectedCard ? '16px 24px' : '0 24px'
+                            padding: selectedCard ? '24px' : '0 24px',
+                            background: '#F8FAFF',
+                            border: '1px solid #E8EFFD',
+                            borderRadius: '24px'
                         }}
                     >
-                        <div className="detail-header">
-                            <span className="detail-title">
-                                {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 상세
-                            </span>
-                            {isDetailLoading && <span className="loading-spinner">로드 중...</span>}
+                        <div className="detail-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span className="detail-title" style={{ fontSize: '16px', fontWeight: 800, color: '#0055FB' }}>
+                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 실시간 차트
+                                </span>
+                                <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 500 }}>(일봉, 30일)</span>
+                            </div>
+                            {isDetailLoading && <span className="loading-spinner">데이터 갱신 중...</span>}
                         </div>
 
-                        <div className="detail-metrics-grid">
-                            <div className="metric-item">
-                                <span className="metric-label">52주 최고</span>
-                                <span className="metric-value">
-                                    {detailData?.fiftyTwoWeekHigh?.toLocaleString() || '---'}
-                                </span>
+                        {/* Chart Area */}
+                        {detailData?.chartData && (
+                            <div style={{ background: 'white', borderRadius: '16px', padding: '16px', marginBottom: '20px', border: '1px solid #F2F4F7' }}>
+                                <MarketChart
+                                    data={detailData.chartData}
+                                    isPositive={detailData.change >= 0}
+                                />
                             </div>
-                            <div className="metric-item">
-                                <span className="metric-label">52주 최저</span>
-                                <span className="metric-value">
-                                    {detailData?.fiftyTwoWeekLow?.toLocaleString() || '---'}
-                                </span>
+                        )}
+
+                        {/* Analysis Grid */}
+                        <div className="detail-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                            {/* Day Range visualizer */}
+                            <div className="range-box" style={{ gridColumn: 'span 2', background: 'white', padding: '16px', borderRadius: '16px', border: '1px solid #F2F4F7' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 700 }}>일일 변동 폭</span>
+                                    <span style={{ fontSize: '11px', fontWeight: 800 }}>{detailData?.price?.toLocaleString()}</span>
+                                </div>
+                                <div style={{ height: '4px', background: '#F2F4F7', borderRadius: '2px', position: 'relative' }}>
+                                    <div style={{
+                                        position: 'absolute',
+                                        left: `${Math.max(0, Math.min(100, ((detailData?.price - detailData?.regularMarketDayLow) / (detailData?.regularMarketDayHigh - detailData?.regularMarketDayLow)) * 100))}%`,
+                                        width: '8px', height: '8px', borderRadius: '50%', background: '#0055FB', top: '-2px', transform: 'translateX(-50%)',
+                                        boxShadow: '0 0 0 3px rgba(0, 85, 251, 0.1)'
+                                    }} />
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
+                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최저 {detailData?.regularMarketDayLow?.toLocaleString()}</span>
+                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최고 {detailData?.regularMarketDayHigh?.toLocaleString()}</span>
+                                </div>
                             </div>
-                            <div className="metric-item">
-                                <span className="metric-label">거래량</span>
-                                <span className="metric-value">
-                                    {formatVolume(detailData?.regularMarketVolume)}
-                                </span>
+
+                            <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
+                                <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최고</span>
+                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{detailData?.fiftyTwoWeekHigh?.toLocaleString()}</span>
+                            </div>
+                            <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
+                                <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최저</span>
+                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{detailData?.fiftyTwoWeekLow?.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>

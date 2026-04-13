@@ -61,11 +61,27 @@ export async function GET(request: Request) {
             volume = volume * 1000;
         }
 
+        // 3. Extract Historical Data for Charting (Last 30 valid points)
+        const closes = indicators.close || [];
+        const timestamps = result.timestamp || [];
+        const chartData = timestamps
+            .map((t: number, i: number) => ({
+                date: new Date(t * 1000).toISOString(),
+                value: closes[i]
+            }))
+            .filter((d: any) => d.value !== null && d.value !== 0)
+            .slice(-30); // Take last 30 trading days
+
         return NextResponse.json({
             price: meta.regularMarketPrice,
+            change: meta.regularMarketPrice - meta.chartPreviousClose,
+            changePercent: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100,
             fiftyTwoWeekHigh: calculatedHigh,
             fiftyTwoWeekLow: calculatedLow <= 0 ? null : calculatedLow,
-            regularMarketVolume: volume
+            regularMarketDayHigh: meta.regularMarketDayHigh || calculatedHigh,
+            regularMarketDayLow: meta.regularMarketDayLow || calculatedLow,
+            regularMarketVolume: volume,
+            chartData: chartData
         }, {
             headers: {
                 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120'

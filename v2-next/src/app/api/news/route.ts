@@ -177,8 +177,8 @@ export async function GET() {
                 seen.add(key);
                 return true;
             })
-            .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-        // No strict slice here to keep all categories populated
+            .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+            .slice(0, 400); // Optimized cap: 400 items (~50 per category) is the perfect balance for performance and diversity
 
         // Fetch OG images for the top 6 articles in parallel to fill the initial view quickly
         const top6Items = sorted.slice(0, 6);
