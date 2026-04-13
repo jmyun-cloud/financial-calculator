@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
-import ProfessionalChart from "./ProfessionalChart";
-import TechnicalSummary from "./TechnicalSummary";
+
+const ProfessionalChart = dynamic(() => import("./ProfessionalChart"), { ssr: false });
+const TechnicalSummary = dynamic(() => import("./TechnicalSummary"), { ssr: false });
 import EconomicCalendar from "./EconomicCalendar";
 import SentimentGauge from "./SentimentGauge";
 
@@ -213,7 +215,7 @@ export default function UserDashboard() {
                         </div>
 
                         {/* Chart Area */}
-                        {detailData?.chartData && (
+                        {detailData && Array.isArray(detailData.chartData) && detailData.chartData.length > 0 && (
                             <>
                                 <div style={{ background: 'white', borderRadius: '16px', padding: '16px 20px 0', marginBottom: '20px', border: '1px solid #F2F4F7', minHeight: '300px' }}>
                                     <ProfessionalChart
@@ -273,7 +275,11 @@ export default function UserDashboard() {
                     </div>
                 </div>
 
-                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px' }}>
+                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <SentimentGauge value={42} label="공포" />
+                    <div className="widget-section">
+                        <EconomicCalendar />
+                    </div>
                     <div className="widget-section">
                         <h3 className="section-title">내 재무 목표</h3>
                         <GoalTracker />

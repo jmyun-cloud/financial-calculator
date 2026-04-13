@@ -16,55 +16,43 @@ export default function ProfessionalChart({
 }: ProfessionalChartProps) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<any>(null);
-    const seriesRef = useRef<any>(null);
     const [chartType, setChartType] = useState<'Candlestick' | 'Area'>(initialType);
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
+        if (chartContainerRef.current.clientWidth <= 0) return;
 
-        const handleResize = () => {
-            if (chartRef.current && chartContainerRef.current) {
-                chartRef.current.applyOptions({
-                    width: chartContainerRef.current.clientWidth
-                });
-            }
-        };
+        let chart: any;
 
-        // Create Chart
-        const chart: any = createChart(chartContainerRef.current, {
-            layout: {
-                background: { type: ColorType.Solid, color: 'transparent' },
-                textColor: '#8B95A1',
-                fontSize: 11,
-            },
-            grid: {
-                vertLines: { color: 'rgba(139, 149, 161, 0.1)' },
-                horzLines: { color: 'rgba(139, 149, 161, 0.1)' },
-            },
-            width: chartContainerRef.current.clientWidth,
-            height: 240,
-            timeScale: {
-                borderVisible: false,
-                timeVisible: true,
-                secondsVisible: false,
-            },
-            rightPriceScale: {
-                borderVisible: false,
-                alignLabels: true,
-            },
-            handleScroll: { mouseWheel: true, pressedMouseMove: true },
-            handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true },
-        });
+        try {
+            chart = createChart(chartContainerRef.current, {
+                layout: {
+                    background: { type: ColorType.Solid, color: 'transparent' },
+                    textColor: '#8B95A1',
+                    fontSize: 11,
+                },
+                grid: {
+                    vertLines: { color: 'rgba(139, 149, 161, 0.1)' },
+                    horzLines: { color: 'rgba(139, 149, 161, 0.1)' },
+                },
+                width: chartContainerRef.current.clientWidth,
+                height: 240,
+                timeScale: {
+                    borderVisible: false,
+                    timeVisible: true,
+                    secondsVisible: false,
+                },
+                rightPriceScale: {
+                    borderVisible: false,
+                    alignLabels: true,
+                },
+                handleScroll: { mouseWheel: true, pressedMouseMove: true },
+                handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true },
+            });
 
-        chartRef.current = chart;
+            let validDataCount = 0;
 
-        // Series setup
-        const updateSeries = (type: 'Candlestick' | 'Area') => {
-            if (seriesRef.current) {
-                chart.removeSeries(seriesRef.current);
-            }
-
-            if (type === 'Candlestick') {
+            if (chartType === 'Candlestick') {
                 const candleSeries = chart.addCandlestickSeries({
                     upColor: '#F04251',
                     downColor: '#0064FF',
@@ -73,6 +61,7 @@ export default function ProfessionalChart({
                     wickUpColor: '#F04251',
                     wickDownColor: '#0064FF',
                 });
+
                 const validData = data
                     .filter(d => d.time && d.open !== null && d.high !== null && d.low !== null && d.close !== null)
                     .map(d => ({
@@ -85,8 +74,8 @@ export default function ProfessionalChart({
 
                 if (validData.length > 0) {
                     candleSeries.setData(validData);
+                    validDataCount = validData.length;
                 }
-                seriesRef.current = candleSeries;
             } else {
                 const areaSeries = chart.addAreaSeries({
                     lineColor: isPositive ? '#F04251' : '#0064FF',
@@ -94,6 +83,7 @@ export default function ProfessionalChart({
                     bottomColor: isPositive ? 'rgba(240, 66, 81, 0.0)' : 'rgba(0, 100, 255, 0.0)',
                     lineWidth: 2,
                 });
+
                 const validData = data
                     .filter(d => d.time && d.close !== null)
                     .map(d => ({
@@ -103,21 +93,32 @@ export default function ProfessionalChart({
 
                 if (validData.length > 0) {
                     areaSeries.setData(validData);
+                    validDataCount = validData.length;
                 }
-                seriesRef.current = areaSeries;
             }
 
-            chart.timeScale().fitContent();
-        };
+            if (validDataCount > 0) {
+                chart.timeScale().fitContent();
+            }
 
-        updateSeries(chartType);
+            const handleResize = () => {
+                if (chart && chartContainerRef.current) {
+                    chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+                }
+            };
 
-        window.addEventListener('resize', handleResize);
+            window.addEventListener('resize', handleResize);
+            chartRef.current = chart;
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            chart.remove();
-        };
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                chart.remove();
+                chartRef.current = null;
+            };
+        } catch (error) {
+            console.error('Lightweight Charts Initialization Error:', error);
+            return () => { };
+        }
     }, [data, isPositive, chartType]);
 
     return (
@@ -136,9 +137,9 @@ export default function ProfessionalChart({
                         padding: '4px 8px',
                         fontSize: '11px',
                         borderRadius: '6px',
-                        border: '1px solid var(--border)',
-                        background: chartType === 'Area' ? 'var(--primary)' : 'white',
-                        color: chartType === 'Area' ? 'white' : 'var(--text-secondary)',
+                        border: '1px solid #F2F4F7',
+                        background: chartType === 'Area' ? '#0055FB' : 'white',
+                        color: chartType === 'Area' ? 'white' : '#8B95A1',
                         cursor: 'pointer',
                         fontWeight: 600
                     }}
@@ -151,9 +152,9 @@ export default function ProfessionalChart({
                         padding: '4px 8px',
                         fontSize: '11px',
                         borderRadius: '6px',
-                        border: '1px solid var(--border)',
-                        background: chartType === 'Candlestick' ? 'var(--primary)' : 'white',
-                        color: chartType === 'Candlestick' ? 'white' : 'var(--text-secondary)',
+                        border: '1px solid #F2F4F7',
+                        background: chartType === 'Candlestick' ? '#0055FB' : 'white',
+                        color: chartType === 'Candlestick' ? 'white' : '#8B95A1',
                         cursor: 'pointer',
                         fontWeight: 600
                     }}
