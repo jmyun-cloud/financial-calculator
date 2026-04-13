@@ -3,6 +3,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
+import { useWatchlist } from "@/hooks/useWatchlist";
+import { Star } from "lucide-react";
 
 const ProfessionalChart = dynamic(() => import("./ProfessionalChart"), { ssr: false });
 const TechnicalSummary = dynamic(() => import("./TechnicalSummary"), { ssr: false });
@@ -13,6 +15,7 @@ export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { data: marketData, loading } = useMarketData();
+    const { toggleWatchlist, isWatched } = useWatchlist();
 
     // Guest view states (Premium upgrade)
     const [activeMarketTab, setActiveMarketTab] = useState("국내");
@@ -171,6 +174,16 @@ export default function UserDashboard() {
                                             <span className="symbol-name">{idx.name}</span>
                                             <span className="symbol-flag">{idx.flag}</span>
                                         </div>
+                                        <button
+                                            className={`watchlist-btn ${isWatched(idx.symbol) ? 'active' : ''}`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleWatchlist(idx.symbol);
+                                            }}
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: isWatched(idx.symbol) ? '#FFB800' : '#B0B8C1' }}
+                                        >
+                                            <Star size={16} fill={isWatched(idx.symbol) ? "#FFB800" : "none"} />
+                                        </button>
                                         <span className={`status-badge ${status.type}`}>
                                             {status.text}
                                         </span>

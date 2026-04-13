@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import HeaderSearch from './portal/HeaderSearch';
 import NewsMegaMenu from './NewsMegaMenu';
 
 export default function Header() {
@@ -26,7 +27,8 @@ export default function Header() {
                     <Link href="/guide" className="nav-link">가이드</Link>
                 </nav>
 
-                <div className="header-right">
+                <div className="header-right" style={{ gap: '16px' }}>
+                    <HeaderSearch />
                     <button className="login-btn">로그인</button>
                     <button className="menu-btn" style={{ background: '#333', color: 'white', border: 'none', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', marginLeft: '12px' }}>
                         <span style={{ fontSize: '1.2rem', lineHeight: '32px' }}>⋮</span>
