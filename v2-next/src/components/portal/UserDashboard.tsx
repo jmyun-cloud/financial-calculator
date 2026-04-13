@@ -289,7 +289,7 @@ export default function UserDashboard() {
                 </div>
 
                 <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <SentimentGauge value={42} label="공포" />
+                    <SentimentGauge />
                     <div className="widget-section">
                         <EconomicCalendar />
                     </div>
@@ -409,7 +409,7 @@ export default function UserDashboard() {
                 </div>
 
                 <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <SentimentGauge value={42} label="공포" />
+                    <SentimentGauge />
                     <div className="widget-section">
                         <h3 className="section-title">내 재무 목표</h3>
                         <GoalTracker />

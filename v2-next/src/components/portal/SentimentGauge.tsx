@@ -1,13 +1,31 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface SentimentGaugeProps {
-    value: number; // 0 to 100
-    label: string;
-}
+export default function SentimentGauge() {
+    const [data, setData] = useState({ value: 50, label: "중립" });
+    const [loading, setLoading] = useState(true);
 
-export default function SentimentGauge({ value = 42, label = "중립" }: SentimentGaugeProps) {
+    useEffect(() => {
+        const fetchSentiment = async () => {
+            try {
+                const res = await fetch('/api/market-sentiment');
+                const result = await res.json();
+                setData({
+                    value: result.value || 50,
+                    label: result.label || "중립"
+                });
+            } catch (error) {
+                console.error("Failed to fetch sentiment", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSentiment();
+    }, []);
+
+    const { value, label } = data;
     const angle = (value / 100) * 180 - 180; // Map 0-100 to -180 to 0 degrees for a semi-circle
 
     const getColor = (v: number) => {

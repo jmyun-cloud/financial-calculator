@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface EconomicEvent {
     id: string;
@@ -14,15 +14,27 @@ interface EconomicEvent {
     previous?: string;
 }
 
-const MOCK_EVENTS: EconomicEvent[] = [
-    { id: '1', time: '21:30', country: 'USD', flag: '🇺🇸', event: '소비자물가지수 (CPI) (YoY)', importance: 3, forecast: '3.1%', previous: '3.2%' },
-    { id: '2', time: '21:30', country: 'USD', flag: '🇺🇸', event: '근원 소비자물가지수 (MoM)', importance: 3, forecast: '0.3%', previous: '0.4%' },
-    { id: '3', time: '16:00', country: 'EUR', flag: '🇪🇺', event: '독일 ZEW 경기전망지수', importance: 2, forecast: '35.0', previous: '31.7' },
-    { id: '4', time: '08:50', country: 'JPY', flag: '🇯🇵', event: '기계수주 (MoM)', importance: 1, actual: '2.1%', forecast: '0.8%', previous: '-1.2%' },
-    { id: '5', time: '10:00', country: 'KRW', flag: '🇰🇷', event: '수출입물가지수', importance: 2, actual: '1.2%', forecast: '0.5%', previous: '0.8%' },
-];
-
 export default function EconomicCalendar() {
+    const [events, setEvents] = useState<EconomicEvent[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const res = await fetch('/api/economic-calendar');
+                const data = await res.json();
+                if (data.events) {
+                    setEvents(data.events);
+                }
+            } catch (error) {
+                console.error("Failed to fetch economic calendar", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
     return (
         <div style={{
             background: 'white',
@@ -52,7 +64,11 @@ export default function EconomicCalendar() {
                     <span style={{ textAlign: 'right' }}>중요도</span>
                 </div>
 
-                {MOCK_EVENTS.map((event) => (
+                {loading ? (
+                    <div style={{ padding: '40px', textAlign: 'center', color: '#B0B8C1', fontSize: '13px' }}>
+                        캘린더 데이터를 불러오는 중...
+                    </div>
+                ) : events.map((event) => (
                     <div key={event.id} style={{
                         display: 'grid',
                         gridTemplateColumns: '80px 40px 1fr 60px',
