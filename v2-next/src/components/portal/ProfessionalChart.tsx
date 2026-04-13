@@ -18,7 +18,7 @@ export default function ProfessionalChart({
     const chartRef = useRef<any>(null);
     const [chartType, setChartType] = useState<'Candlestick' | 'Area'>(initialType);
 
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 240 });
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 300 });
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
@@ -27,7 +27,7 @@ export default function ProfessionalChart({
             if (entries[0].contentRect.width > 0) {
                 setContainerSize({
                     width: entries[0].contentRect.width,
-                    height: 240
+                    height: entries[0].contentRect.height || 300
                 });
             }
         });
@@ -44,13 +44,13 @@ export default function ProfessionalChart({
         try {
             chart = createChart(chartContainerRef.current, {
                 layout: {
-                    background: { type: ColorType.Solid, color: 'transparent' },
-                    textColor: '#8B95A1',
-                    fontSize: 11,
+                    background: { type: ColorType.Solid, color: '#ffffff' },
+                    textColor: '#4E5968',
+                    fontSize: 12,
                 },
                 grid: {
-                    vertLines: { color: 'rgba(139, 149, 161, 0.1)' },
-                    horzLines: { color: 'rgba(139, 149, 161, 0.1)' },
+                    vertLines: { color: '#F2F4F7' },
+                    horzLines: { color: '#F2F4F7' },
                 },
                 width: containerSize.width,
                 height: containerSize.height,
@@ -174,7 +174,21 @@ export default function ProfessionalChart({
                     Candle
                 </button>
             </div>
-            <div ref={chartContainerRef} style={{ width: '100%' }} />
+            <div
+                ref={chartContainerRef}
+                style={{
+                    width: '100%',
+                    height: '300px',
+                    background: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                {(!data || data.length === 0) && (
+                    <div style={{ color: '#B0B8C1', fontSize: '13px' }}>차트 데이터가 없습니다</div>
+                )}
+            </div>
         </div>
     );
 }
