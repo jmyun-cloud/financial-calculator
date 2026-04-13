@@ -4,30 +4,18 @@ import React from 'react';
 import Link from 'next/link';
 
 const MARKET_NEWS = [
-    { name: '경제', href: '/news/economy' },
-    { name: '상품과 선물', href: '/news/commodities' },
-    { name: '주식 시장', href: '/news/stock-market' },
-    { name: '실적', href: '/news/earnings' },
-    { name: '애널리스트 투자 의견', href: '/news/analyst-opinion' },
-    { name: '스크립트', href: '/news/scripts' },
-    { name: '경제 지표', href: '/news/economic-indicators' },
-    { name: '외환', href: '/news/forex' },
-    { name: '암호화폐', href: '/news/cryptocurrency' },
-    { name: '일반', href: '/news/general' },
-    { name: 'IPO', href: '/news/ipo' },
-    { name: '뉴스 속보', href: '/news/breaking' },
-    { name: '프로 뉴스', href: '/news/pro' },
+    { name: '경제 동향', href: '/news/economy' },
+    { name: '국내/해외 주식', href: '/news/stocks' },
+    { name: '가상자산', href: '/news/crypto' },
+    { name: '금리 및 환율', href: '/news/forex' },
+    { name: '기업 실적', href: '/news/earnings' },
 ];
 
 const SEE_MORE = [
-    { name: '최신', href: '/news/latest' },
-    { name: '많이 본', href: '/news/most-read' },
-    { name: '개인 금융', href: '/news/personal-finance' },
-    { name: '경제 캘린더', href: '/news/calendar' },
-    { name: '기업 뉴스', href: '/news/corporate' },
-    { name: '내부자 거래', href: '/news/insider' },
-    { name: '투자 아이디어', href: '/news/investment-ideas' },
-    { name: 'SEC 공시', href: '/news/sec-filings' },
+    { name: '실시간 분석', href: '/news/analysis' },
+    { name: '전문가 칼럼', href: '/news/columns' },
+    { name: '많이 본 뉴스', href: '/news/popular' },
+    { name: '부동산 뉴스', href: '/news/real-estate' },
 ];
 
 export default function NewsMegaMenu() {
@@ -35,7 +23,7 @@ export default function NewsMegaMenu() {
         <div className="mega-menu">
             <div className="mega-menu-content">
                 <div className="mega-column">
-                    <h4 className="column-title">시장뉴스</h4>
+                    <h4 className="column-title">시장 뉴스</h4>
                     <div className="link-grid">
                         {MARKET_NEWS.map((item, idx) => (
                             <Link key={idx} href={item.href} className="mega-link">
@@ -65,7 +53,7 @@ export default function NewsMegaMenu() {
                     border: 1px solid #E5E8EB;
                     border-radius: 0 0 12px 12px;
                     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                    width: 580px;
+                    width: 480px;
                     display: none;
                     z-index: 1001;
                     padding: 24px;
