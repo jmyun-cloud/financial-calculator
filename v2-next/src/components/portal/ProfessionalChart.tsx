@@ -73,13 +73,19 @@ export default function ProfessionalChart({
                     wickUpColor: '#F04251',
                     wickDownColor: '#0064FF',
                 });
-                candleSeries.setData(data.map(d => ({
-                    time: d.time,
-                    open: d.open,
-                    high: d.high,
-                    low: d.low,
-                    close: d.close,
-                })));
+                const validData = data
+                    .filter(d => d.time && d.open !== null && d.high !== null && d.low !== null && d.close !== null)
+                    .map(d => ({
+                        time: d.time,
+                        open: Number(d.open),
+                        high: Number(d.high),
+                        low: Number(d.low),
+                        close: Number(d.close),
+                    }));
+
+                if (validData.length > 0) {
+                    candleSeries.setData(validData);
+                }
                 seriesRef.current = candleSeries;
             } else {
                 const areaSeries = chart.addAreaSeries({
@@ -88,10 +94,16 @@ export default function ProfessionalChart({
                     bottomColor: isPositive ? 'rgba(240, 66, 81, 0.0)' : 'rgba(0, 100, 255, 0.0)',
                     lineWidth: 2,
                 });
-                areaSeries.setData(data.map(d => ({
-                    time: d.time,
-                    value: d.close,
-                })));
+                const validData = data
+                    .filter(d => d.time && d.close !== null)
+                    .map(d => ({
+                        time: d.time,
+                        value: Number(d.close),
+                    }));
+
+                if (validData.length > 0) {
+                    areaSeries.setData(validData);
+                }
                 seriesRef.current = areaSeries;
             }
 

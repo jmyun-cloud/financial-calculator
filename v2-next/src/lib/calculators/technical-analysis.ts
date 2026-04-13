@@ -12,7 +12,11 @@ export interface TechnicalIndicators {
 }
 
 export function calculateIndicators(data: { close: number }[]): TechnicalIndicators {
-    const prices = data.map(d => d.close);
+    if (!data || data.length === 0) {
+        return { rsi: null, ma5: null, ma20: null, ma60: null, ma120: null, signal: 'Neutral' };
+    }
+
+    const prices = data.map(d => Number(d.close)).filter(v => !isNaN(v));
     if (prices.length < 5) {
         return { rsi: null, ma5: null, ma20: null, ma60: null, ma120: null, signal: 'Neutral' };
     }

@@ -231,29 +231,36 @@ export default function UserDashboard() {
                             <div className="range-box" style={{ gridColumn: 'span 2', background: 'white', padding: '16px', borderRadius: '16px', border: '1px solid #F2F4F7' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                                     <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 700 }}>일일 변동 폭</span>
-                                    <span style={{ fontSize: '11px', fontWeight: 800 }}>{detailData?.price?.toLocaleString()}</span>
+                                    <span style={{ fontSize: '11px', fontWeight: 800 }}>{(detailData?.price || 0).toLocaleString()}</span>
                                 </div>
                                 <div style={{ height: '4px', background: '#F2F4F7', borderRadius: '2px', position: 'relative' }}>
                                     <div style={{
                                         position: 'absolute',
-                                        left: `${Math.max(0, Math.min(100, ((detailData?.price - detailData?.regularMarketDayLow) / (detailData?.regularMarketDayHigh - detailData?.regularMarketDayLow)) * 100))}%`,
+                                        left: `${(() => {
+                                            const high = detailData?.regularMarketDayHigh || 0;
+                                            const low = detailData?.regularMarketDayLow || 0;
+                                            const current = detailData?.price || 0;
+                                            if (high === low) return 50;
+                                            const pos = ((current - low) / (high - low)) * 100;
+                                            return Math.max(0, Math.min(100, pos));
+                                        })()}%`,
                                         width: '8px', height: '8px', borderRadius: '50%', background: '#0055FB', top: '-2px', transform: 'translateX(-50%)',
                                         boxShadow: '0 0 0 3px rgba(0, 85, 251, 0.1)'
                                     }} />
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최저 {detailData?.regularMarketDayLow?.toLocaleString()}</span>
-                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최고 {detailData?.regularMarketDayHigh?.toLocaleString()}</span>
+                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최저 {(detailData?.regularMarketDayLow || 0).toLocaleString()}</span>
+                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최고 {(detailData?.regularMarketDayHigh || 0).toLocaleString()}</span>
                                 </div>
                             </div>
 
                             <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
                                 <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최고</span>
-                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{detailData?.fiftyTwoWeekHigh?.toLocaleString()}</span>
+                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{(detailData?.fiftyTwoWeekHigh || 0).toLocaleString()}</span>
                             </div>
                             <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
                                 <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최저</span>
-                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{detailData?.fiftyTwoWeekLow?.toLocaleString()}</span>
+                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{(detailData?.fiftyTwoWeekLow || 0).toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
