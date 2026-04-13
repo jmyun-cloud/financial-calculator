@@ -18,9 +18,26 @@ export default function ProfessionalChart({
     const chartRef = useRef<any>(null);
     const [chartType, setChartType] = useState<'Candlestick' | 'Area'>(initialType);
 
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 240 });
+
     useEffect(() => {
         if (!chartContainerRef.current) return;
-        if (chartContainerRef.current.clientWidth <= 0) return;
+
+        const resizeObserver = new ResizeObserver((entries) => {
+            if (entries[0].contentRect.width > 0) {
+                setContainerSize({
+                    width: entries[0].contentRect.width,
+                    height: 240
+                });
+            }
+        });
+
+        resizeObserver.observe(chartContainerRef.current);
+        return () => resizeObserver.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!chartContainerRef.current || containerSize.width <= 0) return;
 
         let chart: any;
 
@@ -35,12 +52,13 @@ export default function ProfessionalChart({
                     vertLines: { color: 'rgba(139, 149, 161, 0.1)' },
                     horzLines: { color: 'rgba(139, 149, 161, 0.1)' },
                 },
-                width: chartContainerRef.current.clientWidth,
-                height: 240,
+                width: containerSize.width,
+                height: containerSize.height,
                 timeScale: {
                     borderVisible: false,
                     timeVisible: true,
                     secondsVisible: false,
+                    rightOffset: 5,
                 },
                 rightPriceScale: {
                     borderVisible: false,
@@ -63,14 +81,15 @@ export default function ProfessionalChart({
                 });
 
                 const validData = data
-                    .filter(d => d.time && d.open !== null && d.high !== null && d.low !== null && d.close !== null)
+                    .filter(d => d.time && !isNaN(Number(d.open)) && !isNaN(Number(d.high)) && !isNaN(Number(d.low)) && !isNaN(Number(d.close)))
                     .map(d => ({
                         time: d.time,
                         open: Number(d.open),
                         high: Number(d.high),
                         low: Number(d.low),
                         close: Number(d.close),
-                    }));
+                    }))
+                    .sort((a, b) => (typeof a.time === 'number' && typeof b.time === 'number' ? a.time - b.time : 0));
 
                 if (validData.length > 0) {
                     candleSeries.setData(validData);
@@ -85,11 +104,12 @@ export default function ProfessionalChart({
                 });
 
                 const validData = data
-                    .filter(d => d.time && d.close !== null)
+                    .filter(d => d.time && !isNaN(Number(d.close)))
                     .map(d => ({
                         time: d.time,
                         value: Number(d.close),
-                    }));
+                    }))
+                    .sort((a, b) => (typeof a.time === 'number' && typeof b.time === 'number' ? a.time - b.time : 0));
 
                 if (validData.length > 0) {
                     areaSeries.setData(validData);
@@ -101,17 +121,9 @@ export default function ProfessionalChart({
                 chart.timeScale().fitContent();
             }
 
-            const handleResize = () => {
-                if (chart && chartContainerRef.current) {
-                    chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-                }
-            };
-
-            window.addEventListener('resize', handleResize);
             chartRef.current = chart;
 
             return () => {
-                window.removeEventListener('resize', handleResize);
                 chart.remove();
                 chartRef.current = null;
             };
@@ -119,7 +131,7 @@ export default function ProfessionalChart({
             console.error('Lightweight Charts Initialization Error:', error);
             return () => { };
         }
-    }, [data, isPositive, chartType]);
+    }, [data, isPositive, chartType, containerSize]);
 
     return (
         <div style={{ position: 'relative' }}>
