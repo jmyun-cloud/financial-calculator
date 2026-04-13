@@ -24,10 +24,14 @@ export default function AnalysisPage() {
     useEffect(() => {
         const fetchDetail = async () => {
             try {
-                const res = await fetch(`/api/market-detail?symbol=${symbol}`);
+                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const result = await res.json();
-                if (result.success) {
-                    setData(result.data);
+                // API returns data directly (price, change, chartData, ...)
+                if (result && result.chartData) {
+                    setData(result);
+                } else {
+                    console.error('[AnalysisPage] Unexpected API response:', result);
                 }
             } catch (err) {
                 console.error("Failed to fetch symbol detail", err);
