@@ -63,14 +63,22 @@ export async function GET(request: Request) {
 
         // 3. Extract Historical Data for Charting (Last 30 valid points)
         const closes = indicators.close || [];
+        const opens = indicators.open || [];
+        const highs_arr = indicators.high || [];
+        const lows_arr = indicators.low || [];
         const timestamps = result.timestamp || [];
+
         const chartData = timestamps
             .map((t: number, i: number) => ({
-                date: new Date(t * 1000).toISOString(),
-                value: closes[i]
+                time: t, // Send raw timestamp (seconds) for lightweight-charts
+                open: opens[i],
+                high: highs_arr[i],
+                low: lows_arr[i],
+                close: closes[i],
+                value: closes[i] // Keep 'value' for backward compatibility
             }))
-            .filter((d: any) => d.value !== null && d.value !== 0)
-            .slice(-30); // Take last 30 trading days
+            .filter((d: any) => d.close !== null && d.close !== 0)
+            .slice(-60); // Increase to 60 days for better technical analysis context
 
         return NextResponse.json({
             price: meta.regularMarketPrice,

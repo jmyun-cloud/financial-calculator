@@ -2,7 +2,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
-import MarketChart from "./MarketChart";
+import ProfessionalChart from "./ProfessionalChart";
+import TechnicalSummary from "./TechnicalSummary";
+import EconomicCalendar from "./EconomicCalendar";
+import SentimentGauge from "./SentimentGauge";
 
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
@@ -211,12 +214,15 @@ export default function UserDashboard() {
 
                         {/* Chart Area */}
                         {detailData?.chartData && (
-                            <div style={{ background: 'white', borderRadius: '16px', padding: '16px', marginBottom: '20px', border: '1px solid #F2F4F7' }}>
-                                <MarketChart
-                                    data={detailData.chartData}
-                                    isPositive={detailData.change >= 0}
-                                />
-                            </div>
+                            <>
+                                <div style={{ background: 'white', borderRadius: '16px', padding: '16px 20px 0', marginBottom: '20px', border: '1px solid #F2F4F7', minHeight: '300px' }}>
+                                    <ProfessionalChart
+                                        data={detailData.chartData}
+                                        isPositive={(detailData.change || 0) >= 0}
+                                    />
+                                </div>
+                                <TechnicalSummary data={detailData.chartData} />
+                            </>
                         )}
 
                         {/* Analysis Grid */}
@@ -369,10 +375,19 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            <div className="dashboard-sidebar-widgets">
-                <div className="widget-section">
-                    <h3 className="section-title">내 재무 목표</h3>
-                    <GoalTracker />
+            <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
+                <div className="dashboard-main-col">
+                    <div className="widget-section">
+                        <EconomicCalendar />
+                    </div>
+                </div>
+
+                <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <SentimentGauge value={42} label="공포" />
+                    <div className="widget-section">
+                        <h3 className="section-title">내 재무 목표</h3>
+                        <GoalTracker />
+                    </div>
                 </div>
             </div>
 
