@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import GoalTracker from "@/components/GoalTracker";
 import { useMarketData } from "@/hooks/useMarketData";
 import { useWatchlist } from "@/hooks/useWatchlist";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const ProfessionalChart = dynamic(() => import("./ProfessionalChart"), { ssr: false });
 const TechnicalSummary = dynamic(() => import("./TechnicalSummary"), { ssr: false });
@@ -220,11 +221,31 @@ export default function UserDashboard() {
                         <div className="detail-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span className="detail-title" style={{ fontSize: '16px', fontWeight: 800, color: '#0055FB' }}>
-                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 실시간 차트
+                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 실시간 분석
                                 </span>
                                 <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 500 }}>(일봉, 30일)</span>
                             </div>
-                            {isDetailLoading && <span className="loading-spinner">데이터 갱신 중...</span>}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                {isDetailLoading && <span className="loading-spinner">데이터 갱신 중...</span>}
+                                <Link
+                                    href={`/market/${selectedCard}`}
+                                    style={{
+                                        color: '#4E5968',
+                                        fontSize: '12px',
+                                        fontWeight: 700,
+                                        textDecoration: 'none',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        background: 'white',
+                                        padding: '6px 12px',
+                                        borderRadius: '8px',
+                                        border: '1px solid #E5E8EB'
+                                    }}
+                                >
+                                    심층 분석 <ArrowRight size={14} />
+                                </Link>
+                            </div>
                         </div>
 
                         {/* Chart Area */}
