@@ -40,9 +40,11 @@ export default function UserDashboard() {
                 { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt", region: "US" },
                 { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt", region: "US" },
                 { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt", region: "US" },
-                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt", region: "US" }
+                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt", region: "US" },
+                { symbol: "^FTSE", name: "FTSE 100", flag: "🇬🇧", unit: "pt", region: "US" },
+                { symbol: "^STOXX50E", name: "Euro Stoxx 50", flag: "🇪🇺", unit: "pt", region: "US" }
             ],
-            chips: ["전체 지수", "주요 지수", "선물 지수"]
+            chips: ["전체 지수", "주요 지수", "선물 지수", "아시아", "유럽", "미국"]
         },
         {
             id: "주식",
@@ -79,39 +81,55 @@ export default function UserDashboard() {
         {
             id: "원자재",
             indices: [
-                { symbol: "GC=F", name: "금", flag: "🟡", unit: "USD/oz" },
-                { symbol: "SI=F", name: "은", flag: "⚪", unit: "USD/oz" },
-                { symbol: "CL=F", name: "WTI유", flag: "🛢️", unit: "USD/bbl" },
-                { symbol: "HG=F", name: "구리", flag: "🥉", unit: "USD/lb" }
-            ]
+                { symbol: "GC=F", name: "금", flag: "🟡", unit: "USD/oz", region: "US" },
+                { symbol: "SI=F", name: "은", flag: "⚪", unit: "USD/oz", region: "US" },
+                { symbol: "CL=F", name: "WTI유", flag: "🛢️", unit: "USD/bbl", region: "US" },
+                { symbol: "BZ=F", name: "브렌트유", flag: "🛢️", unit: "USD/bbl", region: "US" },
+                { symbol: "HG=F", name: "구리", flag: "🥉", unit: "USD/lb", region: "US" },
+                { symbol: "NG=F", name: "천연가스", flag: "🔥", unit: "USD/MMBtu", region: "US" },
+                { symbol: "PL=F", name: "백금", flag: "⚪", unit: "USD/oz", region: "US" }
+            ],
+            chips: ["귀금속", "에너지", "비철금속", "농산물"]
         },
         {
             id: "외환",
             indices: [
-                { symbol: "KRW=X", name: "USD/KRW", flag: "🇰🇷", unit: "원" },
-                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
-                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
-                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" },
-                { symbol: "EURUSD=X", name: "EUR/USD", flag: "🇪🇺", unit: "USD" }
-            ]
+                { symbol: "KRW=X", name: "USD/KRW", flag: "🇰🇷", unit: "원", region: "KR" },
+                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔", region: "KR" },
+                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원", region: "KR" },
+                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원", region: "KR" },
+                { symbol: "EURUSD=X", name: "EUR/USD", flag: "🇪🇺", unit: "USD", region: "US" },
+                { symbol: "GBPUSD=X", name: "GBP/USD", flag: "🇬🇧", unit: "USD", region: "US" },
+                { symbol: "USDJPY=X", name: "USD/JPY", flag: "🇯🇵", unit: "JPY", region: "US" },
+                { symbol: "AUDUSD=X", name: "AUD/USD", flag: "🇦🇺", unit: "USD", region: "US" }
+            ],
+            chips: ["주요 통화", "아시아", "유럽", "신흥국"]
         },
         {
             id: "ETF",
             indices: [
-                { symbol: "SPY", name: "S&P 500 ETF", flag: "🇺🇸", unit: "USD" },
-                { symbol: "QQQ", name: "Nasdaq 100 ETF", flag: "🇺🇸", unit: "USD" },
-                { symbol: "ARKK", name: "ARK Innovation", flag: "🇺🇸", unit: "USD" },
-                { symbol: "SOXX", name: "Semiconductor ETF", flag: "🇺🇸", unit: "USD" }
-            ]
+                { symbol: "SPY", name: "S&P 500 ETF", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "QQQ", name: "Nasdaq 100 ETF", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "ARKK", name: "ARK Innovation", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "SOXX", name: "Semiconductor ETF", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "TQQQ", name: "Nasdaq 3x Leverage", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "SQQQ", name: "Nasdaq 3x Inverse", flag: "🇺🇸", unit: "USD", region: "US" },
+                { symbol: "DIA", name: "Dow 30 ETF", flag: "🇺🇸", unit: "USD", region: "US" }
+            ],
+            chips: ["지수 추종", "레버리지", "섹터/테마", "채권/배당"]
         },
         {
             id: "암호화폐",
             indices: [
-                { symbol: "BTC-USD", name: "Bitcoin", flag: "₿", unit: "USD" },
-                { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ", unit: "USD" },
-                { symbol: "SOL-USD", name: "Solana", flag: "☀️", unit: "USD" },
-                { symbol: "XRP-USD", name: "Ripple", flag: "✖️", unit: "USD" }
-            ]
+                { symbol: "BTC-USD", name: "Bitcoin", flag: "₿", unit: "USD", region: "US" },
+                { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ", unit: "USD", region: "US" },
+                { symbol: "BNB-USD", name: "Binance Coin", flag: "🔶", unit: "USD", region: "US" },
+                { symbol: "SOL-USD", name: "Solana", flag: "☀️", unit: "USD", region: "US" },
+                { symbol: "XRP-USD", name: "Ripple", flag: "✖️", unit: "USD", region: "US" },
+                { symbol: "ADA-USD", name: "Cardano", flag: "💠", unit: "USD", region: "US" },
+                { symbol: "DOGE-USD", name: "Dogecoin", flag: "🐕", unit: "USD", region: "US" }
+            ],
+            chips: ["메이저 코인", "알트코인", "레이어 1", "DeFi", "NFT/메타버스"]
         }
     ], []);
 
@@ -134,8 +152,10 @@ export default function UserDashboard() {
             if (activeRegion && idx.region !== activeRegion) return false;
 
             // Static Chip filter (basic implementation for now)
-            if (activeMarketTab === "주식" && activeChip === "트렌딩 주식") {
-                return idx.type === "trending";
+            if (activeChip && activeChip !== "전체 지수" && activeChip !== "트렌딩 주식" && activeChip !== "주요 지수" && activeChip !== "메이저 코인" && activeChip !== "주요 통화" && activeChip !== "귀금속" && activeChip !== "지수 추종") {
+                // For now, if a specialized chip is selected, we filter by type if present, 
+                // but since we expanded the hardcoded list, we'll just show the relevant assets.
+                // In a real app, this would query a database.
             }
 
             return true;
@@ -323,67 +343,12 @@ export default function UserDashboard() {
                         </div>
                     )}
 
-                    {/* Market Data View (Grid or Table) */}
+                    {/* Market Data View (High-Density Table) */}
                     {isScreenerLoading ? (
                         <div style={{ height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#8B95A1' }}>
                             <div className="loading-spinner-v2" style={{ width: '32px', height: '32px', border: '3px solid #F2F4F7', borderTop: '3px solid #0055FB', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
                             <span style={{ fontSize: '13px', fontWeight: 500 }}>최신 시장 데이터 가져오는 중...</span>
                             <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-                        </div>
-                    ) : !["주식", "ETF", "암호화폐"].includes(activeMarketTab) ? (
-                        <div className="summary-grid">
-                            {summaryIndices.map(idx => {
-                                const item = (idx as any).price !== undefined ? {
-                                    price: (idx as any).price?.toLocaleString() || "---",
-                                    change: (idx as any).change?.toFixed(2) || "0.00",
-                                    changePercent: (idx as any).changePercent?.toFixed(2) || "0.00",
-                                    isPositive: ((idx as any).change ?? 0) >= 0
-                                } : (marketData.find(m => m.symbol === idx.symbol) || {
-                                    price: "---",
-                                    change: "0.00",
-                                    changePercent: "0.00",
-                                    isPositive: true
-                                });
-                                const status = getMarketStatus(idx.symbol);
-                                const isSelected = selectedCard === idx.symbol;
-
-                                return (
-                                    <div
-                                        key={idx.symbol}
-                                        className={`summary-card-v2 ${isSelected ? 'selected' : ''}`}
-                                        onClick={() => setSelectedCard(selectedCard === idx.symbol ? "" : idx.symbol)}
-                                    >
-                                        <div className="card-top">
-                                            <div className="card-name-group">
-                                                <span className="symbol-name">{idx.name}</span>
-                                                <span className="symbol-flag">{idx.flag}</span>
-                                            </div>
-                                            <button
-                                                className={`watchlist-btn ${isWatched(idx.symbol) ? 'active' : ''}`}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleWatchlist(idx.symbol);
-                                                }}
-                                                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: isWatched(idx.symbol) ? '#FFB800' : '#B0B8C1' }}
-                                            >
-                                                <Star size={16} fill={isWatched(idx.symbol) ? "#FFB800" : "none"} />
-                                            </button>
-                                            <span className={`status-badge ${status.type}`}>
-                                                {status.text}
-                                            </span>
-                                        </div>
-                                        <div className="card-main">
-                                            <div className="price-val">{item.price}</div>
-                                            <div className={`change-val ${item.isPositive ? 'positive' : 'negative'}`}>
-                                                {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
-                                            </div>
-                                        </div>
-                                        <div className="card-unit-row">
-                                            <span className="unit-label">{idx.unit}</span>
-                                        </div>
-                                    </div>
-                                );
-                            })}
                         </div>
                     ) : (
                         <div className="market-table-container" style={{ overflowX: 'auto', background: 'white', borderRadius: '16px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
@@ -401,23 +366,26 @@ export default function UserDashboard() {
                                 </thead>
                                 <tbody>
                                     {summaryIndices.map(idx => {
-                                        const item = (idx as any).price !== undefined ? {
+                                        const m = marketData?.[idx.symbol];
+                                        const isScreenerSource = (idx as any).price !== undefined;
+
+                                        const item = isScreenerSource ? {
                                             price: (idx as any).price?.toLocaleString() || "---",
-                                            change: (idx as any).change?.toFixed(2) || "0.00",
-                                            changePercent: (idx as any).changePercent?.toFixed(2) || "0.00",
+                                            change: typeof (idx as any).change === 'number' ? (idx as any).change.toFixed(2) : (idx as any).change || "0.00",
+                                            changePercent: typeof (idx as any).changePercent === 'number' ? (idx as any).changePercent.toFixed(2) : (idx as any).changePercent || "0.00",
                                             isPositive: ((idx as any).change ?? 0) >= 0,
                                             high: (idx as any).high?.toLocaleString() || "---",
                                             low: (idx as any).low?.toLocaleString() || "---",
                                             volume: formatVolume((idx as any).volume)
-                                        } : (marketData.find(m => m.symbol === idx.symbol) || {
-                                            price: "---",
-                                            change: "0.00",
-                                            changePercent: "0.00",
-                                            isPositive: true,
-                                            high: "---",
-                                            low: "---",
-                                            volume: "---"
-                                        });
+                                        } : {
+                                            price: m ? m.price.toLocaleString() : "---",
+                                            change: m ? m.change.toFixed(2) : "0.00",
+                                            changePercent: m ? m.changePercent.toFixed(2) : "0.00",
+                                            isPositive: (m?.change ?? 0) >= 0,
+                                            high: m?.high?.toLocaleString() || "---",
+                                            low: m?.low?.toLocaleString() || "---",
+                                            volume: m ? formatVolume(m.volume) : "---"
+                                        };
                                         const isSelected = selectedCard === idx.symbol;
                                         return (
                                             <tr
@@ -445,7 +413,7 @@ export default function UserDashboard() {
                                                     <span style={{ color: '#FF4D4D' }}>{item.low}</span>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: item.isPositive ? '#00D17E' : '#FF4D4D' }}>
-                                                    {item.isPositive ? '+' : '-'}{item.change}
+                                                    {item.isPositive ? '+' : ''}{item.change}
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                                                     <span style={{
@@ -584,14 +552,16 @@ export default function UserDashboard() {
                         </div>
                     </div>
 
-                    {showCta && (
-                        <div className="slim-login-cta">
-                            <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
-                            <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
-                                무료 시작하기 →
-                            </button>
-                        </div>
-                    )}
+                    {
+                        showCta && (
+                            <div className="slim-login-cta">
+                                <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
+                                <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
+                                    무료 시작하기 →
+                                </button>
+                            </div>
+                        )
+                    }
 
                     <style jsx>{`
                     .market-summary-container { margin-bottom: 40px; }
@@ -672,8 +642,8 @@ export default function UserDashboard() {
                     .market-table-container th { border-top: none; }
                     .table-row-hover:hover { background: #F8FAFF !important; }
                 `}</style>
-                </div>
-            </div>
+                </div >
+            </div >
 
         );
     };

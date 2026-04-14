@@ -9,14 +9,15 @@ export const MARKET_CONFIG = {
     // 야후 파이낸스 심볼 목록
     symbols: [
         '^KS11', '^KQ11', 'KRW=X', 'JPYKRW=X', 'EURKRW=X', 'CNYKRW=X',
-        '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
+        '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', '^STOXX50E', // 해외 및 아시아/유럽 지수
         '005930.KS', '000660.KS', '035420.KS', '035720.KS', '005380.KS', '000270.KS',
         '373220.KS', '207940.KS', '068270.KS', '005490.KS', '051910.KS', '000810.KS',
-        '012330.KS', '035420.KS', '066570.KS', '096770.KS', '036570.KS', // 한국 대형주 추가
-        'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NFLX', 'BRK-B', 'V', 'JPM', // 미국 주식 추가
-        'SPY', 'QQQ', 'SOXX', 'ARKK', // ETF
-        'BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD', // 암호화폐
-        'GC=F', 'SI=F', 'CL=F', 'HG=F' // 원자재
+        '012330.KS', '066570.KS', '096770.KS', '036570.KS', // 한국 대형주
+        'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NFLX', 'BRK-B', 'V', 'JPM', // 미국 주식
+        'GBPUSD=X', 'USDJPY=X', 'AUDUSD=X', 'EURUSD=X', // 주요 통화 추가
+        'SPY', 'QQQ', 'SOXX', 'ARKK', 'TQQQ', 'SQQQ', 'DIA', // ETF 추가
+        'BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD', 'BNB-USD', 'ADA-USD', 'DOGE-USD', // 암호화폐 추가
+        'GC=F', 'SI=F', 'CL=F', 'HG=F', 'BZ=F', 'NG=F', 'PL=F' // 원자재 추가
     ],
 
     // 카테고리 분류 (신규)
@@ -76,10 +77,24 @@ export const MARKET_CONFIG = {
         'ETH-USD': 'Ethereum',
         'SOL-USD': 'Solana',
         'XRP-USD': 'Ripple',
-        'GC=F': 'Gold',
-        'SI=F': 'Silver',
-        'CL=F': 'Crude Oil',
-        'HG=F': 'Copper',
+        'GBPUSD=X': 'GBP/USD',
+        'USDJPY=X': 'USD/JPY',
+        'EURUSD=X': 'EUR/USD',
+        'AUDUSD=X': 'AUD/USD',
+        'PL=F': '백금',
+        'BZ=F': '브렌트유',
+        'NG=F': '천연가스',
+        'TQQQ': 'TQQQ (나스닥 3배)',
+        'SQQQ': 'SQQQ (나스닥 -3배)',
+        'DIA': '다우 30 ETF',
+        'BNB-USD': '바이낸스 코인',
+        'ADA-USD': '에이다',
+        'DOGE-USD': '도지코인',
+        'STOXX50E': 'Euro Stoxx 50',
+        'GC=F': '금',
+        'SI=F': '은',
+        'CL=F': 'WTI유',
+        'HG=F': '구리',
         'BASE': '금리'
     } as Record<string, string>,
 
