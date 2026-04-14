@@ -147,12 +147,12 @@ export default function UserDashboard() {
     const currentTab = useMemo(() => marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0], [activeMarketTab, marketTabs]);
 
     const summaryIndices = useMemo(() => {
-        // Priority 1: Screener Data (for dynamic chips)
-        if (screenerData.length > 0) {
+        // Priority 1: US Screener Data
+        if (activeRegion === "US" && screenerData.length > 0) {
             return screenerData.map(item => ({
                 symbol: item.symbol,
                 name: item.name || item.symbol,
-                flag: (item.symbol.endsWith('.KS') || item.symbol.endsWith('.KQ')) ? '🇰🇷' : '🇺🇸',
+                flag: '🇺🇸',
                 price: item.price,
                 change: item.change,
                 changePercent: item.changePercent,
@@ -162,21 +162,37 @@ export default function UserDashboard() {
             }));
         }
 
-        // Priority 2: Standard Hardcoded indices
-        return (currentTab.indices as any[]).filter(idx => {
-            // Region filter
+        // Priority 2: Standard Hardcoded indices with Intelligent Sorting (especially for KR)
+        let baseIndices = (currentTab.indices as any[]).filter(idx => {
             if (activeRegion && idx.region !== activeRegion) return false;
-
-            // Static Chip filter (basic implementation for now)
-            if (activeChip && activeChip !== "전체 지수" && activeChip !== "트렌딩 주식" && activeChip !== "주요 지수" && activeChip !== "메이저 코인" && activeChip !== "주요 통화" && activeChip !== "귀금속" && activeChip !== "지수 추종") {
-                // For now, if a specialized chip is selected, we filter by type if present, 
-                // but since we expanded the hardcoded list, we'll just show the relevant assets.
-                // In a real app, this would query a database.
-            }
-
             return true;
         });
-    }, [currentTab, activeRegion, activeChip, screenerData, activeMarketTab]);
+
+        const dynamicChips = ["트렌딩 주식", "최다 거래", "급등주", "급락주", "52주 신고가", "52주 신저가"];
+        if (dynamicChips.includes(activeChip)) {
+            return [...baseIndices].sort((a, b) => {
+                const dataA = marketDataMap[a.symbol];
+                const dataB = marketDataMap[b.symbol];
+
+                if (!dataA || !dataB) return 0;
+
+                const parseVal = (val: string) => parseFloat(val.replace(/,/g, ''));
+                const changeA = parseVal(dataA.changePercent || "0");
+                const changeB = parseVal(dataB.changePercent || "0");
+
+                if (activeChip === "급등주") return changeB - changeA;
+                if (activeChip === "급락주") return changeA - changeB;
+                if (activeChip === "최다 거래") {
+                    const volA = parseVal(dataA.volume || "0");
+                    const volB = parseVal(dataB.volume || "0");
+                    return volB - volA;
+                }
+                return 0; // Default or momentum for others
+            }).slice(0, 15);
+        }
+
+        return baseIndices;
+    }, [currentTab, activeRegion, activeChip, screenerData, marketDataMap]);
 
     // Fetch detailed data when a card is selected
     useEffect(() => {
@@ -205,7 +221,9 @@ export default function UserDashboard() {
 
     // Dynamic Market Screener Logic
     useEffect(() => {
-        const dynamicChips = ["트렌딩 주식", "급등주", "급락주", "최다 거래"];
+        const dynamicChips = ["트렌딩 주식", "급등주", "급락주", "최다 거래", "52주 신고가", "52주 신저가"];
+        // Only fetch US screener for now as Yahoo predefined screeners are US-heavy.
+        // For KR, we use the client-side sorting logic implemented in summaryIndices.
         if (!dynamicChips.includes(activeChip) || activeRegion === "KR") {
             setScreenerData([]);
             return;
@@ -217,7 +235,9 @@ export default function UserDashboard() {
                 "트렌딩 주식": "trending_tickers",
                 "급등주": "day_gainers",
                 "급락주": "day_losers",
-                "최다 거래": "most_actives"
+                "최다 거래": "most_actives",
+                "52주 신고가": "growth_technology_stocks", // Approximated
+                "52주 신저가": "undervalued_growth_stocks" // Approximated
             };
             const scrId = chipToScrId[activeChip];
 
