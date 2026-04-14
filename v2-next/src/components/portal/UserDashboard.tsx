@@ -423,23 +423,27 @@ export default function UserDashboard() {
                                                     </div>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 800, color: '#1B1C1D' }}>{item.price}</td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#4E5968' }}>
-                                                    <span style={{ color: '#00D17E' }}>{item.high}</span>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#4E5968', fontSize: '12px' }}>
+                                                    <span style={{ color: '#F04452' }}>{item.high}</span>
                                                     <span style={{ margin: '0 4px', color: '#E5E8EB' }}>/</span>
-                                                    <span style={{ color: '#FF4D4D' }}>{item.low}</span>
+                                                    <span style={{ color: '#3182F6' }}>{item.low}</span>
                                                 </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: item.isPositive ? '#00D17E' : '#FF4D4D' }}>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: item.isPositive ? '#F04452' : '#3182F6' }}>
                                                     {item.isPositive ? '+' : ''}{item.change}
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                                                     <span style={{
-                                                        background: item.isPositive ? 'rgba(0, 209, 126, 0.1)' : 'rgba(255, 77, 77, 0.1)',
-                                                        color: item.isPositive ? '#00D17E' : '#FF4D4D',
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        gap: '4px',
+                                                        background: item.isPositive ? 'rgba(240, 68, 82, 0.1)' : 'rgba(49, 130, 246, 0.1)',
+                                                        color: item.isPositive ? '#F04452' : '#3182F6',
                                                         padding: '4px 8px',
                                                         borderRadius: '6px',
-                                                        fontWeight: 800
+                                                        fontWeight: 800,
+                                                        whiteSpace: 'nowrap'
                                                     }}>
-                                                        {item.isPositive ? '▲' : '▼'} {item.changePercent}%
+                                                        {item.isPositive ? '▲' : '▼'}{item.changePercent}%
                                                     </span>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1' }}>{item.volume}</td>

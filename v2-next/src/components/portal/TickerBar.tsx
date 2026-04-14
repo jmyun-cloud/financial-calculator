@@ -20,10 +20,12 @@ export default function TickerBar() {
 
     // Triple the items for smooth infinite scroll
     const displayItems = [...indicators, ...indicators, ...indicators];
+    // Adjust duration based on count (e.g., 8 seconds per item for a consistent speed)
+    const scrollDuration = indicators.length > 0 ? indicators.length * 8 : 60;
 
     return (
         <div className="ticker-wrapper">
-            <div className="ticker-track">
+            <div className="ticker-track" style={{ animationDuration: `${scrollDuration}s` }}>
                 {displayItems.map((item, idx) => (
                     <div key={`${item.symbol}-${idx}`} className="ticker-item">
                         <span className="ticker-label">{item.name}</span>
@@ -78,11 +80,11 @@ export default function TickerBar() {
                     border-radius: 4px;
                 }
                 .ticker-chip.positive {
-                    color: #F04452;
+                    color: #F04452; /* Red Up */
                     background: rgba(240, 68, 82, 0.08);
                 }
                 .ticker-chip.negative {
-                    color: #3182F6;
+                    color: #3182F6; /* Blue Down */
                     background: rgba(49, 130, 246, 0.08);
                 }
 
