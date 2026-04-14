@@ -193,10 +193,10 @@ export default function ProfessionalChart({
             `}</style>
             <div style={{
                 position: 'absolute',
-                bottom: 0,
+                bottom: '26px',
                 left: 0,
-                width: '140px',
-                height: '36px',
+                width: '80px',
+                height: '24px',
                 background: '#ffffff',
                 zIndex: 20,
                 pointerEvents: 'all',
