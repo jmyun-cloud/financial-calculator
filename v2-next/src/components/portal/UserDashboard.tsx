@@ -149,10 +149,16 @@ export default function UserDashboard() {
     const summaryIndices = useMemo(() => {
         // Priority 1: Screener Data (for dynamic chips)
         if (screenerData.length > 0) {
-            return screenerData.map(s => ({
-                ...s,
-                flag: activeRegion === "US" ? "🇺🇸" : "🌐",
-                unit: activeRegion === "US" ? "USD" : ""
+            return screenerData.map(item => ({
+                symbol: item.symbol,
+                name: item.name || item.symbol,
+                flag: (item.symbol.endsWith('.KS') || item.symbol.endsWith('.KQ')) ? '🇰🇷' : '🇺🇸',
+                price: item.price,
+                change: item.change,
+                changePercent: item.changePercent,
+                volume: item.volume,
+                high: item.high,
+                low: item.low
             }));
         }
 
@@ -388,13 +394,13 @@ export default function UserDashboard() {
                                             low: (idx as any).low?.toLocaleString() || "---",
                                             volume: formatVolume((idx as any).volume)
                                         } : {
-                                            price: m ? m.price : "---",
-                                            change: m ? m.change : "0.00",
-                                            changePercent: m ? m.changePercent : "0.00",
+                                            price: (m && m.price !== "NaN") ? m.price : "---",
+                                            change: (m && m.change !== "NaN") ? m.change : "0.00",
+                                            changePercent: (m && m.changePercent !== "NaN") ? m.changePercent : "0.00",
                                             isPositive: (m?.isPositive ?? true),
-                                            high: m?.high || "---",
-                                            low: m?.low || "---",
-                                            volume: m ? m.volume : "---"
+                                            high: (m?.high && m.high !== "NaN") ? m.high : "---",
+                                            low: (m?.low && m.low !== "NaN") ? m.low : "---",
+                                            volume: (m && m.volume !== "NaN") ? m.volume : "---"
                                         };
                                         const isSelected = selectedCard === idx.symbol;
                                         return (
