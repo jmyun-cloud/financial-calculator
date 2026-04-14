@@ -37,6 +37,9 @@ export default function UserDashboard() {
     const [chartRange, setChartRange] = useState("1y");
     const [screenerData, setScreenerData] = useState<any[]>([]);
     const [isScreenerLoading, setIsScreenerLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
     const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
 
     const requestSort = (key: string) => {
@@ -155,7 +158,22 @@ export default function UserDashboard() {
     const currentTab = useMemo(() => marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0], [activeMarketTab, marketTabs]);
 
     const summaryIndices = useMemo(() => {
-        // Base list of indices (either US Screener or Regional Filtered)
+        // Priority 0: Search Results
+        if (searchQuery.length >= 2 && searchResults.length > 0) {
+            return searchResults.map(item => ({
+                symbol: item.symbol,
+                name: item.name,
+                flag: item.region === 'KR' ? '🇰🇷' : '🇺🇸',
+                price: marketDataMap[item.symbol]?.price || "---",
+                change: marketDataMap[item.symbol]?.change || "---",
+                changePercent: marketDataMap[item.symbol]?.changePercent || "---",
+                volume: marketDataMap[item.symbol]?.volume || "---",
+                high: "---",
+                low: "---"
+            })).slice(0, 15);
+        }
+
+        // Priority 1: US Screener Data or Regional Filtered
         let processedItems = [];
 
         if (activeRegion === "US" && screenerData.length > 0) {
@@ -286,6 +304,31 @@ export default function UserDashboard() {
         fetchScreener();
     }, [activeChip, activeRegion]);
 
+    // Global Market Search Logic (Debounced)
+    useEffect(() => {
+        if (searchQuery.length < 2) {
+            setSearchResults([]);
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            setIsSearching(true);
+            try {
+                const res = await fetch(`/api/market-search?q=${encodeURIComponent(searchQuery)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setSearchResults(data.data || []);
+                }
+            } catch (err) {
+                console.error("Search failed:", err);
+            } finally {
+                setIsSearching(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
     const formatVolume = (vol: number | null) => {
         if (!vol || vol === 0) return "---";
         if (vol >= 100000000) return (vol / 100000000).toFixed(1) + "억주";
@@ -348,6 +391,55 @@ export default function UserDashboard() {
                             <div className="live-status-badge" style={{ background: '#F8F9FA', color: '#8B95A1' }}>
                                 실시간
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Global Search Interface */}
+                    <div className="market-search-bar" style={{ marginBottom: '24px', position: 'relative' }}>
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="text"
+                                placeholder="종목명 또는 심볼 검색 (예: 삼성전자, Apple, BTC)..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '16px 20px 16px 52px',
+                                    borderRadius: '18px',
+                                    border: '1px solid #F2F4F7',
+                                    background: '#F9FAFB',
+                                    fontSize: '15px',
+                                    fontWeight: 500,
+                                    color: '#191F28',
+                                    outline: 'none',
+                                    transition: 'all 0.2s',
+                                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+                                }}
+                                onFocus={(e) => {
+                                    e.currentTarget.style.background = 'white';
+                                    e.currentTarget.style.borderColor = '#0055FB';
+                                    e.currentTarget.style.boxShadow = '0 0 0 4px rgba(0, 85, 251, 0.1)';
+                                }}
+                                onBlur={(e) => {
+                                    e.currentTarget.style.background = '#F9FAFB';
+                                    e.currentTarget.style.borderColor = '#F2F4F7';
+                                    e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)';
+                                }}
+                            />
+                            <svg style={{ position: 'absolute', left: '20px', width: '20px', height: '20px', color: '#8B95A1' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            {isSearching && (
+                                <div style={{ position: 'absolute', right: '20px' }} className="loading-spinner-v2"></div>
+                            )}
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery("")}
+                                    style={{ position: 'absolute', right: isSearching ? '50px' : '20px', background: 'none', border: 'none', color: '#8B95A1', cursor: 'pointer', padding: '4px' }}
+                                >
+                                    ✕
+                                </button>
+                            )}
                         </div>
                     </div>
 
