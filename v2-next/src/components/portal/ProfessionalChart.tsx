@@ -183,16 +183,24 @@ export default function ProfessionalChart({
                 }}
             />
 
-            {/* Cover TradingView watermark */}
+            {/* Cover TradingView watermark - CSS + overlay combined */}
+            <style>{`
+                .tv-lightweight-charts a,
+                .tv-lightweight-charts td a {
+                    display: none !important;
+                    pointer-events: none !important;
+                }
+            `}</style>
             <div style={{
                 position: 'absolute',
                 bottom: 0,
                 left: 0,
-                width: '80px',
-                height: '28px',
+                width: '140px',
+                height: '36px',
                 background: '#ffffff',
-                zIndex: 10,
-                pointerEvents: 'auto',
+                zIndex: 20,
+                pointerEvents: 'all',
+                cursor: 'default'
             }} />
 
             {/* No-data overlay */}
