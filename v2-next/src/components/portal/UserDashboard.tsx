@@ -10,7 +10,6 @@ import Link from "next/link";
 const ProfessionalChart = dynamic(() => import("./ProfessionalChart"), { ssr: false });
 const TechnicalSummary = dynamic(() => import("./TechnicalSummary"), { ssr: false });
 import EconomicCalendar from "./EconomicCalendar";
-import SentimentGauge from "./SentimentGauge";
 
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
@@ -188,9 +187,11 @@ export default function UserDashboard() {
             const parseVal = (val: any) => {
                 if (typeof val === 'number') return val;
                 if (!val || typeof val !== 'string') return 0;
-                // Remove all formatting characters
+                // Identify the sign based on the arrow indicator
+                const sign = (val.includes('▼') || val.includes('-')) ? -1 : 1;
+                // Remove all formatting characters including arrows
                 const cleaned = val.replace(/,/g, '').replace(/[원USD▲▼%+]/g, '').trim();
-                return parseFloat(cleaned) || 0;
+                return (parseFloat(cleaned) || 0) * sign;
             };
 
             // 1. User Manual Sort (Priority)
@@ -731,7 +732,6 @@ export default function UserDashboard() {
             <>
                 {renderMarketSummary(true)}
                 <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px', padding: '0 32px 32px' }}>
-                    <SentimentGauge />
                     <div className="widget-section">
                         <EconomicCalendar />
                     </div>
@@ -779,7 +779,6 @@ export default function UserDashboard() {
                 </div>
 
                 <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <SentimentGauge />
                     <div className="widget-section">
                         <h3 className="section-title">내 재무 목표</h3>
                         <GoalTracker />
