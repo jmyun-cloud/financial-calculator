@@ -26,6 +26,8 @@ export default function UserDashboard() {
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
     const [chartRange, setChartRange] = useState("1y");
+    const [screenerData, setScreenerData] = useState<any[]>([]);
+    const [isScreenerLoading, setIsScreenerLoading] = useState(false);
 
     // Fetch detailed data when a card is selected
     useEffect(() => {
@@ -51,6 +53,40 @@ export default function UserDashboard() {
 
         fetchDetail();
     }, [selectedCard, chartRange]);
+
+    // Dynamic Market Screener Logic
+    useEffect(() => {
+        const dynamicChips = ["트렌딩 주식", "급등주", "급락주", "최다 거래"];
+        if (!dynamicChips.includes(activeChip) || activeRegion === "KR") {
+            setScreenerData([]);
+            return;
+        }
+
+        const fetchScreener = async () => {
+            setIsScreenerLoading(true);
+            const chipToScrId: Record<string, string> = {
+                "트렌딩 주식": "trending_tickers",
+                "급등주": "day_gainers",
+                "급락주": "day_losers",
+                "최다 거래": "most_actives"
+            };
+            const scrId = chipToScrId[activeChip];
+
+            try {
+                const res = await fetch(`/api/market-screener?scrId=${scrId}&count=15`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setScreenerData(data.data || []);
+                }
+            } catch (err) {
+                console.error("Failed to fetch screener:", err);
+            } finally {
+                setIsScreenerLoading(false);
+            }
+        };
+
+        fetchScreener();
+    }, [activeChip, activeRegion]);
 
     const formatVolume = (vol: number | null) => {
         if (!vol || vol === 0) return "---";
@@ -158,18 +194,31 @@ export default function UserDashboard() {
         const currentTab = marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0];
 
         // Dynamic filtering based on Region and Chips
-        const summaryIndices = (currentTab.indices as any[]).filter(idx => {
-            // Region filter
-            if (activeRegion && idx.region !== activeRegion) return false;
-
-            // Chip filter (basic implementation for now)
-            if (activeMarketTab === "주식") {
-                if (activeChip === "트렌딩 주식") return idx.type === "trending";
-                // Add more chip logic as needed
+        const summaryIndices = useMemo(() => {
+            // Priority 1: Screener Data (for dynamic chips)
+            if (screenerData.length > 0) {
+                return screenerData.map(s => ({
+                    ...s,
+                    flag: activeRegion === "US" ? "🇺🇸" : "🌐",
+                    unit: activeRegion === "US" ? "USD" : ""
+                }));
             }
 
-            return true;
-        });
+            // Priority 2: Standard Hardcoded indices
+            return (currentTab.indices as any[]).filter(idx => {
+                // Region filter
+                if (activeRegion && idx.region !== activeRegion) return false;
+
+                // Static Chip filter (basic implementation for now)
+                if (activeMarketTab === "주식" && activeChip === "트렌딩 주식") {
+                    return idx.type === "trending";
+                }
+
+                return true;
+            });
+        }, [currentTab, activeRegion, activeChip, screenerData, activeMarketTab]);
+
+        const totalDisplayIndices = summaryIndices;
 
         return (
             <div className="market-summary-container">
@@ -261,15 +310,26 @@ export default function UserDashboard() {
                     )}
 
                     {/* Market Data View (Grid or Table) */}
-                    {!["주식", "ETF", "암호화폐"].includes(activeMarketTab) ? (
+                    {isScreenerLoading ? (
+                        <div style={{ height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#8B95A1' }}>
+                            <div className="loading-spinner-v2" style={{ width: '32px', height: '32px', border: '3px solid #F2F4F7', borderTop: '3px solid #0055FB', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                            <span style={{ fontSize: '13px', fontWeight: 500 }}>최신 시장 데이터 가져오는 중...</span>
+                            <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+                        </div>
+                    ) : !["주식", "ETF", "암호화폐"].includes(activeMarketTab) ? (
                         <div className="summary-grid">
                             {summaryIndices.map(idx => {
-                                const item = marketData.find(m => m.symbol === idx.symbol) || {
+                                const item = (idx as any).price !== undefined ? {
+                                    price: (idx as any).price?.toLocaleString() || "---",
+                                    change: (idx as any).change?.toFixed(2) || "0.00",
+                                    changePercent: (idx as any).changePercent?.toFixed(2) || "0.00",
+                                    isPositive: ((idx as any).change ?? 0) >= 0
+                                } : (marketData.find(m => m.symbol === idx.symbol) || {
                                     price: "---",
                                     change: "0.00",
                                     changePercent: "0.00",
                                     isPositive: true
-                                };
+                                });
                                 const status = getMarketStatus(idx.symbol);
                                 const isSelected = selectedCard === idx.symbol;
 
@@ -327,7 +387,15 @@ export default function UserDashboard() {
                                 </thead>
                                 <tbody>
                                     {summaryIndices.map(idx => {
-                                        const item = marketData.find(m => m.symbol === idx.symbol) || {
+                                        const item = (idx as any).price !== undefined ? {
+                                            price: (idx as any).price?.toLocaleString() || "---",
+                                            change: (idx as any).change?.toFixed(2) || "0.00",
+                                            changePercent: (idx as any).changePercent?.toFixed(2) || "0.00",
+                                            isPositive: ((idx as any).change ?? 0) >= 0,
+                                            high: (idx as any).high?.toLocaleString() || "---",
+                                            low: (idx as any).low?.toLocaleString() || "---",
+                                            volume: formatVolume((idx as any).volume)
+                                        } : (marketData.find(m => m.symbol === idx.symbol) || {
                                             price: "---",
                                             change: "0.00",
                                             changePercent: "0.00",
@@ -335,7 +403,7 @@ export default function UserDashboard() {
                                             high: "---",
                                             low: "---",
                                             volume: "---"
-                                        };
+                                        });
                                         const isSelected = selectedCard === idx.symbol;
                                         return (
                                             <tr

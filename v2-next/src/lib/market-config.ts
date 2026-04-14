@@ -10,7 +10,7 @@ export const MARKET_CONFIG = {
     symbols: [
         '^KS11', '^KQ11', 'KRW=X', 'JPYKRW=X', 'EURKRW=X', 'CNYKRW=X',
         '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
-        '005930.KS', '000660.KS', '035420.KS', '035720.KS', // 한국 주식
+        '005930.KS', '000660.KS', '035420.KS', '035720.KS', '005380.KS', '000270.KS', // 한국 주식
         'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', // 미국 주식
         'SPY', 'QQQ', 'SOXX', 'ARKK', // ETF
         'BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD', // 암호화폐
