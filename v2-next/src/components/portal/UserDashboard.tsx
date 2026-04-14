@@ -29,6 +29,103 @@ export default function UserDashboard() {
     const [screenerData, setScreenerData] = useState<any[]>([]);
     const [isScreenerLoading, setIsScreenerLoading] = useState(false);
 
+    // Helper data for premium design
+    const marketTabs = useMemo(() => [
+        {
+            id: "지수",
+            indices: [
+                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt", region: "KR" },
+                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt", region: "KR" },
+                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt", region: "US" },
+                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt", region: "US" }
+            ],
+            chips: ["전체 지수", "주요 지수", "선물 지수"]
+        },
+        {
+            id: "주식",
+            indices: [
+                { symbol: "005930.KS", name: "삼성전자", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "000660.KS", name: "SK하이닉스", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "035420.KS", name: "NAVER", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "035720.KS", name: "카카오", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "005380.KS", name: "현대차", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "000270.KS", name: "기아", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "AAPL", name: "Apple", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "TSLA", name: "Tesla", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "NVDA", name: "Nvidia", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "MSFT", name: "Microsoft", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" }
+            ],
+            chips: ["트렌딩 주식", "최다 거래", "급등주", "급락주", "52주 신고가", "52주 신저가"]
+        },
+        {
+            id: "원자재",
+            indices: [
+                { symbol: "GC=F", name: "금", flag: "🟡", unit: "USD/oz" },
+                { symbol: "SI=F", name: "은", flag: "⚪", unit: "USD/oz" },
+                { symbol: "CL=F", name: "WTI유", flag: "🛢️", unit: "USD/bbl" },
+                { symbol: "HG=F", name: "구리", flag: "🥉", unit: "USD/lb" }
+            ]
+        },
+        {
+            id: "외환",
+            indices: [
+                { symbol: "KRW=X", name: "USD/KRW", flag: "🇰🇷", unit: "원" },
+                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
+                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
+                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" },
+                { symbol: "EURUSD=X", name: "EUR/USD", flag: "🇪🇺", unit: "USD" }
+            ]
+        },
+        {
+            id: "ETF",
+            indices: [
+                { symbol: "SPY", name: "S&P 500 ETF", flag: "🇺🇸", unit: "USD" },
+                { symbol: "QQQ", name: "Nasdaq 100 ETF", flag: "🇺🇸", unit: "USD" },
+                { symbol: "ARKK", name: "ARK Innovation", flag: "🇺🇸", unit: "USD" },
+                { symbol: "SOXX", name: "Semiconductor ETF", flag: "🇺🇸", unit: "USD" }
+            ]
+        },
+        {
+            id: "암호화폐",
+            indices: [
+                { symbol: "BTC-USD", name: "Bitcoin", flag: "₿", unit: "USD" },
+                { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ", unit: "USD" },
+                { symbol: "SOL-USD", name: "Solana", flag: "☀️", unit: "USD" },
+                { symbol: "XRP-USD", name: "Ripple", flag: "✖️", unit: "USD" }
+            ]
+        }
+    ], []);
+
+    // Dynamic filtering based on Region and Chips
+    const currentTab = useMemo(() => marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0], [activeMarketTab, marketTabs]);
+
+    const summaryIndices = useMemo(() => {
+        // Priority 1: Screener Data (for dynamic chips)
+        if (screenerData.length > 0) {
+            return screenerData.map(s => ({
+                ...s,
+                flag: activeRegion === "US" ? "🇺🇸" : "🌐",
+                unit: activeRegion === "US" ? "USD" : ""
+            }));
+        }
+
+        // Priority 2: Standard Hardcoded indices
+        return (currentTab.indices as any[]).filter(idx => {
+            // Region filter
+            if (activeRegion && idx.region !== activeRegion) return false;
+
+            // Static Chip filter (basic implementation for now)
+            if (activeMarketTab === "주식" && activeChip === "트렌딩 주식") {
+                return idx.type === "trending";
+            }
+
+            return true;
+        });
+    }, [currentTab, activeRegion, activeChip, screenerData, activeMarketTab]);
+
     // Fetch detailed data when a card is selected
     useEffect(() => {
         if (!selectedCard) {
@@ -102,76 +199,6 @@ export default function UserDashboard() {
         return () => window.removeEventListener("fc_mock_login", handleLogin);
     }, []);
 
-    // Helper data for premium design
-    const marketTabs = useMemo(() => [
-        {
-            id: "지수",
-            indices: [
-                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt", region: "KR" },
-                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt", region: "KR" },
-                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt", region: "US" },
-                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt", region: "US" },
-                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt", region: "US" },
-                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt", region: "US" },
-                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt", region: "US" }
-            ],
-            chips: ["전체 지수", "주요 지수", "선물 지수"]
-        },
-        {
-            id: "주식",
-            indices: [
-                { symbol: "005930.KS", name: "삼성전자", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "000660.KS", name: "SK하이닉스", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "035420.KS", name: "NAVER", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "035720.KS", name: "카카오", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "005380.KS", name: "현대차", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "000270.KS", name: "기아", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
-                { symbol: "AAPL", name: "Apple", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
-                { symbol: "TSLA", name: "Tesla", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
-                { symbol: "NVDA", name: "Nvidia", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
-                { symbol: "MSFT", name: "Microsoft", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" }
-            ],
-            chips: ["트렌딩 주식", "최다 거래", "급등주", "급락주", "52주 신고가", "52주 신저가"]
-        },
-        {
-            id: "원자재",
-            indices: [
-                { symbol: "GC=F", name: "Gold", flag: "🥇", unit: "USD/oz", region: "US" },
-                { symbol: "SI=F", name: "Silver", flag: "🥈", unit: "USD/oz", region: "US" },
-                { symbol: "CL=F", name: "WTI Crude", flag: "🛢️", unit: "USD/bbl", region: "US" },
-                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb", region: "US" },
-                { symbol: "NG=F", name: "Natural Gas", flag: "🔥", unit: "USD/MMBtu" }
-            ]
-        },
-        {
-            id: "외환",
-            indices: [
-                { symbol: "KRW=X", name: "USD/KRW", flag: "💱", unit: "원" },
-                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
-                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
-                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" },
-                { symbol: "EURUSD=X", name: "EUR/USD", flag: "🇪🇺", unit: "USD" }
-            ]
-        },
-        {
-            id: "ETF",
-            indices: [
-                { symbol: "SPY", name: "S&P 500 ETF", flag: "🇺🇸", unit: "USD" },
-                { symbol: "QQQ", name: "Nasdaq 100 ETF", flag: "🇺🇸", unit: "USD" },
-                { symbol: "ARKK", name: "ARK Innovation", flag: "🇺🇸", unit: "USD" },
-                { symbol: "SOXX", name: "Semiconductor ETF", flag: "🇺🇸", unit: "USD" }
-            ]
-        },
-        {
-            id: "암호화폐",
-            indices: [
-                { symbol: "BTC-USD", name: "Bitcoin", flag: "₿", unit: "USD" },
-                { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ", unit: "USD" },
-                { symbol: "SOL-USD", name: "Solana", flag: "☀️", unit: "USD" },
-                { symbol: "XRP-USD", name: "Ripple", flag: "✖️", unit: "USD" }
-            ]
-        }
-    ], []);
 
     const getMarketStatus = (sym: string) => {
         const now = new Date();
@@ -191,35 +218,6 @@ export default function UserDashboard() {
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px', background: 'rgba(0,0,0,0.05)', borderRadius: '28px' }} />;
 
     const renderMarketSummary = (showCta: boolean = true) => {
-        const currentTab = marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0];
-
-        // Dynamic filtering based on Region and Chips
-        const summaryIndices = useMemo(() => {
-            // Priority 1: Screener Data (for dynamic chips)
-            if (screenerData.length > 0) {
-                return screenerData.map(s => ({
-                    ...s,
-                    flag: activeRegion === "US" ? "🇺🇸" : "🌐",
-                    unit: activeRegion === "US" ? "USD" : ""
-                }));
-            }
-
-            // Priority 2: Standard Hardcoded indices
-            return (currentTab.indices as any[]).filter(idx => {
-                // Region filter
-                if (activeRegion && idx.region !== activeRegion) return false;
-
-                // Static Chip filter (basic implementation for now)
-                if (activeMarketTab === "주식" && activeChip === "트렌딩 주식") {
-                    return idx.type === "trending";
-                }
-
-                return true;
-            });
-        }, [currentTab, activeRegion, activeChip, screenerData, activeMarketTab]);
-
-        const totalDisplayIndices = summaryIndices;
-
         return (
             <div className="market-summary-container">
                 <div className="market-summary-card shadow-premium-clean">
