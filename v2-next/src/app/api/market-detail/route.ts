@@ -18,8 +18,9 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Use a cache-busting parameter to ensure we get fresh data during updates
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=${range}&_=${Date.now()}`;
+        // Always fetch 1y to ensure we have historical data for slicing, even if user asks for 1m/3m/6m
+        // Yahoo API often returns 0 or 1 point for short ranges with 1d interval on indices.
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y&_=${Date.now()}`;
 
         const res = await fetch(url, {
             // Lower revalidate to 1 minute for detailed market data
@@ -84,9 +85,11 @@ export async function GET(request: Request) {
 
         // For '1y' or more, we might want more points, but for detail view we limit to keep it fast
         // However, if the user specifically asked for a range, we should return the relevant portion.
-        const slicedData = range === '1m' ? chartData.slice(-30) :
-            range === '3m' ? chartData.slice(-90) :
-                range === '1y' ? chartData.slice(-252) : chartData;
+        // Slicing manually since we always fetch 1y to avoid Yahoo API bugs
+        const slicedData = range === '1m' ? chartData.slice(-22) :
+            range === '3m' ? chartData.slice(-66) :
+                range === '6m' ? chartData.slice(-132) :
+                    range === '1y' ? chartData.slice(-252) : chartData;
 
         return NextResponse.json({
             price: meta.regularMarketPrice,
