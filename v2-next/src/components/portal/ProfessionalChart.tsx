@@ -66,10 +66,12 @@ export default function ProfessionalChart({
                 rightOffset: 5,
                 tickMarkFormatter: (time: any) => {
                     const date = new Date((time as number) * 1000);
-                    if (date.getDate() === 1) {
-                        return `${date.getMonth() + 1}월'${String(date.getFullYear()).slice(-2)}`;
+                    const month = date.getMonth() + 1;
+                    const day = date.getDate();
+                    if (day === 1) {
+                        return `${month}월`;
                     }
-                    return String(date.getDate());
+                    return `${month}/${day}`;
                 },
             },
             rightPriceScale: {
