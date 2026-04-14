@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const scrId = searchParams.get('scrId') || 'trending_tickers';
-    const count = searchParams.get('count') || '10';
+    const count = searchParams.get('count') || '50';
 
     try {
         // Yahoo Finance Screener API

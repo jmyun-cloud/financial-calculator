@@ -10,8 +10,10 @@ export const MARKET_CONFIG = {
     symbols: [
         '^KS11', '^KQ11', 'KRW=X', 'JPYKRW=X', 'EURKRW=X', 'CNYKRW=X',
         '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
-        '005930.KS', '000660.KS', '035420.KS', '035720.KS', '005380.KS', '000270.KS', // 한국 주식
-        'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', // 미국 주식
+        '005930.KS', '000660.KS', '035420.KS', '035720.KS', '005380.KS', '000270.KS',
+        '373220.KS', '207940.KS', '068270.KS', '005490.KS', '051910.KS', '000810.KS',
+        '012330.KS', '035420.KS', '066570.KS', '096770.KS', '036570.KS', // 한국 대형주 추가
+        'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NFLX', 'BRK-B', 'V', 'JPM', // 미국 주식 추가
         'SPY', 'QQQ', 'SOXX', 'ARKK', // ETF
         'BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD', // 암호화폐
         'GC=F', 'SI=F', 'CL=F', 'HG=F' // 원자재
@@ -43,12 +45,29 @@ export const MARKET_CONFIG = {
         '000660.KS': 'SK하이닉스',
         '035420.KS': 'NAVER',
         '035720.KS': '카카오',
+        '005380.KS': '현대차',
+        '000270.KS': '기아',
+        '373220.KS': 'LG에너지솔루션',
+        '207940.KS': '삼성바이오로직스',
+        '068270.KS': '셀트리온',
+        '005490.KS': 'POSCO홀딩스',
+        '051910.KS': 'LG화학',
+        '000810.KS': '삼성화재',
+        '012330.KS': '현대모비스',
+        '066570.KS': 'LG전자',
+        '096770.KS': 'SK이노베이션',
+        '036570.KS': '엔씨소프트',
         'AAPL': 'Apple',
         'TSLA': 'Tesla',
         'NVDA': 'Nvidia',
         'MSFT': 'Microsoft',
         'GOOGL': 'Alphabet',
         'AMZN': 'Amazon',
+        'META': 'Meta',
+        'NFLX': 'Netflix',
+        'BRK-B': 'Berkshire',
+        'V': 'Visa',
+        'JPM': 'JPMorgan',
         'SPY': 'S&P 500 ETF',
         'QQQ': 'Nasdaq ETF',
         'SOXX': 'Semi ETF',
