@@ -10,7 +10,10 @@ export const MARKET_CONFIG = {
     symbols: [
         '^KS11', '^KQ11', 'KRW=X', 'JPYKRW=X', 'EURKRW=X', 'CNYKRW=X',
         '^GSPC', '^IXIC', '^DJI', '^N225', '^HSI', '^FTSE', // 해외
-        'BTC-USD', 'ETH-USD', 'XRP-USD', // 암호화폐
+        '005930.KS', '000660.KS', '035420.KS', '035720.KS', // 한국 주식
+        'AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', // 미국 주식
+        'SPY', 'QQQ', 'SOXX', 'ARKK', // ETF
+        'BTC-USD', 'ETH-USD', 'SOL-USD', 'XRP-USD', // 암호화폐
         'GC=F', 'SI=F', 'CL=F', 'HG=F' // 원자재
     ],
 
@@ -36,8 +39,23 @@ export const MARKET_CONFIG = {
         '^N225': 'Nikkei 225',
         '^HSI': 'Hang Seng',
         '^FTSE': 'FTSE 100',
+        '005930.KS': '삼성전자',
+        '000660.KS': 'SK하이닉스',
+        '035420.KS': 'NAVER',
+        '035720.KS': '카카오',
+        'AAPL': 'Apple',
+        'TSLA': 'Tesla',
+        'NVDA': 'Nvidia',
+        'MSFT': 'Microsoft',
+        'GOOGL': 'Alphabet',
+        'AMZN': 'Amazon',
+        'SPY': 'S&P 500 ETF',
+        'QQQ': 'Nasdaq ETF',
+        'SOXX': 'Semi ETF',
+        'ARKK': 'ARK Innovation',
         'BTC-USD': 'BitCoin',
         'ETH-USD': 'Ethereum',
+        'SOL-USD': 'Solana',
         'XRP-USD': 'Ripple',
         'GC=F': 'Gold',
         'SI=F': 'Silver',

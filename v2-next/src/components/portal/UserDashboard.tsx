@@ -67,30 +67,27 @@ export default function UserDashboard() {
     // Helper data for premium design
     const marketTabs = useMemo(() => [
         {
-            id: "국내",
+            id: "지수",
             indices: [
                 { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt" },
                 { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt" },
-                { symbol: "KRW=X", name: "USD/KRW", flag: "💱", unit: "원" },
-                { symbol: "GC=F", name: "금 시세", flag: "🥇", unit: "USD/oz" }
-            ]
-        },
-        {
-            id: "해외",
-            indices: [
                 { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt" },
                 { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt" },
-                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt" },
-                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt" }
+                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt" },
+                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt" }
             ]
         },
         {
-            id: "환율",
+            id: "주식",
             indices: [
-                { symbol: "KRW=X", name: "USD/KRW", flag: "🇺🇸", unit: "원" },
-                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
-                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
-                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" }
+                { symbol: "005930.KS", name: "삼성전자", flag: "🇰🇷", unit: "원" },
+                { symbol: "000660.KS", name: "SK하이닉스", flag: "🇰🇷", unit: "원" },
+                { symbol: "035420.KS", name: "NAVER", flag: "🇰🇷", unit: "원" },
+                { symbol: "035720.KS", name: "카카오", flag: "🇰🇷", unit: "원" },
+                { symbol: "AAPL", name: "Apple", flag: "🇺🇸", unit: "USD" },
+                { symbol: "TSLA", name: "Tesla", flag: "🇺🇸", unit: "USD" },
+                { symbol: "NVDA", name: "Nvidia", flag: "🇺🇸", unit: "USD" },
+                { symbol: "MSFT", name: "Microsoft", flag: "🇺🇸", unit: "USD" }
             ]
         },
         {
@@ -98,8 +95,37 @@ export default function UserDashboard() {
             indices: [
                 { symbol: "GC=F", name: "Gold", flag: "🥇", unit: "USD/oz" },
                 { symbol: "SI=F", name: "Silver", flag: "🥈", unit: "USD/oz" },
-                { symbol: "CL=F", name: "WTI", flag: "🛢️", unit: "USD/배럴" },
-                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb" }
+                { symbol: "CL=F", name: "WTI Crude", flag: "🛢️", unit: "USD/bbl" },
+                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb" },
+                { symbol: "NG=F", name: "Natural Gas", flag: "🔥", unit: "USD/MMBtu" }
+            ]
+        },
+        {
+            id: "외환",
+            indices: [
+                { symbol: "KRW=X", name: "USD/KRW", flag: "💱", unit: "원" },
+                { symbol: "JPYKRW=X", name: "JPY/KRW", flag: "🇯🇵", unit: "원/100엔" },
+                { symbol: "EURKRW=X", name: "EUR/KRW", flag: "🇪🇺", unit: "원" },
+                { symbol: "CNYKRW=X", name: "CNY/KRW", flag: "🇨🇳", unit: "원" },
+                { symbol: "EURUSD=X", name: "EUR/USD", flag: "🇪🇺", unit: "USD" }
+            ]
+        },
+        {
+            id: "ETF",
+            indices: [
+                { symbol: "SPY", name: "S&P 500 ETF", flag: "🇺🇸", unit: "USD" },
+                { symbol: "QQQ", name: "Nasdaq 100 ETF", flag: "🇺🇸", unit: "USD" },
+                { symbol: "ARKK", name: "ARK Innovation", flag: "🇺🇸", unit: "USD" },
+                { symbol: "SOXX", name: "Semiconductor ETF", flag: "🇺🇸", unit: "USD" }
+            ]
+        },
+        {
+            id: "암호화폐",
+            indices: [
+                { symbol: "BTC-USD", name: "Bitcoin", flag: "₿", unit: "USD" },
+                { symbol: "ETH-USD", name: "Ethereum", flag: "Ξ", unit: "USD" },
+                { symbol: "SOL-USD", name: "Solana", flag: "☀️", unit: "USD" },
+                { symbol: "XRP-USD", name: "Ripple", flag: "✖️", unit: "USD" }
             ]
         }
     ], []);
@@ -154,55 +180,141 @@ export default function UserDashboard() {
                         ))}
                     </div>
 
-                    <div className="summary-grid">
-                        {summaryIndices.map(idx => {
-                            const item = marketData.find(m => m.symbol === idx.symbol) || {
-                                price: "---",
-                                change: "0.00",
-                                changePercent: "0.00",
-                                isPositive: true
-                            };
-                            const status = getMarketStatus(idx.symbol);
-                            const isSelected = selectedCard === idx.symbol;
+                    {/* Market Data View (Grid or Table) */}
+                    {!["주식", "ETF", "암호화폐"].includes(activeMarketTab) ? (
+                        <div className="summary-grid">
+                            {summaryIndices.map(idx => {
+                                const item = marketData.find(m => m.symbol === idx.symbol) || {
+                                    price: "---",
+                                    change: "0.00",
+                                    changePercent: "0.00",
+                                    isPositive: true
+                                };
+                                const status = getMarketStatus(idx.symbol);
+                                const isSelected = selectedCard === idx.symbol;
 
-                            return (
-                                <div
-                                    key={idx.symbol}
-                                    className={`summary-card-v2 ${isSelected ? 'selected' : ''}`}
-                                    onClick={() => setSelectedCard(selectedCard === idx.symbol ? "" : idx.symbol)}
-                                >
-                                    <div className="card-top">
-                                        <div className="card-name-group">
-                                            <span className="symbol-name">{idx.name}</span>
-                                            <span className="symbol-flag">{idx.flag}</span>
+                                return (
+                                    <div
+                                        key={idx.symbol}
+                                        className={`summary-card-v2 ${isSelected ? 'selected' : ''}`}
+                                        onClick={() => setSelectedCard(selectedCard === idx.symbol ? "" : idx.symbol)}
+                                    >
+                                        <div className="card-top">
+                                            <div className="card-name-group">
+                                                <span className="symbol-name">{idx.name}</span>
+                                                <span className="symbol-flag">{idx.flag}</span>
+                                            </div>
+                                            <button
+                                                className={`watchlist-btn ${isWatched(idx.symbol) ? 'active' : ''}`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleWatchlist(idx.symbol);
+                                                }}
+                                                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: isWatched(idx.symbol) ? '#FFB800' : '#B0B8C1' }}
+                                            >
+                                                <Star size={16} fill={isWatched(idx.symbol) ? "#FFB800" : "none"} />
+                                            </button>
+                                            <span className={`status-badge ${status.type}`}>
+                                                {status.text}
+                                            </span>
                                         </div>
-                                        <button
-                                            className={`watchlist-btn ${isWatched(idx.symbol) ? 'active' : ''}`}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleWatchlist(idx.symbol);
-                                            }}
-                                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: isWatched(idx.symbol) ? '#FFB800' : '#B0B8C1' }}
-                                        >
-                                            <Star size={16} fill={isWatched(idx.symbol) ? "#FFB800" : "none"} />
-                                        </button>
-                                        <span className={`status-badge ${status.type}`}>
-                                            {status.text}
-                                        </span>
-                                    </div>
-                                    <div className="card-main">
-                                        <div className="price-val">{item.price}</div>
-                                        <div className={`change-val ${item.isPositive ? 'positive' : 'negative'}`}>
-                                            {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
+                                        <div className="card-main">
+                                            <div className="price-val">{item.price}</div>
+                                            <div className={`change-val ${item.isPositive ? 'positive' : 'negative'}`}>
+                                                {item.isPositive ? '▲' : '▼'} {item.change} ({item.isPositive ? '+' : ''}{item.changePercent}%)
+                                            </div>
+                                        </div>
+                                        <div className="card-unit-row">
+                                            <span className="unit-label">{idx.unit}</span>
                                         </div>
                                     </div>
-                                    <div className="card-unit-row">
-                                        <span className="unit-label">{idx.unit}</span>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="market-table-container" style={{ overflowX: 'auto', background: 'white', borderRadius: '16px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
+                                <thead>
+                                    <tr style={{ borderBottom: '1px solid #F2F4F7', color: '#8B95A1' }}>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>종목명</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>현재가</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>고가 / 저가</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동 %</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>거래량</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {summaryIndices.map(idx => {
+                                        const item = marketData.find(m => m.symbol === idx.symbol) || {
+                                            price: "---",
+                                            change: "0.00",
+                                            changePercent: "0.00",
+                                            isPositive: true,
+                                            high: "---",
+                                            low: "---",
+                                            volume: "---"
+                                        };
+                                        const isSelected = selectedCard === idx.symbol;
+                                        return (
+                                            <tr
+                                                key={idx.symbol}
+                                                onClick={() => setSelectedCard(isSelected ? "" : idx.symbol)}
+                                                style={{
+                                                    borderBottom: '1px solid #F8FAFF',
+                                                    cursor: 'pointer',
+                                                    background: isSelected ? '#F0F5FF' : 'transparent',
+                                                    transition: 'background 0.2s ease'
+                                                }}
+                                                className="table-row-hover"
+                                            >
+                                                <td style={{ padding: '14px 16px', fontWeight: 700 }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); toggleWatchlist(idx.symbol); }}
+                                                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                                                        >
+                                                            <Star
+                                                                size={14}
+                                                                fill={isWatched(idx.symbol) ? "#FFB800" : "none"}
+                                                                style={{ color: isWatched(idx.symbol) ? "#FFB800" : "#B0B8C1" }}
+                                                            />
+                                                        </button>
+                                                        <span>{idx.name}</span>
+                                                        <span style={{ fontSize: '10px', color: '#B0B8C1', fontWeight: 400 }}>{idx.symbol.split('.')[0]}</span>
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 800, color: '#1B1C1D' }}>{item.price}</td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#4E5968' }}>
+                                                    <span style={{ color: '#00D17E' }}>{item.high}</span>
+                                                    <span style={{ margin: '0 4px', color: '#E5E8EB' }}>/</span>
+                                                    <span style={{ color: '#FF4D4D' }}>{item.low}</span>
+                                                </td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: item.isPositive ? '#00D17E' : '#FF4D4D' }}>
+                                                    {item.isPositive ? '+' : '-'}{item.change}
+                                                </td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right' }}>
+                                                    <span style={{
+                                                        background: item.isPositive ? 'rgba(0, 209, 126, 0.1)' : 'rgba(255, 77, 77, 0.1)',
+                                                        color: item.isPositive ? '#00D17E' : '#FF4D4D',
+                                                        padding: '4px 8px',
+                                                        borderRadius: '6px',
+                                                        fontWeight: 800
+                                                    }}>
+                                                        {item.isPositive ? '▲' : '▼'} {item.changePercent}%
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1' }}>{item.volume}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+
+
 
                     {/* Market Detail Panel (Investing.com Style) */}
                     <div
@@ -310,20 +422,21 @@ export default function UserDashboard() {
                             무료 시작하기 →
                         </button>
                     </div>
-                </div>
 
-                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <SentimentGauge />
-                    <div className="widget-section">
-                        <EconomicCalendar />
-                    </div>
-                    <div className="widget-section">
-                        <h3 className="section-title">내 재무 목표</h3>
-                        <GoalTracker />
-                    </div>
-                </div>
 
-                <style jsx>{`
+
+                    <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <SentimentGauge />
+                        <div className="widget-section">
+                            <EconomicCalendar />
+                        </div>
+                        <div className="widget-section">
+                            <h3 className="section-title">내 재무 목표</h3>
+                            <GoalTracker />
+                        </div>
+                    </div>
+
+                    <style jsx>{`
                     .market-summary-container { margin-bottom: 40px; }
                     .market-summary-card {
                         background: white;
@@ -398,8 +511,13 @@ export default function UserDashboard() {
                     .slim-cta-btn { background: #0055FB; color: white; border: none; padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
                     .slim-cta-btn:hover { background: #0046D9; }
                     .section-title { font-size: 18px; font-weight: 800; color: #191F28; margin-bottom: 16px; }
+
+                    .market-table-container th { border-top: none; }
+                    .table-row-hover:hover { background: #F8FAFF !important; }
                 `}</style>
+                </div>
             </div>
+
         );
     }
 
