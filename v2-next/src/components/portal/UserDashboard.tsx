@@ -38,6 +38,15 @@ export default function UserDashboard() {
     const [chartRange, setChartRange] = useState("1y");
     const [screenerData, setScreenerData] = useState<any[]>([]);
     const [isScreenerLoading, setIsScreenerLoading] = useState(false);
+    const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
+
+    const requestSort = (key: string) => {
+        let direction: 'asc' | 'desc' = 'desc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'desc') {
+            direction = 'asc';
+        }
+        setSortConfig({ key, direction });
+    };
 
     // Helper data for premium design
     const marketTabs = useMemo(() => [
@@ -147,9 +156,11 @@ export default function UserDashboard() {
     const currentTab = useMemo(() => marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0], [activeMarketTab, marketTabs]);
 
     const summaryIndices = useMemo(() => {
-        // Priority 1: US Screener Data
+        // Base list of indices (either US Screener or Regional Filtered)
+        let processedItems = [];
+
         if (activeRegion === "US" && screenerData.length > 0) {
-            return screenerData.map(item => ({
+            processedItems = screenerData.map(item => ({
                 symbol: item.symbol,
                 name: item.name || item.symbol,
                 flag: '🇺🇸',
@@ -160,39 +171,56 @@ export default function UserDashboard() {
                 high: item.high,
                 low: item.low
             }));
+        } else {
+            processedItems = (currentTab.indices as any[]).filter(idx => {
+                if (activeRegion && idx.region !== activeRegion) return false;
+                return true;
+            });
         }
 
-        // Priority 2: Standard Hardcoded indices with Intelligent Sorting (especially for KR)
-        let baseIndices = (currentTab.indices as any[]).filter(idx => {
-            if (activeRegion && idx.region !== activeRegion) return false;
-            return true;
-        });
-
+        // Apply Interactive Sorting or Default Dynamic Chip Sorting
         const dynamicChips = ["트렌딩 주식", "최다 거래", "급등주", "급락주", "52주 신고가", "52주 신저가"];
-        if (dynamicChips.includes(activeChip)) {
-            return [...baseIndices].sort((a, b) => {
-                const dataA = marketDataMap[a.symbol];
-                const dataB = marketDataMap[b.symbol];
 
-                if (!dataA || !dataB) return 0;
+        return [...processedItems].sort((a, b) => {
+            const dataA = marketDataMap[a.symbol] || a;
+            const dataB = marketDataMap[b.symbol] || b;
 
-                const parseVal = (val: string) => parseFloat(val.replace(/,/g, ''));
-                const changeA = parseVal(dataA.changePercent || "0");
-                const changeB = parseVal(dataB.changePercent || "0");
+            const parseVal = (val: any) => {
+                if (typeof val === 'number') return val;
+                if (!val || typeof val !== 'string') return 0;
+                // Remove all formatting characters
+                const cleaned = val.replace(/,/g, '').replace(/[원USD▲▼%+]/g, '').trim();
+                return parseFloat(cleaned) || 0;
+            };
 
-                if (activeChip === "급등주") return changeB - changeA;
-                if (activeChip === "급락주") return changeA - changeB;
-                if (activeChip === "최다 거래") {
-                    const volA = parseVal(dataA.volume || "0");
-                    const volB = parseVal(dataB.volume || "0");
-                    return volB - volA;
+            // 1. User Manual Sort (Priority)
+            if (sortConfig) {
+                const key = sortConfig.key;
+                // Get values based on source
+                let valA = (activeRegion === "US" && screenerData.length > 0) ? a[key] : dataA[key];
+                let valB = (activeRegion === "US" && screenerData.length > 0) ? b[key] : dataB[key];
+
+                if (key === 'name') {
+                    return sortConfig.direction === 'asc'
+                        ? (valA || '').localeCompare(valB || '')
+                        : (valB || '').localeCompare(valA || '');
                 }
-                return 0; // Default or momentum for others
-            }).slice(0, 15);
-        }
 
-        return baseIndices;
-    }, [currentTab, activeRegion, activeChip, screenerData, marketDataMap]);
+                const numA = parseVal(valA);
+                const numB = parseVal(valB);
+                return sortConfig.direction === 'asc' ? numA - numB : numB - numA;
+            }
+
+            // 2. Default Dynamic Chip Sorting (If no manual sort)
+            if (dynamicChips.includes(activeChip)) {
+                if (activeChip === "급등주") return parseVal(dataB.changePercent) - parseVal(dataA.changePercent);
+                if (activeChip === "급락주") return parseVal(dataA.changePercent) - parseVal(dataB.changePercent);
+                if (activeChip === "최다 거래") return parseVal(dataB.volume) - parseVal(dataA.volume);
+            }
+
+            return 0;
+        }).slice(0, 15);
+    }, [currentTab, activeRegion, activeChip, screenerData, marketDataMap, sortConfig]);
 
     // Fetch detailed data when a card is selected
     useEffect(() => {
@@ -391,12 +419,22 @@ export default function UserDashboard() {
                             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
                                 <thead>
                                     <tr style={{ borderBottom: '1px solid #F2F4F7', color: '#8B95A1' }}>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700 }}>종목명</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>현재가</th>
+                                        <th onClick={() => requestSort('name')} style={{ padding: '12px 16px', fontWeight: 700, cursor: 'pointer', transition: 'color 0.2s' }}>
+                                            종목명 {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                        </th>
+                                        <th onClick={() => requestSort('price')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
+                                            현재가 {sortConfig?.key === 'price' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                        </th>
                                         <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>고가 / 저가</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동 %</th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>거래량</th>
+                                        <th onClick={() => requestSort('change')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
+                                            변동 {sortConfig?.key === 'change' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                        </th>
+                                        <th onClick={() => requestSort('changePercent')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
+                                            변동 % {sortConfig?.key === 'changePercent' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                        </th>
+                                        <th onClick={() => requestSort('volume')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
+                                            거래량 {sortConfig?.key === 'volume' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                        </th>
                                         <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>시간</th>
                                     </tr>
                                 </thead>
