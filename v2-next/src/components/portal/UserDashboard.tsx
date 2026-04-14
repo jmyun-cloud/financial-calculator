@@ -19,7 +19,9 @@ export default function UserDashboard() {
     const { toggleWatchlist, isWatched } = useWatchlist();
 
     // Guest view states (Premium upgrade)
-    const [activeMarketTab, setActiveMarketTab] = useState("국내");
+    const [activeMarketTab, setActiveMarketTab] = useState("주식");
+    const [activeRegion, setActiveRegion] = useState("KR"); // "KR" or "US"
+    const [activeChip, setActiveChip] = useState("트렌딩 주식");
     const [selectedCard, setSelectedCard] = useState<string>("");
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
@@ -69,34 +71,39 @@ export default function UserDashboard() {
         {
             id: "지수",
             indices: [
-                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt" },
-                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt" },
-                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt" },
-                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt" },
-                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt" },
-                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt" }
-            ]
+                { symbol: "^KS11", name: "KOSPI", flag: "🇰🇷", unit: "pt", region: "KR" },
+                { symbol: "^KQ11", name: "KOSDAQ", flag: "🇰🇷", unit: "pt", region: "KR" },
+                { symbol: "^GSPC", name: "S&P 500", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^IXIC", name: "Nasdaq", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^DJI", name: "Dow Jones", flag: "🇺🇸", unit: "pt", region: "US" },
+                { symbol: "^N225", name: "Nikkei 225", flag: "🇯🇵", unit: "pt", region: "US" },
+                { symbol: "^HSI", name: "Hang Seng", flag: "🇭🇰", unit: "pt", region: "US" }
+            ],
+            chips: ["전체 지수", "주요 지수", "선물 지수"]
         },
         {
             id: "주식",
             indices: [
-                { symbol: "005930.KS", name: "삼성전자", flag: "🇰🇷", unit: "원" },
-                { symbol: "000660.KS", name: "SK하이닉스", flag: "🇰🇷", unit: "원" },
-                { symbol: "035420.KS", name: "NAVER", flag: "🇰🇷", unit: "원" },
-                { symbol: "035720.KS", name: "카카오", flag: "🇰🇷", unit: "원" },
-                { symbol: "AAPL", name: "Apple", flag: "🇺🇸", unit: "USD" },
-                { symbol: "TSLA", name: "Tesla", flag: "🇺🇸", unit: "USD" },
-                { symbol: "NVDA", name: "Nvidia", flag: "🇺🇸", unit: "USD" },
-                { symbol: "MSFT", name: "Microsoft", flag: "🇺🇸", unit: "USD" }
-            ]
+                { symbol: "005930.KS", name: "삼성전자", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "000660.KS", name: "SK하이닉스", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "035420.KS", name: "NAVER", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "035720.KS", name: "카카오", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "005380.KS", name: "현대차", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "000270.KS", name: "기아", flag: "🇰🇷", unit: "원", region: "KR", type: "trending" },
+                { symbol: "AAPL", name: "Apple", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "TSLA", name: "Tesla", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "NVDA", name: "Nvidia", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" },
+                { symbol: "MSFT", name: "Microsoft", flag: "🇺🇸", unit: "USD", region: "US", type: "trending" }
+            ],
+            chips: ["트렌딩 주식", "최다 거래", "급등주", "급락주", "52주 신고가", "52주 신저가"]
         },
         {
             id: "원자재",
             indices: [
-                { symbol: "GC=F", name: "Gold", flag: "🥇", unit: "USD/oz" },
-                { symbol: "SI=F", name: "Silver", flag: "🥈", unit: "USD/oz" },
-                { symbol: "CL=F", name: "WTI Crude", flag: "🛢️", unit: "USD/bbl" },
-                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb" },
+                { symbol: "GC=F", name: "Gold", flag: "🥇", unit: "USD/oz", region: "US" },
+                { symbol: "SI=F", name: "Silver", flag: "🥈", unit: "USD/oz", region: "US" },
+                { symbol: "CL=F", name: "WTI Crude", flag: "🛢️", unit: "USD/bbl", region: "US" },
+                { symbol: "HG=F", name: "Copper", flag: "🧱", unit: "USD/lb", region: "US" },
                 { symbol: "NG=F", name: "Natural Gas", flag: "🔥", unit: "USD/MMBtu" }
             ]
         },
@@ -147,38 +154,111 @@ export default function UserDashboard() {
 
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px', background: 'rgba(0,0,0,0.05)', borderRadius: '28px' }} />;
 
-    if (!isLoggedIn) {
+    const renderMarketSummary = (showCta: boolean = true) => {
         const currentTab = marketTabs.find(t => t.id === activeMarketTab) || marketTabs[0];
-        const summaryIndices = currentTab.indices;
+
+        // Dynamic filtering based on Region and Chips
+        const summaryIndices = (currentTab.indices as any[]).filter(idx => {
+            // Region filter
+            if (activeRegion && idx.region !== activeRegion) return false;
+
+            // Chip filter (basic implementation for now)
+            if (activeMarketTab === "주식") {
+                if (activeChip === "트렌딩 주식") return idx.type === "trending";
+                // Add more chip logic as needed
+            }
+
+            return true;
+        });
 
         return (
             <div className="market-summary-container">
                 <div className="market-summary-card shadow-premium-clean">
                     <div className="summary-section-header">
                         <div className="header-left">
-                            <h2 className="summary-title">오늘의 시장 요약</h2>
-                            <span className="summary-date">{new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' })}</span>
+                            <h2 className="summary-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                시장 <span style={{ color: '#8B95A1', fontSize: '18px', fontWeight: 400 }}>&gt;</span>
+                            </h2>
                         </div>
-                        <div className="live-status-badge">
-                            <span className="dot"></span>
-                            실시간
+                        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div className="region-selector" style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                    className={`region-btn ${activeRegion === 'KR' ? 'active' : ''}`}
+                                    onClick={() => setActiveRegion('KR')}
+                                    style={{ background: activeRegion === 'KR' ? '#EBF3FF' : 'transparent', border: 'none', padding: '4px', borderRadius: '4px', cursor: 'pointer', opacity: activeRegion === 'KR' ? 1 : 0.5 }}
+                                >
+                                    🇰🇷
+                                </button>
+                                <button
+                                    className={`region-btn ${activeRegion === 'US' ? 'active' : ''}`}
+                                    onClick={() => setActiveRegion('US')}
+                                    style={{ background: activeRegion === 'US' ? '#EBF3FF' : 'transparent', border: 'none', padding: '4px', borderRadius: '4px', cursor: 'pointer', opacity: activeRegion === 'US' ? 1 : 0.5 }}
+                                >
+                                    🇺🇸
+                                </button>
+                            </div>
+                            <div className="live-status-badge" style={{ background: '#F8F9FA', color: '#8B95A1' }}>
+                                실시간
+                            </div>
                         </div>
                     </div>
 
-                    <div className="market-tabs-nav">
+                    <div className="market-tabs-nav" style={{ background: 'transparent', padding: 0, borderBottom: '1px solid #F2F4F7', borderRadius: 0, marginBottom: '20px' }}>
                         {marketTabs.map(tab => (
                             <button
                                 key={tab.id}
-                                className={`tab-item ${activeMarketTab === tab.id ? 'active' : ''}`}
+                                className={`tab-item-v3 ${activeMarketTab === tab.id ? 'active' : ''}`}
                                 onClick={() => {
                                     setActiveMarketTab(tab.id);
+                                    setActiveChip(tab.chips?.[0] || "");
                                     setSelectedCard(""); // clear on tab switch
+                                }}
+                                style={{
+                                    border: 'none',
+                                    background: 'transparent',
+                                    padding: '12px 16px',
+                                    fontSize: '15px',
+                                    fontWeight: activeMarketTab === tab.id ? 800 : 500,
+                                    color: activeMarketTab === tab.id ? '#191F28' : '#8B95A1',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    transition: 'color 0.2s'
                                 }}
                             >
                                 {tab.id}
+                                {activeMarketTab === tab.id && (
+                                    <div style={{ position: 'absolute', bottom: -1, left: 0, right: 0, height: '2px', background: '#0055FB' }} />
+                                )}
                             </button>
                         ))}
                     </div>
+
+                    {/* Secondary Navigation (Chips) */}
+                    {currentTab.chips && (
+                        <div className="market-chips-nav" style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '20px', scrollbarWidth: 'none' }}>
+                            {currentTab.chips.map(chip => (
+                                <button
+                                    key={chip}
+                                    className={`chip-item ${activeChip === chip ? 'active' : ''}`}
+                                    onClick={() => setActiveChip(chip)}
+                                    style={{
+                                        whiteSpace: 'nowrap',
+                                        padding: '8px 16px',
+                                        borderRadius: '100px',
+                                        fontSize: '13px',
+                                        fontWeight: 600,
+                                        border: activeChip === chip ? '1px solid #0055FB' : '1px solid #F2F4F7',
+                                        background: activeChip === chip ? '#F0F5FF' : '#F9FAFB',
+                                        color: activeChip === chip ? '#0055FB' : '#4E5968',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    {chip}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Market Data View (Grid or Table) */}
                     {!["주식", "ETF", "암호화폐"].includes(activeMarketTab) ? (
@@ -242,6 +322,7 @@ export default function UserDashboard() {
                                         <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동</th>
                                         <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>변동 %</th>
                                         <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>거래량</th>
+                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>시간</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -270,18 +351,9 @@ export default function UserDashboard() {
                                             >
                                                 <td style={{ padding: '14px 16px', fontWeight: 700 }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); toggleWatchlist(idx.symbol); }}
-                                                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                                                        >
-                                                            <Star
-                                                                size={14}
-                                                                fill={isWatched(idx.symbol) ? "#FFB800" : "none"}
-                                                                style={{ color: isWatched(idx.symbol) ? "#FFB800" : "#B0B8C1" }}
-                                                            />
-                                                        </button>
-                                                        <span>{idx.name}</span>
-                                                        <span style={{ fontSize: '10px', color: '#B0B8C1', fontWeight: 400 }}>{idx.symbol.split('.')[0]}</span>
+                                                        <span style={{ fontSize: '14px' }}>{idx.flag}</span>
+                                                        <span style={{ color: '#191F28' }}>{idx.name}</span>
+                                                        <span style={{ fontSize: '11px', color: '#B0B8C1', fontWeight: 400, marginLeft: '4px' }}>{idx.symbol.split('.')[0]}</span>
                                                     </div>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 800, color: '#1B1C1D' }}>{item.price}</td>
@@ -305,11 +377,25 @@ export default function UserDashboard() {
                                                     </span>
                                                 </td>
                                                 <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1' }}>{item.volume}</td>
+                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1', fontSize: '11px' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                                                        {new Date().toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', border: '1px solid #00D17E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <div style={{ width: '4px', height: '1px', background: '#00D17E', transform: 'rotate(45deg) translate(0px, 1.5px)' }}></div>
+                                                            <div style={{ width: '1px', height: '3px', background: '#00D17E' }}></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         );
                                     })}
                                 </tbody>
                             </table>
+                            <div style={{ padding: '16px', borderTop: '1px solid #F2F4F7', textAlign: 'right' }}>
+                                <button style={{ border: 'none', background: 'transparent', color: '#0055FB', fontWeight: 800, fontSize: '12px', cursor: 'pointer' }}>
+                                    모든 {activeMarketTab} 보기 <ArrowRight size={14} style={{ verticalAlign: 'middle', marginLeft: '4px' }} />
+                                </button>
+                            </div>
                         </div>
                     )}
 
@@ -416,25 +502,14 @@ export default function UserDashboard() {
                         </div>
                     </div>
 
-                    <div className="slim-login-cta">
-                        <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
-                        <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
-                            무료 시작하기 →
-                        </button>
-                    </div>
-
-
-
-                    <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        <SentimentGauge />
-                        <div className="widget-section">
-                            <EconomicCalendar />
+                    {showCta && (
+                        <div className="slim-login-cta">
+                            <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
+                            <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
+                                무료 시작하기 →
+                            </button>
                         </div>
-                        <div className="widget-section">
-                            <h3 className="section-title">내 재무 목표</h3>
-                            <GoalTracker />
-                        </div>
-                    </div>
+                    )}
 
                     <style jsx>{`
                     .market-summary-container { margin-bottom: 40px; }
@@ -519,6 +594,24 @@ export default function UserDashboard() {
             </div>
 
         );
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <>
+                {renderMarketSummary(true)}
+                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px', padding: '0 32px 32px' }}>
+                    <SentimentGauge />
+                    <div className="widget-section">
+                        <EconomicCalendar />
+                    </div>
+                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
+                        <h3 className="section-title">내 재무 목표</h3>
+                        <GoalTracker />
+                    </div>
+                </div>
+            </>
+        );
     }
 
     return (
@@ -541,6 +634,11 @@ export default function UserDashboard() {
                         <span className="sub-value">68%</span>
                     </div>
                 </div>
+            </div>
+
+            {/* Global Market Hub integration for members */}
+            <div style={{ marginTop: '32px' }}>
+                {renderMarketSummary(false)}
             </div>
 
             <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
