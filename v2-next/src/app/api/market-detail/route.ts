@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const symbol = searchParams.get('symbol');
+    const range = searchParams.get('range') || '1y';
 
     if (!symbol) return NextResponse.json({ error: 'Missing symbol' }, { status: 400 });
 
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
 
     try {
         // Use a cache-busting parameter to ensure we get fresh data during updates
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y&_=${Date.now()}`;
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=${range}&_=${Date.now()}`;
 
         const res = await fetch(url, {
             // Lower revalidate to 1 minute for detailed market data
@@ -66,6 +67,7 @@ export async function GET(request: Request) {
         const opens = indicators.open || [];
         const highs_arr = indicators.high || [];
         const lows_arr = indicators.low || [];
+        const volumes_arr = indicators.volume || [];
         const timestamps = result.timestamp || [];
 
         const chartData = timestamps
@@ -75,10 +77,16 @@ export async function GET(request: Request) {
                 high: highs_arr[i],
                 low: lows_arr[i],
                 close: closes[i],
+                volume: volumes_arr[i],
                 value: closes[i] // Keep 'value' for backward compatibility
             }))
-            .filter((d: any) => d.close !== null && d.close !== 0)
-            .slice(-60); // Increase to 60 days for better technical analysis context
+            .filter((d: any) => d.close !== null && d.close !== 0);
+
+        // For '1y' or more, we might want more points, but for detail view we limit to keep it fast
+        // However, if the user specifically asked for a range, we should return the relevant portion.
+        const slicedData = range === '1m' ? chartData.slice(-30) :
+            range === '3m' ? chartData.slice(-90) :
+                range === '1y' ? chartData.slice(-252) : chartData;
 
         return NextResponse.json({
             price: meta.regularMarketPrice,
@@ -89,7 +97,7 @@ export async function GET(request: Request) {
             regularMarketDayHigh: meta.regularMarketDayHigh || calculatedHigh,
             regularMarketDayLow: meta.regularMarketDayLow || calculatedLow,
             regularMarketVolume: volume,
-            chartData: chartData
+            chartData: slicedData
         }, {
             headers: {
                 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120'

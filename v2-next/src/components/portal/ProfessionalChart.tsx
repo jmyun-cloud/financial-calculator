@@ -6,6 +6,7 @@ import {
     ColorType,
     CandlestickSeries,
     AreaSeries,
+    HistogramSeries,
 } from 'lightweight-charts';
 
 interface ProfessionalChartProps {
@@ -13,13 +14,17 @@ interface ProfessionalChartProps {
     isPositive: boolean;
     initialType?: 'Candlestick' | 'Area';
     height?: number;
+    currentRange?: string;
+    onRangeChange?: (range: string) => void;
 }
 
 export default function ProfessionalChart({
     data,
     isPositive,
     initialType = 'Area',
-    height = 300
+    height = 300,
+    currentRange = '1y',
+    onRangeChange
 }: ProfessionalChartProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<any>(null);
@@ -59,10 +64,21 @@ export default function ProfessionalChart({
                 timeVisible: true,
                 secondsVisible: false,
                 rightOffset: 5,
+                tickMarkFormatter: (time: any) => {
+                    const date = new Date((time as number) * 1000);
+                    if (date.getDate() === 1) {
+                        return `${date.getMonth() + 1}월'${String(date.getFullYear()).slice(-2)}`;
+                    }
+                    return String(date.getDate());
+                },
             },
             rightPriceScale: {
                 borderVisible: false,
                 alignLabels: true,
+                scaleMargins: {
+                    top: 0.1,
+                    bottom: 0.25, // Leave room for volume
+                },
             },
         });
 
@@ -126,6 +142,37 @@ export default function ProfessionalChart({
             setHasData(false);
         }
 
+        // ---- Add Volume Histogram ----
+        const volumeSeries = chart.addSeries(HistogramSeries, {
+            color: '#E5E8EB',
+            priceFormat: { type: 'volume' },
+            priceScaleId: 'volume', // Own scale
+        });
+
+        chart.priceScale('volume').applyOptions({
+            scaleMargins: {
+                top: 0.8, // Push to bottom
+                bottom: 0,
+            },
+        });
+
+        const volumeData = data
+            .filter(d => d && d.time && d.volume != null)
+            .map(d => {
+                // Determine color based on price change
+                const isPriceUp = d.close >= d.open;
+                return {
+                    time: d.time as any,
+                    value: Number(d.volume),
+                    color: isPriceUp ? 'rgba(240, 66, 81, 0.3)' : 'rgba(0, 100, 255, 0.3)',
+                };
+            })
+            .sort((a, b) => (a.time as number) - (b.time as number));
+
+        if (volumeData.length > 0) {
+            volumeSeries.setData(volumeData);
+        }
+
         // ---- Resize handler ----
         const handleResize = () => {
             if (container && chartRef.current) {
@@ -168,6 +215,36 @@ export default function ProfessionalChart({
                         }}
                     >
                         {type === 'Area' ? 'Line' : 'Candle'}
+                    </button>
+                ))}
+            </div>
+
+            {/* Period buttons */}
+            <div style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                display: 'flex',
+                gap: '8px',
+                zIndex: 10
+            }}>
+                {['1m', '3m', '6m', '1y'].map(range => (
+                    <button
+                        key={range}
+                        onClick={() => onRangeChange?.(range)}
+                        style={{
+                            padding: '4px 8px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            borderRadius: '4px',
+                            background: currentRange === range ? '#F2F4F7' : 'transparent',
+                            color: currentRange === range ? '#191F28' : '#8B95A1',
+                            border: 'none',
+                            cursor: 'pointer',
+                            textTransform: 'uppercase'
+                        }}
+                    >
+                        {range}
                     </button>
                 ))}
             </div>

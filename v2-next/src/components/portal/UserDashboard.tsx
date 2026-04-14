@@ -23,6 +23,7 @@ export default function UserDashboard() {
     const [selectedCard, setSelectedCard] = useState<string>("");
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
+    const [chartRange, setChartRange] = useState("1y");
 
     // Fetch detailed data when a card is selected
     useEffect(() => {
@@ -34,7 +35,7 @@ export default function UserDashboard() {
         const fetchDetail = async () => {
             setIsDetailLoading(true);
             try {
-                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(selectedCard)}`);
+                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(selectedCard)}&range=${chartRange}`);
                 if (res.ok) {
                     const data = await res.json();
                     setDetailData(data);
@@ -47,7 +48,7 @@ export default function UserDashboard() {
         };
 
         fetchDetail();
-    }, [selectedCard]);
+    }, [selectedCard, chartRange]);
 
     const formatVolume = (vol: number | null) => {
         if (!vol || vol === 0) return "---";
@@ -255,6 +256,8 @@ export default function UserDashboard() {
                                     <ProfessionalChart
                                         data={detailData.chartData}
                                         isPositive={(detailData.change || 0) >= 0}
+                                        currentRange={chartRange}
+                                        onRangeChange={(range) => setChartRange(range)}
                                     />
                                 </div>
                                 <TechnicalSummary data={detailData.chartData} />

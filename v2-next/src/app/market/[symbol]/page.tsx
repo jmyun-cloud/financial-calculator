@@ -20,11 +20,12 @@ export default function AnalysisPage() {
 
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [chartRange, setChartRange] = useState('1y');
 
     useEffect(() => {
         const fetchDetail = async () => {
             try {
-                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}`);
+                const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}&range=${chartRange}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const result = await res.json();
                 // API returns data directly (price, change, chartData, ...)
@@ -41,7 +42,7 @@ export default function AnalysisPage() {
         };
 
         if (symbol) fetchDetail();
-    }, [symbol]);
+    }, [symbol, chartRange]);
 
     if (loading) return (
         <div className="flex h-screen items-center justify-center bg-[#F8FAFF]">
@@ -110,7 +111,9 @@ export default function AnalysisPage() {
                                 <ProfessionalChart
                                     data={data.chartData}
                                     isPositive={isPositive}
-                                    initialType="Candlestick"
+                                    height={400}
+                                    currentRange={chartRange}
+                                    onRangeChange={(r) => setChartRange(r)}
                                 />
                             )}
                         </div>
