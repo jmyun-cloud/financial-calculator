@@ -18,6 +18,16 @@ export default function UserDashboard() {
     const { data: marketData, loading } = useMarketData();
     const { toggleWatchlist, isWatched } = useWatchlist();
 
+    const marketDataMap = useMemo(() => {
+        const map: Record<string, any> = {};
+        if (Array.isArray(marketData)) {
+            marketData.forEach(item => {
+                map[item.symbol] = item;
+            });
+        }
+        return map;
+    }, [marketData]);
+
     // Guest view states (Premium upgrade)
     const [activeMarketTab, setActiveMarketTab] = useState("주식");
     const [activeRegion, setActiveRegion] = useState("KR"); // "KR" or "US"
@@ -366,7 +376,7 @@ export default function UserDashboard() {
                                 </thead>
                                 <tbody>
                                     {summaryIndices.map(idx => {
-                                        const m = marketData?.[idx.symbol];
+                                        const m = marketDataMap[idx.symbol];
                                         const isScreenerSource = (idx as any).price !== undefined;
 
                                         const item = isScreenerSource ? {
@@ -470,7 +480,7 @@ export default function UserDashboard() {
                         <div className="detail-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <span className="detail-title" style={{ fontSize: '16px', fontWeight: 800, color: '#0055FB' }}>
-                                    {currentTab.indices.find(i => i.symbol === selectedCard)?.name} 실시간 분석
+                                    {currentTab.indices.find((i: any) => i.symbol === selectedCard)?.name} 실시간 분석
                                 </span>
                                 <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 500 }}>(일봉, 30일)</span>
                             </div>
