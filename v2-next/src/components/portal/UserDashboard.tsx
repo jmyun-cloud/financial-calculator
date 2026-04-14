@@ -378,13 +378,13 @@ export default function UserDashboard() {
                                             low: (idx as any).low?.toLocaleString() || "---",
                                             volume: formatVolume((idx as any).volume)
                                         } : {
-                                            price: m ? m.price.toLocaleString() : "---",
-                                            change: m ? m.change.toFixed(2) : "0.00",
-                                            changePercent: m ? m.changePercent.toFixed(2) : "0.00",
-                                            isPositive: (m?.change ?? 0) >= 0,
-                                            high: m?.high?.toLocaleString() || "---",
-                                            low: m?.low?.toLocaleString() || "---",
-                                            volume: m ? formatVolume(m.volume) : "---"
+                                            price: m ? Number(m.price).toLocaleString() : "---",
+                                            change: m ? Number(m.change).toFixed(2) : "0.00",
+                                            changePercent: m ? Number(m.changePercent).toFixed(2) : "0.00",
+                                            isPositive: (Number(m?.change) ?? 0) >= 0,
+                                            high: m?.high ? Number(m.high).toLocaleString() : "---",
+                                            low: m?.low ? Number(m.low).toLocaleString() : "---",
+                                            volume: m ? formatVolume(Number(m.volume)) : "---"
                                         };
                                         const isSelected = selectedCard === idx.symbol;
                                         return (
