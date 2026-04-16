@@ -10,10 +10,12 @@ import Link from "next/link";
 const ProfessionalChart = dynamic(() => import("./ProfessionalChart"), { ssr: false });
 const TechnicalSummary = dynamic(() => import("./TechnicalSummary"), { ssr: false });
 import EconomicCalendar from "./EconomicCalendar";
+import SentimentGauge from "./SentimentGauge";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function UserDashboard() {
     const [isClient, setIsClient] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, setShowLoginModal } = useAuth();
     const { data: marketData, loading } = useMarketData();
     const { toggleWatchlist, isWatched } = useWatchlist();
 
@@ -423,9 +425,6 @@ export default function UserDashboard() {
 
     useEffect(() => {
         setIsClient(true);
-        const handleLogin = () => setIsLoggedIn(true);
-        window.addEventListener("fc_mock_login", handleLogin);
-        return () => window.removeEventListener("fc_mock_login", handleLogin);
     }, []);
 
 
@@ -446,478 +445,114 @@ export default function UserDashboard() {
 
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px', background: 'rgba(0,0,0,0.05)', borderRadius: '28px' }} />;
 
-    const renderMarketSummary = (showCta: boolean = true) => {
+    const renderMarketSummary = () => {
         return (
-            <div className="market-summary-container">
-                <div className="market-summary-card shadow-premium-clean">
-                    <div className="summary-section-header">
-                        <div className="header-left">
-                            <h2 className="summary-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                시장 <span style={{ color: '#8B95A1', fontSize: '18px', fontWeight: 400 }}>&gt;</span>
-                            </h2>
-                        </div>
-                        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div className="region-selector" style={{ display: 'flex', gap: '8px' }}>
-                                <button
-                                    className={`region-btn ${activeRegion === 'KR' ? 'active' : ''}`}
-                                    onClick={() => setActiveRegion('KR')}
-                                    style={{ background: activeRegion === 'KR' ? '#EBF3FF' : 'transparent', border: 'none', padding: '4px', borderRadius: '4px', cursor: 'pointer', opacity: activeRegion === 'KR' ? 1 : 0.5 }}
-                                >
-                                    🇰🇷
-                                </button>
-                                <button
-                                    className={`region-btn ${activeRegion === 'US' ? 'active' : ''}`}
-                                    onClick={() => setActiveRegion('US')}
-                                    style={{ background: activeRegion === 'US' ? '#EBF3FF' : 'transparent', border: 'none', padding: '4px', borderRadius: '4px', cursor: 'pointer', opacity: activeRegion === 'US' ? 1 : 0.5 }}
-                                >
-                                    🇺🇸
-                                </button>
-                            </div>
-                            <div className="live-status-badge" style={{ background: '#F8F9FA', color: '#8B95A1' }}>
-                                실시간
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Global Search Interface */}
-                    <div className="market-search-bar" style={{ marginBottom: '24px', position: 'relative' }}>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                            <input
-                                type="text"
-                                placeholder="종목명 또는 심볼 검색 (예: 삼성전자, Apple, BTC)..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 20px 16px 52px',
-                                    borderRadius: '18px',
-                                    border: '1px solid #F2F4F7',
-                                    background: '#F9FAFB',
-                                    fontSize: '15px',
-                                    fontWeight: 500,
-                                    color: '#191F28',
-                                    outline: 'none',
-                                    transition: 'all 0.2s',
-                                    boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-                                }}
-                                onFocus={(e) => {
-                                    e.currentTarget.style.background = 'white';
-                                    e.currentTarget.style.borderColor = '#0055FB';
-                                    e.currentTarget.style.boxShadow = '0 0 0 4px rgba(0, 85, 251, 0.1)';
-                                }}
-                                onBlur={(e) => {
-                                    e.currentTarget.style.background = '#F9FAFB';
-                                    e.currentTarget.style.borderColor = '#F2F4F7';
-                                    e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)';
-                                }}
-                            />
-                            <svg style={{ position: 'absolute', left: '20px', width: '20px', height: '20px', color: '#8B95A1' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            {isSearching && (
-                                <div style={{ position: 'absolute', right: '20px' }} className="loading-spinner-v2"></div>
-                            )}
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery("")}
-                                    style={{ position: 'absolute', right: isSearching ? '50px' : '20px', background: 'none', border: 'none', color: '#8B95A1', cursor: 'pointer', padding: '4px' }}
-                                >
-                                    ✕
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="market-tabs-nav" style={{ background: 'transparent', padding: 0, borderBottom: '1px solid #F2F4F7', borderRadius: 0, marginBottom: '20px' }}>
-                        {marketTabs.map(tab => (
+            <div className="market-snapshot-card shadow-premium-clean">
+                <div className="snapshot-header">
+                    <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#191F28', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        시장 스냅샷 <span style={{ color: '#0055FB', fontSize: '14px' }}>LIVE</span>
+                    </h3>
+                    <div className="region-selector" style={{ display: 'flex', gap: '4px' }}>
+                        {['KR', 'US'].map(r => (
                             <button
-                                key={tab.id}
-                                className={`tab-item-v3 ${activeMarketTab === tab.id ? 'active' : ''}`}
-                                onClick={() => {
-                                    setActiveMarketTab(tab.id);
-                                    setActiveChip(tab.chips?.[0] || "");
-                                    setSelectedCard(""); // clear on tab switch
-                                }}
+                                key={r}
+                                onClick={() => setActiveRegion(r)}
                                 style={{
+                                    padding: '4px 8px',
+                                    borderRadius: '6px',
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    background: activeRegion === r ? '#EBF3FF' : 'transparent',
+                                    color: activeRegion === r ? '#0055FB' : '#8B95A1',
                                     border: 'none',
-                                    background: 'transparent',
-                                    padding: '12px 16px',
-                                    fontSize: '15px',
-                                    fontWeight: activeMarketTab === tab.id ? 800 : 500,
-                                    color: activeMarketTab === tab.id ? '#191F28' : '#8B95A1',
-                                    cursor: 'pointer',
-                                    position: 'relative',
-                                    transition: 'color 0.2s'
+                                    cursor: 'pointer'
                                 }}
                             >
-                                {tab.id}
-                                {activeMarketTab === tab.id && (
-                                    <div style={{ position: 'absolute', bottom: -1, left: 0, right: 0, height: '2px', background: '#0055FB' }} />
-                                )}
+                                {r === 'KR' ? '국내' : '해외'}
                             </button>
                         ))}
                     </div>
+                </div>
 
-                    {/* Secondary Navigation (Chips) */}
-                    {currentTab.chips && (
-                        <div className="market-chips-nav" style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '20px', scrollbarWidth: 'none' }}>
-                            {currentTab.chips.map(chip => (
-                                <button
-                                    key={chip}
-                                    className={`chip-item ${activeChip === chip ? 'active' : ''}`}
-                                    onClick={() => setActiveChip(chip)}
-                                    style={{
-                                        whiteSpace: 'nowrap',
-                                        padding: '8px 16px',
-                                        borderRadius: '100px',
-                                        fontSize: '13px',
-                                        fontWeight: 600,
-                                        border: activeChip === chip ? '1px solid #0055FB' : '1px solid #F2F4F7',
-                                        background: activeChip === chip ? '#F0F5FF' : '#F9FAFB',
-                                        color: activeChip === chip ? '#0055FB' : '#4E5968',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    {chip}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Market Data View (High-Density Table) */}
-                    {isScreenerLoading ? (
-                        <div style={{ height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', color: '#8B95A1' }}>
-                            <div className="loading-spinner-v2" style={{ width: '32px', height: '32px', border: '3px solid #F2F4F7', borderTop: '3px solid #0055FB', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-                            <span style={{ fontSize: '13px', fontWeight: 500 }}>최신 시장 데이터 가져오는 중...</span>
-                            <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-                        </div>
-                    ) : (
-                        <div className="market-table-container" style={{ overflowX: 'auto', background: 'white', borderRadius: '16px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
-                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
-                                <thead>
-                                    <tr style={{ borderBottom: '1px solid #F2F4F7', color: '#8B95A1' }}>
-                                        <th onClick={() => requestSort('name')} style={{ padding: '12px 16px', fontWeight: 700, cursor: 'pointer', transition: 'color 0.2s' }}>
-                                            종목명 {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                                        </th>
-                                        <th onClick={() => requestSort('price')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
-                                            현재가 {sortConfig?.key === 'price' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                                        </th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>고가 / 저가</th>
-                                        <th onClick={() => requestSort('change')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
-                                            변동 {sortConfig?.key === 'change' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                                        </th>
-                                        <th onClick={() => requestSort('changePercent')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
-                                            변동 % {sortConfig?.key === 'changePercent' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                                        </th>
-                                        <th onClick={() => requestSort('volume')} style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right', cursor: 'pointer' }}>
-                                            거래량 {sortConfig?.key === 'volume' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                                        </th>
-                                        <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>시간</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {summaryIndices.map(idx => {
-                                        const m = marketDataMap[idx.symbol];
-                                        const isScreenerSource = (idx as any).price !== undefined;
-
-                                        const item = isScreenerSource ? {
-                                            price: (idx as any).price?.toLocaleString() || "---",
-                                            change: typeof (idx as any).change === 'number' ? (idx as any).change.toFixed(2) : (idx as any).change || "0.00",
-                                            changePercent: typeof (idx as any).changePercent === 'number' ? (idx as any).changePercent.toFixed(2) : (idx as any).changePercent || "0.00",
-                                            isPositive: ((idx as any).change ?? 0) >= 0,
-                                            high: (idx as any).high?.toLocaleString() || "---",
-                                            low: (idx as any).low?.toLocaleString() || "---",
-                                            volume: formatVolume((idx as any).volume)
-                                        } : {
-                                            price: (m && m.price !== "NaN") ? m.price : "---",
-                                            change: (m && m.change !== "NaN") ? m.change : "0.00",
-                                            changePercent: (m && m.changePercent !== "NaN") ? m.changePercent : "0.00",
-                                            isPositive: (m?.isPositive ?? true),
-                                            high: (m?.high && m.high !== "NaN") ? m.high : "---",
-                                            low: (m?.low && m.low !== "NaN") ? m.low : "---",
-                                            volume: (m && m.volume !== "NaN") ? m.volume : "---"
-                                        };
-                                        const isSelected = selectedCard === idx.symbol;
-                                        return (
-                                            <tr
-                                                key={idx.symbol}
-                                                onClick={() => setSelectedCard(isSelected ? "" : idx.symbol)}
-                                                style={{
-                                                    borderBottom: '1px solid #F8FAFF',
-                                                    cursor: 'pointer',
-                                                    background: isSelected ? '#F0F5FF' : 'transparent',
-                                                    transition: 'background 0.2s ease'
-                                                }}
-                                                className="table-row-hover"
-                                            >
-                                                <td style={{ padding: '14px 16px', fontWeight: 700 }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <span style={{ fontSize: '14px' }}>{idx.flag}</span>
-                                                        <span style={{ color: '#191F28' }}>{idx.name}</span>
-                                                        <span style={{ fontSize: '11px', color: '#B0B8C1', fontWeight: 400, marginLeft: '4px' }}>{idx.symbol.split('.')[0]}</span>
-                                                    </div>
-                                                </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 800, color: '#1B1C1D' }}>{item.price}</td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#4E5968', fontSize: '12px' }}>
-                                                    <span style={{ color: '#F04452' }}>{item.high}</span>
-                                                    <span style={{ margin: '0 4px', color: '#E5E8EB' }}>/</span>
-                                                    <span style={{ color: '#3182F6' }}>{item.low}</span>
-                                                </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', fontWeight: 700, color: item.isPositive ? '#F04452' : '#3182F6' }}>
-                                                    {item.isPositive ? '+' : ''}{item.change}
-                                                </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right' }}>
-                                                    <span style={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        gap: '4px',
-                                                        background: item.isPositive ? 'rgba(240, 68, 82, 0.1)' : 'rgba(49, 130, 246, 0.1)',
-                                                        color: item.isPositive ? '#F04452' : '#3182F6',
-                                                        padding: '4px 8px',
-                                                        borderRadius: '6px',
-                                                        fontWeight: 800,
-                                                        whiteSpace: 'nowrap'
-                                                    }}>
-                                                        {item.isPositive ? '▲' : '▼'}{item.changePercent}%
-                                                    </span>
-                                                </td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1' }}>{item.volume}</td>
-                                                <td style={{ padding: '14px 16px', textAlign: 'right', color: '#8B95A1', fontSize: '11px' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
-                                                        {new Date().toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                                                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', border: '1px solid #00D17E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <div style={{ width: '4px', height: '1px', background: '#00D17E', transform: 'rotate(45deg) translate(0px, 1.5px)' }}></div>
-                                                            <div style={{ width: '1px', height: '3px', background: '#00D17E' }}></div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                            <div style={{ padding: '16px', borderTop: '1px solid #F2F4F7', textAlign: 'right' }}>
-                                <button style={{ border: 'none', background: 'transparent', color: '#0055FB', fontWeight: 800, fontSize: '12px', cursor: 'pointer' }}>
-                                    모든 {activeMarketTab} 보기 <ArrowRight size={14} style={{ verticalAlign: 'middle', marginLeft: '4px' }} />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-
-
-
-                    {/* Market Detail Panel (Investing.com Style) */}
-                    <div
-                        className="detail-preview-section"
-                        style={{
-                            maxHeight: selectedCard ? '450px' : '0',
-                            opacity: selectedCard ? 1 : 0,
-                            overflow: 'hidden',
-                            transition: 'max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin 0.3s ease',
-                            marginBottom: selectedCard ? '24px' : '0',
-                            padding: selectedCard ? '24px' : '0 24px',
-                            background: '#F8FAFF',
-                            border: '1px solid #E8EFFD',
-                            borderRadius: '24px'
-                        }}
-                    >
-                        <div className="detail-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span className="detail-title" style={{ fontSize: '16px', fontWeight: 800, color: '#0055FB' }}>
-                                    {currentTab.indices.find((i: any) => i.symbol === selectedCard)?.name} 실시간 분석
-                                </span>
-                                <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 500 }}>(일봉, 30일)</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                {isDetailLoading && <span className="loading-spinner">데이터 갱신 중...</span>}
-                                <Link
-                                    href={`/market/${selectedCard}`}
-                                    style={{
-                                        color: '#4E5968',
-                                        fontSize: '12px',
-                                        fontWeight: 700,
-                                        textDecoration: 'none',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        background: 'white',
-                                        padding: '6px 12px',
-                                        borderRadius: '8px',
-                                        border: '1px solid #E5E8EB'
-                                    }}
-                                >
-                                    심층 분석 <ArrowRight size={14} />
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Chart Area */}
-                        {detailData && Array.isArray(detailData.chartData) && detailData.chartData.length > 0 && (
-                            <>
-                                <div style={{ background: 'white', borderRadius: '16px', padding: '16px 20px 0', marginBottom: '20px', border: '1px solid #F2F4F7', minHeight: '300px' }}>
-                                    <ProfessionalChart
-                                        data={detailData.chartData}
-                                        isPositive={(detailData.change || 0) >= 0}
-                                        currentRange={chartRange}
-                                        onRangeChange={(range) => setChartRange(range)}
-                                    />
+                <div className="snapshot-grid">
+                    {summaryIndices.slice(0, 4).map(idx => {
+                        const m = marketDataMap[idx.symbol];
+                        const isPositive = (m?.isPositive ?? true);
+                        return (
+                            <div key={idx.symbol} className="snapshot-item" onClick={() => setSelectedCard(idx.symbol)}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968' }}>{idx.name}</span>
+                                    <span style={{ fontSize: '12px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
+                                        {isPositive ? '▲' : '▼'}{m?.changePercent || '0.00'}%
+                                    </span>
                                 </div>
-                                <TechnicalSummary data={detailData.chartData} />
-                            </>
-                        )}
+                                <div style={{ fontSize: '18px', fontWeight: 800, color: '#191F28' }}>{m?.price || '---'}</div>
+                            </div>
+                        );
+                    })}
+                </div>
 
-                        {/* Analysis Grid */}
-                        <div className="detail-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                            {/* Day Range visualizer */}
-                            <div className="range-box" style={{ gridColumn: 'span 2', background: 'white', padding: '16px', borderRadius: '16px', border: '1px solid #F2F4F7' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                                    <span style={{ fontSize: '11px', color: '#8B95A1', fontWeight: 700 }}>일일 변동 폭</span>
-                                    <span style={{ fontSize: '11px', fontWeight: 800 }}>{(detailData?.price || 0).toLocaleString()}</span>
-                                </div>
-                                <div style={{ height: '4px', background: '#F2F4F7', borderRadius: '2px', position: 'relative' }}>
-                                    <div style={{
-                                        position: 'absolute',
-                                        left: `${(() => {
-                                            const high = detailData?.regularMarketDayHigh || 0;
-                                            const low = detailData?.regularMarketDayLow || 0;
-                                            const current = detailData?.price || 0;
-                                            if (high === low) return 50;
-                                            const pos = ((current - low) / (high - low)) * 100;
-                                            return Math.max(0, Math.min(100, pos));
-                                        })()}%`,
-                                        width: '8px', height: '8px', borderRadius: '50%', background: '#0055FB', top: '-2px', transform: 'translateX(-50%)',
-                                        boxShadow: '0 0 0 3px rgba(0, 85, 251, 0.1)'
-                                    }} />
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최저 {(detailData?.regularMarketDayLow || 0).toLocaleString()}</span>
-                                    <span style={{ fontSize: '10px', color: '#B0B8C1' }}>최고 {(detailData?.regularMarketDayHigh || 0).toLocaleString()}</span>
-                                </div>
-                            </div>
-
-                            <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
-                                <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최고</span>
-                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{(detailData?.fiftyTwoWeekHigh || 0).toLocaleString()}</span>
-                            </div>
-                            <div className="metric-item-v3" style={{ background: 'white', padding: '12px 16px', borderRadius: '14px', border: '1px solid #F2F4F7' }}>
-                                <span className="m-label" style={{ fontSize: '11px', color: '#8B95A1', display: 'block', marginBottom: '4px' }}>52주 최저</span>
-                                <span className="m-value" style={{ fontSize: '14px', fontWeight: 800 }}>{(detailData?.fiftyTwoWeekLow || 0).toLocaleString()}</span>
-                            </div>
-                        </div>
+                {!isLoggedIn && (
+                    <div className="snapshot-cta" onClick={() => setShowLoginModal(true)}>
+                        <p>로그인하고 모든 종목 분석 데이터 보기 →</p>
                     </div>
+                )}
 
-                    {
-                        showCta && (
-                            <div className="slim-login-cta">
-                                <span className="slim-cta-text">📊 로그인하면 자산 현황 · DSR · 재무 목표를 볼 수 있어요</span>
-                                <button className="slim-cta-btn" onClick={() => setIsLoggedIn(true)}>
-                                    무료 시작하기 →
-                                </button>
-                            </div>
-                        )
-                    }
-
-                    <style jsx>{`
-                    .market-summary-container { margin-bottom: 40px; }
-                    .market-summary-card {
+                <style jsx>{`
+                    .market-snapshot-card {
                         background: white;
-                        border-radius: 32px;
-                        padding: 32px;
+                        border-radius: 24px;
+                        padding: 24px;
                         border: 1px solid #F2F4F7;
+                        margin-bottom: 24px;
                     }
-                    .shadow-premium-clean { box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
-                    .summary-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-                    .summary-title { font-size: 20px; font-weight: 800; color: #191F28; margin: 0; }
-                    .summary-date { font-size: 14px; color: #8B95A1; font-weight: 500; margin-left: 12px; }
-                    .live-status-badge { background: #E8F9F0; color: #1B8947; padding: 6px 12px; border-radius: 100px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
-                    .live-status-badge .dot { width: 6px; height: 6px; background: #1B8947; border-radius: 50%; animation: pulse 1.5s infinite; }
-                    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-                    .market-tabs-nav {
-                        display: flex;
-                        background: #F2F4F6;
-                        padding: 4px;
-                        border-radius: 12px;
-                        gap: 4px;
-                        margin-bottom: 32px;
-                    }
-                    .tab-item {
-                        flex: 1;
-                        border: none;
-                        background: transparent;
-                        padding: 10px;
-                        font-size: 14px;
-                        font-weight: 700;
-                        color: #8B95A1;
+                    .snapshot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+                    .snapshot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+                    .snapshot-item {
+                        padding: 16px;
+                        background: #F9FAFB;
+                        border-radius: 16px;
                         cursor: pointer;
-                        border-radius: 8px;
                         transition: all 0.2s;
+                        border: 1px solid transparent;
                     }
-                    .tab-item.active { background: white; color: #0055FB; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-
-                    .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
-                    .summary-card-v2 { background: #F9FAFB; border: 1.5px solid transparent; border-radius: 20px; padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; }
-                    .summary-card-v2:hover { background: #F2F4F6; }
-                    .summary-card-v2.selected { background: white; border-color: #0055FB; box-shadow: 0 4px 12px rgba(0, 85, 251, 0.08); }
-
-                    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-                    .card-name-group { display: flex; align-items: center; gap: 4px; }
-                    .symbol-name { font-size: 13px; font-weight: 700; color: #8B95A1; }
-                    .symbol-flag { font-size: 14px; }
-                    .status-badge { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
-                    .status-badge.open { background: #FFF0F0; color: #F04251; }
-                    .status-badge.closed { background: #F2F4F6; color: #8B95A1; }
-                    .status-badge.realtime { background: #EBF3FF; color: #0064FF; }
-
-                    .card-main { margin-bottom: 16px; }
-                    .price-val { font-size: 24px; font-weight: 800; color: #191F28; margin-bottom: 4px; }
-                    .change-val { font-size: 14px; font-weight: 700; }
-                    .change-val.positive { color: #F04251; }
-                    .change-val.negative { color: #0064FF; }
-
-                    .card-unit-row { display: flex; align-items: center; margin-top: 8px; }
-                    .unit-label { font-size: 11px; font-weight: 600; color: #B0B8C1; letter-spacing: 0.02em; }
-
-                    .detail-preview-section { background: #F4F8FF; border-radius: 16px; }
-                    .detail-header { display: flex; align-items: center; margin-bottom: 12px; }
-                    .detail-title { font-size: 14px; font-weight: 800; color: #0055FB; }
-                    .loading-spinner { font-size: 11px; color: #0055FB; margin-left: 10px; font-weight: 500; opacity: 0.8; animation: pulse 1.5s infinite; }
-                    .detail-metrics-grid { display: flex; gap: 32px; }
-                    .metric-item { display: flex; align-items: center; gap: 8px; }
-                    .metric-label { font-size: 12px; color: #8B95A1; font-weight: 600; }
-                    .metric-value { font-size: 14px; font-weight: 800; color: #191F28; }
-
-                    .slim-login-cta { display: flex; align-items: center; justify-content: space-between; background: #F4F8FF; border: 1px solid #DDEEFF; border-radius: 14px; padding: 12px 20px; gap: 12px; }
-                    .slim-cta-text { font-size: 13px; color: #4E5968; font-weight: 500; }
-                    .slim-cta-btn { background: #0055FB; color: white; border: none; padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
-                    .slim-cta-btn:hover { background: #0046D9; }
-                    .section-title { font-size: 18px; font-weight: 800; color: #191F28; margin-bottom: 16px; }
-
-                    .market-table-container th { border-top: none; }
-                    .table-row-hover:hover { background: #F8FAFF !important; }
+                    .snapshot-item:hover { border-color: #0055FB; background: white; box-shadow: 0 4px 12px rgba(0, 85, 251, 0.05); }
+                    .snapshot-cta {
+                        margin-top: 16px;
+                        padding: 12px;
+                        text-align: center;
+                        background: #F4F8FF;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        color: #0055FB;
+                        font-size: 13px;
+                        font-weight: 700;
+                    }
                 `}</style>
-                </div >
-            </div >
-
+            </div>
         );
     };
 
     if (!isLoggedIn) {
         return (
-            <>
-                {renderMarketSummary(true)}
-                <div className="dashboard-sidebar-widgets" style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '24px', padding: '0 32px 32px' }}>
-                    <div className="widget-section">
-                        <EconomicCalendar />
+            <div className="dashboard-guest-view">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
+                    <div className="guest-main-col">
+                        {renderMarketSummary()}
+                        <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
+                            <h3 className="section-title">경제 캘린더</h3>
+                            <EconomicCalendar />
+                        </div>
                     </div>
-                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                        <h3 className="section-title">내 재무 목표</h3>
-                        <GoalTracker />
+                    <div className="guest-sidebar-col">
+                        <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', opacity: 0.6, cursor: 'not-allowed', position: 'relative' }}>
+                            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, color: '#191F28', fontSize: '13px', fontWeight: 700 }}>로그인이 필요합니다</div>
+                            <h3 className="section-title">내 재무 목표</h3>
+                            <GoalTracker />
+                        </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 
@@ -943,28 +578,29 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            {/* Global Market Hub integration for members */}
-            <div style={{ marginTop: '32px' }}>
-                {renderMarketSummary(false)}
-            </div>
-
-            <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
-                <div className="dashboard-main-col">
-                    <div className="widget-section">
+            <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start', marginTop: '32px' }}>
+                <div className="dashboard-main-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    {renderMarketSummary()}
+                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
+                        <h3 className="section-title">경제 캘린더</h3>
                         <EconomicCalendar />
                     </div>
                 </div>
 
                 <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <div className="widget-section">
+                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
                         <h3 className="section-title">내 재무 목표</h3>
                         <GoalTracker />
+                    </div>
+                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
+                        <h3 className="section-title">시장 심리</h3>
+                        <SentimentGauge />
                     </div>
                 </div>
             </div>
 
             <style jsx>{`
-                .user-dashboard-v3 { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; }
+                .user-dashboard-v3 { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }
                 .hero-asset-card {
                     background: linear-gradient(135deg, #0064FF 0%, #0046B3 100%);
                     border-radius: 28px;

@@ -13,9 +13,9 @@ export default function Home() {
 
           {/* LEFT COLUMN: Main Content Feed */}
           <div className="portal-content">
+            <NewsFeed />
             <UserDashboard />
             <MiniToolbox />
-            <NewsFeed />
             <CommunityPreview />
           </div>
 

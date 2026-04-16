@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TickerBar from "@/components/portal/TickerBar";
@@ -46,10 +47,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#1a56e8" />
       </head>
       <body>
-        <Header />
-        <TickerBar />
-        <main>{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <TickerBar />
+          <main>{children}</main>
+          <Footer />
+        </AuthProvider>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
