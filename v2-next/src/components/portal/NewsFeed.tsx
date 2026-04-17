@@ -70,12 +70,17 @@ export default function NewsFeed() {
     const hero = filtered[0];
     const cards = filtered.slice(1, 13); // Show up to 12 cards in the slider
 
-    const Thumbnail = ({ cat, large, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
+    const Thumbnail = ({ cat, imageUrl }: { cat: string; large?: boolean; imageUrl?: string | null }) => {
         const theme = getTheme(cat);
-        const size = { width: "100%", height: large ? "130px" : "100px" };
+        const size = { width: "100%", height: "100%" };
         const [imgError, setImgError] = useState(false);
 
-        if (imageUrl && !imgError) {
+        // Use image proxy to bypass CORS/hotlink protection
+        const proxiedUrl = imageUrl && !imgError
+            ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
+            : null;
+
+        if (proxiedUrl) {
             return (
                 <div style={{
                     ...size,
@@ -84,8 +89,10 @@ export default function NewsFeed() {
                 }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                        src={imageUrl}
+                        src={proxiedUrl}
                         alt=""
+                        loading="lazy"
+                        decoding="async"
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         onError={() => setImgError(true)}
                     />
@@ -98,7 +105,7 @@ export default function NewsFeed() {
                 borderRadius: "8px",
                 background: theme.gradient,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: large ? "36px" : "28px",
+                fontSize: "32px",
                 flexShrink: 0,
             }}>
                 {theme.icon}
