@@ -75,9 +75,10 @@ export default function NewsFeed() {
         const size = { width: "100%", height: "100%" };
         const [imgError, setImgError] = useState(false);
 
-        // Use image proxy to bypass CORS/hotlink protection
+        // Use external high-performance image proxy to bypass CORS/hotlink protection
+        // weserv.nl is reliable and fast for resizing/proxing
         const proxiedUrl = imageUrl && !imgError
-            ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
+            ? `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl.replace(/^https?:\/\//, ''))}&w=800&fit=cover&output=webp`
             : null;
 
         if (proxiedUrl) {

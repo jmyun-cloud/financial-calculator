@@ -62,20 +62,53 @@ function classifyCategory(title: string): { catName: string; color: string } {
     return { catName: '재테크', color: '#9B51E0' };
 }
 
-// Extract image URL directly from Naver description HTML (fast, no external requests)
+// Enhanced fetch OG image optimized for Naver News links (fast & reliable)
+async function fetchOgImage(url: string): Promise<string | null> {
+    if (!url) return null;
+
+    // Only scrape if it's a Naver News link or specific known scrapeable news domains
+    // This prevents wasting time on domains that block us
+    const isNaverNews = url.includes('n.news.naver.com') || url.includes('news.naver.com');
+    if (!isNaverNews) return null;
+
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 1200); // Strict 1.2s timeout per request
+
+        const res = await fetch(url, {
+            signal: controller.signal,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            }
+        });
+        clearTimeout(timeout);
+        if (!res.ok) return null;
+
+        const html = await res.text();
+        const imgMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+            html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+
+        let img = imgMatch ? imgMatch[1] : null;
+        if (img && img.startsWith('//')) img = 'https:' + img;
+
+        // Basic validation for tracking pixels/icons
+        if (img && (img.includes('pixel') || img.length < 20)) return null;
+
+        return img;
+    } catch {
+        return null;
+    }
+}
+
+// Extract from description (fast fallback)
 function extractImageFromDescription(descHtml: string): string | null {
     if (!descHtml) return null;
-    // Match <img src="..."> tags
     const imgMatch = descHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
     if (!imgMatch) return null;
     let src = imgMatch[1];
-    // Decode HTML entities
     src = src.replace(/&amp;/g, '&').replace(/&#x3D;/g, '=').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    // Clean up query params that break images (e.g. "?type&...") → keep clean URL
-    // Accept pstatic.net, imgnews, and other CDN images
     if (src.startsWith('//')) src = 'https:' + src;
-    if (!src.startsWith('http')) return null;
-    // Filter out tracking pixels and icons
     if (src.includes('pixel') || src.includes('icon') || src.length < 20) return null;
     return src;
 }
@@ -90,15 +123,10 @@ export async function GET() {
 
     try {
         const queries = [
-            '한국 경제 지표',
-            '거시 경제 금융 뉴스',
-            '코스피 코스닥 증시 주식',
-            '뉴욕증시 나스닥 반도체',
-            '부동산 매매 전세 분양 청약',
-            '기준금리 채권 환율 달러 외환',
-            '비트코인 가상화폐 암호화폐',
-            'IPO 공모주 기업공개 상장 공시',
-            '재테크 절세 예적금'
+            '한국 경제 지표', '거시 경제 금융 뉴스', '코스피 코스닥 증시 주식',
+            '뉴욕증시 나스닥 반도체', '부동산 매매 전세 분양 청약',
+            '기준금리 채권 환율 달러 외환', '비트코인 가상화폐 암호화폐',
+            'IPO 공모주 기업공개 상장 공시', '재테크 절세 예적금'
         ];
         const allItems: any[] = [];
 
@@ -120,7 +148,7 @@ export async function GET() {
             }
         }));
 
-        // Strict Deduplication using normalized title
+        // Deduplication
         const seen = new Set<string>();
         const sorted = allItems
             .filter(item => {
@@ -130,18 +158,35 @@ export async function GET() {
                 return true;
             })
             .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-            .slice(0, 400); // Optimized cap: 400 items (~50 per category) is the perfect balance for performance and diversity
+            .slice(0, 400);
 
-        // Classify all items and extract images from description HTML (no external requests)
+        // Classify first
         const classified = sorted.map((item, index) => {
             const rawTitle = stripHtml(item.title || '');
             const { catName, color } = classifyCategory(rawTitle);
             return { item, index, rawTitle, catName, color };
         });
 
+        // Targeted OG Image Fetch: Top 2 per category
+        const CATEGORIES = ['증시', '경제', '부동산', '금리/채권', '가상화폐', '외환/달러', 'IPO/공시', '재테크'];
+        const scrapingTargets = new Set<number>();
+        for (const cat of CATEGORIES) {
+            classified.filter(c => c.catName === cat).slice(0, 2).forEach(c => scrapingTargets.add(c.index));
+        }
+        // Also always scrape absolute top 3 (for Hero)
+        classified.slice(0, 3).forEach(c => scrapingTargets.add(c.index));
+
+        const targetItems = classified.filter(c => scrapingTargets.has(c.index));
+        const imageResults = await Promise.all(targetItems.map(c => fetchOgImage(c.item.link)));
+        const imageMap = new Map<number, string | null>();
+        targetItems.forEach((c, idx) => {
+            imageMap.set(c.index, imageResults[idx]);
+        });
+
         const newsItems = classified.map(({ item, index, rawTitle, catName, color }) => {
-            // Extract image from description HTML BEFORE stripping (fast, no external requests)
-            const imageUrl = extractImageFromDescription(item.description || '');
+            // Priority: 1. Scraped OG Image, 2. Description Image, 3. null
+            const imageUrl = imageMap.get(index) || extractImageFromDescription(item.description || '');
+
             return {
                 id: `${index}-${Date.now()}`,
                 category: catName,
@@ -161,3 +206,5 @@ export async function GET() {
         return NextResponse.json({ error: 'Failed to fetch news' }, { status: 500 });
     }
 }
+
+
