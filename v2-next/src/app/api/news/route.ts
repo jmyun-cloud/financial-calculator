@@ -203,6 +203,7 @@ export async function GET() {
                 description: stripHtml(item.description || ''),
                 source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
                 timeAgo: timeAgo(item.pubDate),
+                pubDate: item.pubDate,
                 link: item.originallink || item.link,
                 imageUrl,
             };

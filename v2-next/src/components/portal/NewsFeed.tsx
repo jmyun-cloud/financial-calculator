@@ -78,7 +78,7 @@ export default function NewsFeed() {
         // Use external high-performance image proxy to bypass CORS/hotlink protection
         // weserv.nl is reliable and fast for resizing/proxing
         const proxiedUrl = imageUrl && !imgError
-            ? `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl.replace(/^https?:\/\//, ''))}&w=800&fit=cover&output=webp`
+            ? `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl.replace(/^https?:\/\//, ''))}&w=1200&q=85&fit=cover&output=webp`
             : null;
 
         if (proxiedUrl) {
