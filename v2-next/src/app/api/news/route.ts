@@ -68,7 +68,7 @@ async function fetchOgImage(url: string): Promise<string | null> {
 
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 1200); // Strict 1.2s timeout per request
+        const timeout = setTimeout(() => controller.abort(), 1500); // Relaxed to 1.5s for slower news sites
 
         const res = await fetch(url, {
             signal: controller.signal,
@@ -94,8 +94,8 @@ async function fetchOgImage(url: string): Promise<string | null> {
             } catch { return null; }
         }
 
-        // Basic validation for tracking pixels/icons
-        if (img && (img.includes('pixel') || img.length < 25)) return null;
+        // Filter out tracking pixels and placeholder icons
+        if (img && (img.includes('pixel') || img.length < 20)) return null;
 
         return img;
     } catch {
@@ -169,17 +169,23 @@ export async function GET() {
             return { item, index, rawTitle, catName, color };
         });
 
-        // Targeted OG Image Fetch: Top 2 per category
+        // Targeted OG Image Fetch: Top 5 per category to ensure rich visuals
         const CATEGORIES = ['증시', '경제', '부동산', '금리/채권', '가상화폐', '외환/달러', 'IPO/공시', '재테크'];
         const scrapingTargets = new Set<number>();
+
         for (const cat of CATEGORIES) {
-            classified.filter(c => c.catName === cat).slice(0, 2).forEach(c => scrapingTargets.add(c.index));
+            classified.filter(c => c.catName === cat)
+                .slice(0, 5) // Increased from 2 to 5 for better coverage
+                .forEach(c => scrapingTargets.add(c.index));
         }
-        // Also always scrape absolute top 3 (for Hero)
-        classified.slice(0, 3).forEach(c => scrapingTargets.add(c.index));
+
+        // Also always scrape absolute top 10 (for the global recent feed)
+        classified.slice(0, 10).forEach(c => scrapingTargets.add(c.index));
 
         const targetItems = classified.filter(c => scrapingTargets.has(c.index));
-        const imageResults = await Promise.all(targetItems.map(c => fetchOgImage(c.item.link)));
+
+        // Use the link field which Naver prefers for its own hosted news version if available
+        const imageResults = await Promise.all(targetItems.map(c => fetchOgImage(c.item.link || c.item.originallink)));
         const imageMap = new Map<number, string | null>();
         targetItems.forEach((c, idx) => {
             imageMap.set(c.index, imageResults[idx]);
