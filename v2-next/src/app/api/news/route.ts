@@ -62,70 +62,22 @@ function classifyCategory(title: string): { catName: string; color: string } {
     return { catName: '재테크', color: '#9B51E0' };
 }
 
-// Enhanced fetch OG image with fallbacks and more robust headers
-async function fetchOgImage(url: string, fallbackUrl?: string): Promise<string | null> {
-    if (!url) return null;
-
-    const scrape = async (targetUrl: string): Promise<string | null> => {
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 2000); // Optimized to 2.0s for speed
-
-            const res = await fetch(targetUrl, {
-                signal: controller.signal,
-                headers: {
-                    // Modern Desktop UA
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                    'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
-                }
-            });
-            clearTimeout(timeout);
-            if (!res.ok) return null;
-
-            const html = await res.text();
-
-            // Expanded regex for various image meta tags
-            const imgMatch =
-                html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
-                html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
-                html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i) ||
-                html.match(/<meta[^>]+name=["']twitter:image:src["'][^>]+content=["']([^"']+)["']/i) ||
-                html.match(/<meta[^>]+name=["']thumbnail["'][^>]+content=["']([^"']+)["']/i) ||
-                html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i);
-
-            let img = imgMatch ? imgMatch[1] : null;
-
-            // Handle URL normalization
-            if (img) {
-                if (img.startsWith('//')) {
-                    img = 'https:' + img;
-                } else if (img.startsWith('/')) {
-                    try {
-                        const urlObj = new URL(targetUrl);
-                        img = `${urlObj.protocol}//${urlObj.host}${img}`;
-                    } catch { /* ignore */ }
-                }
-            }
-
-            // Basic validation
-            if (img && (img.includes('pixel.gif') || img.includes('icon') || img.length < 10)) return null;
-
-            return img;
-        } catch {
-            return null;
-        }
-    };
-
-    // Try primary link first
-    let result = await scrape(url);
-
-    // Fallback to secondary link (Naver news link is often more scrapeable)
-    if (!result && fallbackUrl && fallbackUrl !== url) {
-        result = await scrape(fallbackUrl);
-    }
-
-    return result;
+// Extract image URL directly from Naver description HTML (fast, no external requests)
+function extractImageFromDescription(descHtml: string): string | null {
+    if (!descHtml) return null;
+    // Match <img src="..."> tags
+    const imgMatch = descHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (!imgMatch) return null;
+    let src = imgMatch[1];
+    // Decode HTML entities
+    src = src.replace(/&amp;/g, '&').replace(/&#x3D;/g, '=').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    // Clean up query params that break images (e.g. "?type&...") → keep clean URL
+    // Accept pstatic.net, imgnews, and other CDN images
+    if (src.startsWith('//')) src = 'https:' + src;
+    if (!src.startsWith('http')) return null;
+    // Filter out tracking pixels and icons
+    if (src.includes('pixel') || src.includes('icon') || src.length < 20) return null;
+    return src;
 }
 
 export async function GET() {
@@ -180,41 +132,16 @@ export async function GET() {
             .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
             .slice(0, 400); // Optimized cap: 400 items (~50 per category) is the perfect balance for performance and diversity
 
-        // Fetch OG images per category (top 3 per category) so every category tab has images
-        const CATEGORIES_LIST = ['증시', '경제', '부동산', '금리/채권', '가상화폐', '외환/달러', 'IPO/공시', '재테크'];
-
-        // Classify all items first to build category map
+        // Classify all items and extract images from description HTML (no external requests)
         const classified = sorted.map((item, index) => {
             const rawTitle = stripHtml(item.title || '');
             const { catName, color } = classifyCategory(rawTitle);
             return { item, index, rawTitle, catName, color };
         });
 
-        // Pick top 3 per category + top 3 overall (for hero on 전체 tab)
-        const imageTargetIndices = new Set<number>();
-        // Top 3 overall (hero + first two cards on 전체 tab)
-        classified.slice(0, 3).forEach(c => imageTargetIndices.add(c.index));
-        // Top 3 per category
-        for (const cat of CATEGORIES_LIST) {
-            let count = 0;
-            for (const c of classified) {
-                if (count >= 3) break;
-                if (c.catName === cat) {
-                    imageTargetIndices.add(c.index);
-                    count++;
-                }
-            }
-        }
-
-        // Fetch images only for selected indices in parallel
-        const imageTargets = classified.filter(c => imageTargetIndices.has(c.index));
-        const imageResults = await Promise.all(
-            imageTargets.map(c => fetchOgImage(c.item.originallink || c.item.link, c.item.link))
-        );
-        const imageMap = new Map<number, string | null>();
-        imageTargets.forEach((c, i) => imageMap.set(c.index, imageResults[i]));
-
         const newsItems = classified.map(({ item, index, rawTitle, catName, color }) => {
+            // Extract image from description HTML BEFORE stripping (fast, no external requests)
+            const imageUrl = extractImageFromDescription(item.description || '');
             return {
                 id: `${index}-${Date.now()}`,
                 category: catName,
@@ -224,7 +151,7 @@ export async function GET() {
                 source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
                 timeAgo: timeAgo(item.pubDate),
                 link: item.originallink || item.link,
-                imageUrl: imageMap.has(index) ? imageMap.get(index) : null,
+                imageUrl,
             };
         });
 
