@@ -180,15 +180,41 @@ export async function GET() {
             .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
             .slice(0, 400); // Optimized cap: 400 items (~50 per category) is the perfect balance for performance and diversity
 
-        // Fetch OG images for the top 6 articles in parallel to fill the initial view quickly
-        const top6Items = sorted.slice(0, 6);
-        const images = await Promise.all(top6Items.map(item =>
-            fetchOgImage(item.originallink || item.link, item.link)
-        ));
+        // Fetch OG images per category (top 3 per category) so every category tab has images
+        const CATEGORIES_LIST = ['증시', '경제', '부동산', '금리/채권', '가상화폐', '외환/달러', 'IPO/공시', '재테크'];
 
-        const newsItems = sorted.map((item, index) => {
+        // Classify all items first to build category map
+        const classified = sorted.map((item, index) => {
             const rawTitle = stripHtml(item.title || '');
             const { catName, color } = classifyCategory(rawTitle);
+            return { item, index, rawTitle, catName, color };
+        });
+
+        // Pick top 3 per category + top 3 overall (for hero on 전체 tab)
+        const imageTargetIndices = new Set<number>();
+        // Top 3 overall (hero + first two cards on 전체 tab)
+        classified.slice(0, 3).forEach(c => imageTargetIndices.add(c.index));
+        // Top 3 per category
+        for (const cat of CATEGORIES_LIST) {
+            let count = 0;
+            for (const c of classified) {
+                if (count >= 3) break;
+                if (c.catName === cat) {
+                    imageTargetIndices.add(c.index);
+                    count++;
+                }
+            }
+        }
+
+        // Fetch images only for selected indices in parallel
+        const imageTargets = classified.filter(c => imageTargetIndices.has(c.index));
+        const imageResults = await Promise.all(
+            imageTargets.map(c => fetchOgImage(c.item.originallink || c.item.link, c.item.link))
+        );
+        const imageMap = new Map<number, string | null>();
+        imageTargets.forEach((c, i) => imageMap.set(c.index, imageResults[i]));
+
+        const newsItems = classified.map(({ item, index, rawTitle, catName, color }) => {
             return {
                 id: `${index}-${Date.now()}`,
                 category: catName,
@@ -198,7 +224,7 @@ export async function GET() {
                 source: new URL(item.originallink || item.link).hostname.replace('www.', ''),
                 timeAgo: timeAgo(item.pubDate),
                 link: item.originallink || item.link,
-                imageUrl: index < 6 ? images[index] : null,
+                imageUrl: imageMap.has(index) ? imageMap.get(index) : null,
             };
         });
 
