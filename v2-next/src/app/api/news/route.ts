@@ -62,14 +62,9 @@ function classifyCategory(title: string): { catName: string; color: string } {
     return { catName: '재테크', color: '#9B51E0' };
 }
 
-// Enhanced fetch OG image optimized for Naver News links (fast & reliable)
+// Enhanced fetch OG image (targeted at top items with strict timeout)
 async function fetchOgImage(url: string): Promise<string | null> {
     if (!url) return null;
-
-    // Only scrape if it's a Naver News link or specific known scrapeable news domains
-    // This prevents wasting time on domains that block us
-    const isNaverNews = url.includes('n.news.naver.com') || url.includes('news.naver.com');
-    if (!isNaverNews) return null;
 
     try {
         const controller = new AbortController();
@@ -78,7 +73,7 @@ async function fetchOgImage(url: string): Promise<string | null> {
         const res = await fetch(url, {
             signal: controller.signal,
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             }
         });
@@ -87,13 +82,20 @@ async function fetchOgImage(url: string): Promise<string | null> {
 
         const html = await res.text();
         const imgMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
-            html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+            html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+            html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
 
         let img = imgMatch ? imgMatch[1] : null;
         if (img && img.startsWith('//')) img = 'https:' + img;
+        if (img && !img.startsWith('http')) {
+            try {
+                const base = new URL(url).origin;
+                img = new URL(img, base).toString();
+            } catch { return null; }
+        }
 
         // Basic validation for tracking pixels/icons
-        if (img && (img.includes('pixel') || img.length < 20)) return null;
+        if (img && (img.includes('pixel') || img.length < 25)) return null;
 
         return img;
     } catch {
