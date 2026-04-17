@@ -4,18 +4,18 @@ import React from 'react';
 import Link from 'next/link';
 
 const MARKET_NEWS = [
-    { name: '경제 동향', href: '/news/economy' },
-    { name: '국내/해외 주식', href: '/news/stocks' },
-    { name: '가상자산', href: '/news/crypto' },
-    { name: '금리 및 환율', href: '/news/forex' },
-    { name: '기업 실적', href: '/news/earnings' },
+    { name: '경제 동향', href: '/news?category=경제' },
+    { name: '국내/해외 주식', href: '/news?category=증시' },
+    { name: '가상자산', href: '/news?category=가상화폐' },
+    { name: '금리 및 환율', href: '/news?category=금리/채권' },
+    { name: '기업 실적', href: '/news?category=IPO/공시' },
 ];
 
 const SEE_MORE = [
-    { name: '실시간 분석', href: '/news/analysis' },
-    { name: '전문가 칼럼', href: '/news/columns' },
-    { name: '많이 본 뉴스', href: '/news/popular' },
-    { name: '부동산 뉴스', href: '/news/real-estate' },
+    { name: '실시간 분석', href: '/news' },
+    { name: '전문가 칼럼', href: '/news' },
+    { name: '많이 본 뉴스', href: '/news' },
+    { name: '부동산 뉴스', href: '/news?category=부동산' },
 ];
 
 export default function NewsMegaMenu() {

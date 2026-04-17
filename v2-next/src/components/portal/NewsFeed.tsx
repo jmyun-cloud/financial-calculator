@@ -286,7 +286,7 @@ export default function NewsFeed() {
                             </div>
 
                             <button
-                                onClick={() => setIsListView(true)}
+                                onClick={() => window.location.href = '/news'}
                                 style={{
                                     width: "100%",
                                     marginTop: "32px",
@@ -297,7 +297,8 @@ export default function NewsFeed() {
                                     color: "#191F28",
                                     fontSize: "13px",
                                     fontWeight: 700,
-                                    cursor: "pointer"
+                                    cursor: "pointer",
+                                    textAlign: "center"
                                 }}
                             >
                                 전체 뉴스 보기 →
