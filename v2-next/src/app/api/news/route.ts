@@ -175,12 +175,12 @@ export async function GET() {
 
         for (const cat of CATEGORIES) {
             classified.filter(c => c.catName === cat)
-                .slice(0, 5) // Increased from 2 to 5 for better coverage
+                .slice(0, 3) // Optimized from 5 to 3 based on user feedback
                 .forEach(c => scrapingTargets.add(c.index));
         }
 
-        // Also always scrape absolute top 10 (for the global recent feed)
-        classified.slice(0, 10).forEach(c => scrapingTargets.add(c.index));
+        // Also always scrape absolute top 5
+        classified.slice(0, 5).forEach(c => scrapingTargets.add(c.index));
 
         const targetItems = classified.filter(c => scrapingTargets.has(c.index));
 
