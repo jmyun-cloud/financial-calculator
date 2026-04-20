@@ -24,70 +24,13 @@ export default async function GuidePage() {
 
       <main className="main-content">
         <div className="container">
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "24px",
-            paddingTop: "8px",
-          }}>
+          <div className="guide-card-grid">
             {guides.map((guide: any) => (
-              <Link
-                key={guide.slug}
-                href={`/guide/${guide.slug}`}
-                style={{ textDecoration: "none" }}
-              >
-                <div style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "20px",
-                  padding: "28px",
-                  boxShadow: "var(--shadow-md)",
-                  transition: "all 0.2s",
-                  cursor: "pointer",
-                  height: "100%",
-                }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-lg)";
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)";
-                  }}
-                >
-                  <div style={{ fontSize: "2.5rem", marginBottom: "16px" }}>
-                    {guide.thumbnail || "📋"}
-                  </div>
-                  <div style={{
-                    display: "inline-block",
-                    background: "#E8F3FF",
-                    color: "var(--primary)",
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    padding: "4px 10px",
-                    borderRadius: "20px",
-                    marginBottom: "12px",
-                  }}>
-                    {guide.category || "금융 가이드"}
-                  </div>
-                  <h2 style={{
-                    fontSize: "1.1rem",
-                    fontWeight: 700,
-                    color: "var(--text-primary)",
-                    marginBottom: "10px",
-                    lineHeight: 1.4,
-                  }}>
-                    {guide.title}
-                  </h2>
-                  <p style={{
-                    fontSize: "0.9rem",
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.6,
-                    margin: 0,
-                  }}>
-                    {guide.description}
-                  </p>
-                </div>
+              <Link key={guide.slug} href={`/guide/${guide.slug}`} className="guide-card">
+                <div className="guide-card-emoji">{guide.thumbnail || "📋"}</div>
+                <div className="guide-card-badge">{guide.category || "금융 가이드"}</div>
+                <h2 className="guide-card-title">{guide.title}</h2>
+                <p className="guide-card-desc">{guide.description}</p>
               </Link>
             ))}
           </div>
