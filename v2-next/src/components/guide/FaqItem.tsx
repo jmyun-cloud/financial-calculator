@@ -1,47 +1,14 @@
 "use client";
 
-import { useState, Children, isValidElement, ReactNode } from "react";
-
-// Marker component to identify <summary> content
-export function FaqSummary({ children }: { children: ReactNode }) {
-    return <>{children}</>;
-}
-FaqSummary.displayName = "FaqSummary";
+import { useState, ReactNode } from "react";
 
 interface Props {
+    question: ReactNode;
     children: ReactNode;
-    className?: string;
 }
 
-export function FaqItem({ children }: Props) {
+export function FaqItem({ question, children }: Props) {
     const [isOpen, setIsOpen] = useState(false);
-
-    const childArray = Children.toArray(children);
-    let summaryContent: ReactNode = null;
-    const bodyContent: ReactNode[] = [];
-
-    for (const child of childArray) {
-        if (
-            isValidElement(child) && (
-                // native html summary (type is string "summary")
-                child.type === "summary" ||
-                // our custom FaqSummary marker
-                (child.type as any)?.displayName === "FaqSummary" ||
-                // fallback: check function name
-                (typeof child.type === "function" && (child.type as any).name === "FaqSummary")
-            )
-        ) {
-            summaryContent = (child.props as any).children;
-        } else if (child !== "\n") {
-            bodyContent.push(child);
-        }
-    }
-
-    if (!summaryContent) {
-        // Last resort: treat first non-empty text child as summary
-        const idx = bodyContent.findIndex(c => !!c);
-        if (idx !== -1) summaryContent = bodyContent.splice(idx, 1)[0];
-    }
 
     return (
         <div
@@ -59,7 +26,7 @@ export function FaqItem({ children }: Props) {
                 onClick={() => setIsOpen(!isOpen)}
                 style={{
                     width: "100%",
-                    padding: "20px 24px",
+                    padding: "18px 22px",
                     background: isOpen ? "#F0F5FF" : "transparent",
                     border: "none",
                     cursor: "pointer",
@@ -73,15 +40,16 @@ export function FaqItem({ children }: Props) {
                 }}
             >
                 <span style={{
-                    fontSize: "1rem",
+                    fontSize: "0.97rem",
                     fontWeight: 700,
                     color: isOpen ? "#1a56e8" : "#191F28",
                     lineHeight: 1.5,
                     flex: 1,
-                }}>{summaryContent}</span>
+                }}>
+                    {question}
+                </span>
                 <span style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 500,
+                    fontSize: "1.1rem",
                     color: isOpen ? "#1a56e8" : "#B0B8C1",
                     width: "28px",
                     height: "28px",
@@ -92,20 +60,21 @@ export function FaqItem({ children }: Props) {
                     background: isOpen ? "#EEF3FF" : "#F2F4F7",
                     flexShrink: 0,
                     transition: "all 0.2s",
+                    fontWeight: 500,
                 }}>
                     {isOpen ? "−" : "+"}
                 </span>
             </button>
 
-            {isOpen && bodyContent.length > 0 && (
+            {isOpen && (
                 <div style={{
-                    padding: "4px 24px 22px",
+                    padding: "2px 22px 20px",
                     color: "#4E5968",
-                    fontSize: "0.95rem",
+                    fontSize: "0.93rem",
                     lineHeight: 1.75,
                     borderTop: "1px solid #F2F4F7",
                 }}>
-                    {bodyContent}
+                    {children}
                 </div>
             )}
         </div>

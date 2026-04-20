@@ -3,7 +3,8 @@ import { getGuideBySlug, getAllGuides } from '@/lib/mdx';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
-import { FaqItem, FaqSummary } from "@/components/guide/FaqItem";
+import { Children, isValidElement, ReactNode } from 'react';
+import { FaqItem } from "@/components/guide/FaqItem";
 import "../guide.css";
 
 export async function generateStaticParams() {
@@ -17,27 +18,42 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
   if (!guide) return {};
-
   return {
     title: `${guide.meta.title} - 금융계산기.kr`,
     description: guide.meta.description,
   };
 }
 
-// FaqBlock and FaqQ are CAPITALIZED — MDX guarantees these are treated as React components
+// Server-side marker for FAQ question
+function FaqQ({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
+
+// Server-side block that splits question from body, passes to client FaqItem
+function FaqBlock({ children }: { children: ReactNode }) {
+  const childArr = Children.toArray(children);
+  let question: ReactNode = null;
+  const body: ReactNode[] = [];
+
+  for (const child of childArr) {
+    if (isValidElement(child) && child.type === FaqQ) {
+      question = (child.props as any).children;
+    } else {
+      body.push(child);
+    }
+  }
+
+  return <FaqItem question={question}>{body}</FaqItem>;
+}
+
 const mdxComponents = {
-  FaqBlock: ({ children }: any) => <FaqItem>{children}</FaqItem>,
-  FaqQ: ({ children }: any) => <FaqSummary>{children}</FaqSummary>,
-  // Style tables
+  FaqBlock,
+  FaqQ,
   table: ({ children }: any) => (
     <div style={{ overflowX: "auto", margin: "24px 0" }}>
       <table style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        fontSize: "0.9rem",
-        borderRadius: "12px",
-        overflow: "hidden",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        width: "100%", borderCollapse: "collapse", fontSize: "0.9rem",
+        borderRadius: "12px", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
       }}>{children}</table>
     </div>
   ),
@@ -50,12 +66,12 @@ const mdxComponents = {
   td: ({ children }: any) => (
     <td style={{ padding: "12px 16px", borderBottom: "1px solid #F2F4F7", color: "#333D4B" }}>{children}</td>
   ),
-};
+  tr: ({ children }: any) => <tr>{children}</tr>,
+} as any;
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
-
   if (!guide) notFound();
 
   return (
@@ -64,8 +80,10 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         <div className="container">
           <div className="top-desc-inner">
             <div className="breadcrumb">
-              <Link href="/" style={{ color: 'inherit' }}>홈</Link> <span className="bc-sep">›</span>
-              <Link href="/guide" style={{ color: 'inherit' }}>가이드</Link> <span className="bc-sep">›</span>
+              <Link href="/" style={{ color: 'inherit' }}>홈</Link>
+              <span className="bc-sep"> › </span>
+              <Link href="/guide" style={{ color: 'inherit' }}>가이드</Link>
+              <span className="bc-sep"> › </span>
               <span className="bc-current">{guide!.meta.title}</span>
             </div>
             <h1 className="main-title">{guide!.meta.title}</h1>
