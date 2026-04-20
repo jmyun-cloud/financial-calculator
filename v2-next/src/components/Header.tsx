@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import HeaderSearch from './portal/HeaderSearch';
 import NewsMegaMenu from './NewsMegaMenu';
@@ -10,6 +11,12 @@ import { LogOut, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
 export default function Header() {
     const { user, isLoggedIn, logout, setShowLoginModal } = useAuth();
     const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+    const pathname = usePathname() || '/';
+
+    const isActive = (path: string) => {
+        if (path === '/') return pathname === '/';
+        return pathname.startsWith(path);
+    };
 
     return (
         <header className="site-header">
@@ -20,17 +27,17 @@ export default function Header() {
                 </Link>
 
                 <nav className="header-nav" style={{ flex: 1, justifyContent: 'center', gap: '32px', marginLeft: '40px' }}>
-                    <Link href="/" className="nav-link active">홈</Link>
+                    <Link href="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>홈</Link>
                     <Link href="/#market" className="nav-link">시장</Link>
-                    <Link href="/calculators" className="nav-link">계산기</Link>
+                    <Link href="/calculators" className={`nav-link ${isActive('/calculator') ? 'active' : ''}`}>계산기</Link>
 
                     <div className="nav-item-has-mega">
-                        <Link href="/news" className="nav-link">뉴스</Link>
+                        <Link href="/news" className={`nav-link ${isActive('/news') ? 'active' : ''}`}>뉴스</Link>
                         <NewsMegaMenu />
                     </div>
 
-                    <Link href="/community" className="nav-link">커뮤니티</Link>
-                    <Link href="/guide" className="nav-link">가이드</Link>
+                    <Link href="/community" className={`nav-link ${isActive('/community') ? 'active' : ''}`}>커뮤니티</Link>
+                    <Link href="/guide" className={`nav-link ${isActive('/guide') ? 'active' : ''}`}>가이드</Link>
                 </nav>
 
                 <div className="header-right" style={{ gap: '16px', position: 'relative' }}>
