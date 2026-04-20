@@ -23,8 +23,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 const mdxComponents = {
-  details: (props: any) => <details {...props} />,
-  summary: (props: any) => <summary {...props} />,
+  details: ({ children, ...props }: any) => (
+    <details className="faq-item" {...props}>{children}</details>
+  ),
+  summary: ({ children, ...props }: any) => (
+    <summary {...props}>{children}</summary>
+  ),
 };
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
