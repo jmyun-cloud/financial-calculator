@@ -140,7 +140,6 @@ export default function NewsFeed() {
             }}>
                 <div style={{ display: "flex", alignItems: "flex-end", gap: "12px", width: "100%" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <span style={{ fontSize: "14px", fontWeight: 800, color: "#F04452" }}>LIVE</span>
                         <h1 style={{
                             fontSize: "28px",
                             fontWeight: 900,
