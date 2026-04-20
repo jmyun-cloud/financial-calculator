@@ -31,11 +31,8 @@ function NewsContent() {
     useEffect(() => {
         if (queryCat) {
             const catMap: Record<string, string> = {
-                'economy': '경제',
-                'stocks': '증시',
-                'crypto': '가상화폐',
-                'forex': '외환/달러',
-                'real-estate': '부동산'
+                'economy': '경제', 'stocks': '증시', 'crypto': '가상화폐',
+                'forex': '외환/달러', 'real-estate': '부동산'
             };
             setActiveTab(catMap[queryCat] || queryCat);
         }
@@ -69,277 +66,155 @@ function NewsContent() {
             return d.getDate() === today.getDate() &&
                 d.getMonth() === today.getMonth() &&
                 d.getFullYear() === today.getFullYear();
-        } catch (e) {
-            return false;
-        }
+        } catch { return false; }
     };
 
     const newsToday = filtered.filter(item => isToday(item.pubDate || ""));
     const newsPrevious = filtered.filter(item => !isToday(item.pubDate || ""));
 
-    const NewsCard = ({ item }: { item: NewsItem }) => (
-        <a href={item.link} target="_blank" rel="noopener noreferrer" className="news-card">
-            {item.imageUrl && (
-                <div className="news-thumb">
-                    <img
-                        src={`https://images.weserv.nl/?url=${encodeURIComponent(item.imageUrl.replace(/^https?:\/\//, ''))}&w=1200&q=85&fit=cover&output=webp`}
-                        alt=""
-                        loading="lazy"
-                    />
+    const renderCard = (item: NewsItem) => {
+        const proxied = item.imageUrl
+            ? `https://images.weserv.nl/?url=${encodeURIComponent(item.imageUrl.replace(/^https?:\/\//, ''))}&w=400&fit=cover&output=webp`
+            : null;
+        return (
+            <a
+                key={item.id}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "16px",
+                    background: "white",
+                    padding: "16px",
+                    borderRadius: "16px",
+                    textDecoration: "none",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    border: "1px solid #F2F4F7",
+                    alignItems: "flex-start",
+                    transition: "all 0.2s ease",
+                }}
+            >
+                {proxied && (
+                    <div style={{
+                        width: "160px",
+                        height: "110px",
+                        borderRadius: "10px",
+                        overflow: "hidden",
+                        flexShrink: 0,
+                        background: "#F2F4F7",
+                    }}>
+                        <img
+                            src={proxied}
+                            alt=""
+                            loading="lazy"
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                    </div>
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px", fontSize: "12px" }}>
+                        <span style={{ color: item.categoryColor, fontWeight: 800 }}>{item.category}</span>
+                        <span style={{ color: "#E5E8EB" }}>·</span>
+                        <span style={{ color: "#4E5968", fontWeight: 500 }}>{item.source}</span>
+                        <span style={{ color: "#8B95A1", fontWeight: 500 }}>{item.timeAgo}</span>
+                    </div>
+                    <h3 style={{
+                        fontSize: "16px",
+                        fontWeight: 800,
+                        color: "#191F28",
+                        marginBottom: "8px",
+                        lineHeight: 1.5,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                    }}>{item.title}</h3>
+                    <p style={{
+                        fontSize: "13px",
+                        color: "#4E5968",
+                        lineHeight: 1.6,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        margin: 0,
+                    }}>{item.description}</p>
                 </div>
-            )}
-            <div className="news-info">
-                <div className="news-meta">
-                    <span className="cat" style={{ color: item.categoryColor }}>{item.category}</span>
-                    <span className="dot">·</span>
-                    <span className="source">{item.source}</span>
-                    <span className="time">{item.timeAgo}</span>
+            </a>
+        );
+    };
+
+    const renderSection = (title: string, items: NewsItem[], borderColor: string) => (
+        items.length > 0 ? (
+            <div style={{ marginBottom: "40px" }}>
+                <h2 style={{
+                    fontSize: "17px",
+                    fontWeight: 800,
+                    color: "#191F28",
+                    marginBottom: "16px",
+                    paddingLeft: "10px",
+                    borderLeft: `4px solid ${borderColor}`,
+                }}>{title}</h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {items.map(item => renderCard(item))}
                 </div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
             </div>
-        </a>
+        ) : null
     );
 
     return (
-        <div className="news-page-container">
+        <div style={{ padding: "40px 0 80px", background: "#F9FAFB", minHeight: "100vh" }}>
             <div className="container">
-                <div className="news-header">
-                    <h1>금융 뉴스 센터</h1>
-                    <p>가장 빠르고 정확한 실시간 경제 소식</p>
+                {/* Header */}
+                <div style={{ textAlign: "center", marginBottom: "36px" }}>
+                    <h1 style={{ fontSize: "28px", fontWeight: 800, color: "#191F28", marginBottom: "8px" }}>
+                        금융 뉴스 센터
+                    </h1>
+                    <p style={{ color: "#4E5968", fontSize: "15px" }}>가장 빠르고 정확한 실시간 경제 소식</p>
                 </div>
 
-                <div className="category-tabs">
+                {/* Category Tabs */}
+                <div style={{ display: "flex", gap: "8px", marginBottom: "40px", overflowX: "auto", paddingBottom: "8px", justifyContent: "center", flexWrap: "wrap" }}>
                     {CATEGORIES.map(cat => (
                         <button
                             key={cat}
-                            className={`tab-btn ${activeTab === cat ? 'active' : ''}`}
                             onClick={() => setActiveTab(cat)}
-                        >
-                            {cat}
-                        </button>
+                            style={{
+                                padding: "8px 20px",
+                                borderRadius: "100px",
+                                border: activeTab === cat ? "none" : "1px solid #E5E8EB",
+                                background: activeTab === cat ? "#191F28" : "white",
+                                color: activeTab === cat ? "white" : "#4E5968",
+                                fontSize: "14px",
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                whiteSpace: "nowrap",
+                                transition: "all 0.2s",
+                            }}
+                        >{cat}</button>
                     ))}
                 </div>
 
+                {/* News List */}
                 {isLoading ? (
-                    <div className="news-list skeleton">
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} className="skeleton-item" />
+                    <div style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "12px" }}>
+                        {[...Array(5)].map((_, i) => (
+                            <div key={i} style={{ height: "130px", background: "white", borderRadius: "16px", opacity: 0.6 }} />
                         ))}
                     </div>
                 ) : (
-                    <div className="news-list">
-                        {/* Today's News */}
-                        {newsToday.length > 0 && (
-                            <div className="news-section">
-                                <h2 className="section-title">오늘의 주요 뉴스</h2>
-                                <div className="section-content">
-                                    {newsToday.map(item => (
-                                        <NewsCard key={item.id} item={item} />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Recent News Title for Previous if no Today's news */}
-                        {(newsToday.length === 0 && newsPrevious.length > 0) && (
-                            <div className="news-section">
-                                <h2 className="section-title">최신 뉴스</h2>
-                                <div className="section-content">
-                                    {newsPrevious.map(item => (
-                                        <NewsCard key={item.id} item={item} />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Previous News (Hidden behind section if Today's exists) */}
-                        {newsToday.length > 0 && newsPrevious.length > 0 && (
-                            <div className="news-section previous">
-                                <h2 className="section-title">이전 뉴스</h2>
-                                <div className="section-content">
-                                    {newsPrevious.map(item => (
-                                        <NewsCard key={item.id} item={item} />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
+                    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+                        {renderSection("오늘의 주요 뉴스", newsToday, "#F04452")}
+                        {newsToday.length === 0 && renderSection("최신 뉴스", newsPrevious, "#3182F6")}
+                        {newsToday.length > 0 && renderSection("이전 뉴스", newsPrevious, "#B0B8C1")}
                         {newsToday.length === 0 && newsPrevious.length === 0 && (
-                            <div className="no-news">결과가 없습니다.</div>
+                            <p style={{ textAlign: "center", color: "#8B95A1" }}>결과가 없습니다.</p>
                         )}
                     </div>
                 )}
             </div>
-
-            <style jsx>{`
-                .news-page-container {
-                    padding: 40px 0 80px;
-                    background: #F9FAFB;
-                    min-height: 100vh;
-                }
-                .news-header {
-                    text-align: center;
-                    margin-bottom: 40px;
-                }
-                .news-header h1 {
-                    font-size: 32px;
-                    font-weight: 800;
-                    color: #191F28;
-                    margin-bottom: 8px;
-                }
-                .news-header p {
-                    color: #4E5968;
-                    font-size: 16px;
-                }
-                .category-tabs {
-                    display: flex;
-                    gap: 8px;
-                    margin-bottom: 48px;
-                    overflow-x: auto;
-                    padding-bottom: 8px;
-                    justify-content: center;
-                }
-                .tab-btn {
-                    padding: 10px 24px;
-                    border-radius: 100px;
-                    border: 1px solid #E5E8EB;
-                    background: white;
-                    font-size: 15px;
-                    font-weight: 600;
-                    color: #4E5968;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    transition: all 0.2s;
-                }
-                .tab-btn:hover {
-                    background: #F2F4F6;
-                }
-                .tab-btn.active {
-                    background: #191F28;
-                    color: white;
-                    border-color: #191F28;
-                }
-                
-                .news-list {
-                    max-width: 800px;
-                    margin: 0 auto;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 48px;
-                }
-                
-                .section-title {
-                    font-size: 18px;
-                    font-weight: 800;
-                    color: #191F28;
-                    margin-bottom: 20px;
-                    padding-left: 10px;
-                    border-left: 4px solid #3182F6;
-                }
-                .previous .section-title {
-                    border-left-color: #B0B8C1;
-                    color: #8B95A1;
-                }
-                
-                .section-content {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 16px;
-                }
-
-                .news-card {
-                    display: flex;
-                    gap: 20px;
-                    background: white;
-                    padding: 20px;
-                    border-radius: 20px;
-                    text-decoration: none !important;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-                    transition: all 0.2s ease;
-                    border: 1px solid #F2F4F7;
-                    align-items: flex-start;
-                }
-                .news-card:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-                    border-color: #E5E8EB;
-                }
-                .news-thumb {
-                    width: 180px;
-                    height: 120px;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    flex-shrink: 0;
-                    background: #F2F4F7;
-                }
-                .news-thumb img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-                .news-info {
-                    flex: 1;
-                    min-width: 0;
-                }
-                .news-meta {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    margin-bottom: 8px;
-                }
-                .cat { font-weight: 800; }
-                .dot { color: #E5E8EB; }
-                .source { color: #4E5968; }
-                .time { color: #8B95A1; font-weight: 500; }
-                .news-info h3 {
-                    font-size: 17px;
-                    font-weight: 800;
-                    color: #191F28 !important;
-                    margin-bottom: 10px;
-                    line-height: 1.5;
-                    display: -webkit-box;
-                    WebkitLineClamp: 2;
-                    WebkitBoxOrient: vertical;
-                    overflow: hidden;
-                    text-decoration: none !important;
-                }
-                .news-info p {
-                    font-size: 14px;
-                    color: #4E5968 !important;
-                    line-height: 1.6;
-                    display: -webkit-box;
-                    WebkitLineClamp: 2;
-                    WebkitBoxOrient: vertical;
-                    overflow: hidden;
-                    text-decoration: none !important;
-                }
-                
-                .previous .news-card {
-                    opacity: 0.9;
-                    background: #FDFDFD;
-                }
-
-                .skeleton-item {
-                    height: 180px;
-                    background: white;
-                    border-radius: 24px;
-                    animation: pulse 1.5s infinite;
-                }
-                @keyframes pulse {
-                    0% { opacity: 0.8; }
-                    50% { opacity: 0.4; }
-                    100% { opacity: 0.8; }
-                }
-                @media (max-width: 768px) {
-                    .news-card { flex-direction: column; padding: 16px; }
-                    .news-thumb { width: 100%; height: 200px; }
-                    .category-tabs { justify-content: flex-start; }
-                    .news-info h3 { font-size: 17px; }
-                }
-            `}</style>
         </div>
     );
 }
