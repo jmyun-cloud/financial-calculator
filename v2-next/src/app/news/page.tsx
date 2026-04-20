@@ -25,6 +25,7 @@ function NewsContent() {
     const [activeTab, setActiveTab] = useState("전체");
     const [news, setNews] = useState<NewsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(5);
 
     useEffect(() => {
         if (queryCat) {
@@ -35,6 +36,11 @@ function NewsContent() {
             setActiveTab(catMap[queryCat] || queryCat);
         }
     }, [queryCat]);
+
+    // Reset visible count when changing tabs
+    useEffect(() => {
+        setVisibleCount(5);
+    }, [activeTab]);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -67,8 +73,9 @@ function NewsContent() {
         } catch { return false; }
     };
 
-    const newsToday = filtered.filter(item => isToday(item.pubDate || ""));
-    const newsPrevious = filtered.filter(item => !isToday(item.pubDate || ""));
+    const visibleNews = filtered.slice(0, visibleCount);
+    const newsToday = visibleNews.filter(item => isToday(item.pubDate || ""));
+    const newsPrevious = visibleNews.filter(item => !isToday(item.pubDate || ""));
 
     const renderCard = (item: NewsItem) => {
         const proxied = item.imageUrl
@@ -209,6 +216,37 @@ function NewsContent() {
                         {newsToday.length > 0 && renderSection("이전 뉴스", newsPrevious, "#B0B8C1")}
                         {newsToday.length === 0 && newsPrevious.length === 0 && (
                             <p style={{ textAlign: "center", color: "#8B95A1" }}>결과가 없습니다.</p>
+                        )}
+
+                        {visibleCount < filtered.length && (
+                            <button
+                                onClick={() => setVisibleCount(prev => prev + 10)}
+                                style={{
+                                    width: "100%",
+                                    marginTop: "16px",
+                                    padding: "16px",
+                                    borderRadius: "16px",
+                                    border: "1px solid #E5E8EB",
+                                    background: "white",
+                                    color: "#4E5968",
+                                    fontSize: "15px",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease"
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = "#F9FAFB";
+                                    e.currentTarget.style.color = "#191F28";
+                                    e.currentTarget.style.borderColor = "#D1D6DB";
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = "white";
+                                    e.currentTarget.style.color = "#4E5968";
+                                    e.currentTarget.style.borderColor = "#E5E8EB";
+                                }}
+                            >
+                                뉴스 더 보기 ↓
+                            </button>
                         )}
                     </div>
                 )}
