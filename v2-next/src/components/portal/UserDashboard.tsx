@@ -540,7 +540,6 @@ export default function UserDashboard() {
                     <div className="guest-main-col">
                         {renderMarketSummary()}
                         <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                            <h3 className="section-title">경제 캘린더</h3>
                             <EconomicCalendar />
                         </div>
                     </div>
@@ -582,7 +581,6 @@ export default function UserDashboard() {
                 <div className="dashboard-main-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     {renderMarketSummary()}
                     <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                        <h3 className="section-title">경제 캘린더</h3>
                         <EconomicCalendar />
                     </div>
                 </div>
