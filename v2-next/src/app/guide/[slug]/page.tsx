@@ -22,6 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const mdxComponents = {
+  details: (props: any) => <details {...props} />,
+  summary: (props: any) => <summary {...props} />,
+};
+
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
@@ -48,7 +53,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
       <main className="main-content">
         <div className="container">
           <article className="guide-article mdx-content">
-            <MDXRemote source={guide.content} />
+            <MDXRemote source={guide.content} components={mdxComponents} />
           </article>
         </div>
       </main>
