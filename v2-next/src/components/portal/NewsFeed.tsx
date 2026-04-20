@@ -148,7 +148,8 @@ export default function NewsFeed() {
                             margin: 0,
                             letterSpacing: "-0.03em",
                             textTransform: "uppercase",
-                            fontFamily: "'Inter', sans-serif"
+                            fontFamily: "'Inter', sans-serif",
+                            whiteSpace: "nowrap"
                         }}>
                             Financial Times
                         </h1>
@@ -172,7 +173,8 @@ export default function NewsFeed() {
                                 cursor: "pointer",
                                 background: activeTab === cat ? "#191F28" : "transparent",
                                 color: activeTab === cat ? "white" : "#4E5968",
-                                transition: "all 0.2s"
+                                transition: "all 0.2s",
+                                whiteSpace: "nowrap"
                             }}
                         >
                             {cat}
