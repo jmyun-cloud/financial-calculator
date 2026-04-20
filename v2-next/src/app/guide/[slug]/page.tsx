@@ -24,10 +24,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 const mdxComponents = {
-  // Map <details> directly to FaqItem. DO NOT map <summary>.
-  // By leaving <summary> unmapped, MDX passes it as a native string type 'summary',
-  // which FaqItem can easily detect within its children array.
-  details: ({ children, ...props }: any) => <FaqItem {...props}>{children}</FaqItem>,
+  // mapped from preprocessed <FaqApp question="..."> string in mdx.ts
+  FaqApp: FaqItem,
 
   // Standard table definitions
   table: ({ children }: any) => (

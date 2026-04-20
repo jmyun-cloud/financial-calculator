@@ -27,7 +27,13 @@ export async function getGuideBySlug(slug: string) {
   if (!fs.existsSync(fullPath)) return null;
 
   const source = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(source);
+  const { data, content: rawContent } = matter(source);
+
+  // Parse `<details>` and `<summary>` via regex and convert to <FaqApp question="...">
+  // The \n\n around body ensures that MDX processes the interior as Markdown properly.
+  const content = rawContent.replace(/<details[^>]*>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi, (match, summary, body) => {
+    return `<FaqApp question="${summary.trim().replace(/"/g, '&quot;')}">\n\n${body.trim()}\n\n</FaqApp>`;
+  });
 
   return {
     meta: data,
