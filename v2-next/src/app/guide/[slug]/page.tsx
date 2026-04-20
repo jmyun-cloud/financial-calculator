@@ -2,6 +2,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getGuideBySlug, getAllGuides } from '@/lib/mdx';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { FaqItem } from "@/components/guide/FaqItem";
 import "../guide.css";
 
 export async function generateStaticParams() {
@@ -23,12 +24,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 const mdxComponents = {
-  details: ({ children, ...props }: any) => (
-    <details className="faq-item" {...props}>{children}</details>
-  ),
-  summary: ({ children, ...props }: any) => (
-    <summary {...props}>{children}</summary>
-  ),
+  details: ({ children, ...props }: any) => <FaqItem {...props}>{children}</FaqItem>,
+  summary: ({ children }: any) => <summary>{children}</summary>,
 };
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -46,7 +43,8 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           <div className="top-desc-inner">
             <div className="breadcrumb">
               <Link href="/" style={{ color: 'inherit' }}>홈</Link> <span className="bc-sep">›</span>
-              <span className="bc-current">가이드</span>
+              <Link href="/guide" style={{ color: 'inherit' }}>가이드</Link> <span className="bc-sep">›</span>
+              <span className="bc-current">{guide.meta.title}</span>
             </div>
             <h1 className="main-title">{guide.meta.title}</h1>
             <p className="main-subtitle">{guide.meta.description}</p>
