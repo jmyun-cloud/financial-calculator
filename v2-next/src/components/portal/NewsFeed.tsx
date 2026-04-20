@@ -132,13 +132,13 @@ export default function NewsFeed() {
             {/* Newspaper Masthead */}
             <div style={{
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
+                flexDirection: "column",
+                gap: "20px",
                 marginBottom: "28px",
                 borderBottom: "2px solid #191F28",
-                paddingBottom: "12px"
+                paddingBottom: "16px"
             }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "12px", width: "100%" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <span style={{ fontSize: "14px", fontWeight: 800, color: "#F04452" }}>LIVE</span>
                         <h1 style={{
@@ -154,27 +154,28 @@ export default function NewsFeed() {
                             Financial Times
                         </h1>
                     </div>
-                    <div style={{ fontSize: "12px", color: "#8B95A1", fontWeight: 500 }}>
+                    <div style={{ fontSize: "13px", color: "#8B95A1", fontWeight: 600, paddingBottom: "4px" }}>
                         {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
                     </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "6px", overflowX: "auto", scrollbarWidth: "none" }} className="hide-scrollbar">
+                <div style={{ display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none", width: "100%", paddingBottom: "4px" }} className="hide-scrollbar">
                     {CATEGORIES.map(cat => (
                         <button
                             key={cat}
                             onClick={() => setActiveTab(cat)}
                             style={{
-                                border: "none",
-                                padding: "6px 14px",
-                                borderRadius: "8px",
-                                fontSize: "12px",
+                                border: activeTab === cat ? "none" : "1px solid #E5E8EB",
+                                padding: "8px 18px",
+                                borderRadius: "100px",
+                                fontSize: "13px",
                                 fontWeight: 700,
                                 cursor: "pointer",
-                                background: activeTab === cat ? "#191F28" : "transparent",
+                                background: activeTab === cat ? "#191F28" : "white",
                                 color: activeTab === cat ? "white" : "#4E5968",
                                 transition: "all 0.2s",
-                                whiteSpace: "nowrap"
+                                whiteSpace: "nowrap",
+                                flexShrink: 0
                             }}
                         >
                             {cat}
