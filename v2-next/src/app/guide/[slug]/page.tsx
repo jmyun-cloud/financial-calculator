@@ -11,8 +11,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: any }) {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const guide = await getGuideBySlug(slug);
   if (!guide) return {};
 
@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: { params: any }) {
   };
 }
 
-export default async function GuidePage({ params }: { params: any }) {
-  const { slug } = params;
+export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const guide = await getGuideBySlug(slug);
 
   if (!guide) {
