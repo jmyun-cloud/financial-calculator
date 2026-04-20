@@ -278,7 +278,7 @@ export default function NewsFeed() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                                 {filtered.slice(5, 12).map((item, idx) => (
                                     <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: "16px", textDecoration: "none" }}>
-                                        <span style={{ fontSize: "20px", fontWeight: 900, color: "#E5E8EB", flexShrink: 0, width: "24px" }}>{idx + 1}</span>
+                                        <span style={{ fontSize: "20px", fontWeight: 900, color: idx < 3 ? "var(--primary, #3182F6)" : "#8B95A1", flexShrink: 0, width: "24px" }}>{idx + 1}</span>
                                         <div>
                                             <h5 style={{ fontSize: "14px", fontWeight: 700, color: "#333D4B", margin: "0 0 4px", lineHeight: 1.4 }}>{item.title}</h5>
                                             <div style={{ fontSize: "11px", color: "#8B95A1" }}>{item.source}</div>
