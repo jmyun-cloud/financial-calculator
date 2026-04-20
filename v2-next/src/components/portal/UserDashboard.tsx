@@ -539,9 +539,6 @@ export default function UserDashboard() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
                     <div className="guest-main-col">
                         {renderMarketSummary()}
-                        <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                            <EconomicCalendar />
-                        </div>
                     </div>
                     <div className="guest-sidebar-col">
                         <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', opacity: 0.6, cursor: 'not-allowed', position: 'relative' }}>
@@ -580,9 +577,6 @@ export default function UserDashboard() {
             <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start', marginTop: '32px' }}>
                 <div className="dashboard-main-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     {renderMarketSummary()}
-                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                        <EconomicCalendar />
-                    </div>
                 </div>
 
                 <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
