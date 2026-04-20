@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 interface NewsItem {
     id: string;
@@ -221,12 +219,8 @@ function NewsContent() {
 
 export default function NewsPage() {
     return (
-        <main>
-            <Header />
-            <Suspense fallback={<div>Loading...</div>}>
-                <NewsContent />
-            </Suspense>
-            <Footer />
-        </main>
+        <Suspense fallback={<div>Loading...</div>}>
+            <NewsContent />
+        </Suspense>
     );
 }
