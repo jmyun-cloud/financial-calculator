@@ -24,11 +24,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+// FaqBlock and FaqQ are CAPITALIZED — MDX guarantees these are treated as React components
 const mdxComponents = {
-  // Replace <details> with our React accordion
-  details: ({ children, ...props }: any) => <FaqItem {...props}>{children}</FaqItem>,
-  // Replace <summary> with our marker component so FaqItem can identify it
-  summary: ({ children }: any) => <FaqSummary>{children}</FaqSummary>,
+  FaqBlock: ({ children }: any) => <FaqItem>{children}</FaqItem>,
+  FaqQ: ({ children }: any) => <FaqSummary>{children}</FaqSummary>,
   // Style tables
   table: ({ children }: any) => (
     <div style={{ overflowX: "auto", margin: "24px 0" }}>
@@ -46,16 +45,10 @@ const mdxComponents = {
     <thead style={{ background: "linear-gradient(135deg, #1a56e8, #1738c8)", color: "white" }}>{children}</thead>
   ),
   th: ({ children }: any) => (
-    <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.02em" }}>{children}</th>
+    <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 700, fontSize: "0.85rem" }}>{children}</th>
   ),
   td: ({ children }: any) => (
     <td style={{ padding: "12px 16px", borderBottom: "1px solid #F2F4F7", color: "#333D4B" }}>{children}</td>
-  ),
-  tr: ({ children }: any) => (
-    <tr style={{ transition: "background 0.15s" }}
-      onMouseEnter={e => (e.currentTarget.style.background = "#F8FAFF")}
-      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-    >{children}</tr>
   ),
 };
 
@@ -63,9 +56,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
 
-  if (!guide) {
-    notFound();
-  }
+  if (!guide) notFound();
 
   return (
     <>
@@ -75,10 +66,10 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
             <div className="breadcrumb">
               <Link href="/" style={{ color: 'inherit' }}>홈</Link> <span className="bc-sep">›</span>
               <Link href="/guide" style={{ color: 'inherit' }}>가이드</Link> <span className="bc-sep">›</span>
-              <span className="bc-current">{guide.meta.title}</span>
+              <span className="bc-current">{guide!.meta.title}</span>
             </div>
-            <h1 className="main-title">{guide.meta.title}</h1>
-            <p className="main-subtitle">{guide.meta.description}</p>
+            <h1 className="main-title">{guide!.meta.title}</h1>
+            <p className="main-subtitle">{guide!.meta.description}</p>
           </div>
         </div>
       </section>
@@ -87,13 +78,9 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         <div className="container">
           <article className="guide-article mdx-content">
             <MDXRemote
-              source={guide.content}
+              source={guide!.content}
               components={mdxComponents}
-              options={{
-                mdxOptions: {
-                  remarkPlugins: [remarkGfm],
-                },
-              }}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             />
           </article>
         </div>

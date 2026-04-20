@@ -27,7 +27,15 @@ export async function getGuideBySlug(slug: string) {
   if (!fs.existsSync(fullPath)) return null;
 
   const source = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(source);
+  const { data, content: rawContent } = matter(source);
+
+  // Preprocess: replace lowercase html tags with capitalized React component names
+  // This ensures MDX treats them as React components (guaranteed override)
+  const content = rawContent
+    .replace(/<details[^>]*>/g, '<FaqBlock>')
+    .replace(/<\/details>/g, '</FaqBlock>')
+    .replace(/<summary>/g, '<FaqQ>')
+    .replace(/<\/summary>/g, '</FaqQ>');
 
   return {
     meta: data,
