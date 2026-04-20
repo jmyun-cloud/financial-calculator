@@ -21,8 +21,8 @@ export default function Header() {
 
                 <nav className="header-nav" style={{ flex: 1, justifyContent: 'center', gap: '32px', marginLeft: '40px' }}>
                     <Link href="/" className="nav-link active">홈</Link>
-                    <Link href="#market" className="nav-link">시장</Link>
-                    <Link href="#calculator" className="nav-link">계산기</Link>
+                    <Link href="/#market" className="nav-link">시장</Link>
+                    <Link href="/#calculator" className="nav-link">계산기</Link>
 
                     <div className="nav-item-has-mega">
                         <Link href="/news" className="nav-link">뉴스</Link>

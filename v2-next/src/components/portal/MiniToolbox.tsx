@@ -37,7 +37,7 @@ const toolGroups = [
 
 export default function MiniToolbox() {
     return (
-        <div style={{
+        <div id="calculator" style={{
             background: "white",
             borderRadius: "24px",
             padding: "28px 24px",

@@ -50,7 +50,7 @@ export default function MarketWidget() {
     }
 
     return (
-        <div style={{
+        <div id="market" style={{
             background: 'var(--surface)',
             borderRadius: '20px',
             border: '1px solid var(--border)',
