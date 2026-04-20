@@ -3,7 +3,6 @@ import { getGuideBySlug, getAllGuides } from '@/lib/mdx';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
-import { Children, isValidElement, ReactNode } from 'react';
 import { FaqItem } from "@/components/guide/FaqItem";
 import "../guide.css";
 
@@ -24,31 +23,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-// Server-side marker for FAQ question
-function FaqQ({ children }: { children: ReactNode }) {
-  return <>{children}</>;
-}
-
-// Server-side block that splits question from body, passes to client FaqItem
-function FaqBlock({ children }: { children: ReactNode }) {
-  const childArr = Children.toArray(children);
-  let question: ReactNode = null;
-  const body: ReactNode[] = [];
-
-  for (const child of childArr) {
-    if (isValidElement(child) && child.type === FaqQ) {
-      question = (child.props as any).children;
-    } else {
-      body.push(child);
-    }
-  }
-
-  return <FaqItem question={question}>{body}</FaqItem>;
-}
-
 const mdxComponents = {
-  FaqBlock,
-  FaqQ,
+  // Map <details> directly to FaqItem. DO NOT map <summary>.
+  // By leaving <summary> unmapped, MDX passes it as a native string type 'summary',
+  // which FaqItem can easily detect within its children array.
+  details: ({ children, ...props }: any) => <FaqItem {...props}>{children}</FaqItem>,
+
+  // Standard table definitions
   table: ({ children }: any) => (
     <div style={{ overflowX: "auto", margin: "24px 0" }}>
       <table style={{
@@ -61,13 +42,13 @@ const mdxComponents = {
     <thead style={{ background: "linear-gradient(135deg, #1a56e8, #1738c8)", color: "white" }}>{children}</thead>
   ),
   th: ({ children }: any) => (
-    <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 700, fontSize: "0.85rem" }}>{children}</th>
+    <th style={{ padding: "14px 16px", textAlign: "left", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.02em" }}>{children}</th>
   ),
   td: ({ children }: any) => (
     <td style={{ padding: "12px 16px", borderBottom: "1px solid #F2F4F7", color: "#333D4B" }}>{children}</td>
   ),
-  tr: ({ children }: any) => <tr>{children}</tr>,
-} as any;
+  tr: ({ children }: any) => <tr style={{ transition: "background 0.15s" }}>{children}</tr>,
+};
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

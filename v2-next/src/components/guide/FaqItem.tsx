@@ -1,14 +1,28 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { useState, Children, isValidElement, ReactNode } from "react";
 
-interface Props {
-    question: ReactNode;
-    children: ReactNode;
-}
-
-export function FaqItem({ question, children }: Props) {
+export function FaqItem({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const childArr = Children.toArray(children);
+    let question: ReactNode = null;
+    const body: ReactNode[] = [];
+
+    // In a Client Component receiving children from a Server Component,
+    // native HTML tags (like <summary>) are passed with type === "summary"
+    for (const child of childArr) {
+        if (isValidElement(child) && child.type === "summary") {
+            question = (child.props as any).children;
+        } else if (child !== "\n") {
+            body.push(child);
+        }
+    }
+
+    // Fallback if summary wasn't found
+    if (!question && body.length > 0) {
+        question = body.shift();
+    }
 
     return (
         <div
@@ -74,7 +88,7 @@ export function FaqItem({ question, children }: Props) {
                     lineHeight: 1.75,
                     borderTop: "1px solid #F2F4F7",
                 }}>
-                    {children}
+                    {body}
                 </div>
             )}
         </div>
