@@ -208,7 +208,7 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                     <div className="main-news-col" style={{ width: "100%" }}>
                         {compactMode ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                                {filtered.slice(0, 15).map(item => {
+                                {filtered.slice(0, 4).map(item => {
                                     // Coinness 스타일처럼 시간 표기 (2시간 전, 등등을 그대로 쓰되 HH:MM 픽스 형태로 모킹할 수도 있으나 우선 깨짐을 막기 위해 원본 삽입)
                                     const timeLabel = item.timeAgo;
                                     return (
