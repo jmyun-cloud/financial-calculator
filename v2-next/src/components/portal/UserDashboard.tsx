@@ -33,7 +33,7 @@ export default function UserDashboard() {
     const [activeMarketTab, setActiveMarketTab] = useState("주식");
     const [activeRegion, setActiveRegion] = useState("KR"); // "KR" or "US"
     const [activeChip, setActiveChip] = useState("트렌딩 주식");
-    const [selectedCard, setSelectedCard] = useState<string>("");
+    const [selectedCard, setSelectedCard] = useState<string>("BTC-USD");
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
     const [chartRange, setChartRange] = useState("1y");
@@ -446,89 +446,36 @@ export default function UserDashboard() {
     if (!isClient) return <div className="skeleton-loader" style={{ height: '300px', background: 'rgba(0,0,0,0.05)', borderRadius: '28px' }} />;
 
     const renderMarketSummary = () => {
+        const currentData = detailData?.chartData || [];
+        const isPositive = marketDataMap[selectedCard]?.isPositive ?? true;
+
         return (
-            <div className="market-snapshot-card shadow-premium-clean">
-                <div className="snapshot-header">
-                    <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#191F28', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        시장 스냅샷 <span style={{ color: '#0055FB', fontSize: '14px' }}>LIVE</span>
-                    </h3>
-                    <div className="region-selector" style={{ display: 'flex', gap: '4px' }}>
-                        {['KR', 'US'].map(r => (
-                            <button
-                                key={r}
-                                onClick={() => setActiveRegion(r)}
-                                style={{
-                                    padding: '4px 8px',
-                                    borderRadius: '6px',
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    background: activeRegion === r ? '#EBF3FF' : 'transparent',
-                                    color: activeRegion === r ? '#0055FB' : '#8B95A1',
-                                    border: 'none',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {r === 'KR' ? '국내' : '해외'}
-                            </button>
-                        ))}
+            <div className="coinness-chart-main" style={{ background: 'white', border: 'none', marginBottom: '24px', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 8px', borderBottom: '1px solid #F2F4F7' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '20px', fontWeight: 800, color: '#191F28' }}>
+                            {selectedCard === 'BTC-USD' ? '비트코인' : selectedCard}
+                        </span>
+                        <span style={{ fontSize: '13px', color: '#8B95A1', fontWeight: 700 }}>{selectedCard}</span>
                     </div>
+                    {marketDataMap[selectedCard] && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
+                            {marketDataMap[selectedCard].price}
+                            <span style={{ fontSize: '14px' }}>{isPositive ? '▲' : '▼'} {marketDataMap[selectedCard].changePercent}%</span>
+                        </div>
+                    )}
                 </div>
 
-                <div className="snapshot-grid">
-                    {summaryIndices.slice(0, 4).map(idx => {
-                        const m = marketDataMap[idx.symbol];
-                        const isPositive = (m?.isPositive ?? true);
-                        return (
-                            <div key={idx.symbol} className="snapshot-item" onClick={() => setSelectedCard(idx.symbol)}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968' }}>{idx.name}</span>
-                                    <span style={{ fontSize: '12px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
-                                        {isPositive ? '▲' : '▼'}{m?.changePercent || '0.00'}%
-                                    </span>
-                                </div>
-                                <div style={{ fontSize: '18px', fontWeight: 800, color: '#191F28' }}>{m?.price || '---'}</div>
-                            </div>
-                        );
-                    })}
+                <div style={{ marginTop: '16px' }}>
+                    <ProfessionalChart
+                        data={currentData}
+                        isPositive={isPositive}
+                        initialType="Candlestick"
+                        height={500}
+                        currentRange={chartRange}
+                        onRangeChange={setChartRange}
+                    />
                 </div>
-
-                {!isLoggedIn && (
-                    <div className="snapshot-cta" onClick={() => setShowLoginModal(true)}>
-                        <p>로그인하고 모든 종목 분석 데이터 보기 →</p>
-                    </div>
-                )}
-
-                <style jsx>{`
-                    .market-snapshot-card {
-                        background: white;
-                        border-radius: 24px;
-                        padding: 24px;
-                        border: 1px solid #F2F4F7;
-                        margin-bottom: 24px;
-                    }
-                    .snapshot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-                    .snapshot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-                    .snapshot-item {
-                        padding: 16px;
-                        background: #F9FAFB;
-                        border-radius: 16px;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        border: 1px solid transparent;
-                    }
-                    .snapshot-item:hover { border-color: #0055FB; background: white; box-shadow: 0 4px 12px rgba(0, 85, 251, 0.05); }
-                    .snapshot-cta {
-                        margin-top: 16px;
-                        padding: 12px;
-                        text-align: center;
-                        background: #F4F8FF;
-                        border-radius: 12px;
-                        cursor: pointer;
-                        color: #0055FB;
-                        font-size: 13px;
-                        font-weight: 700;
-                    }
-                `}</style>
             </div>
         );
     };

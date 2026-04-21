@@ -209,8 +209,8 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                         {compactMode ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
                                 {filtered.slice(0, 15).map(item => {
-                                    // timeAgo를 파싱하거나 그냥 사용
-                                    const timeLabel = item.timeAgo.replace(/전|시간|분/g, '').trim();
+                                    // Coinness 스타일처럼 시간 표기 (2시간 전, 등등을 그대로 쓰되 HH:MM 픽스 형태로 모킹할 수도 있으나 우선 깨짐을 막기 위해 원본 삽입)
+                                    const timeLabel = item.timeAgo;
                                     return (
                                         <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="coinness-news-item" style={{ display: "flex", gap: "16px", textDecoration: "none", alignItems: "flex-start" }}>
                                             <div style={{ background: "#F1F3F5", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontWeight: 700, color: "#868E96", whiteSpace: "nowrap", marginTop: "2px" }}>
@@ -221,11 +221,7 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                                                     <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#212529", marginBottom: "8px", lineHeight: 1.4, wordBreak: "keep-all" }}>{item.title}</h3>
                                                     <p style={{ fontSize: "13px", color: "#868E96", margin: 0, lineHeight: 1.6, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.description}</p>
                                                 </div>
-                                                {item.imageUrl && (
-                                                    <div style={{ width: "80px", height: "60px", flexShrink: 0, borderRadius: "6px", overflow: "hidden", background: "#f8f9fa", border: "1px solid #e9ecef" }}>
-                                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
-                                                    </div>
-                                                )}
+                                                {/* 코인니스 속보는 썸네일이 레이아웃을 해치는 경우가 많으므로 극단적 텍스트 정보밀도를 위해 삭제 */}
                                             </div>
                                         </a>
                                     );
