@@ -463,8 +463,9 @@ export default function UserDashboard() {
         const selectedInfo = KOSPI_LIST.find(k => k.symbol === selectedCard) || KOSPI_LIST[0];
 
         return (
-            <div className="coinness-chart-main" style={{ background: 'white', borderRadius: '12px', border: '1px solid #E5E8EB', marginBottom: '24px', overflow: 'hidden', position: 'relative', paddingBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', padding: '20px 20px 8px 20px', position: 'relative', zIndex: 50 }}>
+            <div className="coinness-chart-main" style={{ background: 'white', borderRadius: '12px', border: '1px solid #E5E8EB', marginBottom: '24px', overflow: 'hidden', padding: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                {/* Header Line 1: Dropdown & Price */}
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', position: 'relative', zIndex: 50 }}>
                     
                     {/* Coinness-style Dropdown Toggle */}
                     <div style={{ position: 'relative' }}>
@@ -473,20 +474,20 @@ export default function UserDashboard() {
                             style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '8px', 
-                                background: '#FFFFFF', 
+                                gap: '6px', 
+                                background: '#F8F9FA', 
                                 border: '1px solid #E5E8EB', 
-                                borderRadius: '20px', 
+                                borderRadius: '100px', 
                                 padding: '6px 14px', 
                                 cursor: 'pointer',
                                 transition: 'all 0.2s'
                             }}
                         >
                             <span style={{ fontSize: '15px' }}>{selectedInfo.icon}</span>
-                            <span style={{ fontSize: '15px', fontWeight: 800, color: '#191F28' }}>
+                            <span style={{ fontSize: '16px', fontWeight: 800, color: '#191F28' }}>
                                 {selectedInfo.name}
                             </span>
-                            <span style={{ fontSize: '10px', color: '#8B95A1', marginLeft: '6px' }}>▼</span>
+                            <span style={{ fontSize: '10px', color: '#8B95A1', marginLeft: '4px' }}>▼</span>
                         </button>
 
 
@@ -539,13 +540,14 @@ export default function UserDashboard() {
                     <div style={{ width: '16px' }} /> {/* Spacing */}
 
                     {marketDataMap[selectedCard] && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
                             {marketDataMap[selectedCard].price}
                         </div>
                     )}
                 </div>
 
-                <div style={{ marginTop: '16px', position: 'relative', zIndex: 10 }}>
+                {/* Line 2: Time Tabs and Chart container */}
+                <div style={{ position: 'relative', zIndex: 10 }}>
                     <ProfessionalChart
                         data={currentData}
                         isPositive={isPositive}

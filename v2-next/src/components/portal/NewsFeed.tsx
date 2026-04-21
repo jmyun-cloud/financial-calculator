@@ -186,9 +186,9 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
             )}
 
             {compactMode && (
-                <div style={{ paddingBottom: "16px", marginBottom: "16px", borderBottom: "2px solid #191F28", display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ paddingBottom: "16px", marginBottom: "8px", display: "flex", alignItems: "center", gap: "12px" }}>
                     <h2 style={{ fontSize: "18px", fontWeight: 800, color: "#191F28", margin: 0 }}>속보</h2>
-                    <span style={{ fontSize: "12px", color: "#8B95A1", fontWeight: 500 }}>실시간 업데이트</span>
+                    <span style={{ fontSize: "13px", color: "#8B95A1", fontWeight: 500 }}>24시간 실시간 업데이트</span>
                 </div>
             )}
 
@@ -213,7 +213,7 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                                     const timeLabel = item.timeAgo;
                                     return (
                                         <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="coinness-news-item" style={{ display: "flex", gap: "16px", textDecoration: "none", alignItems: "flex-start" }}>
-                                            <div style={{ background: "#F1F3F5", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontWeight: 700, color: "#868E96", whiteSpace: "nowrap", marginTop: "2px" }}>
+                                            <div style={{ background: "#F1F3F5", borderRadius: "100px", padding: "4px 10px", fontSize: "12px", fontWeight: 600, color: "#4E5968", whiteSpace: "nowrap", marginTop: "2px" }}>
                                                 {timeLabel}
                                             </div>
                                             <div style={{ flex: 1, minWidth: 0, display: "flex", gap: "16px" }}>
