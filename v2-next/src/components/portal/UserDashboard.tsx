@@ -33,7 +33,8 @@ export default function UserDashboard() {
     const [activeMarketTab, setActiveMarketTab] = useState("주식");
     const [activeRegion, setActiveRegion] = useState("KR"); // "KR" or "US"
     const [activeChip, setActiveChip] = useState("트렌딩 주식");
-    const [selectedCard, setSelectedCard] = useState<string>("BTC-USD");
+    const [selectedCard, setSelectedCard] = useState<string>("005930.KS");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
     const [chartRange, setChartRange] = useState("1y");
@@ -449,24 +450,102 @@ export default function UserDashboard() {
         const currentData = detailData?.chartData || [];
         const isPositive = marketDataMap[selectedCard]?.isPositive ?? true;
 
+        const KOSPI_LIST = [
+            { symbol: "005930.KS", name: "삼성전자", icon: "🏢" },
+            { symbol: "000660.KS", name: "SK하이닉스", icon: "🖥️" },
+            { symbol: "005935.KS", name: "삼성전자우", icon: "🏢" },
+            { symbol: "005380.KS", name: "현대차", icon: "🚗" },
+            { symbol: "035420.KS", name: "NAVER", icon: "🟢" },
+            { symbol: "035720.KS", name: "카카오", icon: "🟡" },
+            { symbol: "068270.KS", name: "셀트리온", icon: "💊" },
+        ];
+
+        const selectedInfo = KOSPI_LIST.find(k => k.symbol === selectedCard) || KOSPI_LIST[0];
+
         return (
-            <div className="coinness-chart-main" style={{ background: 'white', border: 'none', marginBottom: '24px', overflow: 'hidden' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 8px', borderBottom: '1px solid #F2F4F7' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '20px', fontWeight: 800, color: '#191F28' }}>
-                            {selectedCard === 'BTC-USD' ? '비트코인' : selectedCard}
-                        </span>
-                        <span style={{ fontSize: '13px', color: '#8B95A1', fontWeight: 700 }}>{selectedCard}</span>
+            <div className="coinness-chart-main" style={{ background: 'white', border: 'none', marginBottom: '24px', overflow: 'hidden', position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '16px 8px', borderBottom: '1px solid #F1F3F5', position: 'relative', zIndex: 50 }}>
+
+                    {/* Coinness-style Dropdown Toggle */}
+                    <div style={{ position: 'relative' }}>
+                        <button
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                background: 'white',
+                                border: '1px solid #E5E8EB',
+                                borderRadius: '8px',
+                                padding: '8px 12px',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            <span style={{ fontSize: '14px' }}>{selectedInfo.icon}</span>
+                            <span style={{ fontSize: '15px', fontWeight: 800, color: '#191F28' }}>
+                                {selectedInfo.name}
+                            </span>
+                            <span style={{ fontSize: '10px', color: '#8B95A1', marginLeft: '4px' }}>▼</span>
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {dropdownOpen && (
+                            <div style={{
+                                position: 'absolute',
+                                top: '100%',
+                                left: 0,
+                                marginTop: '4px',
+                                background: 'white',
+                                borderRadius: '12px',
+                                border: '1px solid #E5E8EB',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+                                minWidth: '160px',
+                                overflow: 'hidden',
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                {KOSPI_LIST.map((item) => (
+                                    <button
+                                        key={item.symbol}
+                                        onClick={() => {
+                                            setSelectedCard(item.symbol);
+                                            setDropdownOpen(false);
+                                        }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            padding: '12px 16px',
+                                            background: selectedCard === item.symbol ? '#F8F9FA' : 'white',
+                                            border: 'none',
+                                            borderBottom: '1px solid #F1F3F5',
+                                            cursor: 'pointer',
+                                            textAlign: 'left'
+                                        }}
+                                        onMouseOver={(e) => e.currentTarget.style.background = '#F8F9FA'}
+                                        onMouseOut={(e) => e.currentTarget.style.background = selectedCard === item.symbol ? '#F8F9FA' : 'white'}
+                                    >
+                                        <span style={{ fontSize: '14px' }}>{item.icon}</span>
+                                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#191F28', flex: 1 }}>{item.name}</span>
+                                        {selectedCard === item.symbol && <span style={{ color: '#0055FB', fontSize: '12px' }}>✔</span>}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
+
+                    <div style={{ width: '16px' }} /> {/* Spacing */}
+
                     {marketDataMap[selectedCard] && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: 800, color: isPositive ? '#F04452' : '#3182F6' }}>
                             {marketDataMap[selectedCard].price}
-                            <span style={{ fontSize: '14px' }}>{isPositive ? '▲' : '▼'} {marketDataMap[selectedCard].changePercent}%</span>
                         </div>
                     )}
                 </div>
 
-                <div style={{ marginTop: '16px' }}>
+                <div style={{ marginTop: '16px', position: 'relative', zIndex: 10 }}>
                     <ProfessionalChart
                         data={currentData}
                         isPositive={isPositive}

@@ -5,32 +5,20 @@ import { useMarketData } from '@/hooks/useMarketData';
 
 const WIDGET_SECTIONS = [
     {
-        id: "indices",
-        title: "주요 지수",
-        icon: "📊",
-        symbols: ["^GSPC", "^IXIC", "^DJI", "^N225", "^HSI"],
-        names: { "^GSPC": "S&P 500", "^IXIC": "나스닥", "^DJI": "다우존스", "^N225": "닛케이", "^HSI": "항셍" } as Record<string, string>
-    },
-    {
-        id: "fx",
-        title: "환율",
-        icon: "💱",
-        symbols: ["KRW=X", "JPYKRW=X", "EURKRW=X", "CNYKRW=X"],
-        names: { "KRW=X": "달러/원", "JPYKRW=X": "엔/원", "EURKRW=X": "유로/원", "CNYKRW=X": "위안/원" } as Record<string, string>
-    },
-    {
-        id: "commodity",
-        title: "원자재",
-        icon: "🛢️",
-        symbols: ["GC=F", "SI=F", "CL=F", "HG=F"],
-        names: { "GC=F": "금", "SI=F": "은", "CL=F": "WTI유", "HG=F": "구리" } as Record<string, string>
-    },
-    {
-        id: "crypto",
-        title: "암호화폐",
-        icon: "₿",
-        symbols: ["BTC-USD", "ETH-USD", "XRP-USD"],
-        names: { "BTC-USD": "BTC", "ETH-USD": "ETH", "XRP-USD": "USDT" } as Record<string, string> // 코인니스 스타일 이름
+        id: "kospi_top",
+        title: "인기 종목",
+        icon: "📈",
+        symbols: ["005930.KS", "000660.KS", "005935.KS", "005380.KS", "035420.KS", "035720.KS", "068270.KS", "051910.KS"],
+        names: {
+            "005930.KS": "삼성전자",
+            "000660.KS": "SK하이닉스",
+            "005935.KS": "삼성전자우",
+            "005380.KS": "현대차",
+            "035420.KS": "NAVER",
+            "035720.KS": "카카오",
+            "068270.KS": "셀트리온",
+            "051910.KS": "LG화학"
+        } as Record<string, string>
     }
 ];
 
@@ -65,15 +53,15 @@ export default function MarketWidget() {
             <div style={{ padding: '20px 20px 12px' }}>
                 {/* Tabs -> Coinness style */}
                 <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 800, color: '#191F28', cursor: 'pointer', padding: 0 }}>인기 코인</button>
-                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>해외 지수</button>
-                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>원자재</button>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 800, color: '#191F28', cursor: 'pointer', padding: 0 }}>인기 종목</button>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>코스닥</button>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>해외 종목</button>
                 </div>
 
                 {/* Table Header */}
                 <div style={{ display: 'grid', gridTemplateColumns: '32px minmax(0, 1.2fr) minmax(0, 1fr) 80px', gap: '8px', fontSize: '12px', color: '#868E96', fontWeight: 600, paddingBottom: '8px', borderBottom: '1px solid #F1F3F5', alignItems: 'center' }}>
                     <div style={{ textAlign: 'center' }}>🔥</div>
-                    <div>페어명</div>
+                    <div>종목명</div>
                     <div style={{ textAlign: 'center' }}>현재가</div>
                     <div style={{ textAlign: 'right' }}>24H 변동</div>
                 </div>
