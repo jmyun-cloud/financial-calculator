@@ -535,25 +535,14 @@ export default function UserDashboard() {
 
     if (!isLoggedIn) {
         return (
-            <div className="dashboard-guest-view">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
-                    <div className="guest-main-col">
-                        {renderMarketSummary()}
-                    </div>
-                    <div className="guest-sidebar-col">
-                        <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', opacity: 0.6, cursor: 'not-allowed', position: 'relative' }}>
-                            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1, color: '#191F28', fontSize: '13px', fontWeight: 700 }}>로그인이 필요합니다</div>
-                            <h3 className="section-title">내 재무 목표</h3>
-                            <GoalTracker />
-                        </div>
-                    </div>
-                </div>
+            <div className="dashboard-guest-view" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {renderMarketSummary()}
             </div>
         );
     }
 
     return (
-        <div className="user-dashboard-v3">
+        <div className="user-dashboard-v3" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div className="hero-asset-card shadow-premium">
                 <div className="asset-label">내 총 자산</div>
                 <div className="asset-amount">₩ 48,320,000</div>
@@ -574,22 +563,7 @@ export default function UserDashboard() {
                 </div>
             </div>
 
-            <div className="dashboard-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start', marginTop: '32px' }}>
-                <div className="dashboard-main-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    {renderMarketSummary()}
-                </div>
-
-                <div className="dashboard-sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                        <h3 className="section-title">내 재무 목표</h3>
-                        <GoalTracker />
-                    </div>
-                    <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
-                        <h3 className="section-title">시장 심리</h3>
-                        <SentimentGauge />
-                    </div>
-                </div>
-            </div>
+            {renderMarketSummary()}
 
             <style jsx>{`
                 .user-dashboard-v3 { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }

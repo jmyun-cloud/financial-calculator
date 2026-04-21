@@ -30,7 +30,7 @@ const getTheme = (cat: string) => CATEGORY_THEMES[cat] || CATEGORY_THEMES["재�
 
 const CATEGORIES = ["전체", "증시", "경제", "부동산", "금리/채권", "가상화폐", "외환/달러", "IPO/공시"];
 
-export default function NewsFeed() {
+export default function NewsFeed({ compactMode = false }: { compactMode?: boolean }) {
     const [activeTab, setActiveTab] = useState("전체");
     const [news, setNews] = useState<NewsItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -116,72 +116,81 @@ export default function NewsFeed() {
 
     return (
         <div className="financial-news-hero" style={{
-            background: "rgba(255, 255, 255, 0.7)",
-            backdropFilter: "blur(20px)",
-            borderRadius: "32px",
-            padding: "32px",
-            border: "1px solid rgba(242, 244, 247, 0.8)",
-            marginBottom: "32px",
+            background: compactMode ? "transparent" : "rgba(255, 255, 255, 0.7)",
+            backdropFilter: compactMode ? "none" : "blur(20px)",
+            borderRadius: compactMode ? "0" : "32px",
+            padding: compactMode ? "0" : "32px",
+            border: compactMode ? "none" : "1px solid rgba(242, 244, 247, 0.8)",
+            marginBottom: compactMode ? "0" : "32px",
             position: "relative",
             width: "100%",
-            boxShadow: "0 20px 50px rgba(0,0,0,0.04)",
+            boxShadow: compactMode ? "none" : "0 20px 50px rgba(0,0,0,0.04)",
             display: "flex",
             flexDirection: "column",
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
         }}>
             {/* Newspaper Masthead */}
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                marginBottom: "28px",
-                borderBottom: "2px solid #191F28",
-                paddingBottom: "16px"
-            }}>
-                <div style={{ display: "flex", alignItems: "flex-end", gap: "12px", width: "100%" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <h1 style={{
-                            fontSize: "28px",
-                            fontWeight: 900,
-                            color: "#191F28",
-                            margin: 0,
-                            letterSpacing: "-0.03em",
-                            textTransform: "uppercase",
-                            fontFamily: "'Inter', sans-serif",
-                            whiteSpace: "nowrap"
-                        }}>
-                            Financial Times
-                        </h1>
+            {!compactMode && (
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                    marginBottom: "28px",
+                    borderBottom: "2px solid #191F28",
+                    paddingBottom: "16px"
+                }}>
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: "12px", width: "100%" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <h1 style={{
+                                fontSize: "28px",
+                                fontWeight: 900,
+                                color: "#191F28",
+                                margin: 0,
+                                letterSpacing: "-0.03em",
+                                textTransform: "uppercase",
+                                fontFamily: "'Inter', sans-serif",
+                                whiteSpace: "nowrap"
+                            }}>
+                                Financial Times
+                            </h1>
+                        </div>
+                        <div style={{ fontSize: "13px", color: "#8B95A1", fontWeight: 600, paddingBottom: "4px" }}>
+                            {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                        </div>
                     </div>
-                    <div style={{ fontSize: "13px", color: "#8B95A1", fontWeight: 600, paddingBottom: "4px" }}>
-                        {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
-                    </div>
-                </div>
 
-                <div style={{ display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none", width: "100%", paddingBottom: "4px" }} className="hide-scrollbar">
-                    {CATEGORIES.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setActiveTab(cat)}
-                            style={{
-                                border: activeTab === cat ? "none" : "1px solid #E5E8EB",
-                                padding: "8px 18px",
-                                borderRadius: "100px",
-                                fontSize: "13px",
-                                fontWeight: 700,
-                                cursor: "pointer",
-                                background: activeTab === cat ? "#191F28" : "white",
-                                color: activeTab === cat ? "white" : "#4E5968",
-                                transition: "all 0.2s",
-                                whiteSpace: "nowrap",
-                                flexShrink: 0
-                            }}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+                    <div style={{ display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none", width: "100%", paddingBottom: "4px" }} className="hide-scrollbar">
+                        {CATEGORIES.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveTab(cat)}
+                                style={{
+                                    border: activeTab === cat ? "none" : "1px solid #E5E8EB",
+                                    padding: "8px 18px",
+                                    borderRadius: "100px",
+                                    fontSize: "13px",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                    background: activeTab === cat ? "#191F28" : "white",
+                                    color: activeTab === cat ? "white" : "#4E5968",
+                                    transition: "all 0.2s",
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0
+                                }}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {compactMode && (
+                <div style={{ paddingBottom: "16px", marginBottom: "16px", borderBottom: "2px solid #191F28", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <h2 style={{ fontSize: "18px", fontWeight: 800, color: "#191F28", margin: 0 }}>속보</h2>
+                    <span style={{ fontSize: "12px", color: "#8B95A1", fontWeight: 500 }}>실시간 업데이트</span>
+                </div>
+            )}
 
             {isLoading ? (
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "32px" }}>
@@ -196,8 +205,22 @@ export default function NewsFeed() {
                 <div className="newspaper-layout" style={{ display: "grid", gridTemplateColumns: isListView ? "1fr" : "1fr 320px", gap: "40px" }}>
 
                     {/* Main Content Area */}
-                    <div className="main-news-col">
-                        {isListView ? (
+                    <div className="main-news-col" style={{ width: "100%" }}>
+                        {compactMode ? (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                                {filtered.slice(0, 15).map(item => (
+                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: "12px", textDecoration: "none", alignItems: "flex-start" }}>
+                                        <div style={{ background: "#F2F4F7", borderRadius: "4px", padding: "4px 6px", fontSize: "11px", fontWeight: 700, color: "#4E5968", whiteSpace: "nowrap" }}>
+                                            {item.timeAgo.replace(/전|시간|분/g, '').trim()}
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <h3 style={{ fontSize: "14px", fontWeight: 700, color: "#191F28", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</h3>
+                                            <p style={{ fontSize: "13px", color: "#6B7684", margin: 0, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.description}</p>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+                        ) : isListView ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                                 {filtered.map(item => (
                                     <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: "24px", textDecoration: "none" }}>
@@ -270,7 +293,7 @@ export default function NewsFeed() {
                     </div>
 
                     {/* Sidebar / Trending Area */}
-                    {!isListView && (
+                    {!isListView && !compactMode && (
                         <div className="trending-sidebar" style={{ borderLeft: "1px solid #F2F4F7", paddingLeft: "32px" }}>
                             <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#191F28", marginBottom: "20px", display: "flex", alignItems: "center", gap: "8px" }}>
                                 <span style={{ color: "#F04452" }}>⚡</span> 가장 많이 본 뉴스

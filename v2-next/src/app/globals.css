@@ -1750,12 +1750,34 @@ select.form-input {
 
 .portal-grid {
   display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 32px;
+  grid-template-columns: 320px minmax(0, 1fr) 340px;
+  gap: 24px;
   align-items: start;
 }
 
+@media (max-width: 1200px) {
+  .portal-grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+}
+
+@media (max-width: 900px) {
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.portal-left-sidebar {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .portal-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.portal-right-sidebar {
   min-width: 0;
   max-width: 100%;
 }
