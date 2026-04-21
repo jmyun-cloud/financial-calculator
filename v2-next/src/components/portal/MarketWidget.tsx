@@ -1,10 +1,8 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useMarketData } from '@/hooks/useMarketData';
 
-// Investing.com-style sidebar: unique data NOT shown in main tabs
-// Sections: 주요 지수 | 환율 | 원자재 | 암호화폐
 const WIDGET_SECTIONS = [
     {
         id: "indices",
@@ -32,133 +30,89 @@ const WIDGET_SECTIONS = [
         title: "암호화폐",
         icon: "₿",
         symbols: ["BTC-USD", "ETH-USD", "XRP-USD"],
-        names: { "BTC-USD": "비트코인", "ETH-USD": "이더리움", "XRP-USD": "리플" } as Record<string, string>
+        names: { "BTC-USD": "BTC", "ETH-USD": "ETH", "XRP-USD": "USDT" } as Record<string, string> // 코인니스 스타일 이름
     }
 ];
 
 export default function MarketWidget() {
     const { data: indicators, loading } = useMarketData();
 
+    const flattenedItems = useMemo(() => {
+        const items: any[] = [];
+        WIDGET_SECTIONS.forEach(section => {
+            section.symbols.forEach(sym => {
+                const found = indicators.find(d => d.symbol === sym);
+                if (found) {
+                    items.push({
+                        ...found,
+                        displayName: section.names[sym] || sym,
+                        icon: section.icon
+                    });
+                }
+            });
+        });
+        return items;
+    }, [indicators]);
+
     if (loading && indicators.length === 0) {
         return (
-            <div style={{
-                background: 'var(--surface)', borderRadius: '20px',
-                border: '1px solid var(--border)', height: '480px',
-                animation: 'pulse 1.5s infinite'
-            }} />
+            <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #E5E8EB', height: '400px', animation: 'pulse 1.5s infinite' }} />
         );
     }
 
     return (
-        <div id="market" style={{
-            background: 'var(--surface)',
-            borderRadius: '20px',
-            border: '1px solid var(--border)',
-            overflow: 'hidden',
-            width: '100%',
-            boxSizing: 'border-box'
-        }}>
-            {WIDGET_SECTIONS.map((section, sIdx) => {
-                const items = section.symbols
-                    .map(sym => indicators.find(d => d.symbol === sym))
-                    .filter(Boolean) as typeof indicators;
+        <div id="market" className="coinness-market-widget" style={{ width: '100%', background: 'white', borderRadius: '12px', border: '1px solid #E5E8EB', overflow: 'hidden' }}>
+            <div style={{ padding: '20px 20px 12px' }}>
+                {/* Tabs -> Coinness style */}
+                <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 800, color: '#191F28', cursor: 'pointer', padding: 0 }}>인기 코인</button>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>해외 지수</button>
+                    <button style={{ border: 'none', background: 'transparent', fontSize: '15px', fontWeight: 700, color: '#8B95A1', cursor: 'pointer', padding: 0 }}>원자재</button>
+                </div>
 
-                if (items.length === 0) return null;
+                {/* Table Header */}
+                <div style={{ display: 'grid', gridTemplateColumns: '32px minmax(0, 1.2fr) minmax(0, 1fr) 80px', gap: '8px', fontSize: '12px', color: '#868E96', fontWeight: 600, paddingBottom: '8px', borderBottom: '1px solid #F1F3F5', alignItems: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>🔥</div>
+                    <div>페어명</div>
+                    <div style={{ textAlign: 'center' }}>현재가</div>
+                    <div style={{ textAlign: 'right' }}>24H 변동</div>
+                </div>
 
-                return (
-                    <div key={section.id}>
-                        {/* Section Header */}
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            padding: '12px 16px 8px',
-                            borderBottom: '1px solid var(--border)',
-                            background: sIdx === 0 ? 'transparent' : 'transparent',
-                            marginTop: sIdx > 0 ? '4px' : '0'
-                        }}>
-                            <span style={{ fontSize: '13px' }}>{section.icon}</span>
-                            <span style={{
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                color: 'var(--text-secondary)',
-                                letterSpacing: '0.04em',
-                                textTransform: 'uppercase'
-                            }}>
-                                {section.title}
-                            </span>
-                        </div>
+                {/* Table Rows */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    {flattenedItems.slice(0, 8).map((item, idx) => {
+                        const isPositive = item.isPositive;
+                        const changeColor = isPositive ? '#F04438' : '#2F80ED'; // 코인니스 Red/Blue
 
-                        {/* Rows – Investing.com style */}
-                        {items.map((item, idx) => {
-                            const name = section.names[item.symbol] || item.symbol;
-                            const isPositive = item.isPositive;
-                            const changeColor = isPositive ? '#e84545' : '#1f64e7';
-
-                            return (
-                                <div
-                                    key={item.symbol}
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: '1fr auto auto',
-                                        alignItems: 'center',
-                                        padding: '9px 16px',
-                                        borderBottom: idx < items.length - 1 ? '1px solid var(--border)' : 'none',
-                                        gap: '8px',
-                                        cursor: 'default',
-                                        transition: 'background 0.15s'
-                                    }}
-                                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-2)')}
-                                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                                >
-                                    {/* Name */}
-                                    <span style={{
-                                        fontSize: '13px',
-                                        fontWeight: 600,
-                                        color: 'var(--text-primary)',
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis'
-                                    }}>
-                                        {name}
-                                    </span>
-
-                                    {/* Price */}
-                                    <span style={{
-                                        fontSize: '13px',
-                                        fontWeight: 700,
-                                        color: 'var(--text-primary)',
-                                        fontVariantNumeric: 'tabular-nums',
-                                        textAlign: 'right'
-                                    }}>
-                                        {item.price}
-                                    </span>
-
-                                    {/* Change % badge */}
-                                    <span style={{
-                                        fontSize: '12px',
-                                        fontWeight: 700,
-                                        color: 'white',
-                                        background: changeColor,
-                                        borderRadius: '5px',
-                                        padding: '2px 6px',
-                                        fontVariantNumeric: 'tabular-nums',
-                                        whiteSpace: 'nowrap',
-                                        minWidth: '54px',
-                                        textAlign: 'center'
-                                    }}>
-                                        {isPositive ? '+' : ''}{item.changePercent}%
+                        return (
+                            <div key={item.symbol} style={{ display: 'grid', gridTemplateColumns: '24px minmax(0, 1.2fr) minmax(0, 1fr) 80px', gap: '8px', padding: '14px 0', borderBottom: '1px solid #F8F9FA', alignItems: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 800, color: '#191F28', textAlign: 'center' }}>
+                                    {idx + 1}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+                                    <div style={{ width: '18px', height: '18px', background: '#F2F4F7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>
+                                        {item.icon}
+                                    </div>
+                                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#212529', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        {item.displayName}
                                     </span>
                                 </div>
-                            );
-                        })}
-                    </div>
-                );
-            })}
+                                <div style={{ textAlign: 'right', fontSize: '13px', fontWeight: 600, color: changeColor, whiteSpace: 'nowrap' }}>
+                                    {item.price}
+                                </div>
+                                <div style={{ textAlign: 'right', fontSize: '13px', fontWeight: 700, color: changeColor }}>
+                                    {item.changePercent}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
 
-            <style jsx>{`
-                @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
-            `}</style>
+            {/* Footer */}
+            <button style={{ width: '100%', padding: '14px', background: 'white', border: 'none', borderTop: '1px solid #F1F3F5', fontSize: '13px', fontWeight: 700, color: '#868E96', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px' }}>
+                더보기 <span style={{ fontSize: '10px' }}>›</span>
+            </button>
         </div>
     );
 }

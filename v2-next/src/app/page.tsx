@@ -5,6 +5,7 @@ import UserDashboard from "@/components/portal/UserDashboard";
 import MarketWidget from "@/components/portal/MarketWidget";
 import GoalTracker from "@/components/GoalTracker";
 import SentimentGauge from "@/components/portal/SentimentGauge";
+import CoinnessAuthCard from "@/components/portal/CoinnessAuthCard";
 
 export default function Home() {
   return (
@@ -26,21 +27,21 @@ export default function Home() {
 
           {/* RIGHT COLUMN: Sidebar Widgets */}
           <aside className="portal-right-sidebar">
-            <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
-              <h3 className="section-title" style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px', color: '#191F28' }}>내 재무 목표</h3>
-              <GoalTracker />
-            </div>
-
-            <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
-              <h3 className="section-title" style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px', color: '#191F28' }}>시장 심리</h3>
-              <SentimentGauge />
-            </div>
+            <CoinnessAuthCard />
 
             <MarketWidget />
-            <div style={{ marginTop: "24px" }}>
+
+            {/* 기존 위젯은 스크린샷 1:1 리뷰를 위해 임시 렌더링 제외 (또는 하단 배치) */}
+            <div style={{ marginTop: "24px", display: "none" }}>
+              <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
+                <h3 className="section-title">내 재무 목표</h3>
+                <GoalTracker />
+              </div>
+              <div className="widget-section" style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7', marginBottom: '24px' }}>
+                <h3 className="section-title">시장 심리</h3>
+                <SentimentGauge />
+              </div>
               <MiniToolbox />
-            </div>
-            <div style={{ marginTop: "24px" }}>
               <CommunityPreview />
             </div>
           </aside>

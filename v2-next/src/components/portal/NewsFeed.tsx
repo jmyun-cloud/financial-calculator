@@ -207,18 +207,29 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                     {/* Main Content Area */}
                     <div className="main-news-col" style={{ width: "100%" }}>
                         {compactMode ? (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                                {filtered.slice(0, 15).map(item => (
-                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: "12px", textDecoration: "none", alignItems: "flex-start" }}>
-                                        <div style={{ background: "#F2F4F7", borderRadius: "4px", padding: "4px 6px", fontSize: "11px", fontWeight: 700, color: "#4E5968", whiteSpace: "nowrap" }}>
-                                            {item.timeAgo.replace(/전|시간|분/g, '').trim()}
-                                        </div>
-                                        <div style={{ flex: 1, minWidth: 0 }}>
-                                            <h3 style={{ fontSize: "14px", fontWeight: 700, color: "#191F28", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</h3>
-                                            <p style={{ fontSize: "13px", color: "#6B7684", margin: 0, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.description}</p>
-                                        </div>
-                                    </a>
-                                ))}
+                            <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+                                {filtered.slice(0, 15).map(item => {
+                                    // timeAgo를 파싱하거나 그냥 사용
+                                    const timeLabel = item.timeAgo.replace(/전|시간|분/g, '').trim();
+                                    return (
+                                        <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="coinness-news-item" style={{ display: "flex", gap: "16px", textDecoration: "none", alignItems: "flex-start" }}>
+                                            <div style={{ background: "#F1F3F5", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontWeight: 700, color: "#868E96", whiteSpace: "nowrap", marginTop: "2px" }}>
+                                                {timeLabel}
+                                            </div>
+                                            <div style={{ flex: 1, minWidth: 0, display: "flex", gap: "16px" }}>
+                                                <div style={{ flex: 1 }}>
+                                                    <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#212529", marginBottom: "8px", lineHeight: 1.4, wordBreak: "keep-all" }}>{item.title}</h3>
+                                                    <p style={{ fontSize: "13px", color: "#868E96", margin: 0, lineHeight: 1.6, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.description}</p>
+                                                </div>
+                                                {item.imageUrl && (
+                                                    <div style={{ width: "80px", height: "60px", flexShrink: 0, borderRadius: "6px", overflow: "hidden", background: "#f8f9fa", border: "1px solid #e9ecef" }}>
+                                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </a>
+                                    );
+                                })}
                             </div>
                         ) : isListView ? (
                             <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>

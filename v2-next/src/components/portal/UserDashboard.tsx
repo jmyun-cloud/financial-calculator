@@ -543,67 +543,7 @@ export default function UserDashboard() {
 
     return (
         <div className="user-dashboard-v3" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <div className="hero-asset-card shadow-premium">
-                <div className="asset-label">내 총 자산</div>
-                <div className="asset-amount">₩ 48,320,000</div>
-
-                <div className="asset-sub-grid">
-                    <div className="asset-sub-item">
-                        <span className="sub-label">이번 달 수익</span>
-                        <span className="sub-value highlight">+ ₩320,000</span>
-                    </div>
-                    <div className="asset-sub-item">
-                        <span className="sub-label">DSR 잔여</span>
-                        <span className="sub-value">35.2%</span>
-                    </div>
-                    <div className="asset-sub-item">
-                        <span className="sub-label">목표 달성률</span>
-                        <span className="sub-value">68%</span>
-                    </div>
-                </div>
-            </div>
-
             {renderMarketSummary()}
-
-            <style jsx>{`
-                .user-dashboard-v3 { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }
-                .hero-asset-card {
-                    background: linear-gradient(135deg, #0064FF 0%, #0046B3 100%);
-                    border-radius: 28px;
-                    padding: 32px;
-                    color: white;
-                    position: relative;
-                    overflow: hidden;
-                    box-shadow: 0 20px 40px -10px rgba(0, 100, 255, 0.3);
-                }
-                .hero-asset-card::after {
-                    content: '';
-                    position: absolute;
-                    top: -20%;
-                    right: -10%;
-                    width: 250px;
-                    height: 250px;
-                    background: rgba(255,255,255,0.1);
-                    border-radius: 50%;
-                }
-                .asset-label { font-size: 1rem; opacity: 0.8; margin-bottom: 8px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
-                .asset-amount { font-size: 2.8rem; font-weight: 800; margin-bottom: 40px; letter-spacing: -0.02em; }
-                .asset-sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-                .asset-sub-item {
-                    background: rgba(255,255,255,0.12);
-                    padding: 18px 16px;
-                    border-radius: 20px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 6px;
-                    backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255,255,255,0.1);
-                }
-                .sub-label { font-size: 0.8rem; opacity: 0.75; font-weight: 500; color: rgba(255, 255, 255, 0.8); }
-                .sub-value { font-size: 1.1rem; font-weight: 700; }
-                .sub-value.highlight { color: #FFD363; }
-                .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; color: var(--text-primary); }
-            `}</style>
         </div>
     );
 }
