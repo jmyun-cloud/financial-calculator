@@ -1747,13 +1747,13 @@ select.form-input {
 /* 2. Portal Grid Layout */
 .portal-main {
   padding: 40px 0;
-  background: var(--bg);
+  background: #FFFFFF;
 }
 
 .portal-grid {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr) 340px;
-  gap: 24px;
+  gap: 0;
   align-items: start;
 }
 
@@ -1772,16 +1772,22 @@ select.form-input {
 .portal-left-sidebar {
   min-width: 0;
   max-width: 100%;
+  padding-right: 32px;
 }
 
 .portal-content {
   min-width: 0;
   max-width: 100%;
+  padding: 0 32px;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  min-height: 800px;
 }
 
 .portal-right-sidebar {
   min-width: 0;
   max-width: 100%;
+  padding-left: 32px;
 }
 
 /* 3. Magazine Feed (Toss Feed Style) */
