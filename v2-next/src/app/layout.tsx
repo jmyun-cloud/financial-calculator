@@ -45,8 +45,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <meta name="theme-color" content="#1a56e8" />
+        <style dangerouslySetInnerHTML={{ __html: `body { background-color: #FFFFFF !important; }` }} />
       </head>
-      <body>
+      <body style={{ backgroundColor: '#FFFFFF' }}>
         <AuthProvider>
           <Header />
           <TickerBar />
