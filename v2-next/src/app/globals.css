@@ -64,6 +64,8 @@ body {
     "Segoe UI",
     sans-serif;
   background: var(--bg);
+  /* 포털이나 코인니스 모드일 경우 배경색을 강제로 덮어씌움 */
+  background-color: white !important;
   color: var(--text-primary);
   line-height: 1.7;
   font-size: 0.9375rem;
