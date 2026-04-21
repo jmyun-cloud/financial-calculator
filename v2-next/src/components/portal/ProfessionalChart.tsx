@@ -195,10 +195,10 @@ export default function ProfessionalChart({
             {/* Toggle buttons */}
             <div style={{
                 position: 'absolute',
-                top: '0',
+                top: '-32px',
                 right: '0',
                 display: 'flex',
-                gap: '6px',
+                gap: '12px',
                 zIndex: 10
             }}>
                 {(['Area', 'Candlestick'] as const).map(type => (
@@ -206,14 +206,16 @@ export default function ProfessionalChart({
                         key={type}
                         onClick={() => setChartType(type)}
                         style={{
-                            padding: '5px 12px',
-                            fontSize: '12px',
-                            borderRadius: '8px',
-                            border: '1px solid #E5E8EB',
-                            background: chartType === type ? '#0055FB' : 'white',
-                            color: chartType === type ? 'white' : '#8B95A1',
+                            padding: '4px 8px',
+                            fontSize: '13px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: chartType === type ? '#0055FB' : '#8B95A1',
                             cursor: 'pointer',
-                            fontWeight: 600,
+                            fontWeight: chartType === type ? 700 : 500,
+                            letterSpacing: '-0.3px',
+                            borderBottom: chartType === type ? '2px solid #0055FB' : '2px solid transparent',
+                            transition: 'color 0.2s'
                         }}
                     >
                         {type === 'Area' ? 'Line' : 'Candle'}
@@ -221,34 +223,36 @@ export default function ProfessionalChart({
                 ))}
             </div>
 
-            {/* Period buttons */}
+            {/* Period buttons (Coinness style plain text) */}
             <div style={{
                 position: 'absolute',
-                top: '0',
+                top: '-32px',
                 left: '0',
                 display: 'flex',
                 gap: '8px',
                 zIndex: 10
             }}>
-                {['1m', '3m', '6m', '1y'].map(range => (
-                    <button
-                        key={range}
-                        onClick={() => onRangeChange?.(range)}
-                        style={{
-                            padding: '4px 8px',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            borderRadius: '4px',
-                            background: currentRange === range ? '#F2F4F7' : 'transparent',
-                            color: currentRange === range ? '#191F28' : '#8B95A1',
-                            border: 'none',
-                            cursor: 'pointer',
-                            textTransform: 'uppercase'
-                        }}
-                    >
-                        {range}
-                    </button>
-                ))}
+                {['1m', '3m', '6m', '1y'].map((range, index) => {
+                    const label = ['1분', '1시간', '4시간', '날'][index]; // 코인니스 스타일 한국어 매핑
+                    return (
+                        <button
+                            key={range}
+                            onClick={() => onRangeChange?.(range)}
+                            style={{
+                                padding: '4px 6px',
+                                fontSize: '13px',
+                                fontWeight: currentRange === range ? 700 : 500,
+                                background: 'transparent',
+                                color: currentRange === range ? '#0055FB' : '#4E5968',
+                                border: 'none',
+                                cursor: 'pointer',
+                                letterSpacing: '-0.3px'
+                            }}
+                        >
+                            {label}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Chart container — plain block element, no flex/grid */}

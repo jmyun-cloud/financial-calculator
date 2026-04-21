@@ -9,7 +9,7 @@ import CoinnessAuthCard from "@/components/portal/CoinnessAuthCard";
 
 export default function Home() {
   return (
-    <div className="portal-page-wrapper">
+    <div className="portal-page-wrapper" style={{ background: '#F8F9FA', minHeight: '100vh', paddingBottom: '60px' }}>
       {/* ===== PORTAL DASHBOARD (3-COLUMN COINNESS STYLE) ===== */}
       <div className="main-content portal-main" style={{ paddingTop: "20px" }}>
         <div className="container portal-grid">

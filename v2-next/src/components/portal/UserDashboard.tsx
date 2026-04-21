@@ -463,32 +463,32 @@ export default function UserDashboard() {
         const selectedInfo = KOSPI_LIST.find(k => k.symbol === selectedCard) || KOSPI_LIST[0];
 
         return (
-            <div className="coinness-chart-main" style={{ background: 'white', border: 'none', marginBottom: '24px', overflow: 'hidden', position: 'relative' }}>
-                <div style={{ display: 'flex', alignItems: 'center', padding: '16px 8px', borderBottom: '1px solid #F1F3F5', position: 'relative', zIndex: 50 }}>
-
+            <div className="coinness-chart-main" style={{ background: 'white', borderRadius: '12px', border: '1px solid #E5E8EB', marginBottom: '24px', overflow: 'hidden', position: 'relative', paddingBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '20px 20px 8px 20px', position: 'relative', zIndex: 50 }}>
+                    
                     {/* Coinness-style Dropdown Toggle */}
                     <div style={{ position: 'relative' }}>
-                        <button
+                        <button 
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                background: 'white',
-                                border: '1px solid #E5E8EB',
-                                borderRadius: '8px',
-                                padding: '8px 12px',
+                            style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                background: '#FFFFFF', 
+                                border: '1px solid #E5E8EB', 
+                                borderRadius: '20px', 
+                                padding: '6px 14px', 
                                 cursor: 'pointer',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
                                 transition: 'all 0.2s'
                             }}
                         >
-                            <span style={{ fontSize: '14px' }}>{selectedInfo.icon}</span>
+                            <span style={{ fontSize: '15px' }}>{selectedInfo.icon}</span>
                             <span style={{ fontSize: '15px', fontWeight: 800, color: '#191F28' }}>
                                 {selectedInfo.name}
                             </span>
-                            <span style={{ fontSize: '10px', color: '#8B95A1', marginLeft: '4px' }}>▼</span>
+                            <span style={{ fontSize: '10px', color: '#8B95A1', marginLeft: '6px' }}>▼</span>
                         </button>
+
 
                         {/* Dropdown Menu */}
                         {dropdownOpen && (
