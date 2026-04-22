@@ -70,18 +70,30 @@ export default function MarketIndexCards() {
     );
 
     return (
-        <div className="market-index-bar" style={{
-            display: 'flex',
-            gap: '12px',
-            padding: '16px 20px',
-            overflowX: 'auto',
-            borderBottom: '1px solid #F2F4F7',
-            background: '#ffffff',
-            scrollbarWidth: 'none'
-        }}>
-            {indices.map((idx) => (
-                <IndexCard key={idx.symbol} data={idx} />
-            ))}
+        <div className="market-index-section container" style={{ padding: '32px 40px 0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#191F28', margin: 0 }}>주요 지수</h2>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '13px', fontWeight: 600, color: '#8B95A1' }}>
+                    <span style={{ color: '#191F28', borderBottom: '2px solid #191F28', paddingBottom: '2px' }}>국내</span>
+                    <span>미국</span>
+                    <span>아시아</span>
+                    <span>유럽</span>
+                    <span>시장지표</span>
+                </div>
+            </div>
+
+            <div className="market-index-bar" style={{
+                display: 'flex',
+                gap: '12px',
+                padding: '4px 0 24px',
+                overflowX: 'auto',
+                scrollbarWidth: 'none',
+                WebkitOverflowScrolling: 'touch'
+            }}>
+                {indices.map((idx) => (
+                    <IndexCard key={idx.symbol} data={idx} />
+                ))}
+            </div>
         </div>
     );
 }

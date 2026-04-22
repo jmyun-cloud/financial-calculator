@@ -7,6 +7,7 @@ import CoinnessAuthCard from "@/components/portal/CoinnessAuthCard";
 import MarketIndexCards from "@/components/portal/MarketIndexCards";
 import GlobalRanking from "@/components/portal/GlobalRanking";
 import EconomicCalendar from "@/components/portal/EconomicCalendar";
+import TrendingNews from "@/components/portal/TrendingNews";
 
 export default function Home() {
   return (
@@ -31,7 +32,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Naver Style: Top Indices Bar */}
+      {/* Naver Style: Top Indices Bar (주요 지수) */}
       <MarketIndexCards />
 
       {/* ===== PORTAL DASHBOARD (RESTRUCTURED FOR NAVER STYLE) ===== */}
@@ -47,18 +48,32 @@ export default function Home() {
             </div>
 
             <GlobalRanking />
+
+            {/* Secondary Content Area */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+              <CommunityPreview />
+              <MiniToolbox />
+            </div>
           </div>
 
-          {/* RIGHT SIDEBAR: Authentication, Calendar, Widgets */}
+          {/* RIGHT SIDEBAR: Restructured for Naver Alignment */}
           <aside style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* 1. Login/Profile */}
             <CoinnessAuthCard />
+
+            {/* 2. Trending News */}
+            <TrendingNews />
+
+            {/* 3. Global Economic Calendar */}
+            <EconomicCalendar />
+
+            {/* 4. Market Sentiment */}
             <div style={{ background: 'white', padding: '24px', borderRadius: '24px', border: '1px solid #F2F4F7' }}>
               <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '16px' }}>시장 심리</h3>
               <SentimentGauge />
             </div>
-            <EconomicCalendar />
 
-            {/* AD Placeholder Banner */}
+            {/* 5. AD Sidebar Banner */}
             <div style={{
               height: '400px',
               background: '#F8F9FA',
@@ -70,11 +85,8 @@ export default function Home() {
               color: '#B0B8C1',
               fontSize: '13px'
             }}>
-              광고 배너 영역
+              사이드 광고 배너 영역
             </div>
-
-            <MiniToolbox />
-            <CommunityPreview />
           </aside>
         </div>
       </main>

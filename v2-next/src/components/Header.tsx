@@ -71,7 +71,7 @@ export default function Header() {
 
             {/* Sub Navigation Bar: Naver Style Tabs */}
             <div style={{ borderTop: '1px solid #F2F4F7' }}>
-                <div className="container" style={{ display: 'flex', height: '44px', alignItems: 'center', gap: '24px' }}>
+                <div className="container" style={{ display: 'flex', height: '48px', alignItems: 'center', gap: '32px' }}>
                     {[
                         { label: '홈', path: '/' },
                         { label: '마켓', path: '/#market' },
@@ -85,16 +85,28 @@ export default function Header() {
                             style={{
                                 textDecoration: 'none',
                                 color: isActive(item.path) ? '#191F28' : '#4E5968',
-                                fontSize: '15px',
-                                fontWeight: 700,
+                                fontSize: '16px',
+                                fontWeight: isActive(item.path) ? 800 : 700,
                                 height: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
-                                borderBottom: isActive(item.path) ? '3px solid #191F28' : 'none',
-                                boxSizing: 'border-box'
+                                position: 'relative',
+                                transition: 'color 0.2s',
+                                padding: '0 4px'
                             }}
                         >
                             {item.label}
+                            {isActive(item.path) && (
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '4px',
+                                    background: '#191F28',
+                                    borderRadius: '2px 2px 0 0'
+                                }} />
+                            )}
                         </Link>
                     ))}
                 </div>

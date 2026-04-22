@@ -119,7 +119,7 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
             {isLoading ? (
                 <div style={{ height: '300px', background: '#F8F9FA', borderRadius: '12px', opacity: 0.5 }} />
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '40px' }}>
+                <div style={{ width: '100%' }}>
                     {/* Main Content */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 4.5fr) 2.5fr', gap: '32px' }}>
                         {/* 3 Pillar Grid */}
@@ -140,22 +140,6 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
                                 <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', borderBottom: '1px solid #F2F4F7', paddingBottom: '12px' }}>
                                     <h5 style={{ fontSize: '14px', fontWeight: 700, color: '#333D4B', margin: '0 0 4px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.title}</h5>
                                     <div style={{ fontSize: '12px', color: '#8B95A1' }}>{item.source} · {item.timeAgo}</div>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Trending Sidebar */}
-                    <div style={{ borderLeft: '1px solid #F2F4F7', paddingLeft: '32px' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '20px' }}>⚡ 가장 많이 본 뉴스</h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            {filtered.slice(10, 15).map((item, idx) => (
-                                <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', gap: '12px', textDecoration: 'none' }}>
-                                    <span style={{ fontSize: '18px', fontWeight: 900, color: idx < 3 ? '#3182F6' : '#B0B8C1', width: '20px' }}>{idx + 1}</span>
-                                    <div style={{ flex: 1 }}>
-                                        <h5 style={{ fontSize: '14px', fontWeight: 700, color: '#333D4B', margin: '0 0 4px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.title}</h5>
-                                        <div style={{ fontSize: '11px', color: '#8B95A1' }}>{item.source}</div>
-                                    </div>
                                 </a>
                             ))}
                         </div>
