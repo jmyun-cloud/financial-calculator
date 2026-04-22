@@ -238,7 +238,11 @@ export default function ProfessionalChart({
     }, [data, isPositive, chartType, height]);
 
     return (
-        <div style={{ position: 'relative', paddingTop: '0' }}>
+        <div
+            style={{ position: 'relative', paddingTop: '0' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
 
 
             {/* Period buttons (Coinness style plain text) */}
@@ -274,8 +278,6 @@ export default function ProfessionalChart({
             <div
                 ref={containerRef}
                 className="professional-chart-inner"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
                 style={{
                     width: '100%',
                     height: `${height}px`,
