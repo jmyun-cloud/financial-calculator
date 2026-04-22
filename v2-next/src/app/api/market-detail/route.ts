@@ -33,8 +33,7 @@ export async function GET(request: Request) {
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=${yfInterval}&range=${yfRange}&_=${Date.now()}`;
 
         const res = await fetch(url, {
-            // Lower revalidate to 1 minute for detailed market data
-            next: { revalidate: 60 },
+            cache: 'no-store',
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
@@ -113,7 +112,9 @@ export async function GET(request: Request) {
             chartData: slicedData
         }, {
             headers: {
-                'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120'
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
         });
 

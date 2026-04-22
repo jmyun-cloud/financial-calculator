@@ -73,7 +73,7 @@ export default function MarketIndexCards() {
             try {
                 const symbols = CATEGORY_SYMBOLS[activeTab];
                 const results = await Promise.all(symbols.map(async (s) => {
-                    const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(s.symbol)}&range=1d`);
+                    const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(s.symbol)}&range=1d&t=${Date.now()}`);
                     const data = await res.json();
 
                     const history = (data.chartData || []).map((d: any) => ({
