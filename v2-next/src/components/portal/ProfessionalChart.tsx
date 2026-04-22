@@ -49,6 +49,11 @@ export default function ProfessionalChart({
             return;
         }
 
+        // Gapless Mapping: Map indices back to original timestamps for formatting
+        const timeMap = new Map<number, number>();
+        const sortedData = [...data].sort((a, b) => (a.time as number) - (b.time as number));
+        sortedData.forEach((d, idx) => timeMap.set(idx, d.time as number));
+
         // ---- Create chart ----
         const chart = createChart(container, {
             layout: {
@@ -72,8 +77,10 @@ export default function ProfessionalChart({
                 }
             },
             localization: {
-                timeFormatter: (time: any) => {
-                    const d = new Date((time as number) * 1000);
+                timeFormatter: (index: any) => {
+                    const originalTime = timeMap.get(index as number);
+                    if (!originalTime) return "";
+                    const d = new Date(originalTime * 1000);
                     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
                 }
             },
@@ -88,14 +95,16 @@ export default function ProfessionalChart({
                 timeVisible: true,
                 secondsVisible: false,
                 rightOffset: 5,
-                tickMarkFormatter: (time: any) => {
-                    const date = new Date((time as number) * 1000);
+                tickMarkFormatter: (index: any) => {
+                    const originalTime = timeMap.get(index as number);
+                    if (!originalTime) return "";
+                    const date = new Date(originalTime * 1000);
+                    const hours = date.getHours();
+                    const mins = String(date.getMinutes()).padStart(2, '0');
                     const month = date.getMonth() + 1;
                     const day = date.getDate();
-                    if (day === 1) {
-                        return `${month}월`;
-                    }
-                    return `${month}/${day}`;
+                    if (hours === 9 && mins === "00") return `${month}/${day}`;
+                    return `${hours}:${mins}`;
                 },
             },
             rightPriceScale: {
@@ -123,17 +132,16 @@ export default function ProfessionalChart({
                 wickDownColor: '#0055FF',
             });
 
-            const validData = data
+            const validData = sortedData
                 .filter(d => d && d.time && d.open != null && d.high != null && d.low != null && d.close != null
                     && !isNaN(Number(d.open)) && !isNaN(Number(d.high)) && !isNaN(Number(d.low)) && !isNaN(Number(d.close)))
-                .map(d => ({
-                    time: d.time as any,
+                .map((d, index) => ({
+                    time: index as any, // Use index for gapless
                     open: Number(d.open),
                     high: Number(d.high),
                     low: Number(d.low),
                     close: Number(d.close),
-                }))
-                .sort((a, b) => (a.time as number) - (b.time as number));
+                }));
 
             if (validData.length > 0) {
                 series.setData(validData);
@@ -147,13 +155,12 @@ export default function ProfessionalChart({
                 lineWidth: 2,
             });
 
-            const validData = data
+            const validData = sortedData
                 .filter(d => d && d.time && d.close != null && !isNaN(Number(d.close)))
-                .map(d => ({
-                    time: d.time as any,
+                .map((d, index) => ({
+                    time: index as any,
                     value: Number(d.close),
-                }))
-                .sort((a, b) => (a.time as number) - (b.time as number));
+                }));
 
             if (validData.length > 0) {
                 series.setData(validData);
@@ -201,7 +208,18 @@ export default function ProfessionalChart({
             .sort((a, b) => (a.time as number) - (b.time as number));
 
         if (volumeData.length > 0) {
-            volumeSeries.setData(volumeData);
+            // Volume also needs to use index for gapless
+            const gaplessVolumeData = sortedData
+                .filter(d => d && d.time && d.volume != null)
+                .map((d, index) => {
+                    const isPriceUp = d.close >= d.open;
+                    return {
+                        time: index as any,
+                        value: Number(d.volume),
+                        color: isPriceUp ? 'rgba(240, 66, 81, 0.3)' : 'rgba(0, 100, 255, 0.3)',
+                    };
+                });
+            volumeSeries.setData(gaplessVolumeData);
         }
 
         // ---- Resize handler ----
