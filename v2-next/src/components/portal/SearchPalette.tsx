@@ -10,20 +10,10 @@ interface Result {
     type: 'Stock' | 'Index' | 'News';
 }
 
-const MOCK_ASSETS: Result[] = [
-    { symbol: 'KOSPI', name: '코스피', type: 'Index' },
-    { symbol: 'KOSDAQ', name: '코스닥', type: 'Index' },
-    { symbol: 'NASDAQ', name: '나스닥', type: 'Index' },
-    { symbol: 'S&P500', name: 'S&P 500', type: 'Index' },
-    { symbol: 'BTC', name: '비트코인', type: 'Stock' },
-    { symbol: 'ETH', name: '이더리움', type: 'Stock' },
-    { symbol: 'AAPL', name: 'Apple Inc.', type: 'Stock' },
-    { symbol: 'TSLA', name: 'Tesla Inc.', type: 'Stock' },
-];
-
 export default function SearchPalette({ onClose }: { onClose: () => void }) {
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<Result[]>([]);
+    const [results, setResults] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -31,16 +21,27 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
     }, []);
 
     useEffect(() => {
-        if (query.length < 1) {
-            setResults([]);
-            return;
-        }
+        const timer = setTimeout(async () => {
+            if (query.trim().length < 1) {
+                setResults([]);
+                return;
+            }
 
-        const filtered = MOCK_ASSETS.filter(item =>
-            item.name.toLowerCase().includes(query.toLowerCase()) ||
-            item.symbol.toLowerCase().includes(query.toLowerCase())
-        );
-        setResults(filtered);
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/market-search?q=${encodeURIComponent(query)}`);
+                const json = await res.json();
+                if (json.data) {
+                    setResults(json.data);
+                }
+            } catch (err) {
+                console.error("Search failed", err);
+            } finally {
+                setLoading(false);
+            }
+        }, 300);
+
+        return () => clearTimeout(timer);
     }, [query]);
 
     return (
@@ -62,15 +63,19 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div className="search-results custom-scrollbar">
-                    {query && results.length === 0 && (
-                        <div className="no-results">검색 결과가 없습니다.</div>
+                    {loading && (
+                        <div className="loading-state">실시간 시장 데이터를 검색 중입니다...</div>
+                    )}
+
+                    {!loading && query && results.length === 0 && (
+                        <div className="no-results">'{query}'에 대한 검색 결과가 없습니다.</div>
                     )}
 
                     {!query && (
                         <div className="recent-searches">
                             <h4 className="section-title">추천 검색어</h4>
                             <div className="suggestion-tags">
-                                {['삼성전자', '나스닥', '비트코인', '환율'].map(tag => (
+                                {['삼성전자', '현대차', '나스닥', '비트코인'].map(tag => (
                                     <span key={tag} onClick={() => setQuery(tag)} className="tag">{tag}</span>
                                 ))}
                             </div>
@@ -82,11 +87,13 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
                             {results.map((res, i) => (
                                 <Link
                                     key={i}
-                                    href={`/market/${res.symbol}`}
+                                    href={`/market/${encodeURIComponent(res.symbol)}`}
                                     className="result-item"
                                     onClick={onClose}
                                 >
-                                    {res.type === 'Index' ? <TrendingUp size={16} /> : <Newspaper size={16} />}
+                                    <div className="res-icon">
+                                        {res.region === 'KR' ? '🇰🇷' : '🇺🇸'}
+                                    </div>
                                     <div className="res-info">
                                         <span className="res-name">{res.name}</span>
                                         <span className="res-symbol">{res.symbol}</span>
@@ -206,6 +213,29 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
                     transition: all 0.2s;
                 }
                 .result-item:hover { background: #F8FAFF; }
+                .res-icon { 
+                    width: 32px; 
+                    height: 32px; 
+                    background: #F2F4F7; 
+                    border-radius: 50%; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    font-size: 16px;
+                }
+                .loading-state {
+                    padding: 40px;
+                    text-align: center;
+                    color: #0055FB;
+                    font-size: 14px;
+                    font-weight: 600;
+                    animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                    0% { opacity: 0.6; }
+                    50% { opacity: 1; }
+                    100% { opacity: 0.6; }
+                }
                 .res-info { flex: 1; display: flex; flex-direction: column; }
                 .res-name { color: #191F28; font-weight: 700; font-size: 15px; }
                 .res-symbol { font-size: 12px; font-weight: 600; color: #8B95A1; }
