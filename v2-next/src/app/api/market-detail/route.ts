@@ -18,9 +18,20 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Always fetch 1y to ensure we have historical data for slicing, even if user asks for 1m/3m/6m
-        // Yahoo API often returns 0 or 1 point for short ranges with 1d interval on indices.
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1y&_=${Date.now()}`;
+        // Map UI resolution to Yahoo Finance interval and range.
+        let yfInterval = '1d';
+        let yfRange = '1y';
+
+        if (range === '1m') { yfInterval = '1m'; yfRange = '1d'; }
+        else if (range === '5m') { yfInterval = '5m'; yfRange = '5d'; }
+        else if (range === '15m') { yfInterval = '15m'; yfRange = '5d'; }
+        else if (range === '1h') { yfInterval = '60m'; yfRange = '1mo'; }
+        else if (range === '4h') { yfInterval = '60m'; yfRange = '3mo'; } // Fallback to 1h since YF lacks 4h
+        else if (range === '1d') { yfInterval = '1d'; yfRange = '1y'; }
+        // Keep fallback for legacy '3m', '6m' which meant months previously, mapping them to 1d
+        else if (range === '3m' || range === '6m' || range === '1y') { yfInterval = '1d'; yfRange = '1y'; }
+
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=${yfInterval}&range=${yfRange}&_=${Date.now()}`;
 
         const res = await fetch(url, {
             // Lower revalidate to 1 minute for detailed market data
@@ -83,13 +94,11 @@ export async function GET(request: Request) {
             }))
             .filter((d: any) => d.close !== null && d.close !== 0);
 
-        // For '1y' or more, we might want more points, but for detail view we limit to keep it fast
-        // However, if the user specifically asked for a range, we should return the relevant portion.
-        // Slicing manually since we always fetch 1y to avoid Yahoo API bugs
-        const slicedData = range === '1m' ? chartData.slice(-22) :
-            range === '3m' ? chartData.slice(-66) :
-                range === '6m' ? chartData.slice(-132) :
-                    range === '1y' ? chartData.slice(-252) : chartData;
+        // Apply specific truncations for legacy month ranges. For intraday, send all fetched data.
+        let slicedData = chartData;
+        if (range === '1y' && yfInterval === '1d') slicedData = chartData.slice(-252);
+        if (range === '6m' && yfInterval === '1d') slicedData = chartData.slice(-132);
+        if (range === '3m' && yfInterval === '1d') slicedData = chartData.slice(-66);
 
         return NextResponse.json({
             price: meta.regularMarketPrice,

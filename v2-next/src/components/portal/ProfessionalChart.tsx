@@ -222,8 +222,8 @@ export default function ProfessionalChart({
                 gap: '8px',
                 marginBottom: '16px'
             }}>
-                {['1m', '3m', '6m', '1y'].map((range, index) => {
-                    const label = ['1분', '5분', '15분', '1시간'][index]; // 코인니스 스타일 한국어 매핑 (실제 데이터에 맞게 라벨링 변경)
+                {['1m', '5m', '15m', '1h', '4h', '1d'].map((range, index) => {
+                    const label = ['1분', '5분', '15분', '1시간', '4시간', '날 ▼'][index];
                     return (
                         <button
                             key={range}
@@ -243,8 +243,6 @@ export default function ProfessionalChart({
                         </button>
                     );
                 })}
-                <span style={{ fontSize: '13px', color: '#4E5968', padding: '4px 6px' }}>4시간</span>
-                <span style={{ fontSize: '13px', color: '#4E5968', padding: '4px 6px' }}>날 ▼</span>
             </div>
 
             {/* Chart container — plain block element, no flex/grid */}

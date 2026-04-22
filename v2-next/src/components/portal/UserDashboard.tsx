@@ -37,7 +37,7 @@ export default function UserDashboard() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [detailData, setDetailData] = useState<any>(null);
     const [isDetailLoading, setIsDetailLoading] = useState(false);
-    const [chartRange, setChartRange] = useState("1y");
+    const [chartRange, setChartRange] = useState("1d");
     const [screenerData, setScreenerData] = useState<any[]>([]);
     const [isScreenerLoading, setIsScreenerLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -466,19 +466,19 @@ export default function UserDashboard() {
             <div className="coinness-chart-main" style={{ background: 'white', marginBottom: '24px', overflow: 'hidden', padding: '16px 0', position: 'relative' }}>
                 {/* Header Line 1: Dropdown & Price */}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', position: 'relative', zIndex: 50 }}>
-                    
+
                     {/* Coinness-style Dropdown Toggle */}
                     <div style={{ position: 'relative' }}>
-                        <button 
+                        <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
-                            style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '6px', 
-                                background: '#F8F9FA', 
-                                border: '1px solid #E5E8EB', 
-                                borderRadius: '100px', 
-                                padding: '6px 14px', 
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: '#F8F9FA',
+                                border: '1px solid #E5E8EB',
+                                borderRadius: '100px',
+                                padding: '6px 14px',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s'
                             }}
