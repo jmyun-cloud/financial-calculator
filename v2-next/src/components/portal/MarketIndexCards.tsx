@@ -105,11 +105,11 @@ export default function MarketIndexCards() {
     );
 
     return (
-        <div className="market-index-section container" style={{ padding: '32px 40px 0' }}>
+        <div className="market-index-section container" style={{ padding: '40px 40px 0' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h2 style={{ fontSize: '16px', fontWeight: 900, color: '#191F28', margin: 0 }}>주요 지수</h2>
-                    <div style={{ display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#B0B8C1', marginLeft: '12px' }}>
+                    <h2 style={{ fontSize: '15px', fontWeight: 900, color: '#191F28', margin: 0 }}>주요 지표</h2>
+                    <div style={{ display: 'flex', gap: '10px', fontSize: '14px', fontWeight: 600, color: '#B0B8C1', marginLeft: '12px', alignItems: 'center' }}>
                         {CATEGORIES.map((cat, idx) => (
                             <React.Fragment key={cat}>
                                 <span
@@ -122,13 +122,13 @@ export default function MarketIndexCards() {
                                 >
                                     {cat}
                                 </span>
-                                {idx < CATEGORIES.length - 1 && <span>/</span>}
+                                {idx < CATEGORIES.length - 1 && <span style={{ color: '#E5E8EB', fontSize: '12px' }}>/</span>}
                             </React.Fragment>
                         ))}
                     </div>
                 </div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                    전체 지수 보기 <span style={{ marginLeft: '4px', fontSize: '10px' }}>&gt;</span>
+                    전체 지수 보기 <span style={{ marginLeft: '4px', fontSize: '10px', color: '#B0B8C1' }}>&gt;</span>
                 </div>
             </div>
 
@@ -194,14 +194,15 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
     const chartRef = React.useRef<HTMLDivElement>(null);
     const isPositive = data.change >= 0;
     const color = isPositive ? '#F04452' : '#3182F6';
-    const areaColor = isPositive ? 'rgba(240, 68, 82, 0.1)' : 'rgba(49, 130, 246, 0.1)';
+    const areaColor = isPositive ? 'rgba(240, 68, 82, 0.08)' : 'rgba(49, 130, 246, 0.08)';
+    const isLive = data.symbol.startsWith('^K') || data.symbol.includes('=X');
 
     useEffect(() => {
         if (!chartRef.current || data.history.length === 0) return;
 
         const chart = createChart(chartRef.current, {
-            width: 100,
-            height: 44,
+            width: 76,
+            height: 40,
             layout: { background: { type: ColorType.Solid, color: 'transparent' } },
             grid: { vertLines: { visible: false }, horzLines: { visible: false } },
             rightPriceScale: { visible: false },
@@ -217,6 +218,7 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
             lineWidth: 2,
             lastValueVisible: false,
             priceLineVisible: false,
+            crosshairMarkerVisible: false,
         });
 
         areaSeries.setData(data.history.map(pt => ({
@@ -231,31 +233,48 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
 
     return (
         <div style={{
-            minWidth: '228px',
-            padding: '16px',
+            minWidth: '224px',
+            padding: '16px 18px',
             border: '1px solid #F2F4F7',
             borderRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             background: '#ffffff',
             cursor: 'pointer',
-            flexShrink: 0
+            flexShrink: 0,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
         }}>
             <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#191F28', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ fontSize: '14px' }}>{flag}</span>
-                    {data.name}
-                    <span style={{ fontSize: '11px', color: '#B0B8C1', marginLeft: '2px' }}>● {data.symbol.startsWith('^K') ? '실시간' : '장마감'}</span>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#191F28', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '14px',
+                        overflow: 'hidden'
+                    }}>
+                        {flag}
+                    </div>
+                    <span>{data.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: '2px' }}>
+                        <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: isLive ? '#00D166' : '#B0B8C1' }} />
+                        <span style={{ fontSize: '11px', fontWeight: 500, color: '#B0B8C1' }}>{isLive ? '실시간' : '장마감'}</span>
+                    </div>
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 900, color: '#191F28', letterSpacing: '-0.4px', marginBottom: '4px' }}>
+                <div style={{ fontSize: '19px', fontWeight: 900, color: '#191F28', letterSpacing: '-0.5px', marginBottom: '4px', lineHeight: 1 }}>
                     {data.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                    {isPositive ? '▲' : '▼'} {Math.abs(data.change).toFixed(2)}({data.changePercent?.toFixed(2)}%)
+                    <span style={{ fontSize: '10px' }}>{isPositive ? '▲' : '▼'}</span>
+                    {Math.abs(data.change).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ({data.changePercent?.toFixed(2)}%)
                 </div>
             </div>
-            <div ref={chartRef} style={{ width: '100px', height: '44px', marginTop: '12px' }} />
+            <div ref={chartRef} style={{ width: '76px', height: '40px' }} />
         </div>
     );
 }
