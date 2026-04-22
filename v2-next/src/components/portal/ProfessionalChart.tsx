@@ -21,7 +21,7 @@ interface ProfessionalChartProps {
 export default function ProfessionalChart({
     data,
     isPositive,
-    initialType = 'Area',
+    initialType = 'Candlestick',
     height = 300,
     currentRange = '1y',
     onRangeChange
@@ -192,36 +192,7 @@ export default function ProfessionalChart({
 
     return (
         <div style={{ position: 'relative', paddingTop: '44px' }}>
-            {/* Toggle buttons */}
-            <div style={{
-                position: 'absolute',
-                top: '-32px',
-                right: '0',
-                display: 'flex',
-                gap: '12px',
-                zIndex: 10
-            }}>
-                {(['Area', 'Candlestick'] as const).map(type => (
-                    <button
-                        key={type}
-                        onClick={() => setChartType(type)}
-                        style={{
-                            padding: '4px 8px',
-                            fontSize: '13px',
-                            background: 'transparent',
-                            border: 'none',
-                            color: chartType === type ? '#0055FB' : '#8B95A1',
-                            cursor: 'pointer',
-                            fontWeight: chartType === type ? 700 : 500,
-                            letterSpacing: '-0.3px',
-                            borderBottom: chartType === type ? '2px solid #0055FB' : '2px solid transparent',
-                            transition: 'color 0.2s'
-                        }}
-                    >
-                        {type === 'Area' ? 'Line' : 'Candle'}
-                    </button>
-                ))}
-            </div>
+
 
             {/* Period buttons (Coinness style plain text) */}
             <div style={{
