@@ -31,6 +31,8 @@ export default function ProfessionalChart({
     const chartRef = useRef<any>(null);
     const [chartType, setChartType] = useState<'Candlestick' | 'Area'>(initialType);
     const [hasData, setHasData] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [hasInteractedWithZoom, setHasInteractedWithZoom] = useState(false);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -160,7 +162,12 @@ export default function ProfessionalChart({
         }
 
         if (pointsSet > 0) {
-            chart.timeScale().fitContent();
+            // Coinness logic: Show fewer bars by default to make candles thicker/clearer
+            // Defaulting to the last 80 bars
+            chart.timeScale().setVisibleLogicalRange({
+                from: pointsSet - 80,
+                to: pointsSet + 5, // Small buffer at the right
+            });
             setHasData(true);
         } else {
             setHasData(false);
@@ -249,6 +256,8 @@ export default function ProfessionalChart({
             <div
                 ref={containerRef}
                 className="professional-chart-inner"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 style={{
                     width: '100%',
                     height: `${height}px`,
@@ -257,7 +266,7 @@ export default function ProfessionalChart({
                 }}
             />
 
-            {/* Zoom Controls */}
+            {/* Zoom Controls (Visible only on hover) */}
             <div style={{
                 position: 'absolute',
                 bottom: '36px',
@@ -265,7 +274,11 @@ export default function ProfessionalChart({
                 transform: 'translateX(-50%)',
                 display: 'flex',
                 gap: '8px',
-                zIndex: 30
+                zIndex: 30,
+                opacity: isHovered ? 1 : 0,
+                visibility: isHovered ? 'visible' : 'hidden',
+                transition: 'opacity 0.2s, visibility 0.2s',
+                pointerEvents: isHovered ? 'all' : 'none'
             }}>
                 {[
                     {
@@ -273,6 +286,7 @@ export default function ProfessionalChart({
                             const ts = chartRef.current?.timeScale();
                             const r = ts?.getVisibleLogicalRange();
                             if (r) ts.setVisibleLogicalRange({ from: r.from - (r.to - r.from) * 0.2, to: r.to + (r.to - r.from) * 0.2 });
+                            setHasInteractedWithZoom(true);
                         }
                     },
                     {
@@ -280,14 +294,22 @@ export default function ProfessionalChart({
                             const ts = chartRef.current?.timeScale();
                             const r = ts?.getVisibleLogicalRange();
                             if (r) ts.setVisibleLogicalRange({ from: r.from + (r.to - r.from) * 0.2, to: r.to - (r.to - r.from) * 0.2 });
+                            setHasInteractedWithZoom(true);
                         }
                     },
                     {
-                        label: '↻', onClick: () => {
-                            chartRef.current?.timeScale().fitContent();
+                        label: '↻',
+                        visible: hasInteractedWithZoom,
+                        onClick: () => {
+                            const dataCount = data.length;
+                            chartRef.current?.timeScale().setVisibleLogicalRange({
+                                from: dataCount - 80,
+                                to: dataCount + 5
+                            });
+                            setHasInteractedWithZoom(false);
                         }
                     }
-                ].map((btn, i) => (
+                ].filter(btn => btn.visible !== false).map((btn, i) => (
                     <button
                         key={i}
                         onClick={btn.onClick}
