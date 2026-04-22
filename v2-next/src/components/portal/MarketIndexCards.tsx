@@ -17,6 +17,16 @@ interface IndexData {
 }
 
 const CATEGORY_SYMBOLS: Record<string, { symbol: string; name: string; flag: string }[]> = {
+    "주요 지표": [
+        { symbol: '^KS11', name: '코스피', flag: '🇰🇷' },
+        { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
+        { symbol: '^DJI', name: '다우존스', flag: '🇺🇸' },
+        { symbol: '^IXIC', name: '나스닥 종합', flag: '🇺🇸' },
+        { symbol: '^GSPC', name: 'S&P 500', flag: '🇺🇸' },
+        { symbol: 'USDKRW=X', name: '미국 USD', flag: '🇺🇸' },
+        { symbol: 'GC=F', name: '국제 금', flag: '🪙' },
+        { symbol: 'CL=F', name: 'WTI 원유', flag: '🛢️' },
+    ],
     "국내": [
         { symbol: '^KS11', name: '코스피', flag: '🇰🇷' },
         { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
@@ -51,10 +61,10 @@ const CATEGORY_SYMBOLS: Record<string, { symbol: string; name: string; flag: str
     ]
 };
 
-const CATEGORIES = ["국내", "미국", "아시아", "유럽", "시장지표"];
+const CATEGORIES = ["주요 지표", "국내", "미국", "아시아", "유럽", "시장지표"];
 
 export default function MarketIndexCards() {
-    const [activeTab, setActiveTab] = useState("국내");
+    const [activeTab, setActiveTab] = useState("주요 지표");
     const [indices, setIndices] = useState<IndexData[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -105,24 +115,25 @@ export default function MarketIndexCards() {
     );
 
     return (
-        <div className="market-index-section container" style={{ padding: '40px 40px 0' }}>
+        <div className="market-index-section container" style={{ padding: '32px 40px 0' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h2 style={{ fontSize: '15px', fontWeight: 900, color: '#191F28', margin: 0 }}>주요 지표</h2>
-                    <div style={{ display: 'flex', gap: '10px', fontSize: '14px', fontWeight: 600, color: '#B0B8C1', marginLeft: '12px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: '15px' }}>
+                    <div style={{ display: 'flex', gap: '10px', fontWeight: 600, color: '#B0B8C1', alignItems: 'center' }}>
                         {CATEGORIES.map((cat, idx) => (
                             <React.Fragment key={cat}>
                                 <span
                                     onClick={() => setActiveTab(cat)}
                                     style={{
                                         color: activeTab === cat ? '#191F28' : '#B0B8C1',
+                                        fontWeight: activeTab === cat ? 900 : 600,
                                         cursor: 'pointer',
-                                        transition: 'color 0.2s'
+                                        transition: 'color 0.2s',
+                                        fontSize: activeTab === cat ? '16px' : '15px'
                                     }}
                                 >
                                     {cat}
                                 </span>
-                                {idx < CATEGORIES.length - 1 && <span style={{ color: '#E5E8EB', fontSize: '12px' }}>/</span>}
+                                {idx < CATEGORIES.length - 1 && <span style={{ color: '#E5E8EB', fontSize: '13px' }}>/</span>}
                             </React.Fragment>
                         ))}
                     </div>
@@ -133,16 +144,24 @@ export default function MarketIndexCards() {
             </div>
 
             <div style={{ position: 'relative' }}>
-                <div className={`market-index-bar hide-scrollbar ${loading ? 'opacity-50' : ''}`} style={{
-                    display: 'flex',
-                    gap: '12px',
-                    padding: '4px 0 24px',
-                    overflowX: 'auto',
-                    scrollbarWidth: 'none',
-                    WebkitOverflowScrolling: 'touch',
-                    scrollBehavior: 'smooth',
-                    transition: 'opacity 0.2s'
-                }}>
+                <div className={`market-index-bar hide-scrollbar ${loading ? 'opacity-50' : ''}`}
+                    onScroll={(e) => {
+                        const target = e.target as HTMLDivElement;
+                        const rightBtn = document.getElementById('index-scroll-right');
+                        const leftBtn = document.getElementById('index-scroll-left');
+                        if (rightBtn) rightBtn.style.display = target.scrollLeft + target.clientWidth >= target.scrollWidth - 10 ? 'none' : 'flex';
+                        if (leftBtn) leftBtn.style.display = target.scrollLeft <= 10 ? 'none' : 'flex';
+                    }}
+                    style={{
+                        display: 'flex',
+                        gap: '12px',
+                        padding: '4px 0 24px',
+                        overflowX: 'auto',
+                        scrollbarWidth: 'none',
+                        WebkitOverflowScrolling: 'touch',
+                        scrollBehavior: 'smooth',
+                        transition: 'opacity 0.2s'
+                    }}>
                     {indices.map((idx) => (
                         <IndexCard
                             key={idx.symbol}
@@ -152,8 +171,38 @@ export default function MarketIndexCards() {
                     ))}
                 </div>
 
+                {/* Left Slider Arrow */}
+                <button
+                    id="index-scroll-left"
+                    style={{
+                        position: 'absolute',
+                        left: '-20px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        background: 'white',
+                        border: '1px solid #E5E8EB',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                        display: 'none', // Hidden initially
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        zIndex: 2,
+                        color: '#4E5968'
+                    }}
+                    onClick={() => {
+                        const el = document.querySelector('.market-index-bar');
+                        if (el) el.scrollBy({ left: -300, behavior: 'smooth' });
+                    }}
+                >
+                    <span style={{ fontSize: '18px', fontWeight: 600 }}>&lt;</span>
+                </button>
+
                 {/* Right Slider Arrow */}
                 <button
+                    id="index-scroll-right"
                     style={{
                         position: 'absolute',
                         right: '-20px',
@@ -165,7 +214,7 @@ export default function MarketIndexCards() {
                         background: 'white',
                         border: '1px solid #E5E8EB',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                        display: 'flex',
+                        display: indices.length > 5 ? 'flex' : 'none',
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
