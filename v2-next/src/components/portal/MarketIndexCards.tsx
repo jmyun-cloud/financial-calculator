@@ -10,6 +10,7 @@ import {
 interface IndexData {
     symbol: string;
     name: string;
+    flag: string;
     price: number;
     change: number;
     changePercent: number;
@@ -77,6 +78,10 @@ export default function MarketIndexCards() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let isActive = true;
+        setLoading(true);
+        setIndices([]); // Clear previous tab's data immediately
+
         const fetchAllIndices = async () => {
             try {
                 const symbols = CATEGORY_SYMBOLS[activeTab];
@@ -92,28 +97,33 @@ export default function MarketIndexCards() {
                     return {
                         symbol: s.symbol,
                         name: s.name,
+                        flag: s.flag,
                         price: data.price,
                         change: data.change,
                         changePercent: data.changePercent,
                         history
                     };
                 }));
-                setIndices(results);
+                if (isActive) {
+                    setIndices(results);
+                    setLoading(false);
+                }
             } catch (err) {
                 console.error("Failed to fetch indices:", err);
-            } finally {
-                setLoading(false);
+                if (isActive) setLoading(false);
             }
         };
 
         fetchAllIndices();
-        const interval = setInterval(fetchAllIndices, 5000); // Poll every 5s
+        const interval = setInterval(fetchAllIndices, 5000);
 
-        // Reset scroll position on tab change
         const el = document.querySelector('.market-index-bar');
         if (el) el.scrollLeft = 0;
 
-        return () => clearInterval(interval);
+        return () => {
+            isActive = false;
+            clearInterval(interval);
+        };
     }, [activeTab]);
 
     if (loading && indices.length === 0) return (
@@ -174,9 +184,9 @@ export default function MarketIndexCards() {
                     }}>
                     {indices.map((idx) => (
                         <IndexCard
-                            key={idx.symbol}
+                            key={`${idx.symbol}-${idx.name}`}
                             data={idx}
-                            flag={CATEGORY_SYMBOLS[activeTab].find(s => s.symbol === idx.symbol)?.flag || ''}
+                            flag={idx.flag}
                         />
                     ))}
                 </div>
