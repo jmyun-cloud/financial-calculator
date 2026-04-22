@@ -30,7 +30,7 @@ export default function CoinnessAuthCard() {
     }
 
     return (
-        <div className="coinness-auth-card" style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '2px solid transparent', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', marginBottom: '20px', textAlign: 'center' }}>
+        <div className="coinness-auth-card" style={{ background: 'white', borderRadius: '12px', padding: '24px', border: '1px solid #E5E8EB', marginBottom: '20px', textAlign: 'center' }}>
             <div style={{ fontSize: '14px', color: '#4E5968', fontWeight: 600, lineHeight: 1.5, marginBottom: '16px' }}>
                 <span style={{ color: '#191F28', fontWeight: 800 }}>금융계산기</span>에 로그인 하고<br />다양한 서비스와 혜택을 누리세요!
             </div>

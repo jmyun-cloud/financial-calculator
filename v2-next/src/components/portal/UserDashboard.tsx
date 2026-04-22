@@ -463,7 +463,7 @@ export default function UserDashboard() {
         const selectedInfo = KOSPI_LIST.find(k => k.symbol === selectedCard) || KOSPI_LIST[0];
 
         return (
-            <div className="coinness-chart-main" style={{ background: 'white', marginBottom: '24px', overflow: 'hidden', padding: '16px 0', position: 'relative' }}>
+            <div className="coinness-chart-main" style={{ background: 'white', marginBottom: '24px', overflow: 'hidden', position: 'relative' }}>
                 {/* Header Line 1: Dropdown & Price */}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', position: 'relative', zIndex: 50 }}>
 

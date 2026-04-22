@@ -1772,22 +1772,20 @@ select.form-input {
 .portal-left-sidebar {
   min-width: 0;
   max-width: 100%;
-  padding-right: 16px;
+  padding-right: 24px;
 }
 
 .portal-content {
   min-width: 0;
   max-width: 100%;
-  padding: 0 16px;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  padding: 0;
   min-height: 800px;
 }
 
 .portal-right-sidebar {
   min-width: 0;
   max-width: 100%;
-  padding-left: 16px;
+  padding-left: 24px;
 }
 
 /* 3. Magazine Feed (Toss Feed Style) */
