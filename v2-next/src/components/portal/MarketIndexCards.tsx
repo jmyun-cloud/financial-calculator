@@ -264,6 +264,19 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
         }
     }, [data.price]);
 
+    const priceStr = data.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '';
+    const prevPriceStr = prevPriceRef.current?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '';
+
+    let diffIndex = -1;
+    if (flashClass && priceStr !== prevPriceStr) {
+        for (let i = 0; i < priceStr.length; i++) {
+            if (priceStr[i] !== prevPriceStr[i]) {
+                diffIndex = i;
+                break;
+            }
+        }
+    }
+
     useEffect(() => {
         if (!chartRef.current || data.history.length === 0) return;
 
@@ -332,16 +345,22 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
                         <span style={{ fontSize: '11px', fontWeight: 500, color: '#B0B8C1' }}>{isLive ? '실시간' : '장마감'}</span>
                     </div>
                 </div>
-                <div className={flashClass} style={{
+                <div style={{
                     fontSize: '19px',
                     fontWeight: 900,
                     color: '#191F28',
                     letterSpacing: '-0.5px',
                     marginBottom: '4px',
-                    lineHeight: 1,
-                    transition: 'color 0.3s ease'
+                    lineHeight: 1
                 }}>
-                    {data.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {diffIndex === -1 ? (
+                        priceStr
+                    ) : (
+                        <>
+                            <span>{priceStr.slice(0, diffIndex)}</span>
+                            <span className={flashClass} style={{ transition: 'color 0.3s ease' }}>{priceStr.slice(diffIndex)}</span>
+                        </>
+                    )}
                 </div>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '2px' }}>
                     <span style={{ fontSize: '10px' }}>{isPositive ? '▲' : '▼'}</span>
@@ -354,11 +373,9 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
             <style jsx>{`
                 .flash-red {
                     color: #F04452 !important;
-                    text-shadow: 0 0 8px rgba(240, 68, 82, 0.3);
                 }
                 .flash-blue {
                     color: #3182F6 !important;
-                    text-shadow: 0 0 8px rgba(49, 130, 246, 0.3);
                 }
             `}</style>
         </div>
