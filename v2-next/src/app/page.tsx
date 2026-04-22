@@ -6,12 +6,18 @@ import MarketWidget from "@/components/portal/MarketWidget";
 import GoalTracker from "@/components/GoalTracker";
 import SentimentGauge from "@/components/portal/SentimentGauge";
 import CoinnessAuthCard from "@/components/portal/CoinnessAuthCard";
+import MarketIndexCards from "@/components/portal/MarketIndexCards";
+import GlobalRanking from "@/components/portal/GlobalRanking";
 
 export default function Home() {
   return (
     <div className="portal-page-wrapper" style={{ background: '#FFFFFF', minHeight: '100vh', paddingBottom: '60px' }}>
-      {/* ===== PORTAL DASHBOARD (3-COLUMN COINNESS STYLE) ===== */}
-      <div className="main-content portal-main" style={{ paddingTop: "20px" }}>
+
+      {/* Naver Style: Top Indices Bar */}
+      <MarketIndexCards />
+
+      {/* ===== PORTAL DASHBOARD (RESTRUCTURED FOR NAVER STYLE) ===== */}
+      <div className="main-content portal-main" style={{ paddingTop: "32px" }}>
         <div className="container portal-grid">
 
           {/* LEFT COLUMN: Breaking News Feed */}
@@ -20,9 +26,12 @@ export default function Home() {
             <NewsFeed compactMode={true} />
           </aside>
 
-          {/* CENTER COLUMN: Main Dashboard (Chart, Snapshot) */}
+          {/* CENTER COLUMN: Main Dashboard */}
           <div className="portal-content">
             <UserDashboard />
+
+            {/* Real-time Global Rankings (Naver Style) */}
+            <GlobalRanking />
           </div>
 
           {/* RIGHT COLUMN: Sidebar Widgets */}

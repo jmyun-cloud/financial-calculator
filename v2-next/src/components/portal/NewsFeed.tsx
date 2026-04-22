@@ -129,61 +129,63 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
             flexDirection: "column",
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
         }}>
-            {/* Newspaper Masthead */}
-            {!compactMode && (
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                    marginBottom: "28px",
-                    borderBottom: "2px solid #191F28",
-                    paddingBottom: "16px"
-                }}>
-                    <div style={{ display: "flex", alignItems: "flex-end", gap: "12px", width: "100%" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            <h1 style={{
-                                fontSize: "28px",
-                                fontWeight: 900,
-                                color: "#191F28",
-                                margin: 0,
-                                letterSpacing: "-0.03em",
-                                textTransform: "uppercase",
-                                fontFamily: "'Inter', sans-serif",
-                                whiteSpace: "nowrap"
-                            }}>
-                                Financial Times
-                            </h1>
-                        </div>
-                        <div style={{ fontSize: "13px", color: "#8B95A1", fontWeight: 600, paddingBottom: "4px" }}>
-                            {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
-                        </div>
-                    </div>
-
-                    <div style={{ display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none", width: "100%", paddingBottom: "4px" }} className="hide-scrollbar">
-                        {CATEGORIES.map(cat => (
-                            <button
-                                key={cat}
-                                onClick={() => setActiveTab(cat)}
-                                style={{
-                                    border: activeTab === cat ? "none" : "1px solid #E5E8EB",
-                                    padding: "8px 18px",
-                                    borderRadius: "100px",
-                                    fontSize: "13px",
-                                    fontWeight: 700,
-                                    cursor: "pointer",
-                                    background: activeTab === cat ? "#191F28" : "white",
-                                    color: activeTab === cat ? "white" : "#4E5968",
-                                    transition: "all 0.2s",
-                                    whiteSpace: "nowrap",
-                                    flexShrink: 0
-                                }}
-                            >
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
+            {/* Naver Style: AI Briefing Section */}
+            <div style={{
+                background: '#F8F9FA',
+                borderRadius: '12px',
+                padding: '24px',
+                marginBottom: '32px',
+                border: '1px solid #F2F4F7',
+                position: 'relative'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '24px' }}>🔮</span>
+                    <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#191F28', margin: 0 }}>
+                        <span style={{ color: '#0055FB' }}>AI 브리핑</span> {news[0] ? `: ${news[0].title.slice(0, 30)}...` : '로딩 중...'}
+                    </h2>
                 </div>
-            )}
+                <p style={{ fontSize: '15px', color: '#4E5968', lineHeight: 1.6, margin: 0 }}>
+                    {news[0]?.description ? news[0].description.slice(0, 150) + "..." : "오늘의 주요 시장 상황을 AI가 요약해 드립니다."}
+                </p>
+                <div style={{ marginTop: '12px', fontSize: '12px', color: '#B0B8C1' }}>
+                    ※ 본 AI 요약은 참고용 자료로 모든 투자에 대한 최종 책임은 투자자 본인에게 있습니다.
+                </div>
+            </div>
+
+            {/* Newspaper Masthead */}
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                marginBottom: "28px",
+                borderBottom: "2px solid #191F28",
+                paddingBottom: "16px"
+            }}>
+                <div style={{ display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none", width: "100%", paddingBottom: "4px" }} className="hide-scrollbar">
+                    {CATEGORIES.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => setActiveTab(cat)}
+                            style={{
+                                border: 'none',
+                                padding: "8px 12px",
+                                borderRadius: "4px",
+                                fontSize: "15px",
+                                fontWeight: activeTab === cat ? 800 : 500,
+                                cursor: "pointer",
+                                background: 'transparent',
+                                color: activeTab === cat ? "#191F28" : "#4E5968",
+                                transition: "all 0.2s",
+                                borderBottom: activeTab === cat ? '3px solid #191F28' : 'none',
+                                whiteSpace: "nowrap",
+                                flexShrink: 0
+                            }}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            </div>
 
             {compactMode && (
                 <div style={{ paddingBottom: "16px", marginBottom: "8px", display: "flex", alignItems: "center", gap: "12px" }}>
@@ -206,157 +208,50 @@ export default function NewsFeed({ compactMode = false }: { compactMode?: boolea
 
                     {/* Main Content Area */}
                     <div className="main-news-col" style={{ width: "100%" }}>
-                        {compactMode ? (
-                            <div style={{ display: "flex", flexDirection: "column", position: 'relative' }}>
-                                {/* Vertical Timeline Line */}
-                                <div style={{
-                                    position: 'absolute',
-                                    left: '46px', // Center of the time column approximately
-                                    top: '8px',
-                                    bottom: '8px',
-                                    width: '1px',
-                                    background: '#F2F4F7',
-                                    zIndex: 0
-                                }} />
-
-                                {filtered.slice(0, 8).map((item, idx) => {
-                                    const timeLabel = item.timeAgo;
-                                    return (
-                                        <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="coinness-news-item" style={{
-                                            display: "flex",
-                                            gap: '20px',
-                                            textDecoration: "none",
-                                            alignItems: "flex-start",
-                                            padding: '16px 0',
-                                            position: 'relative',
-                                            zIndex: 1
-                                        }}>
-                                            {/* Timeline Dot */}
-                                            <div style={{
-                                                position: 'absolute',
-                                                left: '43.5px', // Center on the 1px line (left: 46 - dotWidth/2)
-                                                top: '23px',
-                                                width: '6px',
-                                                height: '6px',
-                                                borderRadius: '50%',
-                                                background: '#D1D6DB',
-                                                border: '2px solid white',
-                                                zIndex: 2
-                                            }} />
-
-                                            {/* Time Column */}
-                                            <div style={{
-                                                width: '44px',
-                                                fontSize: "12px",
-                                                fontWeight: 600,
-                                                color: "#8B95A1",
-                                                textAlign: 'right',
-                                                paddingTop: '3px'
-                                            }}>
-                                                {timeLabel}
-                                            </div>
-
-                                            {/* Content Column */}
-                                            <div style={{ flex: 1, minWidth: 0 }}>
-                                                <h3 style={{
-                                                    fontSize: "15px",
-                                                    fontWeight: 700,
-                                                    color: "#191F28",
-                                                    marginBottom: "6px",
-                                                    lineHeight: 1.4,
-                                                    wordBreak: "keep-all",
-                                                    letterSpacing: '-0.3px'
-                                                }}>{item.title}</h3>
-                                                <p style={{
-                                                    fontSize: "13px",
-                                                    color: "#4E5968",
-                                                    margin: 0,
-                                                    lineHeight: 1.5,
-                                                    display: "-webkit-box",
-                                                    WebkitLineClamp: 2,
-                                                    WebkitBoxOrient: "vertical",
-                                                    overflow: "hidden",
-                                                    letterSpacing: '-0.2px'
-                                                }}>{item.description}</p>
-                                            </div>
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        ) : isListView ? (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-                                {filtered.map(item => (
-                                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: "24px", textDecoration: "none" }}>
-                                        <div style={{ width: "240px", height: "160px", flexShrink: 0, borderRadius: "16px", overflow: "hidden" }}>
-                                            <Thumbnail cat={item.category} imageUrl={item.imageUrl} large />
+                        <div style={{ display: "flex", flexDirection: "column", gap: '24px' }}>
+                            {filtered.slice(0, 15).map((item) => (
+                                <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{
+                                    display: "flex",
+                                    gap: '24px',
+                                    textDecoration: "none",
+                                    alignItems: "center",
+                                    paddingBottom: '24px',
+                                    borderBottom: '1px solid #F2F4F7'
+                                }}>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+                                            <span style={{ fontSize: '12px', fontWeight: 700, color: item.categoryColor }}>{item.category}</span>
+                                            <span style={{ fontSize: '12px', color: '#B0B8C1' }}>{item.source} · {item.timeAgo}</span>
                                         </div>
-                                        <div style={{ flex: 1 }}>
-                                            <div style={{ color: getTheme(item.category).gradient.split(',')[1].split(' ')[1], fontSize: "12px", fontWeight: 800, marginBottom: "8px" }}>
-                                                {item.category}
-                                            </div>
-                                            <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#191F28", marginBottom: "12px", lineHeight: 1.4 }}>{item.title}</h3>
-                                            <p style={{ fontSize: "14px", color: "#4E5968", lineHeight: 1.6, marginBottom: "12px", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                                                {item.description}
-                                            </p>
-                                            <div style={{ fontSize: "12px", color: "#8B95A1" }}>{item.source} · {item.timeAgo}</div>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
-                        ) : (
-                            <>
-                                {/* BIG HERO STORY */}
-                                {hero && (
-                                    <a href={hero.link} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", marginBottom: "40px" }}>
-                                        <div style={{ position: "relative", height: "440px", borderRadius: "24px", overflow: "hidden", marginBottom: "24px" }}>
-                                            <Thumbnail cat={hero.category} imageUrl={hero.imageUrl} large />
-                                            <div style={{
-                                                position: "absolute",
-                                                bottom: 0, left: 0, right: 0,
-                                                padding: "40px",
-                                                background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)",
-                                                color: "white"
-                                            }}>
-                                                <span style={{
-                                                    background: "#F04452",
-                                                    padding: "4px 12px",
-                                                    borderRadius: "6px",
-                                                    fontSize: "12px",
-                                                    fontWeight: 900,
-                                                    marginBottom: "16px",
-                                                    display: "inline-block"
-                                                }}>
-                                                    TOP STORY
-                                                </span>
-                                                <h2 style={{ fontSize: "32px", fontWeight: 900, lineHeight: 1.2, letterSpacing: "-0.02em", margin: "0 0 16px" }}>
-                                                    {hero.title}
-                                                </h2>
-                                                <p style={{ fontSize: "16px", opacity: 0.9, lineHeight: 1.6, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                                                    {hero.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                )}
-
-                                {/* SECONDARY GRID */}
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" }}>
-                                    {filtered.slice(1, 5).map(item => (
-                                        <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                                            <div style={{ height: "180px", borderRadius: "16px", overflow: "hidden", marginBottom: "12px" }}>
-                                                <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
-                                            </div>
-                                            <h4 style={{ fontSize: "16px", fontWeight: 800, color: "#191F28", lineHeight: 1.4, margin: "0 0 8px" }}>{item.title}</h4>
-                                            <div style={{ fontSize: "12px", color: "#8B95A1" }}>{item.source} · {item.timeAgo}</div>
-                                        </a>
-                                    ))}
-                                </div>
-                            </>
-                        )}
+                                        <h3 style={{
+                                            fontSize: "17px",
+                                            fontWeight: 700,
+                                            color: "#191F28",
+                                            marginBottom: "8px",
+                                            lineHeight: 1.4,
+                                            letterSpacing: '-0.3px'
+                                        }}>{item.title}</h3>
+                                        <p style={{
+                                            fontSize: "14px",
+                                            color: "#4E5968",
+                                            margin: 0,
+                                            lineHeight: 1.5,
+                                            display: "-webkit-box",
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: "vertical",
+                                            overflow: "hidden",
+                                        }}>{item.description}</p>
+                                    </div>
+                                    <div style={{ width: '120px', height: '80px', borderRadius: '8px', overflow: 'hidden' }}>
+                                        <Thumbnail cat={item.category} imageUrl={item.imageUrl} />
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Sidebar / Trending Area */}
-                    {!isListView && !compactMode && (
+                    {!isListView && (
                         <div className="trending-sidebar" style={{ borderLeft: "1px solid #F2F4F7", paddingLeft: "32px" }}>
                             <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#191F28", marginBottom: "20px", display: "flex", alignItems: "center", gap: "8px" }}>
                                 <span style={{ color: "#F04452" }}>⚡</span> 가장 많이 본 뉴스

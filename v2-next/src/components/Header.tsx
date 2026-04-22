@@ -19,39 +19,36 @@ export default function Header() {
     };
 
     return (
-        <header className="site-header">
-            <div className="container header-inner">
-                <Link href="/" className="logo" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                    <span style={{ color: 'var(--primary)', fontWeight: 800, fontSize: '1.5rem' }}>rich</span>
-                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '1.5rem' }}>calc</span>
+        <header className="site-header" style={{ borderBottom: '1px solid #E5E8EB', background: 'white' }}>
+            {/* Top Bar: Logo + Search + Icons */}
+            <div className="container" style={{ height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Link href="/" className="logo" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '32px', height: '32px', background: '#03C75A', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '18px' }}>N</div>
+                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px' }}>페이 증권</span>
                 </Link>
 
-                <nav className="header-nav" style={{ flex: 1, justifyContent: 'center', gap: '32px', marginLeft: '40px' }}>
-                    <Link href="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>홈</Link>
-                    <Link href="/#market" className="nav-link">시장</Link>
-                    <Link href="/calculators" className={`nav-link ${isActive('/calculator') ? 'active' : ''}`}>계산기</Link>
-
-                    <div className="nav-item-has-mega">
-                        <Link href="/news" className={`nav-link ${isActive('/news') ? 'active' : ''}`}>뉴스</Link>
-                        <NewsMegaMenu />
-                    </div>
-
-                    <Link href="/community" className={`nav-link ${isActive('/community') ? 'active' : ''}`}>커뮤니티</Link>
-                    <Link href="/guide" className={`nav-link ${isActive('/guide') ? 'active' : ''}`}>가이드</Link>
-                </nav>
-
-                <div className="header-right" style={{ gap: '16px', position: 'relative' }}>
+                {/* Naver Style Search Bar */}
+                <div style={{ flex: 1, maxWidth: '440px', margin: '0 40px' }}>
                     <HeaderSearch />
+                </div>
+
+                <div className="header-right" style={{ gap: '20px' }}>
+                    <div style={{ display: 'flex', gap: '16px', color: '#4E5968', fontSize: '13px', fontWeight: 600 }}>
+                        <span>금융</span>
+                        <span>포인트</span>
+                        <span>결제</span>
+                        <span style={{ color: '#03C75A' }}>증권</span>
+                        <span>부동산</span>
+                    </div>
 
                     {isLoggedIn ? (
                         <div className="user-profile-trigger">
                             <button
                                 className="profile-btn"
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                style={{ border: 'none', background: 'transparent' }}
                             >
-                                <img src={user?.avatar} alt="" className="user-avatar" />
-                                <span className="user-name">{user?.name}</span>
-                                <ChevronDown size={14} className={`arrow ${isProfileOpen ? 'open' : ''}`} />
+                                <img src={user?.avatar} alt="" className="user-avatar" style={{ width: '28px', height: '28px', borderRadius: '50%' }} />
                             </button>
 
                             {isProfileOpen && (
@@ -60,14 +57,7 @@ export default function Header() {
                                         <p className="email">{user?.email}</p>
                                     </div>
                                     <div className="dropdown-divider"></div>
-                                    <button className="dropdown-item">
-                                        <UserIcon size={16} /> 프로필 설정
-                                    </button>
-                                    <button className="dropdown-item">
-                                        <Settings size={16} /> 환경설정
-                                    </button>
-                                    <div className="dropdown-divider"></div>
-                                    <button className="dropdown-item logout" onClick={logout}>
+                                    <button className="dropdown-item" onClick={logout}>
                                         <LogOut size={16} /> 로그아웃
                                     </button>
                                 </div>
@@ -76,13 +66,39 @@ export default function Header() {
                     ) : (
                         <button className="login-btn" onClick={() => setShowLoginModal(true)}>로그인</button>
                     )}
-
-                    <button className="menu-btn" style={{ background: '#333', color: 'white', border: 'none', borderRadius: '8px', width: '32px', height: '32px', cursor: 'pointer', marginLeft: '12px' }}>
-                        <span style={{ fontSize: '1.2rem', lineHeight: '32px' }}>⋮</span>
-                    </button>
                 </div>
             </div>
 
+            {/* Sub Navigation Bar: Naver Style Tabs */}
+            <div style={{ borderTop: '1px solid #F2F4F7' }}>
+                <div className="container" style={{ display: 'flex', height: '44px', alignItems: 'center', gap: '24px' }}>
+                    {[
+                        { label: '홈', path: '/' },
+                        { label: '마켓', path: '/#market' },
+                        { label: '토론', path: '/community' },
+                        { label: '뉴스·리서치', path: '/news' },
+                        { label: 'MY', path: '/my' }
+                    ].map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.path}
+                            style={{
+                                textDecoration: 'none',
+                                color: isActive(item.path) ? '#191F28' : '#4E5968',
+                                fontSize: '15px',
+                                fontWeight: 700,
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                borderBottom: isActive(item.path) ? '3px solid #191F28' : 'none',
+                                boxSizing: 'border-box'
+                            }}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
+            </div>
             <LoginModal />
 
             <style jsx>{`
