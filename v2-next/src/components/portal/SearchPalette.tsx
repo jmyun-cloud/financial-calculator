@@ -205,15 +205,17 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
                 .result-item {
                     display: flex;
                     align-items: center;
-                    padding: 12px;
+                    padding: 10px 16px;
                     border-radius: 12px;
                     text-decoration: none;
-                    gap: 14px;
-                    color: #8B95A1;
-                    transition: all 0.2s;
+                    gap: 12px;
+                    color: inherit;
+                    transition: background 0.2s;
+                    min-height: 56px;
                 }
-                .result-item:hover { background: #F8FAFF; }
+                .result-item:hover { background: #F2F4F7; }
                 .res-icon { 
+                    flex-shrink: 0;
                     width: 32px; 
                     height: 32px; 
                     background: #F2F4F7; 
@@ -236,10 +238,24 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
                     50% { opacity: 1; }
                     100% { opacity: 0.6; }
                 }
-                .res-info { flex: 1; display: flex; flex-direction: column; }
-                .res-name { color: #191F28; font-weight: 700; font-size: 15px; }
+                .res-info { 
+                    flex: 1; 
+                    display: flex; 
+                    flex-direction: column; 
+                    gap: 2px;
+                    overflow: hidden;
+                }
+                .res-name { color: #191F28; font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 .res-symbol { font-size: 12px; font-weight: 600; color: #8B95A1; }
-                .res-type { font-size: 11px; font-weight: 800; background: #E8F3FF; color: #0055FB; padding: 4px 8px; border-radius: 6px; }
+                .res-type { 
+                    flex-shrink: 0;
+                    font-size: 11px; 
+                    font-weight: 800; 
+                    background: #E8F3FF; 
+                    color: #0055FB; 
+                    padding: 4px 8px; 
+                    border-radius: 6px; 
+                }
                 .search-footer {
                     padding: 12px 20px;
                     background: #F9FAFB;
