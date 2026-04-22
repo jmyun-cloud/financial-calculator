@@ -8,6 +8,7 @@ interface RankingItem {
     price: number;
     change: number;
     changePercent: number;
+    volume: number;
     metric?: string; // e.g. Volume or Value
 }
 
@@ -31,23 +32,36 @@ export default function GlobalRanking() {
         const fetchRankings = async () => {
             setLoading(true);
             try {
-                // In a real scenario, we'd pass activeCountry to the API
-                // For now, we use existing screeners and simulate country filtering
-                const [volRes, trendRes] = await Promise.all([
-                    fetch('/api/market-screener?scrId=most_actives&count=10'),
-                    fetch('/api/market-screener?scrId=trending_tickers&count=10')
-                ]);
+                // Fetch from a broader screener to get global tickers
+                const res = await fetch('/api/market-screener?scrId=trending_tickers&count=100');
+                const result = await res.json();
+                const allItems = result.data || [];
 
-                const volData = await volRes.json();
-                const trendData = await trendRes.json();
+                // Symbol suffixes for filtering
+                const suffixMap: Record<string, string> = {
+                    'KR': '.KS',
+                    'JP': '.T',
+                    'HK': '.HK',
+                    'CN': '.SS',
+                    'VN': '.VN'
+                };
 
-                // Mocking Value Top by multiplying Vol * Price in the frontend for now
-                const volItems = volData.data || [];
-                const valueItems = [...volItems].sort((a, b) => (b.price * b.volume) - (a.price * a.volume));
+                const filterSuffix = suffixMap[activeCountry];
 
-                setVolumeTop(volItems.slice(0, 10));
-                setValueTop(valueItems.slice(0, 10));
-                setSearchTop(trendData.data || []);
+                let filtered = allItems;
+                if (activeCountry === 'US') {
+                    // US symbols usually have no suffix or don't match the others
+                    filtered = allItems.filter((i: any) => !i.symbol.includes('.'));
+                } else if (filterSuffix) {
+                    filtered = allItems.filter((i: any) => i.symbol.endsWith(filterSuffix));
+                }
+
+                // If filtering yields too few results, fallback to first 10 items of the screener
+                const finalItems = filtered.length >= 5 ? filtered : allItems;
+
+                setVolumeTop(finalItems.sort((a: RankingItem, b: RankingItem) => b.volume - a.volume).slice(0, 10));
+                setValueTop(finalItems.sort((a: RankingItem, b: RankingItem) => (b.price * b.volume) - (a.price * a.volume)).slice(0, 10));
+                setSearchTop(finalItems.slice(0, 10));
             } catch (err) {
                 console.error("Failed to fetch rankings:", err);
             } finally {
