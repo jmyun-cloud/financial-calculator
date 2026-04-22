@@ -7,6 +7,7 @@ import {
     CandlestickSeries,
     AreaSeries,
     HistogramSeries,
+    CrosshairMode,
 } from 'lightweight-charts';
 
 interface ProfessionalChartProps {
@@ -53,6 +54,27 @@ export default function ProfessionalChart({
                 textColor: '#4E5968',
                 fontSize: 12,
             },
+            crosshair: {
+                mode: CrosshairMode.Normal,
+                vertLine: {
+                    width: 1,
+                    color: '#B0B8C1',
+                    style: 3,
+                    labelBackgroundColor: '#191F28',
+                },
+                horzLine: {
+                    width: 1,
+                    color: '#B0B8C1',
+                    style: 3,
+                    labelBackgroundColor: '#191F28',
+                }
+            },
+            localization: {
+                timeFormatter: (time: any) => {
+                    const d = new Date((time as number) * 1000);
+                    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                }
+            },
             grid: {
                 vertLines: { color: '#F2F4F7' },
                 horzLines: { color: '#F2F4F7' },
@@ -91,12 +113,12 @@ export default function ProfessionalChart({
 
         if (chartType === 'Candlestick') {
             const series = chart.addSeries(CandlestickSeries, {
-                upColor: '#F04251',
-                downColor: '#0064FF',
-                borderUpColor: '#F04251',
-                borderDownColor: '#0064FF',
-                wickUpColor: '#F04251',
-                wickDownColor: '#0064FF',
+                upColor: '#FF0000',
+                downColor: '#0055FF',
+                borderUpColor: '#FF0000',
+                borderDownColor: '#0055FF',
+                wickUpColor: '#FF0000',
+                wickDownColor: '#0055FF',
             });
 
             const validData = data
@@ -236,6 +258,56 @@ export default function ProfessionalChart({
                     background: '#ffffff',
                 }}
             />
+
+            {/* Zoom Controls */}
+            <div style={{
+                position: 'absolute',
+                bottom: '36px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                display: 'flex',
+                gap: '8px',
+                zIndex: 30
+            }}>
+                {[
+                    {
+                        label: '−', onClick: () => {
+                            const ts = chartRef.current?.timeScale();
+                            const r = ts?.getVisibleLogicalRange();
+                            if (r) ts.setVisibleLogicalRange({ from: r.from - (r.to - r.from) * 0.2, to: r.to + (r.to - r.from) * 0.2 });
+                        }
+                    },
+                    {
+                        label: '+', onClick: () => {
+                            const ts = chartRef.current?.timeScale();
+                            const r = ts?.getVisibleLogicalRange();
+                            if (r) ts.setVisibleLogicalRange({ from: r.from + (r.to - r.from) * 0.2, to: r.to - (r.to - r.from) * 0.2 });
+                        }
+                    },
+                    {
+                        label: '↻', onClick: () => {
+                            chartRef.current?.timeScale().fitContent();
+                        }
+                    }
+                ].map((btn, i) => (
+                    <button
+                        key={i}
+                        onClick={btn.onClick}
+                        style={{
+                            width: '32px', height: '32px',
+                            background: 'white',
+                            border: '1px solid #E5E8EB',
+                            borderRadius: '6px',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            cursor: 'pointer',
+                            fontSize: '16px', fontWeight: 'bold', color: '#191F28'
+                        }}
+                    >
+                        {btn.label}
+                    </button>
+                ))}
+            </div>
 
             {/* Cover TradingView watermark - CSS + overlay combined */}
             <style>{`
