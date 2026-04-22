@@ -26,9 +26,8 @@ export async function GET(request: Request) {
         else if (range === '5m') { yfInterval = '5m'; yfRange = '5d'; }
         else if (range === '15m') { yfInterval = '15m'; yfRange = '5d'; }
         else if (range === '1h') { yfInterval = '60m'; yfRange = '1mo'; }
-        else if (range === '4h') { yfInterval = '60m'; yfRange = '3mo'; } // Fallback to 1h since YF lacks 4h
-        else if (range === '1d') { yfInterval = '1d'; yfRange = '1y'; }
-        // Keep fallback for legacy '3m', '6m' which meant months previously, mapping them to 1d
+        else if (range === '4h') { yfInterval = '60m'; yfRange = '3mo'; }
+        else if (range === '1d') { yfInterval = '5m'; yfRange = '1d'; } // Use intraday for 1d request
         else if (range === '3m' || range === '6m' || range === '1y') { yfInterval = '1d'; yfRange = '1y'; }
 
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=${yfInterval}&range=${yfRange}&_=${Date.now()}`;
