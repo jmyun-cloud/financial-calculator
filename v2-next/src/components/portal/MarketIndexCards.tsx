@@ -33,8 +33,8 @@ const CATEGORY_SYMBOLS: Record<string, { symbol: string; name: string; flag: str
         { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
         { symbol: '^KS100', name: '코스피 100', flag: '🇰🇷' },
         { symbol: '^KS200', name: '코스피 200', flag: '🇰🇷' },
-        { symbol: 'KMY00=F', name: '코스피 200 선물', flag: '🇰🇷' },
-        { symbol: '^KS11', name: '코리아 밸류업', flag: '🇰🇷' }, // Using KOSPI as fallback if ValueUp symbol is elusive
+        { symbol: '^KS200', name: '코스피 200 선물', flag: '🇰🇷' }, // Fallback to Index
+        { symbol: '^KS11', name: '코리아 밸류업', flag: '🇰🇷' }, // Using KOSPI as fallback
     ],
     "미국": [
         { symbol: '^DJI', name: '다우존스', flag: '🇺🇸' },
@@ -98,9 +98,9 @@ export default function MarketIndexCards() {
                         symbol: s.symbol,
                         name: s.name,
                         flag: s.flag,
-                        price: data.price,
-                        change: data.change,
-                        changePercent: data.changePercent,
+                        price: data.price || 0,
+                        change: data.change || 0,
+                        changePercent: data.changePercent || 0,
                         history
                     };
                 }));
