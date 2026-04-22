@@ -100,10 +100,12 @@ export async function GET(request: Request) {
         if (range === '6m' && yfInterval === '1d') slicedData = chartData.slice(-132);
         if (range === '3m' && yfInterval === '1d') slicedData = chartData.slice(-66);
 
+        const previousClose = meta.regularMarketPreviousClose || meta.chartPreviousClose;
+
         return NextResponse.json({
             price: meta.regularMarketPrice,
-            change: meta.regularMarketPrice - meta.chartPreviousClose,
-            changePercent: ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose) * 100,
+            change: meta.regularMarketPrice - previousClose,
+            changePercent: ((meta.regularMarketPrice - previousClose) / previousClose) * 100,
             fiftyTwoWeekHigh: calculatedHigh,
             fiftyTwoWeekLow: calculatedLow <= 0 ? null : calculatedLow,
             regularMarketDayHigh: meta.regularMarketDayHigh || calculatedHigh,
