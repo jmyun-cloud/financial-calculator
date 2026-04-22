@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
     createChart,
     ColorType,
@@ -31,7 +32,7 @@ const CATEGORY_SYMBOLS: Record<string, { symbol: string; name: string; flag: str
     "국내": [
         { symbol: '^KS11', name: '코스피', flag: '🇰🇷' },
         { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
-        { symbol: '^KS100', name: '코스피 100', flag: '🇰🇷' },
+        { symbol: '^KS11', name: '코스피 100', flag: '🇰🇷' }, // Using KOSPI as proxy
         { symbol: '^KS200', name: '코스피 200', flag: '🇰🇷' },
         { symbol: '^KS200', name: '코스피 200 선물', flag: '🇰🇷' }, // Fallback to Index
         { symbol: '^KS11', name: '코리아 밸류업', flag: '🇰🇷' }, // Using KOSPI as fallback
@@ -183,11 +184,16 @@ export default function MarketIndexCards() {
                         transition: 'opacity 0.2s'
                     }}>
                     {indices.map((idx) => (
-                        <IndexCard
+                        <Link
                             key={`${idx.symbol}-${idx.name}`}
-                            data={idx}
-                            flag={idx.flag}
-                        />
+                            href={`/market/${encodeURIComponent(idx.symbol)}`}
+                            style={{ textDecoration: 'none', display: 'block' }}
+                        >
+                            <IndexCard
+                                data={idx}
+                                flag={idx.flag}
+                            />
+                        </Link>
                     ))}
                 </div>
 
@@ -267,7 +273,32 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
     const isPositive = data.change >= 0;
     const color = isPositive ? '#F04452' : '#3182F6';
     const areaColor = isPositive ? 'rgba(240, 68, 82, 0.08)' : 'rgba(49, 130, 246, 0.08)';
-    const isLive = data.symbol.startsWith('^K') || data.symbol.includes('=X');
+
+    const getMarketStatus = () => {
+        const now = new Date();
+        const kstOffset = 9 * 60;
+        const kst = new Date(now.getTime() + (now.getTimezoneOffset() + kstOffset) * 60000);
+        const kstDay = kst.getDay();
+        const kstHour = kst.getHours() + kst.getMinutes() / 60;
+
+        const estOffset = -4 * 60; // Daylight Savings (EDT)
+        const est = new Date(now.getTime() + (now.getTimezoneOffset() + estOffset) * 60000);
+        const estDay = est.getDay();
+        const estHour = est.getHours() + est.getMinutes() / 60;
+
+        if (data.symbol.startsWith('^K') || data.symbol.includes('.KS')) {
+            const isOpen = kstDay >= 1 && kstDay <= 5 && kstHour >= 9 && kstHour <= 15.5;
+            return isOpen ? '실시간' : '장마감';
+        }
+        if (data.symbol.startsWith('^G') || data.symbol.startsWith('^D') || data.symbol.startsWith('^I') || data.symbol.startsWith('^N')) {
+            const isOpen = estDay >= 1 && estDay <= 5 && estHour >= 9.5 && estHour <= 16;
+            return isOpen ? '실시간' : '장마감';
+        }
+        return '실시간';
+    };
+
+    const statusText = getMarketStatus();
+    const isLive = statusText === '실시간';
 
     useEffect(() => {
         if (data.price && data.price !== prevPriceRef.current) {
@@ -360,7 +391,7 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
                     <span>{data.name}</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: '2px' }}>
                         <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: isLive ? '#00D166' : '#B0B8C1' }} />
-                        <span style={{ fontSize: '11px', fontWeight: 500, color: '#B0B8C1' }}>{isLive ? '실시간' : '장마감'}</span>
+                        <span style={{ fontSize: '11px', fontWeight: 500, color: '#B0B8C1' }}>{statusText}</span>
                     </div>
                 </div>
                 <div style={{

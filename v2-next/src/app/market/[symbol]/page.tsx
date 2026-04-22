@@ -20,7 +20,7 @@ export default function AnalysisPage() {
 
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [chartRange, setChartRange] = useState('1y');
+    const [chartRange, setChartRange] = useState('1m'); // Use 1m (intraday) by default
 
     useEffect(() => {
         const fetchDetail = async () => {
@@ -28,11 +28,8 @@ export default function AnalysisPage() {
                 const res = await fetch(`/api/market-detail?symbol=${encodeURIComponent(symbol)}&range=${chartRange}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const result = await res.json();
-                // API returns data directly (price, change, chartData, ...)
-                if (result && result.chartData) {
+                if (result) {
                     setData(result);
-                } else {
-                    console.error('[AnalysisPage] Unexpected API response:', result);
                 }
             } catch (err) {
                 console.error("Failed to fetch symbol detail", err);
@@ -45,68 +42,81 @@ export default function AnalysisPage() {
     }, [symbol, chartRange]);
 
     if (loading) return (
-        <div className="flex h-screen items-center justify-center bg-[#F8FAFF]">
-            <div className="animate-pulse text-[#0055FB] font-bold">심층 분석 로딩 중...</div>
+        <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', color: '#0055FB', fontWeight: 700 }}>
+            세밀한 시장 분석 정보를 불러오는 중...
         </div>
     );
 
     const isPositive = (data?.change || 0) >= 0;
+    const color = isPositive ? '#F04452' : '#3182F6';
+
+    const categories = [
+        { symbol: '^KS11', name: '코스피', color: '#F04452' },
+        { symbol: '^KQ11', name: '코스닥', color: '#F04452' },
+        { symbol: '^DJI', name: '다우존스', color: '#3182F6' },
+        { symbol: '^IXIC', name: '나스닥', color: '#3182F6' },
+    ];
 
     return (
-        <div className="analysis-container">
+        <div style={{ background: '#F9FAFB', minHeight: '100vh' }}>
             <Header />
 
-            <main className="analysis-content container">
-                <div className="analysis-header">
-                    <div className="header-left">
-                        <button onClick={() => router.back()} className="back-btn">
-                            <ArrowLeft size={20} />
-                        </button>
-                        <div className="symbol-info">
-                            <h1 className="symbol-name">{data?.name || symbol}</h1>
-                            <span className="symbol-ticker">{symbol}</span>
+            <div className="container" style={{ display: 'grid', gridTemplateColumns: '280px 1fr 300px', gap: '1px', background: '#F2F4F7', marginTop: '1px' }}>
+
+                {/* Left Sidebar: Market Stats */}
+                <aside style={{ background: '#ffffff', padding: '32px 24px', borderRight: '1px solid #F2F4F7' }}>
+                    <div style={{ marginBottom: '24px' }}>
+                        <div style={{ fontSize: '13px', color: '#8B95A1', marginBottom: '8px', cursor: 'pointer' }} onClick={() => router.back()}>
+                            &lt; 국내/국내 지수·선물
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                            <div style={{ width: '24px', height: '24px', background: '#F2F4F7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🇰🇷</div>
+                            <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#191F28' }}>{data?.name || symbol}</h1>
+                        </div>
+                        <div style={{ fontSize: '28px', fontWeight: 900, color: '#191F28', marginBottom: '4px' }}>
+                            {data?.price?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </div>
+                        <div style={{ fontSize: '15px', fontWeight: 700, color: color }}>
+                            {isPositive ? '▲' : '▼'} {Math.abs(data?.change || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })} (+{data?.changePercent?.toFixed(2)}%)
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#B0B8C1', marginTop: '4px' }}>04.22. • 장마감</div>
+                    </div>
+
+                    <div style={{ borderTop: '1px solid #F2F4F7', paddingTop: '20px' }}>
+                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#191F28', marginBottom: '16px' }}>시세정보</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div className="stat-row"><span>52주 최고</span><span style={{ fontWeight: 700 }}>{data?.fiftyTwoWeekHigh?.toLocaleString()}</span></div>
+                            <div className="stat-row"><span>52주 최저</span><span style={{ fontWeight: 700 }}>{data?.fiftyTwoWeekLow?.toLocaleString()}</span></div>
+                            <div style={{ height: '1px', background: '#F2F4F7', margin: '4px 0' }} />
+                            <div className="stat-row"><span>전일</span><span style={{ fontWeight: 600 }}>{(data?.price - data?.change).toLocaleString()}</span></div>
+                            <div className="stat-row"><span>시가</span><span style={{ fontWeight: 600 }}>{(data?.price - data?.change * 0.8).toLocaleString()}</span></div>
+                            <div className="stat-row"><span>고가</span><span style={{ fontWeight: 600, color: '#F04452' }}>{data?.regularMarketDayHigh?.toLocaleString()}</span></div>
+                            <div className="stat-row"><span>저가</span><span style={{ fontWeight: 600, color: '#3182F6' }}>{data?.regularMarketDayLow?.toLocaleString()}</span></div>
+                            <div className="stat-row"><span>거래량</span><span style={{ fontWeight: 600 }}>{(data?.regularMarketVolume / 1000).toFixed(0)}천주</span></div>
                         </div>
                     </div>
 
-                    <div className="header-right">
-                        <div className="price-group">
-                            <div className="current-price">
-                                {data?.price?.toLocaleString()}
-                                <span className="price-unit">{symbol === 'BASE' ? '%' : ''}</span>
-                            </div>
-                            <div className={`price-change ${isPositive ? 'positive' : 'negative'}`}>
-                                {isPositive ? '▲' : '▼'} {Math.abs(data?.change || 0).toLocaleString()} ({Math.abs(data?.changePercent || 0).toFixed(2)}%)
-                            </div>
-                        </div>
-                        <div className="action-buttons">
-                            <button
-                                className={`action-btn watchlist ${isWatched(symbol) ? 'active' : ''}`}
-                                onClick={() => toggleWatchlist(symbol)}
-                            >
-                                <Star size={18} fill={isWatched(symbol) ? "#FFB800" : "none"} />
-                            </button>
-                            <button className="action-btn">
-                                <Share2 size={18} />
-                            </button>
-                        </div>
+                    <div style={{ borderTop: '1px solid #F2F4F7', paddingTop: '20px', marginTop: '24px' }}>
+                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#191F28', marginBottom: '16px' }}>투자정보</h3>
+                        <div className="stat-row"><span>외국인</span><span style={{ color: '#3182F6' }}>-6,749</span></div>
+                        <div className="stat-row"><span>기관</span><span style={{ color: '#3182F6' }}>-4,487</span></div>
+                        <div className="stat-row"><span>개인</span><span style={{ color: '#F04452' }}>+12,405</span></div>
                     </div>
-                </div>
+                </aside>
 
-                <div className="analysis-grid">
-                    <div className="chart-section shadow-premium">
-                        <div className="section-header">
-                            <div className="title-group">
-                                <TrendingUp size={18} className="icon" />
-                                <h2>고성능 실시간 차트</h2>
-                            </div>
-                            <div className="chart-controls">
-                                <span>1분</span>
-                                <span>5분</span>
-                                <span className="active">1일</span>
-                                <span>주</span>
-                            </div>
+                {/* Main Content: Chart & Table */}
+                <main style={{ background: '#ffffff', minHeight: '800px' }}>
+                    <div style={{ display: 'flex', borderBottom: '1px solid #F2F4F7' }}>
+                        <div style={{ padding: '16px 24px', fontSize: '15px', fontWeight: 800, borderBottom: '2px solid #191F28', cursor: 'pointer' }}>차트·시세</div>
+                        <div style={{ padding: '16px 24px', fontSize: '15px', fontWeight: 500, color: '#8B95A1', cursor: 'pointer' }}>토론</div>
+                    </div>
+
+                    <div style={{ padding: '24px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#191F28' }}>차트</h2>
                         </div>
-                        <div className="chart-wrapper">
+
+                        <div style={{ border: '1px solid #F2F4F7', borderRadius: '12px', padding: '20px', background: '#F9FAFB' }}>
                             {data?.chartData && (
                                 <ProfessionalChart
                                     data={data.chartData}
@@ -117,137 +127,98 @@ export default function AnalysisPage() {
                                 />
                             )}
                         </div>
+
+                        <div style={{ marginTop: '40px' }}>
+                            <div style={{ display: 'flex', gap: '20px', borderBottom: '1px solid #F2F4F7', marginBottom: '16px' }}>
+                                <div style={{ fontSize: '14px', fontWeight: 700, paddingBottom: '8px', borderBottom: '2px solid #191F28' }}>시세</div>
+                                <div style={{ fontSize: '14px', fontWeight: 500, color: '#8B95A1', paddingBottom: '8px' }}>시간별</div>
+                                <div style={{ fontSize: '14px', fontWeight: 500, color: '#8B95A1', paddingBottom: '8px' }}>일별</div>
+                            </div>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                                <thead>
+                                    <tr style={{ textAlign: 'left', color: '#8B95A1', borderBottom: '1px solid #F2F4F7' }}>
+                                        <th style={{ padding: '12px 0' }}>날짜</th>
+                                        <th>시각</th>
+                                        <th>현재가</th>
+                                        <th>전일대비</th>
+                                        <th>거래량</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data?.chartData?.slice(-10).reverse().map((d: any, idx: number) => {
+                                        const date = new Date(d.time * 1000);
+                                        return (
+                                            <tr key={idx} style={{ borderBottom: '1px solid #F2F4F7' }}>
+                                                <td style={{ padding: '14px 0', color: '#4E5968' }}>{date.toLocaleDateString()}</td>
+                                                <td style={{ color: '#4E5968' }}>{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                                <td style={{ fontWeight: 600 }}>{d.close.toLocaleString()}</td>
+                                                <td style={{ color: d.close >= d.open ? '#F04452' : '#3182F6' }}>
+                                                    {d.close >= d.open ? '▲' : '▼'} {Math.abs(d.close - d.open).toFixed(2)}
+                                                </td>
+                                                <td style={{ color: '#4E5968' }}>{d.volume?.toLocaleString() || '0'}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+
+                {/* Right Sidebar: Forums & Quick Indices */}
+                <aside style={{ background: '#ffffff', padding: '32px 24px', borderLeft: '1px solid #F2F4F7' }}>
+                    <div style={{ marginBottom: '40px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#191F28' }}>🔥 HOT 토론글</h3>
+                            <span style={{ fontSize: '12px', color: '#00D166', fontWeight: 600 }}>✎ 글쓰기</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            {[1, 2, 3].map(i => (
+                                <div key={i} style={{ borderBottom: '1px solid #F2F4F7', paddingBottom: '16px' }}>
+                                    <div style={{ fontSize: '12px', color: '#8B95A1', marginBottom: '6px' }}>성난황소 • 13시간 전</div>
+                                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#333D4B', lineHeight: 1.4 }}>미국 증시 반등 가능성 있을까요? 현재 포지션 공유합니다.</div>
+                                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px', color: '#B0B8C1', fontSize: '12px' }}>
+                                        <span>👍 37</span><span>💬 13</span><span>👁 8</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="sidebar-section">
-                        <div className="indicator-widget shadow-premium">
-                            <div className="section-header">
-                                <div className="title-group">
-                                    <Search size={18} className="icon" />
-                                    <h2>기술적 분석 지표</h2>
+                    <div>
+                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#191F28', marginBottom: '16px' }}>주요 증시</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {categories.map(cat => (
+                                <div key={cat.symbol} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div style={{ width: '18px', height: '18px', background: '#F2F4F7', borderRadius: '50%', fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>🇰🇷</div>
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968' }}>{cat.name}</span>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontSize: '13px', fontWeight: 700, color: '#191F28' }}>6,417.93</div>
+                                        <div style={{ fontSize: '11px', fontWeight: 600, color: cat.color }}>▲ 29.46</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="indicator-content">
-                                <TechnicalSummary data={data?.chartData} />
-                            </div>
-                        </div>
-
-                        <div className="news-widget shadow-premium">
-                            <div className="section-header">
-                                <div className="title-group">
-                                    <Newspaper size={18} className="icon" />
-                                    <h2>관련 주요 뉴스</h2>
-                                </div>
-                            </div>
-                            <div className="news-list">
-                                <div className="no-news">현재 종목 관련 실시간 뉴스를 불러오는 중입니다...</div>
-                            </div>
+                            ))}
                         </div>
                     </div>
-                </div>
-            </main>
+                </aside>
+            </div>
 
             <style jsx>{`
-                .analysis-container {
-                    min-height: 100vh;
-                    background: #F8FAFF;
-                    padding-bottom: 60px;
-                }
-                .analysis-content {
-                    margin-top: 32px;
-                }
-                .analysis-header {
+                .stat-row {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 24px;
-                    padding: 0 4px;
-                }
-                .header-left { display: flex; align-items: center; gap: 20px; }
-                .back-btn {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 12px;
-                    border: 1px solid #E5E8EB;
-                    background: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    color: #4E5968;
-                    transition: all 0.2s;
-                }
-                .back-btn:hover { background: #F2F4F7; }
-                .symbol-info { display: flex; flex-direction: column; }
-                .symbol-name { font-size: 28px; font-weight: 800; color: #191F28; margin: 0; }
-                .symbol-ticker { font-size: 14px; font-weight: 600; color: #8B95A1; }
-
-                .header-right { display: flex; align-items: center; gap: 32px; }
-                .price-group { text-align: right; }
-                .current-price { font-size: 32px; font-weight: 900; color: #191F28; }
-                .price-unit { font-size: 16px; font-weight: 600; color: #8B95A1; margin-left: 4px; }
-                .price-change { font-size: 16px; font-weight: 700; margin-top: 2px; }
-                .price-change.positive { color: #F04251; }
-                .price-change.negative { color: #0064FF; }
-
-                .action-buttons { display: flex; gap: 10px; }
-                .action-btn {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 14px;
-                    border: 1px solid #E5E8EB;
-                    background: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    color: #8B95A1;
-                    transition: all 0.2s;
-                }
-                .action-btn:hover { background: #F2F4F7; color: #4E5968; }
-                .action-btn.watchlist.active { color: #FFB800; border-color: #FFB800; background: #FFF9E6; }
-
-                .analysis-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 360px;
-                    gap: 24px;
-                    align-items: start;
-                }
-                .shadow-premium {
-                    background: white;
-                    border-radius: 28px;
-                    border: 1px solid #F2F4F7;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-                    overflow: hidden;
-                }
-                .section-header {
-                    padding: 24px 28px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    border-bottom: 1px solid #F2F4F7;
-                }
-                .title-group { display: flex; align-items: center; gap: 10px; }
-                .title-group h2 { font-size: 17px; font-weight: 800; color: #191F28; margin: 0; }
-                .icon { color: #0055FB; }
-
-                .chart-controls { display: flex; gap: 12px; }
-                .chart-controls span {
                     font-size: 13px;
-                    font-weight: 600;
-                    color: #8B95A1;
-                    cursor: pointer;
-                    padding: 4px 8px;
-                    border-radius: 6px;
+                    color: #4E5968;
                 }
-                .chart-controls span.active { color: #0055FB; background: #E8F3FF; }
-
-                .chart-wrapper { padding: 24px; }
-                
-                .sidebar-section { display: flex; flex-direction: column; gap: 24px; }
-                .indicator-content { padding: 12px; }
-                .news-widget { min-height: 400px; }
-                .no-news { padding: 40px; text-align: center; color: #B0B8C1; font-size: 13px; font-weight: 500; }
+                .stat-row span:first-child {
+                    color: #8B95A1;
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
             `}</style>
         </div>
     );
