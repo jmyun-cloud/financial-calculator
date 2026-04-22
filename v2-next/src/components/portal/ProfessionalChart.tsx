@@ -213,7 +213,7 @@ export default function ProfessionalChart({
     }, [data, isPositive, chartType, height]);
 
     return (
-        <div style={{ position: 'relative', paddingTop: '44px' }}>
+        <div style={{ position: 'relative', paddingTop: '0' }}>
 
 
             {/* Period buttons (Coinness style plain text) */}

@@ -1772,13 +1772,14 @@ select.form-input {
 .portal-left-sidebar {
   min-width: 0;
   max-width: 100%;
-  padding-right: 24px;
+  padding-right: 28px;
 }
 
 .portal-content {
   min-width: 0;
   max-width: 100%;
-  padding: 0;
+  padding-left: 28px;
+  border-left: 1px solid #F2F4F7;
   min-height: 800px;
 }
 
