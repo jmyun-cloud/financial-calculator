@@ -70,7 +70,6 @@ export default function MarketIndexCards() {
 
     useEffect(() => {
         const fetchAllIndices = async () => {
-            setLoading(true);
             try {
                 const symbols = CATEGORY_SYMBOLS[activeTab];
                 const results = await Promise.all(symbols.map(async (s) => {
@@ -100,10 +99,13 @@ export default function MarketIndexCards() {
         };
 
         fetchAllIndices();
+        const interval = setInterval(fetchAllIndices, 5000); // Poll every 5s
 
         // Reset scroll position on tab change
         const el = document.querySelector('.market-index-bar');
         if (el) el.scrollLeft = 0;
+
+        return () => clearInterval(interval);
     }, [activeTab]);
 
     if (loading && indices.length === 0) return (
@@ -241,10 +243,26 @@ export default function MarketIndexCards() {
 
 function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
     const chartRef = React.useRef<HTMLDivElement>(null);
+    const prevPriceRef = React.useRef<number>(data.price);
+    const [flashClass, setFlashClass] = useState('');
+
     const isPositive = data.change >= 0;
     const color = isPositive ? '#F04452' : '#3182F6';
     const areaColor = isPositive ? 'rgba(240, 68, 82, 0.08)' : 'rgba(49, 130, 246, 0.08)';
     const isLive = data.symbol.startsWith('^K') || data.symbol.includes('=X');
+
+    useEffect(() => {
+        if (data.price && data.price !== prevPriceRef.current) {
+            const isUp = data.price > prevPriceRef.current;
+            setFlashClass(isUp ? 'flash-red' : 'flash-blue');
+            prevPriceRef.current = data.price;
+
+            const timer = setTimeout(() => {
+                setFlashClass('');
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [data.price]);
 
     useEffect(() => {
         if (!chartRef.current || data.history.length === 0) return;
@@ -314,7 +332,15 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
                         <span style={{ fontSize: '11px', fontWeight: 500, color: '#B0B8C1' }}>{isLive ? '실시간' : '장마감'}</span>
                     </div>
                 </div>
-                <div style={{ fontSize: '19px', fontWeight: 900, color: '#191F28', letterSpacing: '-0.5px', marginBottom: '4px', lineHeight: 1 }}>
+                <div className={flashClass} style={{
+                    fontSize: '19px',
+                    fontWeight: 900,
+                    color: '#191F28',
+                    letterSpacing: '-0.5px',
+                    marginBottom: '4px',
+                    lineHeight: 1,
+                    transition: 'color 0.3s ease'
+                }}>
                     {data.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <div style={{ fontSize: '12px', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '2px' }}>
@@ -324,6 +350,17 @@ function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
                 </div>
             </div>
             <div ref={chartRef} style={{ width: '76px', height: '40px' }} />
+
+            <style jsx>{`
+                .flash-red {
+                    color: #F04452 !important;
+                    text-shadow: 0 0 8px rgba(240, 68, 82, 0.3);
+                }
+                .flash-blue {
+                    color: #3182F6 !important;
+                    text-shadow: 0 0 8px rgba(49, 130, 246, 0.3);
+                }
+            `}</style>
         </div>
     );
 }
