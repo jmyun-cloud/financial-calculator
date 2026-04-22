@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import {
     createChart,
     ColorType,
-    LineSeries,
+    AreaSeries,
 } from 'lightweight-charts';
 
 interface IndexData {
@@ -17,11 +17,12 @@ interface IndexData {
 }
 
 const SYMBOLS = [
-    { symbol: '^KS11', name: '코스피' },
-    { symbol: '^KQ11', name: '코스닥' },
-    { symbol: '^DJI', name: '다우존스' },
-    { symbol: '^IXIC', name: '나스닥 종합' },
-    { symbol: '^GSPC', name: 'S&P 500' }
+    { symbol: '^KS11', name: '코스피', flag: '🇰🇷' },
+    { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
+    { symbol: '^DJI', name: '다우존스', flag: '🇺🇸' },
+    { symbol: '^IXIC', name: '나스닥 종합', flag: '🇺🇸' },
+    { symbol: '^GSPC', name: 'S&P 500', flag: '🇺🇸' },
+    { symbol: 'USDKRW=X', name: '미국 USD', flag: '🇺🇸' }
 ];
 
 export default function MarketIndexCards() {
@@ -71,44 +72,91 @@ export default function MarketIndexCards() {
 
     return (
         <div className="market-index-section container" style={{ padding: '32px 40px 0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#191F28', margin: 0 }}>주요 지수</h2>
-                <div style={{ display: 'flex', gap: '12px', fontSize: '13px', fontWeight: 600, color: '#8B95A1' }}>
-                    <span style={{ color: '#191F28', borderBottom: '2px solid #191F28', paddingBottom: '2px' }}>국내</span>
-                    <span>미국</span>
-                    <span>아시아</span>
-                    <span>유럽</span>
-                    <span>시장지표</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <h2 style={{ fontSize: '16px', fontWeight: 900, color: '#191F28', margin: 0 }}>주요 지수</h2>
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#B0B8C1', marginLeft: '12px' }}>
+                        <span style={{ color: '#191F28' }}>국내</span>
+                        <span>/</span>
+                        <span>미국</span>
+                        <span>/</span>
+                        <span>아시아</span>
+                        <span>/</span>
+                        <span>유럽</span>
+                        <span>/</span>
+                        <span>시장지표</span>
+                    </div>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                    전체 지수 보기 <span style={{ marginLeft: '4px', fontSize: '10px' }}>&gt;</span>
                 </div>
             </div>
 
-            <div className="market-index-bar" style={{
-                display: 'flex',
-                gap: '12px',
-                padding: '4px 0 24px',
-                overflowX: 'auto',
-                scrollbarWidth: 'none',
-                WebkitOverflowScrolling: 'touch'
-            }}>
-                {indices.map((idx) => (
-                    <IndexCard key={idx.symbol} data={idx} />
-                ))}
+            <div style={{ position: 'relative' }}>
+                <div className="market-index-bar hide-scrollbar" style={{
+                    display: 'flex',
+                    gap: '12px',
+                    padding: '4px 0 24px',
+                    overflowX: 'auto',
+                    scrollbarWidth: 'none',
+                    WebkitOverflowScrolling: 'touch',
+                    scrollBehavior: 'smooth'
+                }}>
+                    {indices.map((idx) => (
+                        <IndexCard key={idx.symbol} data={idx} flag={SYMBOLS.find(s => s.symbol === idx.symbol)?.flag || ''} />
+                    ))}
+                </div>
+
+                {/* Right Slider Arrow */}
+                <button
+                    style={{
+                        position: 'absolute',
+                        right: '-20px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        background: 'white',
+                        border: '1px solid #E5E8EB',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        zIndex: 2,
+                        color: '#4E5968'
+                    }}
+                    onClick={() => {
+                        const el = document.querySelector('.market-index-bar');
+                        if (el) el.scrollBy({ left: 300, behavior: 'smooth' });
+                    }}
+                >
+                    <span style={{ fontSize: '18px', fontWeight: 600 }}>&gt;</span>
+                </button>
             </div>
+
+            <style jsx>{`
+                .hide-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </div>
     );
 }
 
-function IndexCard({ data }: { data: IndexData }) {
+function IndexCard({ data, flag }: { data: IndexData; flag: string }) {
     const chartRef = React.useRef<HTMLDivElement>(null);
     const isPositive = data.change >= 0;
-    const color = isPositive ? '#F04452' : '#0064FF';
+    const color = isPositive ? '#F04452' : '#3182F6';
+    const areaColor = isPositive ? 'rgba(240, 68, 82, 0.1)' : 'rgba(49, 130, 246, 0.1)';
 
     useEffect(() => {
         if (!chartRef.current || data.history.length === 0) return;
 
         const chart = createChart(chartRef.current, {
-            width: 80,
-            height: 40,
+            width: 100,
+            height: 44,
             layout: { background: { type: ColorType.Solid, color: 'transparent' } },
             grid: { vertLines: { visible: false }, horzLines: { visible: false } },
             rightPriceScale: { visible: false },
@@ -117,45 +165,52 @@ function IndexCard({ data }: { data: IndexData }) {
             handleScale: false,
         });
 
-        const lineSeries = chart.addSeries(LineSeries, {
-            color: color,
+        const areaSeries = chart.addSeries(AreaSeries, {
+            lineColor: color,
+            topColor: areaColor,
+            bottomColor: 'transparent',
             lineWidth: 2,
             lastValueVisible: false,
             priceLineVisible: false,
         });
 
-        lineSeries.setData(data.history.map(pt => ({
-            ...pt,
-            time: pt.time as any
+        areaSeries.setData(data.history.map(pt => ({
+            time: pt.time as any,
+            value: pt.value
         })));
 
+        chart.timeScale().fitContent();
+
         return () => chart.remove();
-    }, [data, color]);
+    }, [data, color, areaColor]);
 
     return (
         <div style={{
-            minWidth: '220px',
+            minWidth: '228px',
             padding: '16px',
             border: '1px solid #F2F4F7',
-            borderRadius: '10px',
+            borderRadius: '12px',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             background: '#ffffff',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            flexShrink: 0
         }}>
-            <div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#4E5968', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    {data.name} <span style={{ fontSize: '10px', color: '#B0B8C1' }}>● 실시간</span>
+            <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#191F28', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ fontSize: '14px' }}>{flag}</span>
+                    {data.name}
+                    <span style={{ fontSize: '11px', color: '#B0B8C1', marginLeft: '2px' }}>● {data.symbol.startsWith('^K') ? '실시간' : '장마감'}</span>
                 </div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: '#191F28' }}>
-                    {data.price?.toLocaleString()}
+                <div style={{ fontSize: '20px', fontWeight: 900, color: '#191F28', letterSpacing: '-0.4px', marginBottom: '4px' }}>
+                    {data.price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: color, marginTop: '2px' }}>
-                    {isPositive ? '▲' : '▼'} {Math.abs(data.change).toFixed(2)} ({data.changePercent?.toFixed(2)}%)
+                <div style={{ fontSize: '12px', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    {isPositive ? '▲' : '▼'} {Math.abs(data.change).toFixed(2)}({data.changePercent?.toFixed(2)}%)
                 </div>
             </div>
-            <div ref={chartRef} style={{ width: '80px', height: '40px' }} />
+            <div ref={chartRef} style={{ width: '100px', height: '44px', marginTop: '12px' }} />
         </div>
     );
 }
