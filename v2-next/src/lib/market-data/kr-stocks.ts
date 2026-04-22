@@ -45,5 +45,14 @@ export const KR_STOCKS = [
     { name: "YG엔터테인먼트", symbol: "122870.KQ", region: "KR", type: "Stock" },
     { name: "코스피", symbol: "^KS11", region: "KR", type: "Index" },
     { name: "코스닥", symbol: "^KQ11", region: "KR", type: "Index" },
-    { name: "코스피200", symbol: "^KS200", region: "KR", type: "Index" }
+    { name: "코스피200", symbol: "^KS200", region: "KR", type: "Index" },
+    { name: "대덕전자", symbol: "353200.KS", region: "KR", type: "Stock" },
+    { name: "SK스퀘어", symbol: "402340.KS", region: "KR", type: "Stock" },
+    { name: "고려아연", symbol: "010130.KS", region: "KR", type: "Stock" },
+    { name: "삼성전기", symbol: "009150.KS", region: "KR", type: "Stock" },
+    { name: "LC디스플레이", symbol: "034220.KS", region: "KR", type: "Stock" },
+    { name: "DB하이텍", symbol: "000990.KS", region: "KR", type: "Stock" },
+    { name: "한미반도체", symbol: "042700.KS", region: "KR", type: "Stock" },
+    { name: "이수페타시스", symbol: "007660.KS", region: "KR", type: "Stock" },
+    { name: "제주반도체", symbol: "080220.KQ", region: "KR", type: "Stock" }
 ];
