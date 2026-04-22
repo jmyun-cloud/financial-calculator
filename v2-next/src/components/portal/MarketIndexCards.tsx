@@ -30,35 +30,43 @@ const CATEGORY_SYMBOLS: Record<string, { symbol: string; name: string; flag: str
     "국내": [
         { symbol: '^KS11', name: '코스피', flag: '🇰🇷' },
         { symbol: '^KQ11', name: '코스닥', flag: '🇰🇷' },
-        { symbol: '005930.KS', name: '삼성전자', flag: '🇰🇷' },
-        { symbol: '000660.KS', name: 'SK하이닉스', flag: '🇰🇷' },
+        { symbol: '^KS100', name: '코스피 100', flag: '🇰🇷' },
+        { symbol: '^KS200', name: '코스피 200', flag: '🇰🇷' },
+        { symbol: 'KMY00=F', name: '코스피 200 선물', flag: '🇰🇷' },
+        { symbol: '^KS11', name: '코리아 밸류업', flag: '🇰🇷' }, // Using KOSPI as fallback if ValueUp symbol is elusive
     ],
     "미국": [
         { symbol: '^DJI', name: '다우존스', flag: '🇺🇸' },
         { symbol: '^IXIC', name: '나스닥 종합', flag: '🇺🇸' },
         { symbol: '^GSPC', name: 'S&P 500', flag: '🇺🇸' },
-        { symbol: '^SOX', name: '필라델피아 반도체', flag: '🇺🇸' },
-        { symbol: '^RUT', name: '러셀 2000', flag: '🇺🇸' },
+        { symbol: '^NDX', name: '나스닥 100', flag: '🇺🇸' },
+        { symbol: 'RTY=F', name: '러셀 2000 선물', flag: '🇺🇸' },
+        { symbol: '^VIX', name: 'VIX', flag: '🇺🇸' },
     ],
     "아시아": [
+        { symbol: '000001.SS', name: '상해종합', flag: '🇨🇳' },
+        { symbol: '399106.SZ', name: '심천종합', flag: '🇨🇳' },
+        { symbol: '^HSI', name: '항생', flag: '🇭🇰' },
+        { symbol: '^HSCE', name: '홍콩H', flag: '🇭🇰' },
         { symbol: '^N225', name: '니케이 225', flag: '🇯🇵' },
-        { symbol: '^HSI', name: '항셍 지수', flag: '🇭🇰' },
-        { symbol: '000001.SS', name: '상하이 종합', flag: '🇨🇳' },
-        { symbol: '^TWII', name: '대만 가권', flag: '🇹🇼' },
+        { symbol: '^VNI', name: '호치민 VN', flag: '🇻🇳' },
     ],
     "유럽": [
-        { symbol: '^STOXX50E', name: '유로 스톡스 50', flag: '🇪🇺' },
-        { symbol: '^GDAXI', name: 'DAX', flag: '🇩🇪' },
-        { symbol: '^FTSE', name: 'FTSE 100', flag: '🇬🇧' },
-        { symbol: '^FCHI', name: 'CAC 40', flag: '🇫🇷' },
+        { symbol: '^STOXX50E', name: '유로스톡스 50', flag: '🇪🇺' },
+        { symbol: 'FESX=F', name: '유로스톡스 50 선물', flag: '🇪🇺' },
+        { symbol: '^GDAXI', name: '독일 DAX', flag: '🇩🇪' },
+        { symbol: '^FTSE', name: '영국 FTSE 100', flag: '🇬🇧' },
+        { symbol: '^FCHI', name: '프랑스 CAC 40', flag: '🇫🇷' },
+        { symbol: '^IBEX', name: '스페인 IBEX 35', flag: '🇪🇸' },
     ],
     "시장지표": [
-        { symbol: 'USDKRW=X', name: 'USD/KRW', flag: '🇺🇸' },
-        { symbol: 'JPYKRW=X', name: 'JPY/KRW', flag: '🇯🇵' },
-        { symbol: 'BTC-USD', name: '비트코인', flag: '₿' },
-        { symbol: 'GC=F', name: '금 선물', flag: '🪙' },
-        { symbol: 'CL=F', name: 'WTI 원유', flag: '🛢️' },
-    ]
+        { symbol: 'DX-Y.NYB', name: '달러인덱스', flag: '🇺🇸' },
+        { symbol: 'USDKRW=X', name: '미국 USD', flag: '🇺🇸' },
+        { symbol: '^KR10Y', name: '한국 국채 10년', flag: '🇰🇷' }, // Fallback if no data
+        { symbol: '^TNX', name: '미국 국채 10년', flag: '🇺🇸' },
+        { symbol: 'KRW=X', name: 'CD금리 (91일)', flag: '🇰🇷' }, // Placeholder
+        { symbol: 'CL=F', name: 'WTI', flag: '🛢️' },
+    ],
 };
 
 const CATEGORIES = ["주요 지표", "국내", "미국", "아시아", "유럽", "시장지표"];
