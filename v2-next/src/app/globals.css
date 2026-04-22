@@ -10,10 +10,10 @@
 
 /* ===== CSS VARIABLES ===== */
 :root {
-  --primary: #0064FF;
-  /* Toss Blue */
-  --primary-dark: #0056DB;
-  --primary-light: #E8F3FF;
+  --primary: #3182F6;
+  /* Premium Blue */
+  --primary-dark: #1b64da;
+  --primary-light: #e8f3ff;
   --accent: var(--primary);
   --accent-light: var(--primary-light);
 
@@ -89,9 +89,9 @@ ul {
 }
 
 .container {
-  max-width: 1160px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
 }
 
 /* ===== HEADER ===== */

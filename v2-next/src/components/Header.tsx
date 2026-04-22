@@ -23,8 +23,8 @@ export default function Header() {
             {/* Top Bar: Logo + Search + Icons */}
             <div className="container" style={{ height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Link href="/" className="logo" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '32px', height: '32px', background: '#03C75A', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '18px' }}>N</div>
-                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '20px', letterSpacing: '-0.5px' }}>페이 증권</span>
+                    <div style={{ width: '32px', height: '32px', background: '#3182F6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 950, fontSize: '20px' }}>R</div>
+                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.8px' }}>richcalc 증권</span>
                 </Link>
 
                 {/* Naver Style Search Bar */}
