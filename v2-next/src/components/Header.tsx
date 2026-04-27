@@ -22,25 +22,17 @@ export default function Header() {
         <header className="site-header" style={{ borderBottom: '1px solid #E5E8EB', background: 'white' }}>
             {/* Top Bar: Logo + Search + Icons */}
             <div className="container" style={{ height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Link href="/" className="logo" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '32px', height: '32px', background: '#3182F6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 950, fontSize: '20px' }}>R</div>
-                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '22px', letterSpacing: '-0.8px' }}>richcalc 증권</span>
+                <Link href="/" className="logo" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #1a56e8 0%, #1738c8 100%)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 950, fontSize: '22px', boxShadow: '0 4px 12px rgba(26, 86, 232, 0.2)' }}>R</div>
+                    <span style={{ color: '#191F28', fontWeight: 800, fontSize: '24px', letterSpacing: '-1px' }}>richcalc</span>
                 </Link>
 
-                {/* Naver Style Search Bar */}
-                <div style={{ flex: 1, maxWidth: '440px', margin: '0 40px' }}>
+                {/* Search Bar */}
+                <div style={{ flex: 1, maxWidth: '480px', margin: '0 40px' }}>
                     <HeaderSearch />
                 </div>
 
-                <div className="header-right" style={{ gap: '20px' }}>
-                    <div style={{ display: 'flex', gap: '16px', color: '#4E5968', fontSize: '13px', fontWeight: 600 }}>
-                        <span>금융</span>
-                        <span>포인트</span>
-                        <span>결제</span>
-                        <span style={{ color: '#03C75A' }}>증권</span>
-                        <span>부동산</span>
-                    </div>
-
+                <div className="header-right" style={{ gap: '24px' }}>
                     {isLoggedIn ? (
                         <div className="user-profile-trigger">
                             <button
@@ -48,7 +40,7 @@ export default function Header() {
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                                 style={{ border: 'none', background: 'transparent' }}
                             >
-                                <img src={user?.avatar} alt="" className="user-avatar" style={{ width: '28px', height: '28px', borderRadius: '50%' }} />
+                                <img src={user?.avatar} alt="" className="user-avatar" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
                             </button>
 
                             {isProfileOpen && (
@@ -69,29 +61,29 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Sub Navigation Bar: Naver Style Tabs */}
+            {/* Sub Navigation Bar */}
             <div style={{ borderTop: '1px solid #F2F4F7' }}>
-                <div className="container" style={{ display: 'flex', height: '48px', alignItems: 'center', gap: '32px' }}>
+                <div className="container" style={{ display: 'flex', height: '52px', alignItems: 'center', gap: '36px' }}>
                     {[
                         { label: '홈', path: '/' },
-                        { label: '마켓', path: '/#market' },
-                        { label: '토론', path: '/community' },
-                        { label: '뉴스·리서치', path: '/news' },
-                        { label: 'MY', path: '/my' }
+                        { label: '금융 계산기', path: '/calculators' },
+                        { label: '금융 가이드', path: '/guide' },
+                        { label: '시장 데이터', path: '/#market' },
+                        { label: '서비스 소개', path: '/about' }
                     ].map((item) => (
                         <Link
                             key={item.label}
                             href={item.path}
                             style={{
                                 textDecoration: 'none',
-                                color: isActive(item.path) ? '#191F28' : '#4E5968',
-                                fontSize: '16px',
-                                fontWeight: isActive(item.path) ? 800 : 700,
+                                color: isActive(item.path) ? '#1a56e8' : '#4E5968',
+                                fontSize: '15px',
+                                fontWeight: isActive(item.path) ? 800 : 600,
                                 height: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
                                 position: 'relative',
-                                transition: 'color 0.2s',
+                                transition: 'all 0.2s',
                                 padding: '0 4px'
                             }}
                         >
@@ -102,8 +94,8 @@ export default function Header() {
                                     bottom: 0,
                                     left: 0,
                                     right: 0,
-                                    height: '4px',
-                                    background: '#191F28',
+                                    height: '3px',
+                                    background: '#1a56e8',
                                     borderRadius: '2px 2px 0 0'
                                 }} />
                             )}
