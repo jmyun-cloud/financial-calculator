@@ -3,8 +3,8 @@ import Link from "next/link";
 import "../guide/guide.css";
 
 export const metadata: Metadata = {
-  title: "개인정보처리방침 | 금융계산기.kr",
-  description: "금융계산기.kr의 개인정보 수집·이용·보호 방침을 안내합니다.",
+  title: "개인정보처리방침 | richcalc.kr",
+  description: "richcalc.kr의 개인정보 수집·이용·보호 방침을 안내합니다.",
 };
 
 export default function PrivacyPage() {
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
               <span className="bc-current">개인정보처리방침</span>
             </div>
             <h1 className="main-title">개인정보처리방침</h1>
-            <p className="main-subtitle">금융계산기.kr은 이용자의 개인정보를 소중히 여깁니다.</p>
+            <p className="main-subtitle">richcalc.kr은 이용자의 개인정보를 소중히 여깁니다.</p>
           </div>
         </div>
       </section>
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             </p>
 
             <h2>제1조 (개인정보의 처리 목적)</h2>
-            <p>금융계산기.kr(이하 &quot;서비스&quot;)은 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
+            <p>richcalc.kr(이하 &quot;서비스&quot;)은 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
             <ul>
               <li>서비스 제공 및 계정 관리 (회원 식별, 서비스 이용 관리)</li>
               <li>서비스 개선 및 통계 분석 (이용 패턴 분석, 오류 개선)</li>
@@ -83,7 +83,7 @@ export default function PrivacyPage() {
             <h2>제7조 (개인정보 보호책임자)</h2>
             <div className="formula-box">
               <ul>
-                <li><strong>서비스명:</strong> 금융계산기.kr (richcalc.kr)</li>
+                <li><strong>서비스명:</strong> richcalc.kr (richcalc.kr)</li>
                 <li><strong>개인정보 보호책임자:</strong> 서비스 운영팀</li>
                 <li><strong>이메일:</strong> contact@richcalc.kr</li>
                 <li><strong>처리 시간:</strong> 평일 09:00 ~ 18:00 (주말·공휴일 제외)</li>

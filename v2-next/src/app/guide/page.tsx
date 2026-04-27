@@ -4,7 +4,7 @@ import { getAllGuides } from "@/lib/mdx";
 import "./guide.css";
 
 export const metadata: Metadata = {
-  title: "금융 가이드 | 금융계산기.kr",
+  title: "금융 가이드 | richcalc.kr",
   description: "대출, 연봉, 적금, 연금, 전월세, DSR 등 실생활 금융 지식을 쉽게 설명합니다.",
 };
 

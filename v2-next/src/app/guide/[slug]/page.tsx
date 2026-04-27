@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const guide = await getGuideBySlug(slug);
   if (!guide) return {};
   return {
-    title: `${guide.meta.title} - 금융계산기.kr`,
+    title: `${guide.meta.title} - richcalc.kr`,
     description: guide.meta.description,
   };
 }

@@ -55,7 +55,7 @@ export default function MagazineFeed() {
                         {featured.description}
                     </p>
                     <div className="flex items-center gap-2 text-[13px] text-[#8B95A1] font-bold mt-1">
-                        <span>금융계산기 에디터</span>
+                        <span>richcalc 에디터</span>
                         <span className="text-[#E5E8EB]">·</span>
                         <span>{featured.date}</span>
                     </div>

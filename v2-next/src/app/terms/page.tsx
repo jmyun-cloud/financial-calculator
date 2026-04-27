@@ -3,8 +3,8 @@ import Link from "next/link";
 import "../guide/guide.css";
 
 export const metadata: Metadata = {
-  title: "이용약관 | 금융계산기.kr",
-  description: "금융계산기.kr 서비스 이용약관을 안내합니다.",
+  title: "이용약관 | richcalc.kr",
+  description: "richcalc.kr 서비스 이용약관을 안내합니다.",
 };
 
 export default function TermsPage() {
@@ -18,7 +18,7 @@ export default function TermsPage() {
               <span className="bc-current">이용약관</span>
             </div>
             <h1 className="main-title">이용약관</h1>
-            <p className="main-subtitle">금융계산기.kr 서비스 이용에 관한 약관입니다.</p>
+            <p className="main-subtitle">richcalc.kr 서비스 이용에 관한 약관입니다.</p>
           </div>
         </div>
       </section>
@@ -31,7 +31,7 @@ export default function TermsPage() {
             </p>
 
             <h2>제1조 (목적)</h2>
-            <p>본 약관은 금융계산기.kr(이하 &quot;서비스&quot;)이 제공하는 금융 계산, 시장 정보, 뉴스 등 인터넷 관련 서비스의 이용과 관련하여 서비스와 이용자 간의 권리·의무 및 책임사항, 서비스 이용조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.</p>
+            <p>본 약관은 richcalc.kr(이하 &quot;서비스&quot;)이 제공하는 금융 계산, 시장 정보, 뉴스 등 인터넷 관련 서비스의 이용과 관련하여 서비스와 이용자 간의 권리·의무 및 책임사항, 서비스 이용조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.</p>
 
             <h2>제2조 (약관의 효력 및 변경)</h2>
             <ul>
@@ -87,7 +87,7 @@ export default function TermsPage() {
             <h2>문의</h2>
             <div className="formula-box">
               <ul>
-                <li><strong>서비스명:</strong> 금융계산기.kr (richcalc.kr)</li>
+                <li><strong>서비스명:</strong> richcalc.kr (richcalc.kr)</li>
                 <li><strong>이메일:</strong> contact@richcalc.kr</li>
               </ul>
             </div>

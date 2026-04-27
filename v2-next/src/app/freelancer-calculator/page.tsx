@@ -3,7 +3,7 @@ import Link from "next/link";
 import FreelancerCalculator from "@/components/calculators/FreelancerCalculator";
 
 export const metadata: Metadata = {
-  title: "프리랜서 3.3% 계산기 - 알바·N잡러 실수령액 및 세금 자동 계산 | 금융계산기.kr",
+  title: "프리랜서 3.3% 계산기 - 알바·N잡러 실수령액 및 세금 자동 계산 | richcalc.kr",
   description: "프리랜서, 아르바이트, N잡러를 위한 3.3% 세금 계산기. 총 수입을 입력하면 3.3% 원천징수 세액을 자동 공제하여 실수령액을 즉시 확인하세요.",
   openGraph: {
     title: "프리랜서 3.3% 계산기 - 원천징수 세급 및 실수령액 자동 산출",

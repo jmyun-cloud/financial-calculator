@@ -3,7 +3,7 @@ import Link from "next/link";
 import SalaryCalculator from "@/components/calculators/SalaryCalculator";
 
 export const metadata: Metadata = {
-  title: "연봉 계산기 2026 - 월 실수령액·4대보험·소득세 자동 계산 | 금융계산기.kr",
+  title: "연봉 계산기 2026 - 월 실수령액·4대보험·소득세 자동 계산 | richcalc.kr",
   description: "2026년 기준 연봉 실수령액 계산기. 연봉 입력 시 국민연금·건강보험·고용보험·소득세를 자동 계산하여 월 실수령액을 즉시 확인하세요.",
   openGraph: {
     title: "2026 연봉 계산기 - 월 실수령액·4대보험 자동 계산",

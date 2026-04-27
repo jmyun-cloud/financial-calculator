@@ -6,7 +6,7 @@ export default function Footer() {
             <div className="container footer-inner">
                 <div className="footer-logo">
                     <span className="logo-icon">💰</span>
-                    <span className="logo-text">금융계산기<span className="logo-accent">.kr</span></span>
+                    <span className="logo-text">richcalc<span className="logo-accent">.kr</span></span>
                 </div>
                 <div className="footer-links">
                     <Link href="/">홈</Link>
@@ -22,7 +22,7 @@ export default function Footer() {
                     본 사이트의 콘텐츠는 정보 제공 목적으로 작성되었으며, 전문가의 법적 조언을 대신할 수 없습니다.
                     정확한 세금 및 공제 내역은 관할 기관 또는 세무사 등 전문가에게 확인하시기 바랍니다.
                 </p>
-                <p className="footer-copy">© 2026 금융계산기.kr | All rights reserved.</p>
+                <p className="footer-copy">© 2026 richcalc.kr | All rights reserved.</p>
             </div>
         </footer>
     );

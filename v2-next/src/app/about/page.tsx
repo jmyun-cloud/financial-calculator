@@ -3,8 +3,8 @@ import Link from "next/link";
 import "../guide/guide.css";
 
 export const metadata: Metadata = {
-  title: "서비스 소개 | 금융계산기.kr",
-  description: "금융계산기.kr은 대한민국 누구나 무료로 사용할 수 있는 종합 금융 유틸리티 플랫폼입니다.",
+  title: "서비스 소개 | richcalc.kr",
+  description: "richcalc.kr은 대한민국 누구나 무료로 사용할 수 있는 종합 금융 유틸리티 플랫폼입니다.",
 };
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
               <Link href="/" style={{ color: "inherit" }}>홈</Link> <span className="bc-sep">›</span>
               <span className="bc-current">서비스 소개</span>
             </div>
-            <h1 className="main-title">금융계산기.kr 소개</h1>
+            <h1 className="main-title">richcalc.kr 소개</h1>
             <p className="main-subtitle">복잡한 금융 계산, 이제 쉽게 해결하세요.</p>
           </div>
         </div>
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <article className="guide-article mdx-content">
 
             <h2>서비스 목적</h2>
-            <p>금융계산기.kr은 대출 이자, 연봉 실수령액, 적금 수익, 퇴직금, 연금 등 일상적인 금융 계산을 누구나 쉽고 빠르게 할 수 있도록 돕는 <strong>무료 금융 유틸리티 플랫폼</strong>입니다.</p>
+            <p>richcalc.kr은 대출 이자, 연봉 실수령액, 적금 수익, 퇴직금, 연금 등 일상적인 금융 계산을 누구나 쉽고 빠르게 할 수 있도록 돕는 <strong>무료 금융 유틸리티 플랫폼</strong>입니다.</p>
             <p>복잡한 금융 공식을 직접 계산하거나, 은행 창구를 방문하거나, 전문가에게 문의하지 않아도 됩니다. 몇 가지 숫자를 입력하면 결과를 바로 확인할 수 있습니다.</p>
 
             <h2>제공 서비스</h2>
@@ -42,7 +42,7 @@ export default function AboutPage() {
             </ul>
 
             <h2>계산 결과의 정확성</h2>
-            <p>금융계산기.kr의 모든 계산기는 금융감독원 및 관련 기관이 공시하는 공식 계산 공식을 바탕으로 설계되었습니다.</p>
+            <p>richcalc.kr의 모든 계산기는 금융감독원 및 관련 기관이 공시하는 공식 계산 공식을 바탕으로 설계되었습니다.</p>
             <div className="formula-box">
               <ul>
                 <li>4대보험 요율: 국민건강보험공단·국민연금공단 공시 요율 반영</li>
@@ -67,7 +67,7 @@ export default function AboutPage() {
               <ul>
                 <li><strong>이메일:</strong> contact@richcalc.kr</li>
                 <li><strong>운영 시간:</strong> 평일 09:00 ~ 18:00</li>
-                <li><strong>도메인:</strong> richcalc.kr / 금융계산기.kr</li>
+                <li><strong>도메인:</strong> richcalc.kr / richcalc.kr</li>
               </ul>
             </div>
 

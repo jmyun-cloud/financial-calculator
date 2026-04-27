@@ -3,8 +3,8 @@ import Link from "next/link";
 import "../guide/guide.css";
 
 export const metadata: Metadata = {
-  title: "문의하기 | 금융계산기.kr",
-  description: "금융계산기.kr 서비스 이용 문의, 오류 제보, 개선 제안을 받습니다.",
+  title: "문의하기 | richcalc.kr",
+  description: "richcalc.kr 서비스 이용 문의, 오류 제보, 개선 제안을 받습니다.",
 };
 
 export default function ContactPage() {
@@ -50,7 +50,7 @@ export default function ContactPage() {
             <p>새로운 계산기 추가, 기존 기능 개선, UI 불편 사항 등 어떤 제안이든 환영합니다. 이용자 의견을 바탕으로 서비스를 지속적으로 개선하고 있습니다.</p>
 
             <h3>광고 및 제휴 문의</h3>
-            <p>금융계산기.kr과의 광고 게재, 콘텐츠 제휴, 데이터 협력 등을 원하시는 기업·기관은 이메일로 문의 주시기 바랍니다.</p>
+            <p>richcalc.kr과의 광고 게재, 콘텐츠 제휴, 데이터 협력 등을 원하시는 기업·기관은 이메일로 문의 주시기 바랍니다.</p>
 
             <h3>개인정보 관련 문의</h3>
             <p>개인정보 열람, 정정, 삭제 요청 등 개인정보 보호 관련 문의는 <Link href="/privacy">개인정보처리방침</Link>을 먼저 확인하신 후 이메일로 연락 주세요.</p>
@@ -60,14 +60,14 @@ export default function ContactPage() {
             <details className="faq-item">
               <summary>계산기 결과가 은행과 다른 이유는 무엇인가요?</summary>
               <p style={{ padding: "16px 20px" }}>
-                금융계산기.kr은 공식 계산식을 사용하지만, 실제 은행의 결과와 수 원에서 수천 원의 차이가 발생할 수 있습니다. 이는 은행마다 기산일 처리 방식, 원단위 절사 규정, 비과세 항목 설정이 다르기 때문입니다. 본 서비스의 결과는 참고용으로 활용하시고, 정확한 수치는 해당 금융기관에 문의하세요.
+                richcalc.kr은 공식 계산식을 사용하지만, 실제 은행의 결과와 수 원에서 수천 원의 차이가 발생할 수 있습니다. 이는 은행마다 기산일 처리 방식, 원단위 절사 규정, 비과세 항목 설정이 다르기 때문입니다. 본 서비스의 결과는 참고용으로 활용하시고, 정확한 수치는 해당 금융기관에 문의하세요.
               </p>
             </details>
 
             <details className="faq-item">
               <summary>광고가 너무 많아 불편합니다.</summary>
               <p style={{ padding: "16px 20px" }}>
-                금융계산기.kr은 광고 수익으로 무료 서비스를 운영합니다. 광고 위치나 빈도에 대한 불편 사항은 이메일로 알려주시면 개선에 반영하겠습니다.
+                richcalc.kr은 광고 수익으로 무료 서비스를 운영합니다. 광고 위치나 빈도에 대한 불편 사항은 이메일로 알려주시면 개선에 반영하겠습니다.
               </p>
             </details>
 
