@@ -11,34 +11,14 @@ import TrendingNews from "@/components/portal/TrendingNews";
 import Link from "next/link";
 import { Calculator, FileText, CheckCircle } from "lucide-react";
 import FeatureScroll from "@/components/home/FeatureScroll";
+import PremiumHero from "@/components/home/PremiumHero";
 
 export default function Home() {
   return (
     <div className="landing-page-container" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
 
-      {/* 1. HERO SECTION */}
-      <section className="hero-section">
-        <div className="container">
-          <h1 className="hero-title">
-            연봉·대출·퇴직금,<br />필요한 계산을 지금 바로.
-          </h1>
-          <p className="hero-subtitle">
-            richcalc는 대한민국 직장인과 프리랜서를 위한 무료 금융 유틸리티 플랫폼입니다.
-            연봉 실수령액부터 DSR 대출 한도, 퇴직금, 노후 연금까지 — 계산기 10종과 가이드 정보를 확인하세요.
-          </p>
-          <div className="hero-cta-group">
-            <Link href="/calculators" className="btn-primary-invert">
-              금융 계산기 사용하기
-            </Link>
-            <Link href="/guide" style={{ color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '16px 32px', borderRadius: '14px', fontWeight: 700 }}>
-              가이드 읽어보기
-            </Link>
-          </div>
-          <p className="hero-disclaimer">
-            모든 계산 결과는 국세청·금융감독원 기준을 반영하며, 실제 결과와 차이가 있을 수 있습니다.
-          </p>
-        </div>
-      </section>
+      {/* 1. PREMIUM HERO SECTION */}
+      <PremiumHero />
 
       {/* 2. PILLAR SECTION */}
       <section className="pillar-section">
