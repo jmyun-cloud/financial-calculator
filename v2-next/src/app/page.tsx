@@ -10,6 +10,7 @@ import EconomicCalendar from "@/components/portal/EconomicCalendar";
 import TrendingNews from "@/components/portal/TrendingNews";
 import Link from "next/link";
 import { Calculator, FileText, CheckCircle } from "lucide-react";
+import FeatureScroll from "@/components/home/FeatureScroll";
 
 export default function Home() {
   return (
@@ -69,6 +70,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 2.5 SLEEK FEATURE SHOWCASE */}
+      <FeatureScroll />
 
       {/* 3. FEATURED GUIDES */}
       <section className="guide-section">
