@@ -15,7 +15,7 @@ export default function PremiumHero() {
                 <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-emerald-50 rounded-full blur-[80px] opacity-30" />
             </div>
 
-            <div className="container relative z-10 mx-auto px-6 text-center">
+            <div className="container relative z-10 mx-auto px-6 flex flex-col items-center text-center">
 
                 {/* Brand Label */}
                 <motion.div
@@ -54,9 +54,9 @@ export default function PremiumHero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
+                    className="flex flex-col items-center justify-center gap-6 mb-20"
                 >
-                    <div className="relative group w-full max-w-[400px]">
+                    <div className="relative group w-full max-w-[440px]">
                         <input
                             type="text"
                             placeholder="연봉 6,000만원 실수령액은?"
@@ -66,10 +66,15 @@ export default function PremiumHero() {
                             검색
                         </button>
                     </div>
-                    <div className="hidden sm:block text-gray-300 font-black px-4">OR</div>
-                    <Link href="/calculators" className="flex items-center gap-2 text-gray-900 font-black text-lg group px-4 py-2 hover:translate-x-1 transition-transform">
-                        모든 계산기 보기 <ChevronRight className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    <div className="flex items-center gap-6">
+                        <Link href="/calculators" className="flex items-center gap-2 text-gray-400 font-bold text-sm group hover:text-gray-900 transition-colors">
+                            모든 계산기 보기 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <span className="w-1 h-1 rounded-full bg-gray-200"></span>
+                        <Link href="/guide" className="text-gray-400 font-bold text-sm hover:text-gray-900 transition-colors">
+                            금융 가이드 읽기
+                        </Link>
+                    </div>
                 </motion.div>
 
                 {/* THE DASHBOARD PREVIEW CARD */}
