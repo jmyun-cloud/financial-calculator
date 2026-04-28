@@ -5,7 +5,6 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import TickerBar from "@/components/portal/TickerBar";
 
 const GA_ID = "G-B1TE1JHHE3";
 
@@ -50,7 +49,6 @@ export default function RootLayout({
       <body style={{ backgroundColor: '#FFFFFF' }}>
         <AuthProvider>
           <Header />
-          <TickerBar />
           <main>{children}</main>
           <Footer />
         </AuthProvider>
