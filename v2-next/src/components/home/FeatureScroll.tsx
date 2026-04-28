@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Wallet, Landmark, TrendingUp, ChevronRight, PieChart, Activity, Bell } from 'lucide-react';
+import { Wallet, Landmark, TrendingUp, ChevronRight, Activity, PieChart, Bell } from 'lucide-react';
 
 const FEATURES = [
     {
@@ -43,13 +43,38 @@ export default function FeatureScroll() {
     // Background color shifts
     const bgColor = useTransform(smoothProgress, [0, 0.33, 0.66, 1], ['#ffffff', '#f8fbff', '#f6fffb', '#f9f9ff']);
 
+    // Vertical Parallax for the whole content - subtle sense of "moving down" even while sticky
+    const contentY = useTransform(smoothProgress, [0, 1], [0, -50]);
+
     return (
         <motion.section
             ref={containerRef}
             className="relative"
-            style={{ height: '400vh', backgroundColor: bgColor }}
+            style={{ height: '300vh', backgroundColor: bgColor }} // Reduced from 400vh for faster flow
         >
             <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden">
+
+                {/* Scroll Indicator (Visual Feedback of Movement) */}
+                <div className="absolute left-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-50 hidden lg:flex">
+                    <div className="h-40 w-px bg-gray-100 relative">
+                        <motion.div
+                            className="absolute top-0 left-0 w-full bg-blue-500"
+                            style={{ height: useTransform(smoothProgress, [0, 1], ['0%', '100%']) }}
+                        />
+                    </div>
+                    {FEATURES.map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="w-2 h-2 rounded-full"
+                            style={{
+                                backgroundColor: useTransform(smoothProgress,
+                                    [i / 3, (i + 1) / 3],
+                                    ['#E5E8EB', '#3182F6']
+                                )
+                            }}
+                        />
+                    ))}
+                </div>
 
                 {/* Visual Glows behind components */}
                 <motion.div
@@ -63,7 +88,7 @@ export default function FeatureScroll() {
                     }}
                 />
 
-                <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+                <motion.div style={{ y: contentY }} className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
 
                     {/* Left: Premium Typography Section */}
                     <div className="relative h-[480px]">
@@ -75,16 +100,16 @@ export default function FeatureScroll() {
                                 [start, start + 0.1, end - 0.1, end],
                                 [0, 1, 1, 0]
                             );
-                            const x = useTransform(smoothProgress,
+                            const y = useTransform(smoothProgress,
                                 [start, start + 0.1, end - 0.1, end],
-                                [-40, 0, 0, -20]
+                                [40, 0, 0, -40]
                             );
 
                             return (
                                 <motion.div
                                     key={feature.id}
                                     className="absolute inset-0 flex flex-col justify-center"
-                                    style={{ opacity, x }}
+                                    style={{ opacity, y }}
                                 >
                                     <div className="mb-8 flex items-center gap-3">
                                         <div className="w-10 h-1px bg-gray-900"></div>
@@ -126,9 +151,9 @@ export default function FeatureScroll() {
                             {/* Browser/Window Header */}
                             <div className="h-14 border-b border-gray-50 px-8 flex items-center justify-between bg-gray-50/30">
                                 <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-300"></div>
-                                    <div className="w-3 h-3 rounded-full bg-yellow-300"></div>
-                                    <div className="w-3 h-3 rounded-full bg-green-300"></div>
+                                    <div className="w-3 h-3 rounded-full bg-red-200"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-200"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-200"></div>
                                 </div>
                                 <div className="text-[10px] font-black text-gray-300 tracking-widest uppercase">richcalc.kr / intelligence</div>
                                 <div className="w-10"></div>
@@ -265,16 +290,16 @@ export default function FeatureScroll() {
                         <FloatingIcon progress={smoothProgress} icon={<Bell size={20} />} range={[0.6, 1]} className="absolute -bottom-10 right-20 w-24 h-24 rounded-[40px] bg-indigo-600 shadow-xl flex items-center justify-center text-white z-50" />
                     </div>
 
-                </div>
             </div>
-        </motion.section>
+        </div>
+        </motion.section >
     );
 }
 
 function Widget({ children, progress, range, delay, className }: { children: React.ReactNode, progress: any, range: [number, number], delay: number, className: string }) {
     const opacity = useTransform(progress, [range[0] - 0.05, range[0], range[1], range[1] + 0.05], [0, 1, 1, 0]);
-    const y = useTransform(progress, [range[0] - 0.05, range[0], range[1], range[1] + 0.05], [100, 0, 0, -100]);
-    const scale = useTransform(progress, [range[0] - 0.05, range[0], range[1], range[1] + 0.05], [0.8, 1, 1, 0.8]);
+    const y = useTransform(progress, [range[0] - 0.05, range[0], range[1], range[1] + 0.05], [60, 0, 0, -60]); // Reduced y shift
+    const scale = useTransform(progress, [range[0] - 0.05, range[0], range[1], range[1] + 0.05], [0.95, 1, 1, 0.95]); // Subtler scale
 
     return (
         <motion.div style={{ opacity, y, scale }} className={className}>
